@@ -1,0 +1,54 @@
+import { login } from '@/api/login';
+const state = {
+  token: '',
+  name: '',
+  routes: [],
+  roles: [],
+  avatar: '',
+  userId: '',
+  code: '',
+};
+const actions = {
+  login({ commit }, userInfo) {
+    const { username, password } = userInfo;
+    return new Promise((resolve, reject) => {
+      login({ nickName: username.trim(), password: password })
+        .then((response) => {
+          const {
+            body: { token, shopMerchantsName, shopMerchantsCode, permissions },
+          } = response;
+          commit('SET_TOKEN', token);
+          commit('SET_NAME', shopMerchantsName);
+          commit('SET_CODE', shopMerchantsCode);
+          commit('SET_ROLES', permissions);
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+};
+const mutations = {
+  SET_TOKEN: (state, token) => {
+    state.token = token;
+  },
+  SET_NAME: (state, name) => {
+    state.name = name;
+  },
+  SET_ROLES: (state, roles) => {
+    state.roles = roles;
+  },
+  SET_CODE: (state, code) => {
+    state.code = code;
+  },
+  SET_ROUTES: (state, routes) => {
+    state.routes = routes
+  }
+};
+export default {
+  namespaced: true,
+  state,
+  mutations,
+  actions,
+};
