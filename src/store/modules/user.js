@@ -1,4 +1,4 @@
-import { login } from '@/api/login';
+import { login, plogin } from '@/api/login';
 const state = {
   token: '',
   name: '',
@@ -24,6 +24,26 @@ const actions = {
           resolve(response);
         })
         .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+  phonelogin({ commit }, userInfo) {
+    const { mobile, smCode } = userInfo;
+    return new Promise((resolve, reject) => {
+      plogin({ mobile: mobile.trim(), smCode: smCode })
+        .then(response => {
+          const { body, code } = response;
+          if (code == '000000') {
+            commit("SET_TOKEN", body.token);
+            commit("SET_NAME", body.shopMerchantsName);
+            commit('SET_CODE', body.shopMerchantsCode);
+            commit('SET_ROLES', body.permissions);
+
+            resolve();
+          }
+        })
+        .catch(error => {
           reject(error);
         });
     });

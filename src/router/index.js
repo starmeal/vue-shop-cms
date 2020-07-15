@@ -25,6 +25,14 @@ export const asyncRoutes = [
           title: '首页',
           roles: ["/shop/cms/permission/role/list", "/shop/cms/user/list", "/shop/cms/user/get"]
         }
+      },
+      {
+        path: '/about',
+        hidden: true,
+        component: () => import('@/views/AnnouncementManagement'),
+        meta: {
+          title: '首页1',
+        }
       }
     ]
   },
