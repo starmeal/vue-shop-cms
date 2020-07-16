@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-export const staticRoutes =  [
+export const staticRoutes = [
   {
     path: '/login',
     component: () => import('@/baseView/login/index'),
@@ -27,13 +27,28 @@ export const asyncRoutes = [
         }
       },
       {
-        path: '/about',
-        hidden: true,
-        component: () => import('@/views/AnnouncementManagement'),
+        path: '/notice',
+        component: () => import('@/views/routeview'),
         meta: {
-          title: '首页1',
-        }
-      }
+          title: '公告',
+        },
+        children: [
+          {
+            path: '/Notice/Noticeform',
+            component: () => import('@/views/notice/index.vue'),
+            meta: {
+              title: '编辑公告',
+            }
+          },
+          {
+            path: '/Notice/noticelist',
+            component: () => import('@/views/notice/noticelist.vue'),
+            meta: {
+              title: '公告列表',
+            }
+          }
+        ]
+      },
     ]
   },
   { path: "*", redirect: "/404", hidden: true }
