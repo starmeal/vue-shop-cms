@@ -1,29 +1,29 @@
 <template>
   <div class='menu-container'>
     <div :class="['menu-con', {'is-collapse': isCollapse}]">
-      <div :class="['menu-top-item', {'is-collapse': isCollapse}]" @click='changeIsCollapse'>
+      <div class='menu-top-item' :class="{'is-collapse': isCollapse}" @click='changeIsCollapse'>
         <Icon :icon="isCollapse ? 'yousuojin':'zuosuojin'" />
       </div>
-      <div  wx:for='menuItem in menuList' :class="['menu-item', {'is-collapse': isCollapse, 'is-collapse-color': isCollapse}]">
-        <Icon icon='zuosuojin' />
-        <div class='menu-item-name' v-show='isCollapse'>店铺</div>
+      <div v-for="(menuItem, index ) in menuList" :key='menuItem.path' class='menu-item' :class="{'is-collapse': isCollapse, 'is-collapse-color': menuItem.path  === $route.path || menuItem.path === basePath}" @click='switchRouter(menuItem, index)'>
+        <Icon :icon='menuItem.meta.icon' />
+        <div class='menu-item-name' v-show='isCollapse'>{{menuItem.meta.title}}</div>
       </div>
     </div>
-
 
     <div :class="['menu-second-container', {'active': isCollapseSecond}]">
       <div :class="['second-title', {'active': isCollapseSecond}]"><span>店铺首页</span></div>
-      <el-tree :data="data" node-key="id" default-expand-all>
+      <el-tree :data="menuItemList" highlight-current node-key="path" @node-click='handleNodeClick' :default-expanded-keys="defaultExpandedKeys" :current-node-key='currentNodeKey'>
         <div class="second-init-title" slot-scope="{ node, data }">
-          <span :class="{'has-children': data.children && data.children.length}">{{ node.label }}</span>
+          <span :class="{'has-children': data.children && data.children.length}">{{ data.title }}</span>
         </div>
       </el-tree>
     </div>
-    <div class='close'  @click='handleIsCollapseSecond'></div>
+    <div class='close' @click='handleIsCollapseSecond'></div>
   </div>
 </template>
 
 <script>
+import { deepClone } from '@/utils/util';
 import Icon from '@/components/base/icon.vue';
 import { createNamespacedHelpers } from 'vuex';
 const { mapState } = createNamespacedHelpers('user');
@@ -32,34 +32,13 @@ export default {
     return {
       isCollapse: true,
       isCollapseSecond: true,
-      data: [
-        {
-          id: 1,
-          label: '奥利给给'
-        },
-        {
-          id: 2,
-          label: '一级 2'
-        },
-        {
-          id: 3,
-          label: '一级 3',
-          children: [
-            {
-              id: 7,
-              label: '二级 3-1'
-            },
-            {
-              id: 8,
-              label: '二级 3-2'
-            }
-          ]
-        }
-      ],
+      menuItemList: [],
       defaultProps: {
         children: 'children',
-        label: 'label'
-      }
+        label: 'title'
+      },
+      defaultExpandedKeys: [],
+      currentNodeKey: ''
     };
   },
   components: {
@@ -70,14 +49,68 @@ export default {
       menuList: 'routes'
     })
   },
-  created () {
+  created() {
+    let {
+      path,
+      meta: { basePath, parentPath }
+    } = this.$route;
+    this.defaultExpandedKeys = [path];
+    this.basePath = basePath;
+    this.menuList.forEach((menuItem, menuIndex) => {
+      if (menuItem.path != '/' && menuItem.path == basePath) {
+        this.menuItemList = this.filterMenuItem(
+          deepClone(this.menuList[menuIndex].children)
+        );
+      }
+    });
+    this.currentNodeKey = this.$route.matched[
+      this.$route.matched.length - 1
+    ].path;
   },
   methods: {
+    handleNodeClick(data, node, self) {
+      let {
+        path,
+        meta: { parentPath },
+        children
+      } = data;
+      if (children && children.length > 0) {
+        return false;
+      }
+      this.$router.push(path.replace(/\/$/g, ''));
+    },
+    filterMenuItem(list) {
+      let result = [];
+      list.forEach((menuItem, menuIndex) => {
+        let {
+          path,
+          meta: { basePath, parentPath }
+        } = menuItem;
+        if (menuItem.path == '') {
+          menuItem.path = (parentPath || basePath) + '/';
+        }
+        if (!menuItem.hidden) {
+          result.push(menuItem);
+          if (menuItem.children) {
+            this.filterMenuItem(menuItem.children);
+          }
+        }
+      });
+      return result;
+    },
+    switchRouter(menuItem, index) {
+      if (menuItem.path !== this.$route.path) {
+        this.$router.push(menuItem.path);
+        this.menuItemList = this.filterMenuItem(
+          deepClone(this.menuList[index].children)
+        );
+      }
+    },
     changeIsCollapse() {
       this.isCollapse = !this.isCollapse;
     },
-    handleIsCollapseSecond () {
-      this.isCollapseSecond = !this.isCollapseSecond
+    handleIsCollapseSecond() {
+      this.isCollapseSecond = !this.isCollapseSecond;
     }
   }
 };
@@ -86,15 +119,15 @@ export default {
 <style scoped lang='scss'>
 .menu-container {
   display: flex;
-  position:relative;
+  position: relative;
   height: calc(100vh - 54px);
-  .close{
-    position:absolute;
-    width:18px;
-    height:36px;
-    background:#fff;
-    right:-18px;
-    top:0;
+  .close {
+    position: absolute;
+    width: 18px;
+    height: 36px;
+    background: #fff;
+    right: -18px;
+    top: 0;
     cursor: pointer;
   }
   .menu-con {
@@ -148,10 +181,10 @@ export default {
     width: 0px;
     height: 100%;
     background: #fff;
-    position:relative;
-    transition: all .3s;
+    position: relative;
+    transition: all 0.3s;
     overflow-x: hidden;
-    &.active{
+    &.active {
       width: 120px;
     }
     .second-title {
@@ -171,7 +204,7 @@ export default {
       font-family: Microsoft YaHei;
       font-weight: 300;
       color: rgba(102, 102, 102, 1);
-      .has-children{
+      .has-children {
         font-size: 13px;
         font-family: Microsoft YaHei;
         color: #333333;

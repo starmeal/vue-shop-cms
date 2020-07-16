@@ -12,7 +12,6 @@
 </template>
 
 <script>
-
 import HeaderContainer from './header.vue'
 import Menu from './menu.vue'
 import Order from './order.vue'

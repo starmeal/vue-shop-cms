@@ -138,3 +138,19 @@ export const throttle = function(func, wait = 500, type = 1) {
     }, wait);
   };
 };
+export const deepClone = (value,hash = new WeakMap) => { // 弱引用，不要用map
+  if(value == null || typeof value != 'object'){ return value;}
+  if(value instanceof RegExp){return new RegExp(value)}
+  if(value instanceof Date){return new Date(value)}
+  let obj = new value.constructor(); 
+  if(hash.get(value)){ 
+      return hash.get(value)
+  }
+  hash.set(value,obj);
+  for(let key in value){ 
+      if(value.hasOwnProperty(key)){
+          obj[key] = deepClone(value[key],hash);
+      }
+  }
+  return obj
+}

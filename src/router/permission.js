@@ -38,7 +38,7 @@ router.beforeEach((to, from, next) => {
           // dynamically add accessible routes
           hasRoles = true
           router.addRoutes(accessRoutes)
-          store.commit('user/SET_ROUTES', accessRoutes)
+          store.commit('user/SET_ROUTES',asyncRoutes.slice(0, asyncRoutes.length - 1))
           // hack method to ensure that addRoutes is complete
           // set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true })
