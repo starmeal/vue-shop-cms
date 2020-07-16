@@ -1,15 +1,12 @@
 <template>
-   <div>
-       i am 首页
-   </div>
+  <div>
+      i am 店铺首页
+  </div>
 </template>
 
 <script>
-
 export default {
-   name: 'home',
-   created () {
-   }
+
 }
 </script>
 

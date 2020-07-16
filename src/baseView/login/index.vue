@@ -2,7 +2,10 @@
   <div class='hs-login'>
     <div class="hs-login-container">
       <div class='action-container'>
-        <div :class='["action-item", {"is-active": isActive == 1}]' @click='() => isActive = 1'>账号密码登录</div>
+        <div 
+        :class='["action-item", {"is-active": isActive == 1}]' 
+        @click='() => isActive = 1'
+        >账号密码登录</div>
         <div :class='["action-item", {"is-active": isActive == 2}]' @click='() => isActive = 2'>短信登录</div>
       </div>
       <el-form class='login-con' :model='userPass' :rules='userRules' ref='adminLogin'>
@@ -65,14 +68,16 @@ export default {
           this.login({
             ...this.userPass,
             password: md5(this.userPass.password)
-          }).then(({ code }) => {
-            this.loading = false;
-            if (code === '000000') {
-              this.$router.push({ path: this.redirect || '/' });
-            }
-          }).catch(err => {
-            this.loading = false;
           })
+            .then(({ code }) => {
+              this.loading = false;
+              if (code === '000000') {
+                this.$router.push({ path: this.redirect || '/' });
+              }
+            })
+            .catch(err => {
+              this.loading = false;
+            });
         }
       });
     }
