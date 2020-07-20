@@ -173,7 +173,7 @@
 </template>
 
 <script>
-import { ossUpload, SSupload } from "@/utils/upload";
+import { asyncUpload, SSupload } from "@/utils/upload";
 export default {
   data() {
     return {
@@ -481,7 +481,7 @@ export default {
           }
         })
         .catch(err => {
-          loading.close();
+          // loading.close();
           this.$message("图片上传失败");
           console.log(`阿里云OSS上传图片失败回调`, err);
         });
