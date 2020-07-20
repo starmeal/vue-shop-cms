@@ -79,8 +79,6 @@
             class="avatar-uploader"
             action="https://jsonplaceholder.typicode.com/posts/"
             :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -93,8 +91,10 @@
             class="avatar-uploader"
             action="https://jsonplaceholder.typicode.com/posts/"
             :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
+            :http-request="uploadHttp"
+            :data="{
+              data:'handheldIdCardImg'
+            }"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -109,8 +109,6 @@
             class="avatar-uploader"
             action="https://jsonplaceholder.typicode.com/posts/"
             :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -121,8 +119,6 @@
             class="avatar-uploader"
             action="https://jsonplaceholder.typicode.com/posts/"
             :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -158,12 +154,7 @@
         </el-form-item>
         <div class="title" style="margin-bottom:20px">其他资质</div>
         <el-form-item>
-          <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
-            list-type="picture-card"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-          >
+          <el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card">
             <i class="el-icon-plus"></i>
           </el-upload>
           <div style="width:80%">
@@ -182,9 +173,12 @@
 </template>
 
 <script>
+import { ossUpload, SSupload } from "@/utils/upload";
 export default {
   data() {
     return {
+      imageUrl: "",
+      textarea: "",
       radio: 1,
       options: [
         {
@@ -461,6 +455,37 @@ export default {
     };
   },
   methods: {
+    // 图片上传
+    uploadHttp({ file, data }) {
+      if (file.type.split("/")[0] !== "image") {
+        this.$message({
+          message: "请上传图片",
+          type: "warning"
+        });
+        return false;
+      }
+      let consat = `hs_star/app_shop/goods/`;
+      let that = this;
+      SSupload(consat, file)
+        .then(({ res, url, name }) => {
+          if (res && res.status == 200) {
+            if (url) {
+              // 替换文件
+              // https://hs-star-bucket-prod.oss-cn-zhangjiakou.aliyuncs.com
+              url = url.replace(
+                "https://hs-star-bucket-prod.oss-cn-zhangjiakou.aliyuncs.com",
+                "https://hs.star.oss.xingfaner.cn"
+              );
+              console.log(url);
+            }
+          }
+        })
+        .catch(err => {
+          loading.close();
+          this.$message("图片上传失败");
+          console.log(`阿里云OSS上传图片失败回调`, err);
+        });
+    },
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
