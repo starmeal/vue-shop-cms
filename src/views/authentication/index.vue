@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="form-content">
-      <el-form ref="form" :model="form" label-width="150px">
+      1111
+      <!-- <el-form ref="form" :model="form" label-width="150px">
         <div class="title">选择类目</div>
         <el-form-item label="经验类目：">
           <span>食品</span>
@@ -176,7 +177,7 @@
          <el-form-item>
            <el-button type="danger" size="mini">提交审核</el-button>
          </el-form-item>
-      </el-form>
+      </el-form> -->
     </div>
   </div>
 </template>

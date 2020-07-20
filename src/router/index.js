@@ -37,60 +37,7 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/authentication',
-    component: () => import('@/views/layout/layout'),
-    meta: {
-      title: '资质认证',
-      fullTitle: '资质认证',
-      icon: 'zuosuojin',
-    },
-    children: [
-      {
-        title: '资质认证',
-        path: '/authentication/authenticationform',
-        meta: {
-          parentPath: '/authentication/authenticationform',
-          basePath: '/authentication/authenticationform',
-        },
-        component: () => import('@/views/authentication/index'),
-      },
-<<<<<<< HEAD
-    ]
-  },
-  {
-    path: '/notice',
-    component: () => import('@/views/layout/layout'),
-    meta: {
-      title: '公告',
-      fullTitle: '店铺首页',
-      icon: 'zuosuojin',
-    },
-    children: [
-      {
-        title: '编辑公告',
-        path: '/Notice/Noticeform',
-        meta: {
-          parentPath: '/Notice/Noticeform',
-          basePath: '/Notice/Noticeform',
-        },
-        component: () => import('@/views/notice/index'),
-      },
-      {
-        title: '公告列表',
-        path: '/Notice/noticelist',
-        meta: {
-          parentPath: '/Notice/noticelist',
-          basePath: '/Notice/noticelist',
-        },
-        component: () => import('@/views/notice/noticelist'),
-      },
-=======
-
->>>>>>> 2f6f8ae3092161c38095ee9008509ca6693a4cf2
-    ]
-  },
-  {
-    path: '/',
+    path: '/store',
     component: () => import('@/views/layout/layout'),
     meta: {
       title: '店铺',
@@ -106,16 +53,45 @@ export const asyncRoutes = [
           basePath: '/store',
         },
         component: () => import('@/views/store'),
-
       },
       {
-        path: '/home1',
+        path: '/authentication',
         meta: {
-          title: '店铺详情1',
+          title: '资质认证',
           parentPath: '/store',
           basePath: '/store',
         },
-        component: () => import('@/views/home'),
+        component: () => import('@/views/authentication/index')
+      },
+      {
+        path: '/notice',
+        component: () => import('@/views/routeview'),
+        meta: {
+          title: '公告',
+          icon: 'zuosuojin',
+          parentPath: '/store',
+          basePath: '/store',
+        },
+        children: [
+          {
+            path: '',
+            meta: {
+              title: '编辑公告',
+              parentPath: '/notice',
+              basePath: '/store',
+            },
+            component: () => import('@/views/notice/index'),
+          },
+          {
+            path: '/noticelist',
+            meta: {
+              title: '公告列表',
+              parentPath: '/notice',
+              basePath: '/store',
+            },
+            component: () => import('@/views/notice/noticelist'),
+          },
+        ]
       },
       {
         path: '/home2',
