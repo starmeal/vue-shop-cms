@@ -4,7 +4,7 @@
     <div class='home-con'>
       <icon icon='home'></icon>
     </div>
-    <el-popover trigger="click" placement="bottom-start" v-if='isShowPopver' v-model='isShowPopver'>
+    <el-popover trigger="click" placement="bottom-start" v-model='isShowPopver'>
       <div class='visit-con'>
         <div class='visit-con-left'>
           <div class='visit-title'>所有菜单</div>
@@ -18,7 +18,7 @@
         <div></div>
       </div>
       <template slot="reference" @click='handlePopver'>
-        <div class='home-con' >
+        <div class='home-con'>
           <icon icon='xiangqing'></icon>
         </div>
       </template>
