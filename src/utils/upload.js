@@ -1,10 +1,7 @@
 import { getOssToken } from '@/api/upload'
 import Cookies from 'js-cookie'
 import OSS from "ali-oss";
-function ossClient(conf) {
-  return new OSS(conf);
-}
-//  上传图片
+//  上传图片token
 export function ossUpload() {
   let obj = {
     roleSessionName: 'hs-star-test'
@@ -38,12 +35,32 @@ export function ossUpload() {
     })
   }
 }
-export function SSupload(consat,file) {
+async function multipartUpload(ossConfig, consat, file) {
+  try {
+    let client = new OSS(ossConfig)
+    let result = await client.multipartUpload(consat, file, {
+      progress: function (p, checkpoint) {
+        console.log(p, checkpoint)
+      },
+    })
+    return Promise.resolve(result)
+  } catch (e) {
+    console.log(e);
+    return Promise.reject(e)
+  }
+}
+export function asyncUpload(consat, file) {
+  return ossUpload().then(res => {
+    return multipartUpload(res, consat, file)
+  })
+}
+// 普通上传方法
+export function SSupload(consat, file) {
   return new Promise((resolve, reject) => {
-    ossUpload().then(res => {
-      resolve(ossClient(res).put(consat, file))
-    }).catch(()=>{
-      reject("erro")
+    ossUpload().then(conf => {
+      resolve(new OSS(conf).put(consat, file))
+    }).catch(() => {
+      console.log(reject)
     })
   })
 }
