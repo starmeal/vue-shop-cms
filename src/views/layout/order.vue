@@ -1,5 +1,5 @@
 <template>
-  <div class='order-main-container'>
+  <div class='order-main-container' :class="{'order-container-spread': isSpread}">
     <div :class="['order-container', {'order-container-spread': isSpread}]" ref='orderContainer'>
       <el-collapse v-model="activeName">
         <el-collapse-item name="1">
@@ -145,7 +145,11 @@ export default {
   position: relative;
   height: calc(100vh - 54px);
   overflow: hidden;
-  width: 180px;
+  width: 0px;
+  transition: all 0.3s linear;
+  &.order-container-spread{
+    width:180px;
+  }
   .order-container {
     width: 180px;
     height: calc(100vh - 54px);

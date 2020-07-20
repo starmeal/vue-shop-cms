@@ -164,9 +164,9 @@
             >查看示例</span>
           </div>
         </el-form-item>
-        <el-form-item>
-          <el-button type="danger" size="mini">提交审核</el-button>
-        </el-form-item>
+         <el-form-item>
+           <el-button type="danger" size="mini">提交审核</el-button>
+         </el-form-item>
       </el-form>
     </div>
   </div>
