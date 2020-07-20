@@ -24,7 +24,7 @@
       </template>
     </el-popover>
     <div class='search-con'></div>
-    <div class='refresh'>
+    <div class='refresh' @click='reload'>
       <i class='el-icon-refresh-right'></i>刷新
     </div>
     <el-popover trigger="hover" width='154'>
@@ -76,6 +76,9 @@ export default {
     };
   },
   methods: {
+    reload () {
+      window.location.reload()
+    },
     handlePopver () {
       this.isShowPopver = true
     },
