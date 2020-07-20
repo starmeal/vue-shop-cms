@@ -7,6 +7,7 @@
         </el-form-item>
         <el-form-item label="店铺名称" prop="name1">
           <el-input v-model="form.name1" placeholder="请输入店铺名称，建议15字以内"></el-input>
+          <div style="font-size: 12px;color:#999;">详细阅读 <span style="color:#3976e6">《店铺命名规范》</span>，如需申请“旗舰店”、“专营店”、“专卖店”，请进入<span style="color:#3976e6">《店铺名称认证》</span></div>
         </el-form-item>
         <el-form-item label="店铺标志" prop="">
 
@@ -46,6 +47,7 @@
 
 <script>
   import cascader from './../../components/city/cascader'
+  import {shopSettings} from "@/api/store/index";
 export default {
   data(){
     return {
@@ -77,7 +79,14 @@ export default {
   components: {
     cascader
   },
+  created(){
+    this.getInfo();
+  },
   methods: {
+    async getInfo(){
+      let res = await shopSettings();
+      console.log(res);
+    },
     //城市选择
     changecity(){
 
