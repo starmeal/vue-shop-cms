@@ -15,3 +15,10 @@ export function plogin (data) {
     data
   })
 }
+export function getOrderMessage (data) {
+  return request({
+    url: '/order/getOrderMessage',
+    method: 'POST',
+    data
+  })
+}

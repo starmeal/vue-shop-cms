@@ -6,13 +6,18 @@
           <div slot="title" class='order-icon-container'>
             <i class="order-icon el-icon-info"></i>订单
           </div>
-          <div class='order-item-con'>
+          <div class='order-item-con' v-if='deliveredCount'>
             待发货订单
-            <div class='count'>(2)</div>
+            <div class='count'>({{deliveredCount}})</div>
           </div>
-          <div class='order-item-con'>
+          <div class='order-item-con' v-if='afterSaleCount'>
             售后订单
-            <div class='count'>(2)</div>
+            <div class='count'>({{afterSaleCount}})</div>
+          </div>
+          <div class='order-item-con' v-if='!deliveredCount && !afterSaleCount'>
+            <template>
+              暂无提醒消息
+            </template>
           </div>
         </el-collapse-item>
         <el-collapse-item name="2">
@@ -28,13 +33,13 @@
           <div slot="title" class='order-icon-container'>
             <i class="order-icon el-icon-info"></i>评价
           </div>
-          <div class='order-item-con'>
+          <div class='order-item-con' v-if='evaCount'>
             <template>
               待评价回复
-              <div class='count'>(2)</div>
+              <div class='count'>({{evaCount}})</div>
             </template>
           </div>
-          <div class='order-item-con'>
+          <div class='order-item-con' v-else>
             <template>
               暂无提醒消息
             </template>
@@ -49,13 +54,27 @@
 
 <script>
 import { throttle } from '@/utils/util.js'
+import {getOrderMessage} from '@/api/login'
+import { createNamespacedHelpers } from 'vuex';
+const { mapState } = createNamespacedHelpers('user');
 export default {
   name: 'order',
   data() {
     return {
+      deliveredCount: '',
+      afterSaleCount: '',
+      evaCount: '',
       isSpread: true,
       activeName: '1'
     };
+  },
+  created () {
+    this.getOrderMessage()
+  },
+   computed: {
+    ...mapState({
+      shopMerchantsCode: 'code',
+    })
   },
   mounted() {
     this.handle();
@@ -74,6 +93,19 @@ export default {
     window.removeEventListener('resize', this.handle);
   },
   methods: {
+    getOrderMessage () {
+      getOrderMessage({
+        shopMerchantsCode: this.shopMerchantsCode
+      }).then(({code, body:{
+        afterSaleCount,
+        deliveredCount,
+        evaCount
+      }}) => {
+        this.afterSaleCount = afterSaleCount
+        this.deliveredCount = deliveredCount
+        this.evaCount = evaCount
+      })
+    },
     handle () {
       let windowWith =
         document.documentElement.clientWidth || document.body.clientWidth;
