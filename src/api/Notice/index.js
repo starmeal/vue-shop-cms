@@ -31,7 +31,6 @@ export function selectShopMerchantsNoticeById(data) {
     data
   });
 }
-
 export function updateShopMerchantsNoticeById(data) {
   return request({
     url: "/merchants/updateShopMerchantsNoticeById",
@@ -39,43 +38,26 @@ export function updateShopMerchantsNoticeById(data) {
     data
   });
 }
-// 提现申请记录列表
-export function withdrawalList(data) {
+export function announcement(data) {
   return request({
-    url: "/withdrawal/withdrawalList",
+    url: "/merchants/announcement",
     method: "post",
     data
   });
 }
-// 提现申请
-export function withdrawalApplication(data) {
+// 批量删除公告接口
+export function batchDeleteShopMerchantsNoticeByIds(data) {
   return request({
-    url: "/withdrawal/withdrawalApplication",
+    url: "/merchants/batchDeleteShopMerchantsNoticeByIds",
     method: "post",
     data
   });
 }
-// 提现申请
-export function sendSMCode(data) {
+// 批量停止
+export function batchStopShopMerchantsNoticeByIds(data) {
   return request({
-    url: "/withdrawal/sendSMCode/v1",
+    url: "/merchants/batchStopShopMerchantsNoticeByIds",
     method: "post",
-    data
-  });
-}
-// 提现申请基本信息获取
-export function withdrawInformation(data) {
-  return request({
-    url: "/withdrawal/withdrawInformation",
-    method: "post",
-    data
-  });
-}
-export function withdrawalListExportExcel(data) {
-  return request({
-    url: "/withdrawal/withdrawalListExportExcel",
-    method: "post",
-    responseType: 'blob',
     data
   });
 }

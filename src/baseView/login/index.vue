@@ -121,26 +121,6 @@ export default {
     }
   },
   methods: {
-<<<<<<< HEAD
-    ...mapActions(['login']),
-    adminLogin() {
-      this.$refs.adminLogin.validate(async valid => {
-        this.loading = true;
-        if (valid) {
-          this.login({
-            ...this.userPass,
-            password: md5(this.userPass.password)
-          })
-            .then(({ code }) => {
-              this.loading = false;
-              if (code === '000000') {
-                this.$router.push({ path: this.redirect || '/' });
-              }
-            })
-            .catch(err => {
-              this.loading = false;
-            });
-=======
     ...mapActions(["login"]),
     // 倒计时
     sendOutMessage() {
@@ -176,7 +156,6 @@ export default {
           this.$refs.adminLogin.resetFields();
         } else {
           this.$refs.mobelForm.resetFields();
->>>>>>> 0637f54b660862e1fa0edfa5edf4a3240c70c804
         }
       });
     },

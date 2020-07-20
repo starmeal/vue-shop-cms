@@ -37,8 +37,8 @@
       </div>
       <div class="btn-box">
         <el-button type="primary" @click="gomodify('')" icon="el-icon-plus" :size="size">添加公告</el-button>
-        <el-button :size="size">停止</el-button>
-        <el-button :size="size">删除</el-button>
+        <el-button :size="size" @click="stopall">停止</el-button>
+        <el-button :size="size" @click="delall">删除</el-button>
       </div>
     </section>
     <section class="table-container">
@@ -74,16 +74,26 @@
         <el-table-column prop="display_end_time" label="公告结束时间"></el-table-column>
         <el-table-column prop="display_end_time" label="发布状态" width="100px">
           <template slot-scope="props">
-            <span v-if="props.row.publish_status == 1">待发布</span>
+            <span v-if="props.row.publish_status == 1">未发布</span>
             <span v-if="props.row.publish_status == 2">已发布</span>
-            <span v-if="props.row.publish_status == 3">已撤销</span>
+            <span v-if="props.row.publish_status == 3">已停止</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="200px">
           <template slot-scope="props">
             <el-button type="text" :size="size" @click="gomodify(props.row)">编辑</el-button>
-            <el-button type="text" :size="size" @click="gomodify(props.row)">发布</el-button>
-            <el-button type="text" :size="size" @click="gomodify(props.row)">停止</el-button>
+            <el-button
+              type="text"
+              :size="size"
+              @click="operation(props.row,2)"
+              v-if="props.row.publish_status == 3 || props.row.publish_status == 1"
+            >发布</el-button>
+            <el-button
+              type="text"
+              :size="size"
+              @click="operation(props.row,3)"
+              v-if="props.row.publish_status == 2"
+            >停止</el-button>
             <el-button type="text" :size="size" @click="delgoods(props.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -113,7 +123,10 @@
 <script>
 import {
   selectShopMerchantsNotice,
-  deleteShopMerchantsNoticeById
+  deleteShopMerchantsNoticeById,
+  announcement,
+  batchDeleteShopMerchantsNoticeByIds,
+  batchStopShopMerchantsNoticeByIds
 } from "@/api/Notice";
 export default {
   data() {
@@ -142,7 +155,8 @@ export default {
       delrow: "",
       selectarr: [],
       selectarr1: [],
-      selectarr2: []
+      selectarr2: [],
+      arrlist: []
     };
   },
   created() {
@@ -150,6 +164,36 @@ export default {
   },
   mounted() {},
   methods: {
+    // 批量停止
+    stopall() {
+      let obj = {
+        ids: this.arrlist.join(",")
+      };
+      batchStopShopMerchantsNoticeByIds(obj).then(res => {
+        this.$message({
+          showClose: true,
+          message: "操作成功",
+          type: "success"
+        });
+        this.arrlist = [];
+        this.getList();
+      });
+    },
+    // 批量删除
+    delall() {
+      let obj = {
+        ids: this.arrlist.join(",")
+      };
+      batchDeleteShopMerchantsNoticeByIds(obj).then(res => {
+        this.$message({
+          showClose: true,
+          message: "操作成功",
+          type: "success"
+        });
+        this.arrlist = [];
+        this.getList();
+      });
+    },
     // 用户勾选
     del() {
       this.listpage = {
@@ -159,9 +203,30 @@ export default {
         startTime: "",
         endTime: ""
       };
+      this.value1 = ''
       this.getList();
     },
+    // 发布或者停止
+    operation(row, idx) {
+      let obj = {
+        id: row.id,
+        publishStatus: idx
+      };
+      announcement(obj).then(res => {
+        if (res.code === "000000") {
+          this.$message({
+            showClose: true,
+            message: "操作成功",
+            type: "success"
+          });
+          this.getList();
+        }
+      });
+    },
     tableSelect(selection, row) {
+      selection.forEach(element => {
+        this.arrlist.push(element.id);
+      });
       console.log(selection, row);
     },
     changepicker(e) {

@@ -23,8 +23,8 @@
                 placeholder="选择时间"
                 :picker-options="endTimepickerOptions"
                 v-model="form.displayBeginTime"
-                value-format="yyyy-MM-dd HH:MM:SS"
-                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                 type="datetime"
               ></el-date-picker>
               <div class="font-f">结束时间：</div>
               <el-date-picker
@@ -33,7 +33,7 @@
                 :size="size"
                 v-model="form.displayEndTime"
                 type="datetime"
-                value-format="yyyy-MM-dd HH:MM:SS"
+               value-format="yyyy-MM-dd HH:mm:ss"
               ></el-date-picker>
             </div>
           </el-form-item>
@@ -50,16 +50,17 @@
               clearable
             ></el-input>
           </el-form-item>
-          <el-form-item label="是否发布">
-            <el-radio v-model="radio" label="1">是</el-radio>
-            <el-radio v-model="radio" label="2">否</el-radio>
+          <el-form-item label="是否发布" v-if="!$route.query.id">
+            <el-radio v-model="form.publishStatus" label="1">是</el-radio>
+            <el-radio v-model="form.publishStatus" label="2">否</el-radio>
           </el-form-item>
           <el-form-item>
             <el-button
               :size="size"
               type="primary"
               @click="submitgoods()"
-            >{{ $route.query.id ? "修改" : "创建" }}</el-button>
+            >{{ $route.query.id ? "修改" : "保存" }}</el-button>
+            <el-button :size="size" @click="gohistory">返回列表</el-button>
           </el-form-item>
         </el-form>
       </section>
@@ -118,7 +119,7 @@ export default {
         displayBeginTime: "",
         displayEndTime: "",
         noticeContent: "",
-        publishStatus: ""
+        publishStatus: "1"
       }
     };
   },
@@ -133,6 +134,11 @@ export default {
     }
   },
   methods: {
+     gohistory(){
+        this.$router.push({
+           path:'/Notice/noticelist'
+        })
+     },
     dealDisabledDate(time) {
       return (
         time.getTime() + 24 * 60 * 60 * 1000 <
@@ -161,7 +167,8 @@ export default {
           }
           if (this.$route.query.id) {
             let obj = Object.assign({}, this.form, {
-              id: this.$route.query.id
+              id: this.$route.query.id,
+              publishStatus: this.$route.query.id ? 3 : this.form.publishStatus
             });
             updateShopMerchantsNoticeById(obj).then(res => {
               this.$message({

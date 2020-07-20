@@ -20,7 +20,6 @@ export const asyncRoutes = [
       title: '首页',
       fullTitle: '首页',
       icon: 'zuosuojin',
-      roles: ["/shop/cms/permission/role/list", "/shop/cms/user/list", "/shop/cms/user/get"]
     },
     children: [
       {
@@ -31,42 +30,66 @@ export const asyncRoutes = [
           title: '首页',
           fullTitle: '首页',
           icon: 'zuosuojin',
-          roles: ["/shop/cms/permission/role/list", "/shop/cms/user/list", "/shop/cms/user/get"]
         }
-      },
+      }
+    ]
+  },
+  {
+    path: '/authentication',
+    component: () => import('@/views/layout/layout'),
+    meta: {
+      title: '资质认证',
+      fullTitle: '资质认证',
+      icon: 'zuosuojin',
+    },
+    children: [
       {
-        path: '/notice',
-        component: () => import('@/views/routeview'),
+        title: '资质认证',
+        path: '/authentication/authenticationform',
         meta: {
-          title: '公告',
+          parentPath: '/authentication/authenticationform',
+          basePath: '/authentication/authenticationform',
         },
-        children: [
-          {
-            path: '/Notice/Noticeform',
-            component: () => import('@/views/notice/index.vue'),
-            meta: {
-              title: '编辑公告',
-            }
-          },
-          {
-            path: '/Notice/noticelist',
-            component: () => import('@/views/notice/noticelist.vue'),
-            meta: {
-              title: '公告列表',
-            }
-          }
-        ]
+        component: () => import('@/views/authentication/index'),
       },
     ]
   },
   {
-    path: '/store',
+    path: '/notice',
+    component: () => import('@/views/layout/layout'),
+    meta: {
+      title: '公告',
+      fullTitle: '店铺首页',
+      icon: 'zuosuojin',
+    },
+    children: [
+      {
+        title: '编辑公告',
+        path: '/Notice/Noticeform',
+        meta: {
+          parentPath: '/Notice/Noticeform',
+          basePath: '/Notice/Noticeform',
+        },
+        component: () => import('@/views/notice/index'),
+      },
+      {
+        title: '公告列表',
+        path: '/Notice/noticelist',
+        meta: {
+          parentPath: '/Notice/noticelist',
+          basePath: '/Notice/noticelist',
+        },
+        component: () => import('@/views/notice/noticelist'),
+      },
+    ]
+  },
+  {
+    path: '/',
     component: () => import('@/views/layout/layout'),
     meta: {
       title: '店铺',
       fullTitle: '店铺首页',
       icon: 'zuosuojin',
-      roles: ["/shop/cms/permission/role/list", "/shop/cms/user/list", "/shop/cms/user/get"]
     },
     children: [
       {

@@ -4,7 +4,7 @@
       <div class='menu-top-item' :class="{'is-collapse': isCollapse}" @click='changeIsCollapse'>
         <Icon :icon="isCollapse ? 'yousuojin':'zuosuojin'" />
       </div>
-      <div v-for="(menuItem, index ) in menuList" :key='menuItem.path' class='menu-item' :class="{'is-collapse': isCollapse, 'is-collapse-color': menuItem.path  === $route.path || menuItem.path === basePath}" @click='switchRouter(menuItem, index)'>
+      <div v-for="(menuItem, index ) in menuList" :key='index' class='menu-item' :class="{'is-collapse': isCollapse, 'is-collapse-color': menuItem.path  === $route.path || menuItem.path === basePath}" @click='switchRouter(menuItem, index)'>
         <Icon :icon='menuItem.meta.icon' />
         <div class='menu-item-name' v-show='isCollapse'>{{menuItem.meta.title}}</div>
       </div>
