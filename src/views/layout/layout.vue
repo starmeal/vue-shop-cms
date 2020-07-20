@@ -1,5 +1,5 @@
 <template>
-  <div class='layout-container'>
+  <div class='layout-container' :key='$route.path'>
       <header-container></header-container>
       <div class='layout-main-con'>
         <Menu />

@@ -4,22 +4,24 @@
     <div class='home-con'>
       <icon icon='home'></icon>
     </div>
-    <el-popover trigger="click" placement="bottom-start">
+    <el-popover trigger="click" placement="bottom-start" v-model='isShowPopver'>
       <div class='visit-con'>
         <div class='visit-con-left'>
           <div class='visit-title'>所有菜单</div>
           <div class='visit-scroll-con'>
-            <div class='visit-item'>11111</div>
+            <div class='visit-item' :class="{'active': menuItem.path === basePath}" v-for='(menuItem, menuIndex) in menuList' :key='menuIndex' @mouseenter='switchRouter(menuItem, menuIndex)'>{{menuItem.meta.title}}</div>
           </div>
         </div>
         <div class='visit-con-right'>
-          <div class='visit-item'>1111111</div>
+          <div class='visit-item' v-for='(item, index) in menuItemList' :key='index' :class="{'active': item.path === path}" @mouseenter='handleItemEnter(item)' @click='handleSwitchRouter(item.path)'> {{item.meta.title}}</div>
         </div>
         <div></div>
       </div>
-      <div class='home-con' slot="reference">
-        <icon icon='xiangqing'></icon>
-      </div>
+      <template slot="reference" @click='handlePopver'>
+        <div class='home-con' >
+          <icon icon='xiangqing'></icon>
+        </div>
+      </template>
     </el-popover>
     <div class='search-con'></div>
     <div class='refresh'>
@@ -42,7 +44,7 @@
       </div>
     </el-popover>
     <el-tooltip class="item" content="退出登录" placement="bottom">
-      <div class='home-con' @click='aaa'>
+      <div class='home-con'>
         <icon icon='guanbikaiguan'></icon>
       </div>
     </el-tooltip>
@@ -53,6 +55,7 @@
 import { createNamespacedHelpers } from 'vuex';
 const { mapState } = createNamespacedHelpers('user');
 import Icon from '@/components/base/icon.vue';
+import { deepClone } from '@/utils/util';
 export default {
   name: 'headercontainer',
   components: {
@@ -64,13 +67,71 @@ export default {
       menuList: 'routes'
     })
   },
+  data() {
+    return {
+      isShowPopver: false,
+      path: '',
+      basePath: '',
+      menuItemList: []
+    };
+  },
   methods: {
-    aaa() {
-      console.log('');
+    handlePopver () {
+      this.isShowPopver = true
+    },
+    handleSwitchRouter(path) {
+      this.isShowPopver = false;
+      this.$router.push(path !== '/' ? path.replace(/\/$/g, ''): path);
+    },
+    handleItemEnter(item) {
+      this.path = item.path;
+    },
+    switchRouter(menuItem, index) {
+      this.basePath = menuItem.path;
+      this.menuItemList = this.filterMenuItem(deepClone(menuItem.children));
+    },
+    filterMenuItem(list) {
+      let result = [];
+      try {
+        list.forEach((menuItem, menuIndex) => {
+          let {
+            path,
+            meta: { basePath, parentPath }
+          } = menuItem;
+          if (menuItem.path == '') {
+            menuItem.path = (parentPath || basePath) + '/';
+          }
+          if (!menuItem.hidden) {
+            if (menuItem.children) {
+              result.push(...this.filterMenuItem(menuItem.children));
+            } else {
+              result.push(menuItem);
+            }
+          }
+        });
+      } catch (error) {
+        console.log(error, 'error');
+      }
+      return result;
     }
   },
-  created () {
-    console.log(this.menuList, 'menuList')
+  created() {
+    let {
+      path,
+      meta: { basePath, parentPath }
+    } = this.$route;
+    this.basePath = basePath || path;
+    this.path = path == basePath ? path + '/' : path;
+    this.menuList.forEach((menuItem, menuIndex) => {
+      if (menuItem.path === basePath) {
+        this.menuItemList = this.filterMenuItem(
+          deepClone(this.menuList[menuIndex].children)
+        );
+      }
+    });
+    this.currentNodeKey = this.$route.matched[
+      this.$route.matched.length - 1
+    ].path;
   }
 };
 </script>
@@ -244,7 +305,9 @@ export default {
         box-sizing: border-box;
         padding-left: 17px;
         cursor: pointer;
-        &:hover {
+        margin-bottom: 10px;
+        &:hover,
+        &.active {
           font-size: 13px;
           font-family: Microsoft YaHei;
           background: rgba(68, 171, 247, 1);
@@ -272,7 +335,10 @@ export default {
       color: rgba(102, 102, 102, 1);
       background: #f7f8fa;
       cursor: pointer;
-      &:hover {
+      margin-bottom: 10px;
+
+      &:hover,
+      &.active {
         font-size: 13px;
         font-family: Microsoft YaHei;
         background: rgba(68, 171, 247, 1);

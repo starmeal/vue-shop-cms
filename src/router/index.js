@@ -16,6 +16,7 @@ export const asyncRoutes = [
   {
     path: '/',
     component: () => import('@/views/layout/layout'),
+    alwaysHidden: true,
     meta: {
       title: '首页',
       fullTitle: '首页',
@@ -25,23 +26,17 @@ export const asyncRoutes = [
     children: [
       {
         path: '',
-        hidden: true,
         component: () => import('@/views/home'),
         meta: {
+          parentPath: '/',
+          basePath: '/',
           title: '首页',
           fullTitle: '首页',
           icon: 'zuosuojin',
           roles: ["/shop/cms/permission/role/list", "/shop/cms/user/list", "/shop/cms/user/get"]
         }
       },
-      {
-        path: '/about',
-        hidden: true,
-        component: () => import('@/views/AnnouncementManagement'),
-        meta: {
-          title: '首页1',
-        }
-      }
+
     ]
   },
   {
@@ -55,55 +50,55 @@ export const asyncRoutes = [
     },
     children: [
       {
-        title: '店铺详情',
         path: '',
         meta: {
+          title: '店铺详情',
           parentPath: '/store',
           basePath: '/store',
         },
         component: () => import('@/views/store'),
-        
+
       },
       {
-        title: '店铺详情1',
         path: '/home1',
         meta: {
+          title: '店铺详情1',
           parentPath: '/store',
           basePath: '/store',
         },
         component: () => import('@/views/home'),
       },
       {
-        title: '店铺详情2',
         path: '/home2',
         meta: {
+          title: '店铺详情2',
           parentPath: '/store',
           basePath: '/store',
         },
         component: () => import('@/views/home'),
         children: [
           {
-            title: '店铺详情3',
             path: '',
             meta: {
+              title: '店铺详情3',
               parentPath: '/home2',
               basePath: '/store',
             },
             component: () => import('@/views/store'),
           },
           {
-            title: '店铺详情4',
             path: '/home4',
             meta: {
+              title: '店铺详情4',
               parentPath: '/home2',
               basePath: '/store',
             },
             component: () => import('@/views/home'),
           },
           {
-            title: '店铺详情5',
             path: '/home5',
             meta: {
+              title: '店铺详情5',
               parentPath: '/home2',
               basePath: '/store',
             },

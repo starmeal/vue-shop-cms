@@ -4,21 +4,23 @@
       <div class='menu-top-item' :class="{'is-collapse': isCollapse}" @click='changeIsCollapse'>
         <Icon :icon="isCollapse ? 'yousuojin':'zuosuojin'" />
       </div>
-      <div v-for="(menuItem, index ) in menuList" :key='menuItem.path' class='menu-item' :class="{'is-collapse': isCollapse, 'is-collapse-color': menuItem.path  === $route.path || menuItem.path === basePath}" @click='switchRouter(menuItem, index)'>
-        <Icon :icon='menuItem.meta.icon' />
-        <div class='menu-item-name' v-show='isCollapse'>{{menuItem.meta.title}}</div>
-      </div>
+      <template v-for="(menuItem, index ) in menuList" >
+        <div v-if='!menuItem.alwaysHidden' :key='menuItem.path' class='menu-item' :class="{'is-collapse': isCollapse, 'is-collapse-color': menuItem.path  === $route.path || menuItem.path === basePath}" @click='switchRouter(menuItem, index)'>
+          <Icon :icon='menuItem.meta.icon' />
+          <div class='menu-item-name' v-show='isCollapse'>{{menuItem.meta.title}}</div>
+        </div>
+      </template>
     </div>
 
     <div :class="['menu-second-container', {'active': isCollapseSecond}]">
       <div :class="['second-title', {'active': isCollapseSecond}]"><span>店铺首页</span></div>
       <el-tree :data="menuItemList" highlight-current node-key="path" @node-click='handleNodeClick' :default-expanded-keys="defaultExpandedKeys" :current-node-key='currentNodeKey'>
         <div class="second-init-title" slot-scope="{ node, data }">
-          <span :class="{'has-children': data.children && data.children.length}">{{ data.title }}</span>
+          <span :class="{'has-children': data.children && data.children.length}">{{ data.meta.title }}</span>
         </div>
       </el-tree>
     </div>
-    <div class='close' @click='handleIsCollapseSecond'></div>
+    <div class='close' @click='handleIsCollapseSecond' v-if='menuItemList.length'></div>
   </div>
 </template>
 
@@ -37,6 +39,7 @@ export default {
         children: 'children',
         label: 'title'
       },
+      menuFilterList: [],
       defaultExpandedKeys: [],
       currentNodeKey: ''
     };
@@ -61,6 +64,9 @@ export default {
         this.menuItemList = this.filterMenuItem(
           deepClone(this.menuList[menuIndex].children)
         );
+        this.isCollapseSecond = !!this.menuItemList.length
+      } else {
+        this.isCollapseSecond = false
       }
     });
     this.currentNodeKey = this.$route.matched[
