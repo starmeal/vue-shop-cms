@@ -4,7 +4,7 @@
     <div class='home-con'>
       <icon icon='home'></icon>
     </div>
-    <el-popover trigger="click" placement="bottom-start" v-model='isShowPopver'>
+    <el-popover trigger="click" placement="bottom-start" v-if='isShowPopver' v-model='isShowPopver'>
       <div class='visit-con'>
         <div class='visit-con-left'>
           <div class='visit-title'>所有菜单</div>
