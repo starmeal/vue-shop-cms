@@ -50,6 +50,9 @@ export default {
       display:flex;
       align-items: center;
       justify-content: center;
+      font-size:12px;
+      font-family:Microsoft YaHei;
+      color:rgba(153,153,153,1);
     }
   }
 }
