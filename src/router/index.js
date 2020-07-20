@@ -62,6 +62,7 @@ export const asyncRoutes = [
           basePath: '/store',
         },
         component: () => import('@/views/store'),
+        
       },
       {
         title: '店铺详情1',

@@ -59,14 +59,18 @@ export default {
     Icon
   },
   computed: {
-    ...mapState([
-      'name'
-    ])
+    ...mapState({
+      name: 'name',
+      menuList: 'routes'
+    })
   },
   methods: {
     aaa() {
       console.log('');
     }
+  },
+  created () {
+    console.log(this.menuList, 'menuList')
   }
 };
 </script>
@@ -91,7 +95,7 @@ export default {
     justify-content: center;
     position: relative;
     box-sizing: border-box;
-    border-bottom: 1px solid #E7EAEC;
+    border-bottom: 1px solid #e7eaec;
     cursor: pointer;
     &::after {
       content: ' ';
@@ -109,7 +113,7 @@ export default {
     position: relative;
     background: #fff;
     box-sizing: border-box;
-    border-bottom: 1px solid #E7EAEC;
+    border-bottom: 1px solid #e7eaec;
     &::after {
       content: ' ';
       position: absolute;
@@ -133,7 +137,7 @@ export default {
     background: #fff;
     position: relative;
     box-sizing: border-box;
-    border-bottom: 1px solid #E7EAEC;
+    border-bottom: 1px solid #e7eaec;
     cursor: pointer;
     .el-icon-refresh-right {
       margin-right: 10px;
@@ -162,7 +166,7 @@ export default {
     cursor: pointer;
     position: relative;
     box-sizing: border-box;
-    border-bottom: 1px solid #E7EAEC;
+    border-bottom: 1px solid #e7eaec;
     &::after {
       content: ' ';
       position: absolute;
