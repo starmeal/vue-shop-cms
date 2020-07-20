@@ -68,7 +68,6 @@ export const asyncRoutes = [
         component: () => import('@/views/routeview'),
         meta: {
           title: '公告',
-          icon: 'zuosuojin',
           parentPath: '/store',
           basePath: '/store',
         },
