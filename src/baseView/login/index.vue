@@ -76,7 +76,7 @@ export default {
       isActive: 2,
       count: 60,
       mobelForm: {
-        mobile: "15004673591",
+        mobile: "",
         smCode: ""
       },
       userPass: {

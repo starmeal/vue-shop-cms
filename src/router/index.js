@@ -48,7 +48,7 @@ export const asyncRoutes = [
       {
         path: '',
         meta: {
-          title: '店铺详情',
+          title: '店铺设置',
           parentPath: '/store',
           basePath: '/store',
         },
