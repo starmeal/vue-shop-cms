@@ -77,17 +77,19 @@ export default {
     })
   },
   mounted() {
-    this.handle();
-    window.addEventListener(
-      'resize',
-      throttle(
-        () => {
-          this.handle();
-        },
-        20,
-        true
-      )
-    );
+    this.$nextTick(() => {
+      this.handle();
+      window.addEventListener(
+        'resize',
+        throttle(
+          () => {
+            this.handle();
+          },
+          20,
+          true
+        )
+      );
+    });
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.handle);
