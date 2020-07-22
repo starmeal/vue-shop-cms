@@ -21,3 +21,10 @@ export function GetBasicDetailsByName(data) {
     data: data
   });
 }
+export function certification(data) {
+  return request({
+    url: "merchants/info/certification",
+    method: "post",
+    data: data
+  });
+}

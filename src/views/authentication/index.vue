@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="form-content">
-      <el-form ref="form" :model="form" label-width="150px">
+      <el-form ref="form" :model="form" label-width="150px" :rules="rules">
         <div class="title">选择类目</div>
-        <el-form-item label="经验类目：">
+        <el-form-item label="经验类目：" prop="categoryName">
           <span
             v-for="(item,index) in form.categoryName"
             :key="index"
@@ -48,8 +48,9 @@
           <el-input v-model="keyWord" placeholder="请输入内容" style="width:400px" size="mini"></el-input>
           <el-button type="primary" size="mini" style="margin-left:20px" @click="serachcomp">搜索</el-button>
         </el-form-item>
-        <el-form-item label="企业名称：">
+        <el-form-item label="企业名称：" prop="companyName">
           <el-input
+            :disabled="true"
             placeholder="请输入企业名称"
             clearable
             style="width:400px"
@@ -58,10 +59,10 @@
           ></el-input>
           <div>该名称需要与提现银行卡所对应的对公账户名称一致</div>
         </el-form-item>
-        <el-form-item label="注册地址：">
-          <el-cascader :options="districts" size="mini" :props="cityProps"></el-cascader>
+        <el-form-item label="注册地址：" prop="cityCode">
+          <cascader v-model="cityvalue" @change="handleChange"></cascader>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="addressDetail">
           <el-input
             v-model="form.addressDetail"
             type="textarea"
@@ -72,7 +73,7 @@
             show-word-limit
           ></el-input>
         </el-form-item>
-        <el-form-item label="经营范围：">
+        <el-form-item label="经营范围：" prop="businessScope">
           <el-input
             type="textarea"
             style="width:450px"
@@ -82,7 +83,7 @@
             maxlength="100"
           ></el-input>
         </el-form-item>
-        <el-form-item label="统一社会信用代码：">
+        <el-form-item label="统一社会信用代码：" prop="socialCreditCode">
           <el-input
             size="mini"
             style="width:400px"
@@ -91,7 +92,7 @@
           ></el-input>
           <div>请输入营业执照18位统一社会信用代码</div>
         </el-form-item>
-        <el-form-item label="营业期限：">
+        <el-form-item label="营业期限：" prop="periodStartDate">
           <div>
             <el-radio v-model="form.operatingPeriodType" label="0">区间有效</el-radio>
             <el-date-picker
@@ -117,12 +118,12 @@
             ></el-date-picker>
           </div>
         </el-form-item>
-        <el-form-item label="营业执照照片：">
+        <el-form-item label="营业执照照片：" prop="licenseImgUrl">
           <img v-if="form.licenseImgUrl" :src="form.licenseImgUrl" class="avatar" />
         </el-form-item>
         <div class="title">法人信息</div>
         <div style="margin-left: 52px; padding: 20px 0px;font-size:12px">法人代表人证件照（身份证）</div>
-        <el-form-item label="手持身份证：">
+        <el-form-item label="手持身份证：" prop="handheldIdCardImg">
           <el-upload
             class="avatar-uploader"
             action="https://jsonplaceholder.typicode.com/posts/"
@@ -138,17 +139,21 @@
           </el-upload>
           <div>
             必须为彩色图片且小于4M，文件格式为bmp，png，jpeg，或gif。
-            <span style="color:#3976e6">查看示例</span>
+            <span
+              style="color:#3976e6"
+              class="poiner"
+              @click="showdemoIDcard"
+            >查看示例</span>
           </div>
         </el-form-item>
-        <el-form-item label="身份证正面：">
+        <el-form-item label="身份证正面：" prop="legalIdCardUp">
           <img v-if="form.legalIdCardUp" :src="form.legalIdCardUp" class="avatar" />
         </el-form-item>
-        <el-form-item label="身份证反面：">
+        <el-form-item label="身份证反面：" prop="legalIdCardDown">
           <img v-if="form.legalIdCardUp" :src="form.legalIdCardDown" class="avatar" />
         </el-form-item>
         <div style="margin-left: 52px; padding: 20px 0px; font-size:12px">法人代表信息</div>
-        <el-form-item label="法人代表姓名：">
+        <el-form-item label="法人代表姓名：" prop="legalPersonName">
           <el-input
             v-model="form.legalPersonName"
             placeholder="请输入内容"
@@ -156,7 +161,7 @@
             size="mini"
           ></el-input>
         </el-form-item>
-        <el-form-item label="证件号码：">
+        <el-form-item label="证件号码：" prop="legalPersonIdCard">
           <el-input
             v-model="form.legalPersonIdCard"
             placeholder="请输入内容"
@@ -164,7 +169,7 @@
             size="mini"
           ></el-input>
         </el-form-item>
-        <el-form-item label="法人手机：">
+        <el-form-item label="法人手机：" prop="legalPersonMobile">
           <el-input
             v-model="form.legalPersonMobile"
             placeholder="请输入内容"
@@ -172,7 +177,7 @@
             size="mini"
           ></el-input>
         </el-form-item>
-        <el-form-item label="证件有效期：">
+        <el-form-item label="证件有效期：" prop="validityStartDate">
           <div>
             <el-radio v-model="form.idCardValidityType" label="0">区间有效</el-radio>
             <el-date-picker
@@ -224,9 +229,6 @@
               <i class="el-icon-plus"></i>
             </el-upload>
           </div>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt />
-          </el-dialog>
           <div
             v-if="textArr[index]"
             style="width:80%"
@@ -237,26 +239,50 @@
         </el-form-item>
       </el-form>
     </div>
+    <el-dialog title="提示" :visible.sync="showTips" width="30%">
+      <span>您的资料已经提交审核，平台审核将在1-3个工作日内完成，请您耐心等待~</span>
+    </el-dialog>
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" src="../../../static/img/demID.jpg" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+let districts;
 import { asyncUpload, SSupload } from "@/utils/upload";
+import cascader from "@/components/city/cascader.vue";
+import axios from "axios";
 import {
   qualification,
   categoryInformationList,
-  GetBasicDetailsByName
+  GetBasicDetailsByName,
+  certification
 } from "@/api/authentication";
 export default {
+  components: {
+    cascader
+  },
   data() {
+    var checkPhone = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("手机号不能为空"));
+      } else {
+        const reg = /^[1][3,4,5,6,7,8,9,][0-9]{9}$/;
+        if (reg.test(value)) {
+          callback();
+        } else {
+          return callback(new Error("请输入正确的手机号"));
+        }
+      }
+    };
     return {
-      cityProps:{
-        value:'adcode',
-        label:'name',
-        children:'districts',
-      },
-      districts:[],
+      showTips:false,
+      dialogVisible: false,
+      cityvalue: [],
+      cityArrName: [],
+      category: [],
+      districts: [],
       keyWord: "",
       imageUrl: "",
       textarea: "",
@@ -267,6 +293,42 @@ export default {
       timevalueOne: "",
       idCardvalue: [],
       idCardvalueOne: "",
+      rules: {
+        categoryName: [
+          {
+            required: true,
+            message: "请至少选择一个经营类目",
+            trigger: "change"
+          }
+        ],
+        companyName: [
+          { required: true, message: "请输入活动名称", trigger: "blur" }
+        ],
+        cityCode: [
+          { required: true, message: "请选择省市区", trigger: "change" }
+        ],
+        businessScope: [
+          { required: true, message: "请填写经营范围", trigger: "blur" }
+        ],
+        socialCreditCode: [
+          { required: true, message: "请填写统一社会信用代码", trigger: "blur" }
+          //  { min: 18, max: 18, message: '长度在 18个字符', trigger: 'blur' }
+        ],
+        handheldIdCardImg: [
+          { required: true, message: "手持身份证", trigger: "change" }
+        ],
+        legalPersonName: [
+          { required: true, message: "法人姓名", trigger: "change" }
+        ],
+        legalPersonIdCard: [
+          { required: true, message: "法人身份证", trigger: "change" },
+          { min: 18, max: 18, message: "长度在 18个字符", trigger: "blur" }
+        ],
+        legalPersonMobile: [{ validator: checkPhone, trigger: "blur" }],
+        validityStartDate: [
+          { required: true, message: "证件有效期", trigger: "change" }
+        ]
+      },
       form: {
         category: "",
         categoryName: "",
@@ -292,9 +354,7 @@ export default {
         validityEndDate: "",
         qualificationList: ""
       },
-      textArr: [],
-      dialogImageUrl: "",
-      dialogVisible: false
+      textArr: []
     };
   },
   watch: {
@@ -334,8 +394,7 @@ export default {
       )
       .then(res => {
         if (res.statusText == "OK") {
-          this.districts = res.data.districts[0].districts;
-          console.log(this.districts);
+          districts = res.data.districts[0].districts;
         }
       });
     this.getSelect().then(() => {
@@ -343,15 +402,121 @@ export default {
     });
   },
   methods: {
-    delImg(index, idx) {
-      this.form.qualificationList[index].qualificationImg.splice(idx, 1);
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
+    showdemoIDcard() {
       this.dialogVisible = true;
     },
+    handleChange(val) {
+      if (val.length == 0) {
+        this.form.provinceCode = "";
+        this.form.cityCode = "";
+        this.form.countyCode = "";
+      } else {
+        this.form.provinceCode = val[0];
+        this.form.cityCode = val[1];
+        this.form.countyCode = val[2];
+        this.HandleCityName(districts);
+      }
+    },
+    // 得到省市区中文
+    HandleCityName(districts) {
+      for (let j = 0; j < this.cityvalue.length; j++) {
+        for (let i = 0; i < districts.length; i++) {
+          if (districts[i].adcode == this.cityvalue[j]) {
+            this.cityArrName.push(districts[i].name);
+            if (districts[i].districts && districts[i].districts.length) {
+              this.HandleCityName(districts[i].districts);
+            }
+            break;
+          }
+        }
+      }
+      (this.form.provinceName = this.cityArrName[0]),
+        (this.form.cityName = this.cityArrName[1]);
+      this.form.countyName = this.cityArrName[2];
+    },
+    // 详情
+    getDetail() {
+      qualification().then(res => {
+        this.textArr = [];
+        let category = res.body.category.split(",").map(el => {
+          return parseInt(el);
+        });
+        this.category = category;
+        this.cityvalue = [
+          res.body.provinceCode,
+          res.body.cityCode,
+          res.body.countyCode
+        ];
+        category.forEach(element => {
+          this.selectArr.forEach(el => {
+            if (element == el.id) {
+              let obj = {
+                id: el.id,
+                qualificationDescription: el.qualificationDescription
+              };
+              this.textArr.push(obj);
+            }
+          });
+        });
+        if (res.body.operatingPeriodType == 0) {
+          this.timevalue = [res.body.periodStartDate, res.body.periodEndDate];
+        } else {
+          this.timevalueOne = res.body.periodStartDate;
+        }
+        if (res.body.idCardValidityType == 0) {
+          this.idCardvalue = [
+            res.body.validityStartDate,
+            res.body.validityEndDate
+          ];
+        } else {
+          this.idCardvalueOne = res.body.validityStartDate;
+        }
+
+        this.form = Object.assign({}, res.body, {
+          categoryName: res.body.categoryName ? res.body.categoryName.split(",") : 0,
+          category: category
+        });
+      });
+    },
     submit() {
-      console.log(this.form);
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          if (
+            this.category.sort().toString() == this.form.category.toString()
+          ) {
+            this.$message({
+              message: "类目没有更改不允许提交",
+              type: "warning"
+            });
+            return false;
+          }
+          let form = Object.assign({}, this.form, {
+            category: this.form.category.join(","),
+            categoryName: this.form.categoryName.join(",")
+          });
+          if (form.idCardValidityType == 0) {
+            form.validityStartDate = this.idCardvalue[0];
+            form.validityEndDate = this.idCardvalue[1];
+          } else {
+            form.validityStartDate = this.idCardvalueOne;
+            form.validityEndDate = "";
+          }
+          if (form.operatingPeriodType == 0) {
+            form.periodStartDate = this.timevalue[0];
+            form.period_end_date = this.timevalue[1];
+          } else {
+            form.periodStartDate = this.timevalueOne;
+            form.period_end_date = "";
+          }
+          certification(form).then(res => {});
+          // console.log(form)
+        } else {
+          return false;
+        }
+      });
+    },
+    delImg(index, idx) {
+      this.form.qualificationList[index].qualificationImg.splice(idx, 1);
     },
     serachcomp() {
       let obj = {
@@ -413,44 +578,6 @@ export default {
           });
       });
     },
-    // 详情
-    getDetail() {
-      qualification().then(res => {
-        this.textArr = [];
-        let category = res.body.category.split(",").map(el => {
-          return parseInt(el);
-        });
-        category.forEach(element => {
-          this.selectArr.forEach(el => {
-            if (element == el.id) {
-              let obj = {
-                id: el.id,
-                qualificationDescription: el.qualificationDescription
-              };
-              this.textArr.push(obj);
-            }
-          });
-        });
-        if (res.body.operatingPeriodType == 0) {
-          this.timevalue = [res.body.periodStartDate, res.body.periodEndDate];
-        } else {
-          this.timevalueOne = res.body.periodStartDate;
-        }
-        if (res.body.idCardValidityType == 0) {
-          this.idCardvalue = [
-            res.body.validityStartDate,
-            res.body.validityEndDate
-          ];
-        } else {
-          this.idCardvalueOne = res.body.validityStartDate;
-        }
-
-        this.form = Object.assign({}, res.body, {
-          categoryName: res.body.categoryName.split(","),
-          category: category
-        });
-      });
-    },
     // 图片上传
     uploadHttp({ file, data }) {
       if (file.type.split("/")[0] !== "image") {
@@ -502,15 +629,14 @@ export default {
           this.$message("图片上传失败");
           console.log(`阿里云OSS上传图片失败回调`, err);
         });
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
     }
   }
 };
 </script>
 <style lang="scss">
+.poiner {
+  cursor: pointer;
+}
 .icon-d {
   position: absolute;
   left: 50%;
