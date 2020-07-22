@@ -53,8 +53,8 @@
 </template>
 
 <script>
-import { throttle } from '@/utils/util.js'
-import {getOrderMessage} from '@/api/login'
+import { throttle } from '@/utils/util.js';
+import { getOrderMessage } from '@/api/login';
 import { createNamespacedHelpers } from 'vuex';
 const { mapState } = createNamespacedHelpers('user');
 export default {
@@ -68,12 +68,12 @@ export default {
       activeName: '1'
     };
   },
-  created () {
-    this.getOrderMessage()
+  created() {
+    this.getOrderMessage();
   },
-   computed: {
+  computed: {
     ...mapState({
-      shopMerchantsCode: 'code',
+      shopMerchantsCode: 'code'
     })
   },
   mounted() {
@@ -89,24 +89,22 @@ export default {
       )
     );
   },
-  beforeDestroy () {
+  beforeDestroy() {
     window.removeEventListener('resize', this.handle);
   },
   methods: {
-    getOrderMessage () {
+    getOrderMessage() {
       getOrderMessage({
         shopMerchantsCode: this.shopMerchantsCode
-      }).then(({code, body:{
-        afterSaleCount,
-        deliveredCount,
-        evaCount
-      }}) => {
-        this.afterSaleCount = afterSaleCount
-        this.deliveredCount = deliveredCount
-        this.evaCount = evaCount
-      })
+      }).then(
+        ({ code, body: { afterSaleCount, deliveredCount, evaCount } }) => {
+          this.afterSaleCount = afterSaleCount;
+          this.deliveredCount = deliveredCount;
+          this.evaCount = evaCount;
+        }
+      );
     },
-    handle () {
+    handle() {
       let windowWith =
         document.documentElement.clientWidth || document.body.clientWidth;
       this.$refs.orderContainer.style = 'none';
@@ -122,19 +120,32 @@ export default {
       this.isSpread = !this.isSpread;
       let windowWith =
         document.documentElement.clientWidth || document.body.clientWidth;
-      if (windowWith < 1080) {
-        this.$nextTick(() => {
-          if (this.isSpread) {
-            this.$refs.orderContainer.style.position = 'fixed';
-            this.$refs.orderContainer.style.right = '0px';
-            this.$refs.orderContainer.style.bottom = '0px';
-          } else {
-            this.$refs.orderContainer.style.position = 'fixed';
-            this.$refs.orderContainer.style.right = '-180px';
-            this.$refs.orderContainer.style.bottom = '0px';
-          }
-        });
+      if (this.isSpread) {
+        this.$refs.orderContainer.style.position = 'fixed';
+        this.$refs.orderContainer.style.right = '0px';
+        this.$refs.orderContainer.style.bottom = '0px';
+      } else {
+        this.$refs.orderContainer.style.position = 'fixed';
+        this.$refs.orderContainer.style.right = '-180px';
+        this.$refs.orderContainer.style.bottom = '0px';
       }
+      // if (windowWith < 1080) {
+      //   this.$nextTick(() => {
+      //     if (this.isSpread) {
+      //       console.log('2222223333');
+      //       this.$refs.orderContainer.style.position = 'fixed';
+      //       this.$refs.orderContainer.style.right = '0px';
+      //       this.$refs.orderContainer.style.bottom = '0px';
+      //     } else {
+      //       console.log('11111222');
+      //       this.$refs.orderContainer.style.position = 'fixed';
+      //       this.$refs.orderContainer.style.right = '-180px';
+      //       this.$refs.orderContainer.style.bottom = '0px';
+      //     }
+      //   });
+      // } else {
+      //   console.log('在这里输出了');
+      // }
     }
   }
 };
@@ -147,8 +158,8 @@ export default {
   overflow: hidden;
   width: 0px;
   transition: all 0.3s linear;
-  &.order-container-spread{
-    width:180px;
+  &.order-container-spread {
+    width: 180px !important;
   }
   .order-container {
     width: 180px;
