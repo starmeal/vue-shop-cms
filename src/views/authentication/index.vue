@@ -1,20 +1,23 @@
 <template>
-  <div>
+  <div class="authentication">
     <div class="form-content">
-      <el-form ref="form" :model="form" label-width="150px" :rules="rules">
+      <el-form ref="form" :model="form" label-width="130px" :rules="rules">
         <div class="title">选择类目</div>
+        <div style="width:100%;height:10px"></div>
         <el-form-item label="经验类目：" prop="categoryName">
-          <span
-            v-for="(item,index) in form.categoryName"
-            :key="index"
-            style="margin-right:20px"
-          >{{item}}</span>
+          <div class="woqu">
+            <span
+              v-for="(item,index) in form.categoryName"
+              :key="index"
+              style="margin-right:20px"
+            >{{item}}</span>
+          </div>
         </el-form-item>
-        <el-form-item label="增加类目：">
+        <el-form-item label="经验类目：">
           <el-select
             v-model="form.category"
             multiple
-            placeholder="请选择"
+            placeholder="请选择经营类目最多五个"
             size="mini"
             @change="categoryChange"
           >
@@ -42,7 +45,7 @@
           <div>5:提现、发票的主体需要与认证主题一致，请如实填写主题认证信息；</div>
           <div>6:详细资质要求可参考《认证资质要求》。</div>
         </el-form-item>
-        <div class="title">营业执照信息</div>
+        <div class="title" style="border-top: solid 13px #fff;">营业执照信息</div>
         <el-form-item>
           <div>输入你的企业名称或统一社会信用代码:</div>
           <el-input v-model="keyWord" placeholder="请输入内容" style="width:400px" size="mini"></el-input>
@@ -92,13 +95,13 @@
           ></el-input>
           <div>请输入营业执照18位统一社会信用代码</div>
         </el-form-item>
-        <el-form-item label="营业期限：" prop="periodStartDate">
+        <el-form-item label="营业期限：" prop="operatingPeriodType">
           <div>
             <el-radio v-model="form.operatingPeriodType" label="0">区间有效</el-radio>
             <el-date-picker
               :disabled="form.operatingPeriodType != 0"
               v-model="timevalue"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="yyyy-MM-dd"
               size="mini"
               type="daterange"
               range-separator="至"
@@ -109,7 +112,7 @@
           <div>
             <el-radio v-model="form.operatingPeriodType" label="1">长期有效</el-radio>
             <el-date-picker
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="yyyy-MM-dd"
               :disabled="form.operatingPeriodType != 1"
               v-model="timevalueOne"
               type="date"
@@ -121,7 +124,7 @@
         <el-form-item label="营业执照照片：" prop="licenseImgUrl">
           <img v-if="form.licenseImgUrl" :src="form.licenseImgUrl" class="avatar" />
         </el-form-item>
-        <div class="title">法人信息</div>
+        <div class="title" style="border-top: solid 13px #fff;">法人信息</div>
         <div style="margin-left: 52px; padding: 20px 0px;font-size:12px">法人代表人证件照（身份证）</div>
         <el-form-item label="手持身份证：" prop="handheldIdCardImg">
           <el-upload
@@ -136,6 +139,9 @@
           >
             <img v-if="form.handheldIdCardImg" :src="form.handheldIdCardImg" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <div class="hidden-box">
+              <el-input v-model="form.handheldIdCardImg" class="hidden-input"></el-input>
+            </div>
           </el-upload>
           <div>
             必须为彩色图片且小于4M，文件格式为bmp，png，jpeg，或gif。
@@ -177,7 +183,7 @@
             size="mini"
           ></el-input>
         </el-form-item>
-        <el-form-item label="证件有效期：" prop="validityStartDate">
+        <el-form-item label="证件有效期：" prop="idCardValidityType">
           <div>
             <el-radio v-model="form.idCardValidityType" label="0">区间有效</el-radio>
             <el-date-picker
@@ -187,6 +193,7 @@
               :disabled="form.idCardValidityType != 0"
               range-separator="至"
               start-placeholder="开始日期"
+              value-format="yyyy-MM-dd"
               end-placeholder="结束日期"
             ></el-date-picker>
           </div>
@@ -196,6 +203,7 @@
               v-model="idCardvalueOne"
               type="date"
               placeholder="选择日期"
+              value-format="yyyy-MM-dd"
               size="mini"
               :disabled="form.idCardValidityType != 1"
             ></el-date-picker>
@@ -204,7 +212,6 @@
         </el-form-item>
         <div class="title" style="margin-bottom:20px">其他资质</div>
         <el-form-item v-for="(item,index) in form.qualificationList" :key="index">
-          <!-- <img src=""> -->
           <div class="flex-box">
             <div class="png-s" v-for="(item,idx) in item.qualificationImg" :key="idx">
               <img :src="item" style="width:100%;height:100%" />
@@ -235,13 +242,10 @@
           >{{textArr[index].qualificationDescription ? textArr[index].qualificationDescription : ''}}；必须为彩色图片且小于6M，文件格式为bmp、png、jpeg、或gif</div>
         </el-form-item>
         <el-form-item>
-          <el-button type="danger" size="mini" @click="submit">提交审核</el-button>
+          <el-button type="primary" size="mini" @click="submit" style="margin-bottom:0px">提交审核</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <el-dialog title="提示" :visible.sync="showTips" width="30%">
-      <span>您的资料已经提交审核，平台审核将在1-3个工作日内完成，请您耐心等待~</span>
-    </el-dialog>
     <el-dialog :visible.sync="dialogVisible">
       <img width="100%" src="../../../static/img/demID.jpg" />
     </el-dialog>
@@ -277,7 +281,7 @@ export default {
       }
     };
     return {
-      showTips:false,
+      showTips: false,
       dialogVisible: false,
       cityvalue: [],
       cityArrName: [],
@@ -318,15 +322,18 @@ export default {
           { required: true, message: "手持身份证", trigger: "change" }
         ],
         legalPersonName: [
-          { required: true, message: "法人姓名", trigger: "change" }
+          { required: true, message: "法人姓名", trigger: "blur" }
         ],
         legalPersonIdCard: [
-          { required: true, message: "法人身份证", trigger: "change" },
+          { required: true, message: "法人身份证", trigger: "blur" },
           { min: 18, max: 18, message: "长度在 18个字符", trigger: "blur" }
         ],
         legalPersonMobile: [{ validator: checkPhone, trigger: "blur" }],
-        validityStartDate: [
-          { required: true, message: "证件有效期", trigger: "change" }
+        idCardValidityType: [
+          { required: true, message: "请选择有效期", trigger: "change" }
+        ],
+        operatingPeriodType: [
+          { required: true, message: "请选择有效期", trigger: "change" }
         ]
       },
       form: {
@@ -358,14 +365,6 @@ export default {
     };
   },
   watch: {
-    // "form.qualificationList": {
-    //   handler(newval) {
-    //     console.log(newval);
-    //     this.cloneArr = JSON.parse(JSON.stringify(newval));
-    //   },
-    //   deep: true,
-    //   immediate: true
-    // },
     "form.operatingPeriodType": {
       handler(newval) {
         if (newval == 1) {
@@ -438,7 +437,13 @@ export default {
     getDetail() {
       qualification().then(res => {
         this.textArr = [];
+        let qualificationList = [];
         let category = res.body.category.split(",").map(el => {
+          let obj = {
+            categoryId: el,
+            qualificationImg: []
+          };
+          qualificationList.push(obj);
           return parseInt(el);
         });
         this.category = category;
@@ -471,21 +476,38 @@ export default {
         } else {
           this.idCardvalueOne = res.body.validityStartDate;
         }
-
         this.form = Object.assign({}, res.body, {
-          categoryName: res.body.categoryName ? res.body.categoryName.split(",") : 0,
-          category: category
+          categoryName: res.body.categoryName
+            ? res.body.categoryName.split(",")
+            : 0,
+          category: category,
+          qualificationList:
+            res.body.qualificationList.length > 0
+              ? res.body.qualificationList
+              : qualificationList
         });
+        this.$refs.form.clearValidate();
       });
     },
     submit() {
-      this.$refs.form.validate(valid => {
+      let form = this.form;
+      this.$refs.form.validate((valid, form) => {
         if (valid) {
           if (
             this.category.sort().toString() == this.form.category.toString()
           ) {
             this.$message({
               message: "类目没有更改不允许提交",
+              type: "warning"
+            });
+            return false;
+          }
+          var r = this.form.qualificationList.filter(function(s) {
+            return s.qualificationImg.length == 0;
+          });
+          if (r.length > 0) {
+            this.$message({
+              message: `您有${r.length}项资质图未为上传`,
               type: "warning"
             });
             return false;
@@ -508,10 +530,26 @@ export default {
             form.periodStartDate = this.timevalueOne;
             form.period_end_date = "";
           }
-          certification(form).then(res => {});
-          // console.log(form)
+          certification(form).then(res => {
+            this.$alert(
+              "您的资料已经提交审核，平台审核将在1-3个工作日内完成，请您耐心等待~",
+              "提示",
+              {
+                confirmButtonText: "确定"
+              }
+            );
+          });
         } else {
-          return false;
+          this.$nextTick(() => {
+            let obj = {
+              alignToTop: false,
+              block: "center",
+              behavior: "smooth"
+            };
+            document
+              .querySelectorAll(".el-form-item__error")[0]
+              .scrollIntoView(obj);
+          });
         }
       });
     },
@@ -529,21 +567,38 @@ export default {
     datechangeOne(val) {
       this.form.validityStartDate = val[0];
       this.form.validityEndDate = val[1];
-      console.log(val);
     },
     // 分类变化
     categoryChange(val) {
+      if (val.length > 5) {
+        val.splice(val.length - 1, 1);
+      }
       let arr = [];
       let textarr = [];
-      let ret = this.form.qualificationList.filter((item, index) => {
-        if (val.includes(Number(item.categoryId))) {
-          return item;
+      let ret = [];
+      let categoryIds = this.form.qualificationList.map((item, index) => {
+        return item.categoryId;
+      });
+      let qualificationImgs = this.form.qualificationList.map((item, index) => {
+        return item.qualificationImg;
+      });
+      val.forEach((valItem, valIndex) => {
+        if (categoryIds.includes(valItem)) {
+          ret.push({
+            categoryId: valItem,
+            qualificationImg:
+              qualificationImgs[categoryIds.findIndex(item => item == valItem)]
+          });
+        } else {
+          ret.push({
+            categoryId: valItem,
+            qualificationImg: []
+          });
         }
       });
       this.$set(this.form, "qualificationList", ret);
       val.forEach(element => {
         this.selectArr.forEach((el, idx) => {
-          console.log(element == el.id);
           if (element == el.id) {
             arr.push(el.categoryName);
             let obj = {
@@ -600,7 +655,14 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)"
       });
-      let consat = `hs_star/app_shop/goods/`;
+      let houzhui = "";
+      let fileName = "";
+      var timestamp = Date.parse(new Date());
+      houzhui = file.name.split(".");
+      fileName = `${parseInt(
+        (Math.random() + 1) * Math.pow(10, 18 - 1)
+      )}${timestamp}.${houzhui[houzhui.length - 1]}`;
+      let consat = `hs_star/authentication/${fileName}`;
       let that = this;
       SSupload(consat, file)
         .then(({ res, url, name }) => {
@@ -703,16 +765,55 @@ export default {
   display: block;
 }
 </style>
-
-<style lang="scss" scpoed>
-.title {
-  width: 100%;
-  height: 50px;
-  line-height: 50px;
-  background: #f0f0f0;
-  text-indent: 40px;
+<style scoped>
+.authentication {
+  background: #fff;
+  box-sizing: border-box;
+  padding: 20px;
+  font-family: MicrosoftYaHei-Bold;
+}
+.woqu {
+  width: 90%;
+  background: #fff;
+  height: 32px;
+  line-height: 32px;
+}
+.woqu span {
+  height: 24px;
+  line-height: 24px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-family: Microsoft YaHei;
+  font-weight: 300;
+  color: rgba(51, 51, 51, 1);
+  background: rgba(240, 240, 240, 1);
+  border: 1px solid rgba(225, 225, 225, 1);
 }
 .form-content {
-  background: #fff;
+  background: #f7f6f9;
+}
+.hidden-box {
+  width: 0px;
+  height: 0px;
+}
+.hidden-box /deep/ .el-input > .el-input__inner {
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  z-index: -1 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  top: 0;
+  left: 0;
+}
+.title {
+  width: 100%;
+  height: 48px;
+  line-height: 48px;
+  text-indent: 40px;
+  font-family: Microsoft YaHei, MicrosoftYaHei-Bold;
+  font-weight: bold;
+  color: rgba(51, 51, 51, 1);
+  border-bottom: solid 2px #fff;
 }
 </style>
