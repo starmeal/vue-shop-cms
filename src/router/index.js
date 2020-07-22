@@ -64,6 +64,15 @@ export const asyncRoutes = [
         component: () => import('@/views/authentication/index')
       },
       {
+        path: '/shopNominate',
+        meta: {
+          title: '店铺命名申请',
+          parentPath: '/store',
+          basePath: '/store',
+        },
+        component: () => import('@/views/shopNominate/index')
+      },
+      {
         path: '/notice',
         component: () => import('@/views/routeview'),
         meta: {
