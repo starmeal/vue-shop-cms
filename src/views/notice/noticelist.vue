@@ -2,43 +2,46 @@
   <div class="merchants-container" ref="merchantsContainer">
     <section ref="merchantslabel">
       <div class="operation-container">
-        <span class="text-ee">公告标题</span>
-        <el-input
-          clearable
-          @change="searchlist"
-          v-model="listpage.noticeName"
-          placeholder="请输入公告标题"
-          :size="size"
-          class="el-input-s"
-        ></el-input>
-        <span class="text-ee">公告时间</span>
-        <el-date-picker
-          :size="size"
-          value-format="yyyy-MM-dd"
-          v-model="value1"
-          @change="changepicker"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        ></el-date-picker>
-        <el-button
-          :loading="searchLoading"
-          :size="size"
-          type="primary"
-          class="btn-search"
-          @click="searchlist"
-        >搜索</el-button>
-        <el-button
-          type="text"
-          style="color:#666;font-size:10px;margin-left:10px"
-          @click="del"
-        >清空筛选条件</el-button>
-      </div>
-      <div class="btn-box">
-        <el-button type="primary" @click="gomodify('')" icon="el-icon-plus" :size="size">添加公告</el-button>
-        <el-button :size="size" @click="stopall">停止</el-button>
-        <el-button :size="size" @click="delall">删除</el-button>
+        <section class="flex-top">
+          <div>
+            <el-button
+              :round="false"
+              type="primary"
+              @click="gomodify('')"
+              icon="el-icon-plus"
+              :size="size"
+            >添加公告</el-button>
+            <el-button :round="false" type="primary" :size="size" @click="stopall">停止</el-button>
+            <el-button :round="false" type="primary" :size="size" @click="delall">删除</el-button>
+          </div>
+          <div class="mini-flex">
+            <el-input
+              clearable
+              @change="searchlist"
+              v-model="listpage.noticeName"
+              placeholder="请输入公告标题"
+              :size="size"
+              class="el-input-s"
+            ></el-input>
+            <el-date-picker
+              :size="size"
+              value-format="yyyy-MM-dd"
+              v-model="value1"
+              @change="changepicker"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            ></el-date-picker>
+            <el-button
+              :loading="searchLoading"
+              :size="size"
+              type="primary"
+              class="btn-search"
+              @click="searchlist"
+            >搜索</el-button>
+          </div>
+        </section>
       </div>
     </section>
     <section class="table-container">
@@ -46,7 +49,6 @@
         ref="multipleTable"
         :size="size"
         :data="list"
-        border
         @select="tableSelect"
         @select-all="tableSelect"
         v-loading="tableloading"
@@ -74,27 +76,41 @@
         <el-table-column prop="display_end_time" label="公告结束时间"></el-table-column>
         <el-table-column prop="display_end_time" label="发布状态" width="100px">
           <template slot-scope="props">
-            <span v-if="props.row.publish_status == 1">未发布</span>
-            <span v-if="props.row.publish_status == 2">已发布</span>
-            <span v-if="props.row.publish_status == 3">已停止</span>
+            <span v-if="props.row.publish_status == 1" class="zhuangtai">未发布</span>
+            <span v-if="props.row.publish_status == 2" class="zhuangtai">已发布</span>
+            <span v-if="props.row.publish_status == 3" class="zhuangtai">已停止</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="200px">
+        <el-table-column label="操作" width="130px">
           <template slot-scope="props">
-            <el-button type="text" :size="size" @click="gomodify(props.row)">编辑</el-button>
-            <el-button
-              type="text"
-              :size="size"
-              @click="operation(props.row,2)"
-              v-if="props.row.publish_status == 3 || props.row.publish_status == 1"
-            >发布</el-button>
-            <el-button
-              type="text"
-              :size="size"
-              @click="operation(props.row,3)"
-              v-if="props.row.publish_status == 2"
-            >停止</el-button>
-            <el-button type="text" :size="size" @click="delgoods(props.row)">删除</el-button>
+            <div class="flex-btn">
+              <el-tooltip class="item light-item" effect="light" placement="top">
+                <span slot="content" style="font-size:12px;color:#9d9d9d">编辑</span>
+                <i class="el-icon-edit icon-content" @click="gomodify(props.row)"></i>
+              </el-tooltip>
+              <el-tooltip
+                class="item light-item"
+                effect="light"
+                placement="top"
+                v-if="props.row.publish_status == 3 || props.row.publish_status == 1"
+              >
+                <span slot="content" style="font-size:12px;color:#9d9d9d">发布</span>
+                <i class="el-icon-circle-check icon-content" @click="operation(props.row,2)"></i>
+              </el-tooltip>
+              <el-tooltip
+                class="item light-item"
+                effect="light"
+                placement="top"
+                v-if="props.row.publish_status == 2"
+              >
+                <span slot="content" style="font-size:12px;color:#9d9d9d">停止</span>
+                <i class="el-icon-circle-close icon-content" @click="operation(props.row,2)"></i>
+              </el-tooltip>
+              <el-tooltip class="item light-item" effect="light" placement="top">
+                <span slot="content" style="font-size:12px;color:#9d9d9d">删除</span>
+                <i class="el-icon-delete icon-content" @click="delgoods(props.row)"></i>
+              </el-tooltip>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -203,7 +219,7 @@ export default {
         startTime: "",
         endTime: ""
       };
-      this.value1 = ''
+      this.value1 = "";
       this.getList();
     },
     // 发布或者停止
@@ -289,7 +305,7 @@ export default {
     },
     gomodify(row) {
       let obj = {
-        path: "/Notice/Noticeform"
+        path: "/notice"
       };
       if (row != "") {
         obj.query = {
@@ -338,6 +354,16 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+.flex-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mini-flex {
+  display: flex;
+  align-items: center;
+}
 .btn-box {
   background: #fff;
   padding-top: 20px;
@@ -374,7 +400,9 @@ export default {
 }
 .merchants-container {
   background-color: #fff;
-  padding: 10px;
+  padding: 20px 30px;
+  box-sizing: border-box;
+  min-height: 100%;
 }
 .num-container {
   padding: 10px;
@@ -388,7 +416,6 @@ export default {
 }
 .operation-container {
   background-color: #fff;
-  padding-top: 20px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -426,6 +453,23 @@ export default {
   text-overflow: ellipsis;
 }
 .btn-search {
+  border-radius: 0px;
   margin-left: 20px;
+}
+.icon-content {
+  border: solid 1px #efefef;
+  border-radius: 2px;
+  padding: 4px;
+  display: inline-block;
+  box-sizing: border-box;
+  font-size: 12px;
+}
+.flex-btn {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.zhuangtai{
+  color: $primary;
 }
 </style>

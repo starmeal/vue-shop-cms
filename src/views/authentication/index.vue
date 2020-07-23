@@ -2,7 +2,7 @@
   <div class="authentication">
     <div class="form-content">
       <el-form ref="form" :model="form" label-width="150px" :rules="rules">
-        <div class="title">选择类目</div>
+        <div class="title"> <Icon icon="jibenxinxi" className="authentication-title" />选择类目</div>
         <div style="width:100%;height:10px"></div>
         <el-form-item label="经验类目：" prop="categoryName" style="margin-bottom:10px">
           <div class="woqu">
@@ -39,7 +39,7 @@
         <el-form-item label="需要材料：">
           <section class="nimem">
             <div>1:证明合法经营的材料：三证/五证合一营业执照；</div>
-            <div style="color:#3976e6" v-if="textArr.length">
+            <div style="color:#44ABF7" v-if="textArr.length">
               请提供
               <span v-for="(item,index) in textArr" :key="index">
                 {{item.qualificationDescription}}
@@ -50,10 +50,13 @@
             <div>3:证明实际经营人材料：法人手持证件照，法人身份证正反面照片；</div>
             <div>4:照片规则：照片需要四角完整，清晰可辨，若加水印需保证照片重要信息清晰可辨；可提交复印件，每张复印件均需加盖完整红色公章；</div>
             <div>5:提现、发票的主体需要与认证主题一致，请如实填写主题认证信息；</div>
-            <div>6:详细资质要求可参考《认证资质要求》。</div>
+            <div>
+              6:详细资质要求可参考
+              <span style="color:#44ABF7">《认证资质要求》</span>
+            </div>
           </section>
         </el-form-item>
-        <div class="title" style="border-top: solid 13px #fff;">营业执照信息</div>
+        <div class="title" style="border-top: solid 13px #fff;"><Icon icon="jibenxinxi" className="authentication-title" />营业执照信息</div>
         <el-form-item>
           <div style="width:100%;height:10px"></div>
           <section class="input-con">
@@ -132,9 +135,11 @@
           </div>
         </el-form-item>
         <el-form-item label="营业执照照片：" prop="licenseImgUrl">
-          <img v-if="form.licenseImgUrl" :src="form.licenseImgUrl" class="avatar" />
+          <div class="picture-bg">
+            <img v-if="form.licenseImgUrl" :src="form.licenseImgUrl" class="pic-company" />
+          </div>
         </el-form-item>
-        <div class="title" style="border-top: solid 13px #fff;">法人信息</div>
+        <div class="title" style="border-top: solid 13px #fff;"><Icon icon="jibenxinxi" className="authentication-title" />法人信息</div>
         <div class="faren">法定代表人信息</div>
         <el-form-item label="手持身份证：" prop="handheldIdCardImg">
           <el-upload
@@ -156,17 +161,21 @@
           <div>
             必须为彩色图片且小于4M，文件格式为bmp，png，jpeg，或gif。
             <span
-              style="color:#3976e6"
+              style="color:#44ABF7"
               class="poiner"
               @click="showdemoIDcard"
             >查看示例</span>
           </div>
         </el-form-item>
         <el-form-item label="身份证正面：" prop="legalIdCardUp">
-          <img v-if="form.legalIdCardUp" :src="form.legalIdCardUp" class="avatar" />
+          <div class="idcard-bg">
+            <img v-if="form.legalIdCardUp" :src="form.legalIdCardUp" />
+          </div>
         </el-form-item>
         <el-form-item label="身份证反面：" prop="legalIdCardDown">
-          <img v-if="form.legalIdCardUp" :src="form.legalIdCardDown" class="avatar" />
+          <div class="idcard-bg">
+            <img v-if="form.legalIdCardUp" :src="form.legalIdCardDown" class="avatar" />
+          </div>
         </el-form-item>
         <div style="margin-left: 52px; padding: 20px 0px; font-size:12px">法人代表信息</div>
         <el-form-item label="法人代表姓名：" prop="legalPersonName">
@@ -217,10 +226,9 @@
               size="small"
               :disabled="form.idCardValidityType != 1"
             ></el-date-picker>
-            <span style="margin-left:10px">身份证开始日期</span>
           </div>
         </el-form-item>
-        <div class="title" style="margin-bottom:20px">其他资质</div>
+        <div class="title" style="margin-bottom:20px"><Icon icon="jibenxinxi" className="authentication-title" />其他资质</div>
         <el-form-item v-for="(item,index) in form.qualificationList" :key="index">
           <div class="flex-box">
             <div class="png-s" v-for="(item,idx) in item.qualificationImg" :key="idx">
@@ -256,6 +264,49 @@
         </el-form-item>
       </el-form>
     </div>
+    <el-dialog title="查询到的信息" :visible.sync="showmessage" width="60%">
+      <section class="bjj">
+        <div>
+          <span>公司名称：</span>
+          <span>{{keyWordContent.Name}}</span>
+        </div>
+        <div>
+          <span>公司地址：</span>
+          <span>{{keyWordContent.Address}}</span>
+        </div>
+        <div>
+          <span>注册号：</span>
+          <span>{{keyWordContent.No}}</span>
+        </div>
+        <div>
+          <span>法人名：</span>
+          <span>{{keyWordContent.OperName}}</span>
+        </div>
+        <div>
+          <span>成立日期：</span>
+          <span>{{keyWordContent.StartDate}}</span>
+        </div>
+        <div>
+          <span>企业状态：</span>
+          <span>{{keyWordContent.Status}}</span>
+        </div>
+        <div>
+          <span>社会统一信用代码：</span>
+          <span>{{keyWordContent.CreditCode}}</span>
+        </div>
+        <div>
+          <span>登记机关：</span>
+          <span>{{keyWordContent.BelongOrg}}</span>
+        </div>
+        <div>
+          <span>经营范围：</span>
+          <span>{{keyWordContent.Scope}}</span>
+        </div>
+      </section>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="fuzhi">确 定</el-button>
+      </span>
+    </el-dialog>
     <el-dialog :visible.sync="dialogVisible">
       <img width="100%" src="../../../static/img/demID.jpg" />
     </el-dialog>
@@ -264,6 +315,7 @@
 
 <script>
 let districts;
+import Icon from '@/components/base/icon.vue';
 import { asyncUpload, SSupload } from "@/utils/upload";
 import cascader from "@/components/city/cascader.vue";
 import axios from "axios";
@@ -275,7 +327,8 @@ import {
 } from "@/api/authentication";
 export default {
   components: {
-    cascader
+    cascader,
+    Icon
   },
   data() {
     var checkPhone = (rule, value, callback) => {
@@ -291,6 +344,8 @@ export default {
       }
     };
     return {
+      keyWordContent: "",
+      showmessage: false,
       showTips: false,
       dialogVisible: false,
       cityvalue: [],
@@ -325,8 +380,12 @@ export default {
           { required: true, message: "请填写经营范围", trigger: "blur" }
         ],
         socialCreditCode: [
-          { required: true, message: "请填写统一社会信用代码", trigger: "blur" }
-          //  { min: 18, max: 18, message: '长度在 18个字符', trigger: 'blur' }
+          {
+            required: true,
+            message: "请填写统一社会信用代码",
+            trigger: "blur"
+          },
+          { min: 18, max: 18, message: "长度在 18个字符", trigger: "blur" }
         ],
         handheldIdCardImg: [
           { required: true, message: "手持身份证", trigger: "change" }
@@ -470,7 +529,7 @@ export default {
           qualificationList.push(obj);
           return parseInt(el);
         });
-        this.category = category;
+        this.category = JSON.parse(JSON.stringify(category));
         this.cityvalue = [
           res.body.provinceCode,
           res.body.cityCode,
@@ -580,12 +639,26 @@ export default {
     delImg(index, idx) {
       this.form.qualificationList[index].qualificationImg.splice(idx, 1);
     },
+    fuzhi() {
+      this.form.addressDetail = this.keyWordContent.Address;
+      this.form.companyName = this.keyWordContent.Name;
+      this.form.businessScope = this.keyWordContent.Scope;
+      this.showmessage = false;
+    },
     serachcomp() {
+      if (!this.keyWord) {
+        this.$message({
+          message: "请输入后进行查询",
+          type: "warning"
+        });
+        return false;
+      }
       let obj = {
         keyWord: this.keyWord
       };
       GetBasicDetailsByName(obj).then(res => {
-        console.log(res);
+        this.keyWordContent = res.body.Result;
+        this.showmessage = true;
       });
     },
     datechangeOne(val) {
@@ -721,6 +794,9 @@ export default {
 };
 </script>
 <style lang="scss">
+.bjj{
+  line-height: 30px;
+}
 .poiner {
   cursor: pointer;
 }
@@ -736,7 +812,6 @@ export default {
 .flex-box .png-s {
   width: 146px;
   height: 146px;
-  background: #fcc;
   margin-right: 10px;
   position: relative;
 }
@@ -761,15 +836,6 @@ export default {
 .flex-container div {
   flex: 1;
   width: 100px;
-}
-.el-form-item__label {
-  font-size: 12px;
-  font-family: Microsoft YaHei, MicrosoftYaHei-Bold;
-  font-weight: bold;
-  color: rgba(102, 102, 102, 1);
-}
-.el-textarea .el-textarea__inner {
-  resize: none;
 }
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
@@ -854,11 +920,20 @@ export default {
   width: 100%;
   height: 48px;
   line-height: 48px;
-  text-indent: 40px;
+  padding-left: 40px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
   font-family: Microsoft YaHei, MicrosoftYaHei-Bold;
   font-weight: bold;
   color: rgba(51, 51, 51, 1);
   border-bottom: solid 2px #fff;
+  box-sizing: border-box;
+}
+.authentication-title{
+  width: 14px;
+  height: 16px;
+  margin-right: 6px;
 }
 .tips {
   font-size: 12px;
@@ -872,6 +947,7 @@ export default {
   box-sizing: border-box;
   padding: 10px;
   width: 90%;
+  font-family: MicrosoftYaHeiLight;
 }
 .nimem > div {
   line-height: 25px;
@@ -894,13 +970,15 @@ export default {
   display: inline-block;
   position: absolute;
   right: 0;
+  top: 0;
+  z-index: 100;
 }
 .input-con {
   position: relative;
   width: 90%;
 }
 .input-cla {
-  width: calc(90%);
+  width: 100%;
   background: #efefef;
   height: 40px;
   display: inline-block;
@@ -921,6 +999,36 @@ export default {
   color: rgba(153, 153, 153, 1);
 }
 .submit-btn {
+  padding: 20px 0px;
   background: #fff;
+  margin-bottom: 0px;
+}
+.pic-company {
+  width: 160px;
+  height: 215px;
+}
+.picture-bg {
+  background-image: url("../../../static/img/2a.png");
+  width: 190px;
+  height: 240px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.idcard-bg {
+  background-image: url("../../../static/img/1a.png");
+  width: 170px;
+  height: 110px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.idcard-bg img {
+  width: 150px;
+  height: 90px;
 }
 </style>
