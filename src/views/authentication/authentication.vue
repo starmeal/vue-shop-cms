@@ -2,7 +2,9 @@
   <div class="authentication">
     <div class="form-content">
       <el-form ref="form" :model="form" label-width="150px" :rules="rules">
-        <!-- <div class="title"> <Icon icon="jibenxinxi" className="authentication-title" />选择类目</div>
+        <div class="title">
+          <Icon icon="jibenxinxi" class="authentication-title" />选择类目
+        </div>
         <el-form-item label="经验类目：" prop="categoryName" style="margin-bottom:10px">
           <div class="woqu">
             <span
@@ -53,8 +55,8 @@
               <span style="color:#44ABF7">《认证资质要求》</span>
             </div>
           </section>
-        </el-form-item>-->
-        <div class="title">
+        </el-form-item>
+        <!-- <div class="title">
           <Icon icon="jibenxinxi" class="authentication-title" />营业执照信息
         </div>
         <el-form-item>
@@ -139,8 +141,7 @@
             <img v-if="form.licenseImgUrl" :src="form.licenseImgUrl" class="pic-company" />
           </div>
         </el-form-item>
-        <div style="border-top: solid 13px #fff;"></div>
-        <div class="title">
+        <div class="title" style="border-top: solid 13px #fff;">
           <Icon icon="jibenxinxi" class="authentication-title" />法人信息
         </div>
         <div class="faren">法定代表人信息</div>
@@ -230,8 +231,8 @@
               :disabled="form.idCardValidityType != 1"
             ></el-date-picker>
           </div>
-        </el-form-item>
-        <!-- <div class="title" style="margin-bottom:20px">
+        </el-form-item>-->
+        <div class="title" style="margin-bottom:20px">
           <Icon icon="jibenxinxi" class="authentication-title" />其他资质
         </div>
         <el-form-item v-for="(item,index) in form.qualificationList" :key="index">
@@ -263,7 +264,7 @@
             v-if="textArr[index]"
             class="text-text"
           >{{textArr[index].qualificationDescription ? textArr[index].qualificationDescription : ''}}；必须为彩色图片且小于6M，文件格式为bmp、png、jpeg、或gif</div>
-        </el-form-item>-->
+        </el-form-item>
         <el-form-item class="submit-btn">
           <el-button type="primary" size="small" @click="submit" style="margin-bottom:0px">提交审核</el-button>
         </el-form-item>
@@ -581,6 +582,27 @@ export default {
       let form = this.form;
       this.$refs.form.validate((valid, form) => {
         if (valid) {
+          if (
+            this.category.sort().toString() == this.form.category.toString()
+          ) {
+            this.$message({
+              message: "类目没有更改不允许提交",
+              type: "error",
+              center: true,
+            });
+            return false;
+          }
+          var r = this.form.qualificationList.filter(function (s) {
+            return s.qualificationImg.length == 0;
+          });
+          if (r.length > 0) {
+            this.$message({
+              message: `您有${r.length}项资质图未为上传`,
+              type: "error",
+              center: true,
+            });
+            return false;
+          }
           let form = Object.assign({}, this.form, {
             category: this.form.category.join(","),
             categoryName: this.form.categoryName.join(","),
@@ -781,11 +803,6 @@ export default {
   },
 };
 </script>
-<style>
-.el-message--error {
-  background-color: #e9615f;
-}
-</style>
 <style lang="scss">
 .bjj {
   line-height: 30px;
@@ -990,6 +1007,8 @@ export default {
   margin-top: 10px;
   line-height: 20px;
   color: rgba(153, 153, 153, 1);
+  padding-right: 20px;
+  box-sizing: border-box;
 }
 .submit-btn {
   padding: 20px 0px;

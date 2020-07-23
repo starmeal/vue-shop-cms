@@ -1,9 +1,39 @@
 $primary: #44abf7;
-$--color-primary: #44abf7;
+$--color-primary: #44abf7 !default;
 $formBg: #F7F6F9;
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import "~element-ui/packages/theme-chalk/src/index";
+.el-message{
+    min-width: 590px;
+}
+.el-message--success {
+    background: #54c952;
+    border-color:#54c952;
+  }
+  .el-message--error{
+    background: #E96061;
+    border-color:#E96061;
+  }
+.el-message .el-icon-success {
+    color: #fff;
+}
+.el-message .el-icon-error{
+    color: #fff;
+}
+.el-message--success .el-message__content{
+    color: #fff;
+    font-size:16px;
+    font-family:Microsoft YaHei;
+    font-weight:bold;
+    color:rgba(255,255,255,1);
+}
+.el-message--error .el-message__content {
+    color: #fff;
+    font-size: 16px;
+    font-family: Microsoft YaHei;
+    font-weight: bold;
+  }
 .el-tooltip__popper{
     padding: 10px;
     line-height: 1;

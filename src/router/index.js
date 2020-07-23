@@ -64,6 +64,15 @@ export const asyncRoutes = [
         component: () => import('@/views/authentication/index')
       },
       {
+        path: '/category',
+        meta: {
+          title: '类目资质认证',
+          parentPath: '/store',
+          basePath: '/store',
+        },
+        component: () => import('@/views/authentication/authentication')
+      },
+      {
         path: '/notice',
         component: () => import('@/views/routeview'),
         meta: {

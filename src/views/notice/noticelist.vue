@@ -142,7 +142,7 @@ import {
   deleteShopMerchantsNoticeById,
   announcement,
   batchDeleteShopMerchantsNoticeByIds,
-  batchStopShopMerchantsNoticeByIds
+  batchStopShopMerchantsNoticeByIds,
 } from "@/api/Notice";
 export default {
   data() {
@@ -164,7 +164,7 @@ export default {
         pageSize: 10,
         noticeName: "",
         startTime: "",
-        endTime: ""
+        endTime: "",
       },
       row: "",
       rowname: "",
@@ -172,7 +172,7 @@ export default {
       selectarr: [],
       selectarr1: [],
       selectarr2: [],
-      arrlist: []
+      arrlist: [],
     };
   },
   created() {
@@ -182,14 +182,21 @@ export default {
   methods: {
     // 批量停止
     stopall() {
-      let obj = {
-        ids: this.arrlist.join(",")
-      };
-      batchStopShopMerchantsNoticeByIds(obj).then(res => {
+      if (this.arrlist.length == 0) {
         this.$message({
-          showClose: true,
+          message: "请先勾选",
+          type: "error",
+          center: true,
+        });
+        return false;
+      }
+      let obj = {
+        ids: this.arrlist.join(","),
+      };
+      batchStopShopMerchantsNoticeByIds(obj).then((res) => {
+        this.$message({
           message: "操作成功",
-          type: "success"
+          type: "success",
         });
         this.arrlist = [];
         this.getList();
@@ -197,14 +204,22 @@ export default {
     },
     // 批量删除
     delall() {
+      if (this.arrlist.length == 0) {
+        this.$message({
+          message: "请先勾选",
+          type: "error",
+          center: true,
+        });
+        return false;
+      }
       let obj = {
-        ids: this.arrlist.join(",")
+        ids: this.arrlist.join(","),
       };
-      batchDeleteShopMerchantsNoticeByIds(obj).then(res => {
+      batchDeleteShopMerchantsNoticeByIds(obj).then((res) => {
         this.$message({
           showClose: true,
           message: "操作成功",
-          type: "success"
+          type: "success",
         });
         this.arrlist = [];
         this.getList();
@@ -217,7 +232,7 @@ export default {
         pageSize: 10,
         noticeName: "",
         startTime: "",
-        endTime: ""
+        endTime: "",
       };
       this.value1 = "";
       this.getList();
@@ -226,21 +241,21 @@ export default {
     operation(row, idx) {
       let obj = {
         id: row.id,
-        publishStatus: idx
+        publishStatus: idx,
       };
-      announcement(obj).then(res => {
+      announcement(obj).then((res) => {
         if (res.code === "000000") {
           this.$message({
             showClose: true,
             message: "操作成功",
-            type: "success"
+            type: "success",
           });
           this.getList();
         }
       });
     },
     tableSelect(selection, row) {
-      selection.forEach(element => {
+      selection.forEach((element) => {
         this.arrlist.push(element.id);
       });
       console.log(selection, row);
@@ -266,12 +281,12 @@ export default {
     delgoods(row) {
       if (this.dialogVisibledel) {
         let obj = {
-          id: this.delrow.id
+          id: this.delrow.id,
         };
-        deleteShopMerchantsNoticeById(obj).then(res => {
+        deleteShopMerchantsNoticeById(obj).then((res) => {
           this.$message({
             message: "删除成功",
-            type: "success"
+            type: "success",
           });
           this.dialogVisibledel = false;
           this.delrow = "";
@@ -286,12 +301,12 @@ export default {
       if (this.dialogFormVisible) {
         let obj = {
           goodsCode: this.rowname.goods_code,
-          goodsName: this.goodsName
+          goodsName: this.goodsName,
         };
-        updateGoodsName(obj).then(res => {
+        updateGoodsName(obj).then((res) => {
           this.$message({
             message: "修改成功",
-            type: "success"
+            type: "success",
           });
           this.dialogFormVisible = false;
           this.rowname = "";
@@ -305,11 +320,11 @@ export default {
     },
     gomodify(row) {
       let obj = {
-        path: "/notice"
+        path: "/notice",
       };
       if (row != "") {
         obj.query = {
-          id: row.id
+          id: row.id,
         };
       }
       this.$router.push(obj);
@@ -319,8 +334,8 @@ export default {
       this.$router.push({
         path: "/coupon/ccform",
         query: {
-          id: row.id
-        }
+          id: row.id,
+        },
       });
     },
     // 翻页
@@ -343,14 +358,14 @@ export default {
     async getList() {
       this.tableloading = true;
       let listpage = Object.assign({}, this.listpage, {
-        noticeName: this.listpage.noticeName.trim()
+        noticeName: this.listpage.noticeName.trim(),
       });
       let res = await selectShopMerchantsNotice(listpage);
       this.searchLoading = false;
       this.tableloading = false;
       this.list = res.body;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped lang="scss">
@@ -469,7 +484,7 @@ export default {
   align-items: center;
   cursor: pointer;
 }
-.zhuangtai{
+.zhuangtai {
   color: $primary;
 }
 </style>

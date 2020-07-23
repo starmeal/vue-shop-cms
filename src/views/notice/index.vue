@@ -177,7 +177,7 @@ export default {
                 type: "success"
               });
               this.$router.push({
-                path: "/Notice/Noticelist"
+                path: "/noticelist"
               });
             });
             return false;
@@ -188,7 +188,7 @@ export default {
               type: "success"
             });
             this.$router.push({
-              path: "/Notice/Noticelist"
+              path: "/noticelist"
             });
           });
         } else {
