@@ -1,6 +1,7 @@
 <template>
   <span class="container">
     <el-cascader
+      :style="{width:width}"
       clearable
       :size="size"
       placeholder="请选择"
@@ -22,6 +23,10 @@ export default {
     event: "change"
   },
   props: {
+    width: {
+      type: String,
+      default: ""
+    },
     level: {
       type: String,
       default: ""
@@ -37,7 +42,7 @@ export default {
   },
   data() {
     return {
-      cityList:[],
+      cityList: [],
       options: [],
       value: null,
       optionProps: {

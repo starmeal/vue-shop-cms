@@ -1,70 +1,71 @@
 <template>
-  <div class="banner-container">
-    <div class="section-contianer">
-      <section class="form-container">
-        <el-form ref="form" :rules="rules" :size="size" :model="form" label-width="200px">
-          <el-form-item label="公告标题" prop="noticeName">
-            <el-input
+  <div class="big-container">
+    <section class="form-container">
+      <div style="height:20px"></div>
+      <el-form ref="form" :rules="rules" :size="size" :model="form" label-width="150px">
+        <el-form-item label="公告标题" prop="noticeName">
+          <el-input
+            class="input-update"
+            :size="size"
+            type="textarea"
+            show-word-limit
+            v-model="form.noticeName"
+            :rows="2"
+            maxlength="30"
+            :placeholder="`公告名称在50字以内`"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="公告时间" prop="displayBeginTime">
+          <div class="flex-box">
+            <div class="font-f">开始时间：</div>
+            <el-date-picker
               :size="size"
-              type="textarea"
-              show-word-limit
-              v-model="form.noticeName"
-              :rows="2"
-              maxlength="30"
-              :placeholder="`公告名称在50字以内`"
-              clearable
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="公告时间" prop="displayBeginTime">
-            <div class="flex-box">
-              <div class="font-f">开始时间：</div>
-              <el-date-picker
-                :size="size"
-                placeholder="选择时间"
-                :picker-options="endTimepickerOptions"
-                v-model="form.displayBeginTime"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                 type="datetime"
-              ></el-date-picker>
-              <div class="font-f">结束时间：</div>
-              <el-date-picker
-                placeholder="公告展示结束时间"
-                :picker-options="endTimepickerOptions1"
-                :size="size"
-                v-model="form.displayEndTime"
-                type="datetime"
-               value-format="yyyy-MM-dd HH:mm:ss"
-              ></el-date-picker>
-            </div>
-          </el-form-item>
-          <el-form-item label="公告内容" prop="noticeContent">
-            <el-input
-              type="textarea"
-              placeholder="请输入内容最多150字"
-              v-model="form.noticeContent"
-              maxlength="150"
-              size="mini"
-              resize="none"
-              :rows="8"
-              show-word-limit
-              clearable
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="是否发布" v-if="!$route.query.id">
-            <el-radio v-model="form.publishStatus" label="1">是</el-radio>
-            <el-radio v-model="form.publishStatus" label="2">否</el-radio>
-          </el-form-item>
-          <el-form-item>
-            <el-button
+              placeholder="选择时间"
+              :picker-options="endTimepickerOptions"
+              v-model="form.displayBeginTime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              type="datetime"
+            ></el-date-picker>
+            <div class="font-f">结束时间：</div>
+            <el-date-picker
+              placeholder="公告展示结束时间"
+              :picker-options="endTimepickerOptions1"
               :size="size"
-              type="primary"
-              @click="submitgoods()"
-            >{{ $route.query.id ? "修改" : "保存" }}</el-button>
-            <el-button :size="size" @click="gohistory">返回列表</el-button>
-          </el-form-item>
-        </el-form>
-      </section>
-    </div>
+              v-model="form.displayEndTime"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            ></el-date-picker>
+          </div>
+        </el-form-item>
+        <el-form-item label="公告内容" prop="noticeContent">
+          <el-input
+            class="input-update"
+            type="textarea"
+            placeholder="请输入内容最多150字"
+            v-model="form.noticeContent"
+            maxlength="150"
+            size="mini"
+            resize="none"
+            :rows="8"
+            show-word-limit
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="是否发布" v-if="!$route.query.id">
+          <el-radio v-model="form.publishStatus" label="1">是</el-radio>
+          <el-radio v-model="form.publishStatus" label="2">否</el-radio>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            :size="size"
+            type="primary"
+            @click="submitgoods()"
+          >{{ $route.query.id ? "修改" : "保存" }}</el-button>
+          <el-button :size="size" @click="gohistory">返回列表</el-button>
+        </el-form-item>
+      </el-form>
+    </section>
   </div>
 </template>
 
@@ -134,11 +135,11 @@ export default {
     }
   },
   methods: {
-     gohistory(){
-        this.$router.push({
-           path:'/Notice/noticelist'
-        })
-     },
+    gohistory() {
+      this.$router.push({
+        path: "/noticelist"
+      });
+    },
     dealDisabledDate(time) {
       return (
         time.getTime() + 24 * 60 * 60 * 1000 <
@@ -199,31 +200,18 @@ export default {
   }
 };
 </script>
-<style>
-.el-textarea__inner {
-  resize: none;
-}
-</style>
 <style scoped lang="scss">
 .font-f {
   font-size: 12px;
   color: #606266;
   margin-right: 20px;
+  flex: 1;
+  text-align: right;
 }
 .flex-box {
+  width: 90%;
   display: flex;
   justify-content: space-between;
-}
-.section-contianer {
-  width: 98%;
-  margin: 0 auto;
-  padding: 20px 0px;
-  background: #fff;
-  border-radius: 4px;
-}
-.form-container {
-  width: 85%;
-  background-color: #fff;
 }
 .hidden-box {
   width: 0px;

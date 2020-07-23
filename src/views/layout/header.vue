@@ -1,90 +1,109 @@
 <template>
-  <div class='header-container'>
-    <div class='header-menu-placeholder'></div>
-    <div class='home-con'>
-      <icon icon='home'></icon>
+  <div class="header-container">
+    <div class="header-menu-placeholder"></div>
+    <div class="home-con">
+      <icon icon="home"></icon>
     </div>
-    <el-popover trigger="click" placement="bottom-start" v-model='isShowPopver'>
-      <div class='visit-con'>
-        <div class='visit-con-left'>
-          <div class='visit-title'>所有菜单</div>
-          <div class='visit-scroll-con'>
-            <div class='visit-item' :class="{'active': menuItem.path === basePath}" v-for='(menuItem, menuIndex) in menuList' :key='menuIndex' @mouseenter='switchRouter(menuItem, menuIndex)'>{{menuItem.meta.title}}</div>
+    <el-popover trigger="click" placement="bottom-start" v-model="isShowPopver">
+      <div class="visit-con">
+        <div class="visit-con-left">
+          <div class="visit-title">所有菜单</div>
+          <div class="visit-scroll-con">
+            <div
+              class="visit-item"
+              :class="{'active': menuItem.path === basePath}"
+              v-for="(menuItem, menuIndex) in menuList"
+              :key="menuIndex"
+              @mouseenter="switchRouter(menuItem, menuIndex)"
+            >{{menuItem.meta.title}}</div>
           </div>
         </div>
-        <div class='visit-con-right'>
-          <div class='visit-item' v-for='(item, index) in menuItemList' :key='index' :class="{'active': item.path === path}" @mouseenter='handleItemEnter(item)' @click='handleSwitchRouter(item.path)'> {{item.meta.title}}</div>
+        <div class="visit-con-right">
+          <div
+            class="visit-item"
+            v-for="(item, index) in menuItemList"
+            :key="index"
+            :class="{'active': item.path === path}"
+            @mouseenter="handleItemEnter(item)"
+            @click="handleSwitchRouter(item.path)"
+          >{{item.meta.title}}</div>
         </div>
         <div></div>
       </div>
-      <template slot="reference" @click='handlePopver'>
-        <div class='home-con'>
-          <icon icon='xiangqing'></icon>
+      <template slot="reference" @click="handlePopver">
+        <div class="home-con">
+          <icon icon="xiangqing"></icon>
         </div>
       </template>
     </el-popover>
-    <div class='search-con'></div>
-    <div class='refresh' @click='reload'>
-      <i class='el-icon-refresh-right'></i>刷新
+    <div class="search-con"></div>
+    <div class="refresh" @click="reload">
+      <i class="el-icon-refresh-right"></i>刷新
     </div>
-    <el-popover trigger="hover" width='154'>
-      <div class='user-action-con'>
-        <div class='user-action-item'>
-          <img src="../../../static/img/qiehuan.png">
+    <el-popover trigger="hover" width="154">
+      <div class="user-action-con">
+        <div class="user-action-item">
+          <img src="../../../static/img/qiehuan.png" />
           切换账号
         </div>
-        <div class='user-action-item'>
-          <img src="../../../static/img/xiugai.png">
+        <div class="user-action-item">
+          <img src="../../../static/img/xiugai.png" />
           修改密码
         </div>
       </div>
-      <div class='name-con' slot="reference">
-        <div class='user-name'>{{name}}</div>
-        <icon icon='danjiantouxia' style='width:10px;height:10px;margin-left:9px;'></icon>
+      <div class="name-con" slot="reference">
+        <div class="user-name">{{name}}</div>
+        <icon icon="danjiantouxia" style="width:10px;height:10px;margin-left:9px;"></icon>
       </div>
     </el-popover>
     <el-tooltip class="item" content="退出登录" placement="bottom">
-      <div class='home-con'>
-        <icon icon='guanbikaiguan'></icon>
+      <div class="home-con" @click="signout">
+        <icon icon="guanbikaiguan"></icon>
       </div>
     </el-tooltip>
   </div>
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex';
-const { mapState } = createNamespacedHelpers('user');
-import Icon from '@/components/base/icon.vue';
-import { deepClone } from '@/utils/util';
+import { createNamespacedHelpers } from "vuex";
+import { mapActions } from 'vuex';
+const { mapState } = createNamespacedHelpers("user");
+import Icon from "@/components/base/icon.vue";
+import { deepClone } from "@/utils/util";
 export default {
-  name: 'headercontainer',
+  name: "headercontainer",
   components: {
     Icon
   },
   computed: {
     ...mapState({
-      name: 'name',
-      menuList: 'routes'
+      name: "name",
+      menuList: "routes"
     })
   },
   data() {
     return {
       isShowPopver: false,
-      path: '',
-      basePath: '',
+      path: "",
+      basePath: "",
       menuItemList: []
     };
   },
   methods: {
-    reload () {
-      window.location.reload()
+    signout() {
+      this.$store.dispatch("user/resetToken").then(() => {
+        window.location.hash = "/login";
+      });
     },
-    handlePopver () {
-      this.isShowPopver = true
+    reload() {
+      window.location.reload();
+    },
+    handlePopver() {
+      this.isShowPopver = true;
     },
     handleSwitchRouter(path) {
       this.isShowPopver = false;
-      this.$router.push(path !== '/' ? path.replace(/\/$/g, ''): path);
+      this.$router.push(path !== "/" ? path.replace(/\/$/g, "") : path);
     },
     handleItemEnter(item) {
       this.path = item.path;
@@ -101,8 +120,8 @@ export default {
             path,
             meta: { basePath, parentPath }
           } = menuItem;
-          if (menuItem.path == '') {
-            menuItem.path = (parentPath || basePath) + '/';
+          if (menuItem.path == "") {
+            menuItem.path = (parentPath || basePath) + "/";
           }
           if (!menuItem.hidden) {
             if (menuItem.children) {
@@ -113,7 +132,7 @@ export default {
           }
         });
       } catch (error) {
-        console.log(error, 'error');
+        console.log(error, "error");
       }
       return result;
     }
@@ -124,7 +143,7 @@ export default {
       meta: { basePath, parentPath }
     } = this.$route;
     this.basePath = basePath || path;
-    this.path = path == basePath ? path + '/' : path;
+    this.path = path == basePath ? path + "/" : path;
     this.menuList.forEach((menuItem, menuIndex) => {
       if (menuItem.path === basePath) {
         this.menuItemList = this.filterMenuItem(
@@ -162,7 +181,7 @@ export default {
     border-bottom: 1px solid #e7eaec;
     cursor: pointer;
     &::after {
-      content: ' ';
+      content: " ";
       position: absolute;
       width: 1px;
       background: #e7eaec;
@@ -179,7 +198,7 @@ export default {
     box-sizing: border-box;
     border-bottom: 1px solid #e7eaec;
     &::after {
-      content: ' ';
+      content: " ";
       position: absolute;
       width: 1px;
       background: #e7eaec;
@@ -207,7 +226,7 @@ export default {
       margin-right: 10px;
     }
     &::after {
-      content: ' ';
+      content: " ";
       position: absolute;
       width: 1px;
       background: #e7eaec;
@@ -232,7 +251,7 @@ export default {
     box-sizing: border-box;
     border-bottom: 1px solid #e7eaec;
     &::after {
-      content: ' ';
+      content: " ";
       position: absolute;
       width: 1px;
       background: #e7eaec;
