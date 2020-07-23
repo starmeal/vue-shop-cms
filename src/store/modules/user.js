@@ -39,7 +39,6 @@ const actions = {
             commit("SET_NAME", body.shopMerchantsName);
             commit('SET_CODE', body.shopMerchantsCode);
             commit('SET_ROLES', body.permissions);
-
             resolve();
           }
         })

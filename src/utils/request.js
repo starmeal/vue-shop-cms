@@ -66,10 +66,7 @@ service.interceptors.response.use(
         });
         //
         if(res.code == '300010'){
-          Message({
-            message: "店铺名称中含有违禁词"+res.body+"",
-            type: "warning"
-          });
+          return Promise.reject(res)
         }
         if (res.code == "400000") {
           store.dispatch("user/resetToken").then(() => {

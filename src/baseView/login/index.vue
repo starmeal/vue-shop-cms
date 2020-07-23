@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="hs-login">
       <img src="../../../static/img/login-i.png" class="bg-image" />
-      <div class="hs-login-container">
+      <div v-if="isShow" class="hs-login-container">
         <div class="action-container">
           <div
             v-bind:class="[{'is-active': isActive == 1} ,'action-item']"
@@ -12,6 +12,7 @@
         </div>
         <!-- 账户密码登录 -->
         <el-form
+          key='pass'
           class="login-con"
           :model="userPass"
           :rules="userRules"
@@ -47,7 +48,27 @@
           </el-form-item>
           <el-button type="primary" class="submit" @click="adminLogin(2)" :loading="loading">登录</el-button>
         </el-form>
-        <section class="forget-password">忘记密码&nbsp;&nbsp;&nbsp;&nbsp;？</section>
+        <section @click="forgetPassword" class="forget-password">忘记密码&nbsp;&nbsp;&nbsp;&nbsp;？</section>
+      </div>
+      <div v-else class="resetPassword">
+        <p class="z_title">密码重置</p>
+        <el-form key='pass-reset':model="zform" :rules="zrules" ref="zform" class="demo-form">
+          <el-form-item class="zphone" prop="mobile1">
+            <el-input v-model="zform.mobile" placeholder="请输入手机号"></el-input>
+          </el-form-item>
+          <el-form-item class="zimgCode" prop="imgCode">
+            <el-input v-model="zform.imgCode" placeholder="输入右侧图片验证码"></el-input>
+            <img src="" alt="">
+          </el-form-item>
+          <el-form-item class="zpassword" prop="password1">
+            <el-input v-model="zform.password1" placeholder="请输入密码" show-password autocomplete="new-password"></el-input>
+          </el-form-item>
+          <el-form-item class="zagainPassword" prop="againPassword">
+            <el-input v-model="zform.againPassword" placeholder="重复密码" show-password autocomplete="new-password"></el-input>
+          </el-form-item>
+          <el-button type="primary" class="submit" @click="zlogin" :loading="loading">登录</el-button>
+        </el-form>
+        <section @click="toLogin" class="forget-password">已有账号登录</section>
       </div>
     </div>
   </div>
@@ -69,7 +90,15 @@ export default {
         callback();
       }
     };
+    var validatePass = (rule, value, callback) => {
+      if(value !== this.zform.password1){
+        callback(new Error("两次密码输入不一致"));
+      }else {
+        callback();
+      }
+    };
     return {
+      isShow: true,
       sendout: false,
       loading: false,
       btnMessage: "发送验证码",
@@ -78,6 +107,12 @@ export default {
       mobelForm: {
         mobile: "",
         smCode: ""
+      },
+      zform: {
+        mobile: '',
+        imgCode: '',
+        password: '',
+        againPassword: ''
       },
       userPass: {
         username: "",
@@ -108,6 +143,25 @@ export default {
           { required: true, message: "验证码不能为空", trigger: "blur" },
           { min: 6, max: 6, message: '验证码应为6位', trigger: 'blur' }
          ]
+      },
+      zrules: {
+        mobile: [
+          { required: true, message: "手机号不能为空", trigger: "blur" },
+          {
+            validator: EmptyValidator,
+            trigger: "blur"
+          }
+        ],
+        imgCode: [
+          { required: true, message: "验证码不能为空", trigger: "blur" },
+        ],
+        password1: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
+        ],
+        againPassword: [
+          { required: true, message: "请再次输入密码", trigger: "blur" },
+          { validator: validatePass, trigger: "blur"}
+        ],
       }
     };
   },
@@ -200,6 +254,21 @@ export default {
           }
         });
       }
+    },
+    forgetPassword(){
+      this.isShow = false;
+    },
+    toLogin(){
+      this.isShow = true;
+    },
+    zlogin(){
+      this.$refs.zform.validate(async valid => {
+        if (valid) {
+
+        }else{
+
+        }
+      })
     }
   }
 };
@@ -219,6 +288,28 @@ export default {
   height: 100%;
   margin: 0 auto;
   position: relative;
+  /*重置密码start*/
+  .resetPassword {
+    box-sizing: border-box;
+    padding: 25px 40px;
+    width: 420px;
+    height: 510px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 11px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    .z_title {
+      margin-top: 25px;
+      margin-bottom: 30px;
+      font-size: 24px;
+    }
+    .zimgCode {
+      width: 220px;
+    }
+  }
+  /*重置密码end*/
   .hs-login-container {
     box-sizing: border-box;
     padding: 25px 40px;
@@ -303,6 +394,7 @@ export default {
     font-family: Microsoft YaHei;
     font-weight: 300;
     color: rgba(153, 153, 153, 1);
+    cursor: pointer;
   }
 }
 </style>
