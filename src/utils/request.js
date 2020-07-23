@@ -65,7 +65,10 @@ service.interceptors.response.use(
           center:true,
           duration: 2 * 1000
         });
-        // 
+        //
+        if(res.code == '300010'){
+          return Promise.reject(res)
+        }
         if (res.code == "400000") {
           store.dispatch("user/resetToken").then(() => {
             window.location.hash = "/login";

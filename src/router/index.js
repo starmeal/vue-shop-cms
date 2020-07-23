@@ -73,6 +73,35 @@ export const asyncRoutes = [
         component: () => import('@/views/authentication/authentication')
       },
       {
+        path: '/shopNominate',
+        meta: {
+          title: '店铺命名申请',
+          parentPath: '/store',
+          basePath: '/store',
+        },
+        component: () => import('@/views/shopNominate/index')
+      },
+      {
+        path: '/shippingMethods',
+        meta: {
+          title: '配送方式',
+          parentPath: '/store',
+          basePath: '/store',
+        },
+        component: () => import('@/views/routeview'),
+        children: [
+          {
+            path: '/index',
+            meta: {
+              title: '同城配送',
+              parentPath: '/shippingMethods',
+              basePath: '/store',
+            },
+            component: () => import('@/views/shippingMethods/index'),
+          },
+        ]
+      },
+      {
         path: '/notice',
         component: () => import('@/views/routeview'),
         meta: {
