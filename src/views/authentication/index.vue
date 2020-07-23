@@ -601,8 +601,9 @@ export default {
       let textarr = [];
       let ret = [];
       let categoryIds = this.form.qualificationList.map((item, index) => {
-        return item.categoryId;
+        return Number(item.categoryId);
       });
+
       let qualificationImgs = this.form.qualificationList.map((item, index) => {
         return item.qualificationImg;
       });
