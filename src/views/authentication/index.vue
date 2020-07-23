@@ -1,24 +1,30 @@
 <template>
   <div class="authentication">
     <div class="form-content">
-      <el-form ref="form" :model="form" label-width="130px" :rules="rules">
+      <el-form ref="form" :model="form" label-width="150px" :rules="rules">
         <div class="title">选择类目</div>
         <div style="width:100%;height:10px"></div>
-        <el-form-item label="经验类目：" prop="categoryName">
+        <el-form-item label="经验类目：" prop="categoryName" style="margin-bottom:10px">
           <div class="woqu">
             <span
               v-for="(item,index) in form.categoryName"
               :key="index"
-              style="margin-right:20px"
-            >{{item}}</span>
+              style="margin-right:4px"
+              @click="delcategory(item)"
+            >
+              <i class="el-icon-close"></i>
+              {{item}}
+            </span>
           </div>
+          <div class="tips">企业经营类目最多可多选五个类目</div>
         </el-form-item>
-        <el-form-item label="经验类目：">
+        <el-form-item label="增加类目：">
           <el-select
+            style="width:90%"
             v-model="form.category"
             multiple
             placeholder="请选择经营类目最多五个"
-            size="mini"
+            size="small"
             @change="categoryChange"
           >
             <el-option
@@ -28,50 +34,54 @@
               :value="item.id"
             ></el-option>
           </el-select>
-          <!-- <el-cascader v-model="value" :options="options" size="mini"></el-cascader> -->
+          <!-- <el-cascader v-model="value" :options="options" size="small"></el-cascader> -->
         </el-form-item>
         <el-form-item label="需要材料：">
-          <div>1:证明合法经营的材料：三证/五证合一营业执照；</div>
-          <div style="color:#3976e6" v-if="textArr.length">
-            请提供
-            <span v-for="(item,index) in textArr" :key="index">
-              {{item.qualificationDescription}}
-              <span v-if="index !== textArr.length - 1">或</span>
-            </span>
-          </div>
-          <div>2:证明真实经营的材料：店铺门头、店铺内景、收银台照片，无实体门店的线上商家可提供线上店铺首页、管理后台、商品照片；</div>
-          <div>3:证明实际经营人材料：法人手持证件照，法人身份证正反面照片；</div>
-          <div>4:照片规则：照片需要四角完整，清晰可辨，若加水印需保证照片重要信息清晰可辨；可提交复印件，每张复印件均需加盖完整红色公章；</div>
-          <div>5:提现、发票的主体需要与认证主题一致，请如实填写主题认证信息；</div>
-          <div>6:详细资质要求可参考《认证资质要求》。</div>
+          <section class="nimem">
+            <div>1:证明合法经营的材料：三证/五证合一营业执照；</div>
+            <div style="color:#3976e6" v-if="textArr.length">
+              请提供
+              <span v-for="(item,index) in textArr" :key="index">
+                {{item.qualificationDescription}}
+                <span v-if="index !== textArr.length - 1">或</span>
+              </span>
+            </div>
+            <div>2:证明真实经营的材料：店铺门头、店铺内景、收银台照片，无实体门店的线上商家可提供线上店铺首页、管理后台、商品照片；</div>
+            <div>3:证明实际经营人材料：法人手持证件照，法人身份证正反面照片；</div>
+            <div>4:照片规则：照片需要四角完整，清晰可辨，若加水印需保证照片重要信息清晰可辨；可提交复印件，每张复印件均需加盖完整红色公章；</div>
+            <div>5:提现、发票的主体需要与认证主题一致，请如实填写主题认证信息；</div>
+            <div>6:详细资质要求可参考《认证资质要求》。</div>
+          </section>
         </el-form-item>
         <div class="title" style="border-top: solid 13px #fff;">营业执照信息</div>
         <el-form-item>
-          <div>输入你的企业名称或统一社会信用代码:</div>
-          <el-input v-model="keyWord" placeholder="请输入内容" style="width:400px" size="mini"></el-input>
-          <el-button type="primary" size="mini" style="margin-left:20px" @click="serachcomp">搜索</el-button>
+          <div style="width:100%;height:10px"></div>
+          <section class="input-con">
+            <input placeholder="输入你的企业名称或统一社会信用代码" v-model="keyWord" size="small" class="input-cla" />
+            <div class="btnsss" @click="serachcomp">搜索</div>
+          </section>
         </el-form-item>
         <el-form-item label="企业名称：" prop="companyName">
           <el-input
             :disabled="true"
             placeholder="请输入企业名称"
             clearable
-            style="width:400px"
-            size="mini"
+            style="width:90%"
+            size="small"
             v-model="form.companyName"
           ></el-input>
-          <div>该名称需要与提现银行卡所对应的对公账户名称一致</div>
+          <div class="tips">该名称需要与提现银行卡所对应的对公账户名称一致</div>
         </el-form-item>
-        <el-form-item label="注册地址：" prop="cityCode">
-          <cascader v-model="cityvalue" @change="handleChange"></cascader>
+        <el-form-item label="注册地址：" prop="cityCode" style="margin-bottom:10px">
+          <cascader v-model="cityvalue" @change="handleChange" size="small" width="90%"></cascader>
         </el-form-item>
         <el-form-item prop="addressDetail">
           <el-input
             v-model="form.addressDetail"
             type="textarea"
-            style="width:450px:"
+            style="width:90%"
             placeholder="请输入内容"
-            rows="5"
+            rows="4"
             maxlength="100"
             show-word-limit
           ></el-input>
@@ -79,21 +89,21 @@
         <el-form-item label="经营范围：" prop="businessScope">
           <el-input
             type="textarea"
-            style="width:450px"
+            style="width:90%"
             placeholder="请输入内容"
             v-model="form.businessScope"
-            rows="3"
+            rows="4"
             maxlength="100"
           ></el-input>
         </el-form-item>
         <el-form-item label="统一社会信用代码：" prop="socialCreditCode">
           <el-input
-            size="mini"
-            style="width:400px"
+            size="small"
+            style="width:90%"
             v-model="form.socialCreditCode"
             placeholder="请输入内容"
           ></el-input>
-          <div>请输入营业执照18位统一社会信用代码</div>
+          <div class="tips">请输入营业执照18位统一社会信用代码</div>
         </el-form-item>
         <el-form-item label="营业期限：" prop="operatingPeriodType">
           <div>
@@ -102,7 +112,7 @@
               :disabled="form.operatingPeriodType != 0"
               v-model="timevalue"
               value-format="yyyy-MM-dd"
-              size="mini"
+              size="small"
               type="daterange"
               range-separator="至"
               start-placeholder="开始日期"
@@ -117,7 +127,7 @@
               v-model="timevalueOne"
               type="date"
               placeholder="选择日期"
-              size="mini"
+              size="small"
             ></el-date-picker>
           </div>
         </el-form-item>
@@ -125,7 +135,7 @@
           <img v-if="form.licenseImgUrl" :src="form.licenseImgUrl" class="avatar" />
         </el-form-item>
         <div class="title" style="border-top: solid 13px #fff;">法人信息</div>
-        <div style="margin-left: 52px; padding: 20px 0px;font-size:12px">法人代表人证件照（身份证）</div>
+        <div class="faren">法定代表人信息</div>
         <el-form-item label="手持身份证：" prop="handheldIdCardImg">
           <el-upload
             class="avatar-uploader"
@@ -163,24 +173,24 @@
           <el-input
             v-model="form.legalPersonName"
             placeholder="请输入内容"
-            style="width:400px"
-            size="mini"
+            style="width:90%"
+            size="small"
           ></el-input>
         </el-form-item>
         <el-form-item label="证件号码：" prop="legalPersonIdCard">
           <el-input
             v-model="form.legalPersonIdCard"
             placeholder="请输入内容"
-            style="width:400px"
-            size="mini"
+            style="width:90%"
+            size="small"
           ></el-input>
         </el-form-item>
         <el-form-item label="法人手机：" prop="legalPersonMobile">
           <el-input
             v-model="form.legalPersonMobile"
             placeholder="请输入内容"
-            style="width:400px"
-            size="mini"
+            style="width:90%"
+            size="small"
           ></el-input>
         </el-form-item>
         <el-form-item label="证件有效期：" prop="idCardValidityType">
@@ -188,7 +198,7 @@
             <el-radio v-model="form.idCardValidityType" label="0">区间有效</el-radio>
             <el-date-picker
               v-model="idCardvalue"
-              size="mini"
+              size="small"
               type="daterange"
               :disabled="form.idCardValidityType != 0"
               range-separator="至"
@@ -204,7 +214,7 @@
               type="date"
               placeholder="选择日期"
               value-format="yyyy-MM-dd"
-              size="mini"
+              size="small"
               :disabled="form.idCardValidityType != 1"
             ></el-date-picker>
             <span style="margin-left:10px">身份证开始日期</span>
@@ -238,11 +248,11 @@
           </div>
           <div
             v-if="textArr[index]"
-            style="width:80%"
+            class="text-text"
           >{{textArr[index].qualificationDescription ? textArr[index].qualificationDescription : ''}}；必须为彩色图片且小于6M，文件格式为bmp、png、jpeg、或gif</div>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" size="mini" @click="submit" style="margin-bottom:0px">提交审核</el-button>
+        <el-form-item class="submit-btn">
+          <el-button type="primary" size="small" @click="submit" style="margin-bottom:0px">提交审核</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -401,6 +411,20 @@ export default {
     });
   },
   methods: {
+    // 删除
+    delcategory(name) {
+      let id;
+      this.selectArr.forEach((item, idx) => {
+        if (item.categoryName == name) {
+          id = item.id;
+        }
+      });
+      let index = this.form.category.findIndex(el => {
+        return el == id;
+      });
+      this.form.category.splice(index, 1);
+      this.categoryChange(this.form.category);
+    },
     showdemoIDcard() {
       this.dialogVisible = true;
     },
@@ -480,11 +504,11 @@ export default {
           categoryName: res.body.categoryName
             ? res.body.categoryName.split(",")
             : 0,
-          category: category,
           qualificationList:
             res.body.qualificationList.length > 0
               ? res.body.qualificationList
-              : qualificationList
+              : qualificationList,
+          category: category
         });
         this.$refs.form.clearValidate();
       });
@@ -737,6 +761,12 @@ export default {
   flex: 1;
   width: 100px;
 }
+.el-form-item__label {
+  font-size: 12px;
+  font-family: Microsoft YaHei, MicrosoftYaHei-Bold;
+  font-weight: bold;
+  color: rgba(102, 102, 102, 1);
+}
 .el-textarea .el-textarea__inner {
   resize: none;
 }
@@ -766,6 +796,14 @@ export default {
 }
 </style>
 <style scoped>
+.faren {
+  font-size: 18px;
+  font-family: Microsoft YaHei, MicrosoftYaHeiLight;
+  font-weight: 300;
+  color: rgba(51, 51, 51, 1);
+  margin-left: 52px;
+  padding: 20px 0px;
+}
 .authentication {
   background: #fff;
   box-sizing: border-box;
@@ -773,10 +811,14 @@ export default {
   font-family: MicrosoftYaHei-Bold;
 }
 .woqu {
-  width: 90%;
+  width: 89.5%;
   background: #fff;
   height: 32px;
   line-height: 32px;
+  padding-left: 3px;
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(239, 239, 239, 1);
 }
 .woqu span {
   height: 24px;
@@ -788,6 +830,7 @@ export default {
   color: rgba(51, 51, 51, 1);
   background: rgba(240, 240, 240, 1);
   border: 1px solid rgba(225, 225, 225, 1);
+  cursor: pointer;
 }
 .form-content {
   background: #f7f6f9;
@@ -815,5 +858,68 @@ export default {
   font-weight: bold;
   color: rgba(51, 51, 51, 1);
   border-bottom: solid 2px #fff;
+}
+.tips {
+  font-size: 12px;
+  line-height: 30px;
+  font-family: Microsoft YaHei, MicrosoftYaHeiLight;
+  font-weight: 300;
+  color: rgba(153, 153, 153, 1);
+}
+.nimem {
+  background: #fff;
+  box-sizing: border-box;
+  padding: 10px;
+  width: 90%;
+}
+.nimem > div {
+  line-height: 25px;
+  font-size: 12px;
+  font-family: Microsoft YaHei, MicrosoftYaHeiLight;
+  font-weight: 300;
+  color: rgba(153, 153, 153, 1);
+}
+.btnsss {
+  background: rgba(68, 171, 247, 1);
+  border: 1px solid rgba(68, 171, 247, 1);
+  font-size: 12px;
+  font-family: Microsoft YaHei;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 1);
+  width: 82px;
+  text-align: center;
+  line-height: 40px;
+  height: 40px;
+  display: inline-block;
+  position: absolute;
+  right: 0;
+}
+.input-con {
+  position: relative;
+  width: 90%;
+}
+.input-cla {
+  width: calc(90%);
+  background: #efefef;
+  height: 40px;
+  display: inline-block;
+  background: #eaeaea;
+  border: 1px solid rgba(234, 234, 234, 1);
+  outline-color: rgba(68, 171, 247, 1);
+  text-indent: 10px;
+}
+.input-cla:focus {
+  background: rgba(239, 239, 239, 1);
+}
+.text-text {
+  font-size: 12px;
+  font-family: Microsoft YaHei;
+  font-weight: 300;
+  margin-top: 10px;
+  line-height: 20px;
+  color: rgba(153, 153, 153, 1);
+}
+.submit-btn {
+  background: #fff;
 }
 </style>

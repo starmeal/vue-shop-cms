@@ -9,6 +9,15 @@ const state = {
   code: '',
 };
 const actions = {
+  resetToken({ commit }) {
+    return new Promise(resolve => {
+      commit("SET_TOKEN", "");
+      commit("SET_NAME", "");
+      commit("SET_CODE", "");
+      commit("SET_ROLES", []);
+      resolve();
+    });
+  },
   login({ commit }, userInfo) {
     const { username, password } = userInfo;
     return new Promise((resolve, reject) => {
