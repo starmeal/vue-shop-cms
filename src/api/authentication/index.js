@@ -23,7 +23,22 @@ export function GetBasicDetailsByName(data) {
 }
 export function certification(data) {
   return request({
-    url: "merchants/info/certification",
+    url: "/merchants/info/certification",
+    method: "post",
+    data: data
+  });
+}
+export function queryQualificationDetail(data) {
+  return request({
+    url: "/merchants/info/queryQualificationDetail",
+    method: "post",
+    data: data
+  });
+}
+
+export function qualificationDetailEdit(data) {
+  return request({
+    url: "merchants/info/qualificationDetailEdit",
     method: "post",
     data: data
   });

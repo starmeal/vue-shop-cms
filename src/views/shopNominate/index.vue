@@ -31,7 +31,7 @@
                       @change="shopNameChange"
                       :class="{styleShop: isShowShop}"
                       ></el-input>
-            <div style="font-size: 12px;color:#999;">请详细阅读 <a style="color:#3976e6" href="https://hs.star.cms.xingfaner.cn/xieyi/mingmingguizhe.html">《店铺名称命名规范》</a></div>
+            <div style="font-size: 12px;color:#999;">请详细阅读 <a style="color:#3976e6" href="https://hs.star.cms.xingfaner.cn/xieyi/mingmingguizhe.html" target="_blank">《店铺名称命名规范》</a></div>
             <div v-show="isShowShop" style="font-size:12px;color: #F56C6C;">店铺名称中含有违禁词：{{hotCard}}</div>
           </el-form-item>
           <el-form-item v-if="status == 1 || status == 3" label="店铺名称" prop="shopMerchantsName">

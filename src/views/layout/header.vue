@@ -9,24 +9,11 @@
         <div class="visit-con-left">
           <div class="visit-title">所有菜单</div>
           <div class="visit-scroll-con">
-            <div
-              class="visit-item"
-              :class="{'active': menuItem.path === basePath}"
-              v-for="(menuItem, menuIndex) in menuList"
-              :key="menuIndex"
-              @mouseenter="switchRouter(menuItem, menuIndex)"
-            >{{menuItem.meta.title}}</div>
+            <div class="visit-item" :class="{'active': menuItem.path === basePath}" v-for="(menuItem, menuIndex) in menuList" :key="menuIndex" @mouseenter="switchRouter(menuItem, menuIndex)">{{menuItem.meta.title}}</div>
           </div>
         </div>
         <div class="visit-con-right">
-          <div
-            class="visit-item"
-            v-for="(item, index) in menuItemList"
-            :key="index"
-            :class="{'active': item.path === path}"
-            @mouseenter="handleItemEnter(item)"
-            @click="handleSwitchRouter(item.path)"
-          >{{item.meta.title}}</div>
+          <div class="visit-item" v-for="(item, index) in menuItemList" :key="index" :class="{'active': item.path === path}" @mouseenter="handleItemEnter(item)" @click="handleSwitchRouter(item.path)">{{item.meta.title}}</div>
         </div>
         <div></div>
       </div>
@@ -36,6 +23,12 @@
         </div>
       </template>
     </el-popover>
+    <div class='search-luyou-con'>
+      <el-select :value="[]" multiple filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="remoteMethod" :loading="loading">
+        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+    </div>
     <div class="search-con"></div>
     <div class="refresh" @click="reload">
       <i class="el-icon-refresh-right"></i>刷新
@@ -65,34 +58,111 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from "vuex";
+import { createNamespacedHelpers } from 'vuex';
 import { mapActions } from 'vuex';
-const { mapState } = createNamespacedHelpers("user");
-import Icon from "@/components/base/icon.vue";
-import { deepClone } from "@/utils/util";
+const { mapState } = createNamespacedHelpers('user');
+import Icon from '@/components/base/icon.vue';
+import { deepClone } from '@/utils/util';
 export default {
-  name: "headercontainer",
+  name: 'headercontainer',
   components: {
-    Icon
+    Icon,
   },
   computed: {
     ...mapState({
-      name: "name",
-      menuList: "routes"
-    })
+      name: 'name',
+      menuList: 'routes',
+    }),
   },
   data() {
     return {
+      valueSelect: '',
+      loading: false,
+      states: [
+        'Alabama',
+        'Alaska',
+        'Arizona',
+        'Arkansas',
+        'California',
+        'Colorado',
+        'Connecticut',
+        'Delaware',
+        'Florida',
+        'Georgia',
+        'Hawaii',
+        'Idaho',
+        'Illinois',
+        'Indiana',
+        'Iowa',
+        'Kansas',
+        'Kentucky',
+        'Louisiana',
+        'Maine',
+        'Maryland',
+        'Massachusetts',
+        'Michigan',
+        'Minnesota',
+        'Mississippi',
+        'Missouri',
+        'Montana',
+        'Nebraska',
+        'Nevada',
+        'New Hampshire',
+        'New Jersey',
+        'New Mexico',
+        'New York',
+        'North Carolina',
+        'North Dakota',
+        'Ohio',
+        'Oklahoma',
+        'Oregon',
+        'Pennsylvania',
+        'Rhode Island',
+        'South Carolina',
+        'South Dakota',
+        'Tennessee',
+        'Texas',
+        'Utah',
+        'Vermont',
+        'Virginia',
+        'Washington',
+        'West Virginia',
+        'Wisconsin',
+        'Wyoming',
+      ],
+      options: [],
       isShowPopver: false,
-      path: "",
-      basePath: "",
-      menuItemList: []
+      path: '',
+      basePath: '',
+      menuItemList: [],
     };
   },
   methods: {
+    remoteMethod(query) {
+      let ret  = []
+      const getList = (list) => {
+        if (list.children) return false;
+        console.log(list, '1111222')
+      }
+      this.menuList.forEach((listItem, listIndex) => {
+        getList(listItem)
+      })  
+      getList(this.menuList)
+      if (query !== '') {
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.options = this.list.filter((item) => {
+            return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+          });
+        }, 200);
+      } else {
+        this.options = [];
+      }
+    },
     signout() {
-      this.$store.dispatch("user/resetToken").then(() => {
-        window.location.hash = "/login";
+      this.$store.dispatch('user/resetToken').then(() => {
+        window.location.hash = '/login';
       });
     },
     reload() {
@@ -103,7 +173,7 @@ export default {
     },
     handleSwitchRouter(path) {
       this.isShowPopver = false;
-      this.$router.push(path !== "/" ? path.replace(/\/$/g, "") : path);
+      this.$router.push(path !== '/' ? path.replace(/\/$/g, '') : path);
     },
     handleItemEnter(item) {
       this.path = item.path;
@@ -118,10 +188,10 @@ export default {
         list.forEach((menuItem, menuIndex) => {
           let {
             path,
-            meta: { basePath, parentPath }
+            meta: { basePath, parentPath },
           } = menuItem;
-          if (menuItem.path == "") {
-            menuItem.path = (parentPath || basePath) + "/";
+          if (menuItem.path == '') {
+            menuItem.path = (parentPath || basePath) + '/';
           }
           if (!menuItem.hidden) {
             if (menuItem.children) {
@@ -132,18 +202,18 @@ export default {
           }
         });
       } catch (error) {
-        console.log(error, "error");
+        console.log(error, 'error');
       }
       return result;
-    }
+    },
   },
   created() {
     let {
       path,
-      meta: { basePath, parentPath }
+      meta: { basePath, parentPath },
     } = this.$route;
     this.basePath = basePath || path;
-    this.path = path == basePath ? path + "/" : path;
+    this.path = path == basePath ? path + '/' : path;
     this.menuList.forEach((menuItem, menuIndex) => {
       if (menuItem.path === basePath) {
         this.menuItemList = this.filterMenuItem(
@@ -154,7 +224,12 @@ export default {
     this.currentNodeKey = this.$route.matched[
       this.$route.matched.length - 1
     ].path;
-  }
+  },
+  mounted() {
+    this.list = this.states.map((item) => {
+      return { value: `value:${item}`, label: `label:${item}` };
+    });
+  },
 };
 </script>
 
@@ -167,6 +242,39 @@ export default {
     width: 138px;
     height: 100%;
     background: #24303c;
+  }
+  .search-luyou-con{
+    height: 100%;
+    background: #fff;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e7eaec;
+    border-right: 1px solid #e7eaec;
+    display: flex;
+    align-items: center;
+    width:284px;
+
+    & ::v-deep  .el-select{
+      width:100% !important;
+      border: none !important;
+      .el-input__inner{
+        border: none !important;
+        padding-right:0 !important;
+      }
+      .el-select__tags{
+        border: none !important;
+        max-width: 280px !important;
+      }
+      .el-input{
+        border: none !important;
+        padding-right:0;
+      }
+      .el-select__input{
+        max-width: 247px !important;
+      }
+      .el-input__suffix{
+        width:0 !important;
+      }
+    }
   }
   .home-con {
     flex: 0 0 60px;
@@ -181,7 +289,7 @@ export default {
     border-bottom: 1px solid #e7eaec;
     cursor: pointer;
     &::after {
-      content: " ";
+      content: ' ';
       position: absolute;
       width: 1px;
       background: #e7eaec;
@@ -198,7 +306,7 @@ export default {
     box-sizing: border-box;
     border-bottom: 1px solid #e7eaec;
     &::after {
-      content: " ";
+      content: ' ';
       position: absolute;
       width: 1px;
       background: #e7eaec;
@@ -226,7 +334,7 @@ export default {
       margin-right: 10px;
     }
     &::after {
-      content: " ";
+      content: ' ';
       position: absolute;
       width: 1px;
       background: #e7eaec;
@@ -251,7 +359,7 @@ export default {
     box-sizing: border-box;
     border-bottom: 1px solid #e7eaec;
     &::after {
-      content: " ";
+      content: ' ';
       position: absolute;
       width: 1px;
       background: #e7eaec;

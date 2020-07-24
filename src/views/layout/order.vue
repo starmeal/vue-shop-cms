@@ -160,6 +160,7 @@ export default {
   overflow: hidden;
   width: 0px;
   transition: all 0.3s linear;
+  z-index: 10000;
   &.order-container-spread {
     width: 180px !important;
   }
@@ -171,6 +172,7 @@ export default {
     bottom: 0;
     right: -180px;
     transition: all 0.3s linear;
+    z-index: 10000;
     &.order-container-spread {
       right: 0px;
     }
