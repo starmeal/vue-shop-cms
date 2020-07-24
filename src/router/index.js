@@ -91,14 +91,33 @@ export const asyncRoutes = [
         component: () => import('@/views/routeview'),
         children: [
           {
-            path: '/index',
+            path: '',
+            meta: {
+              title: '快递配送',
+              parentPath: '/shippingMethods',
+              basePath: '/store',
+            },
+            component: () => import('@/views/tongchengpeisong/list'),
+          },
+          {
+            path: '/expressDeliveryAdd',
+            hidden: true,
+            meta: {
+              title: '添加',
+              parentPath: '/shippingMethods',
+              basePath: '/store',
+            },
+            component: () => import('@/views/tongchengpeisong/add'),
+          },
+          {
+            path: '/intraCity',
             meta: {
               title: '同城配送',
               parentPath: '/shippingMethods',
               basePath: '/store',
             },
             component: () => import('@/views/shippingMethods/index'),
-          },
+          }
         ]
       },
       {

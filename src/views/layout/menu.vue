@@ -99,7 +99,7 @@ export default {
         if (!menuItem.hidden) {
           result.push(menuItem);
           if (menuItem.children) {
-            this.filterMenuItem(menuItem.children);
+            menuItem.children = this.filterMenuItem(menuItem.children);
           }
         }
       });

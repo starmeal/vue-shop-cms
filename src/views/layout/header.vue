@@ -141,10 +141,13 @@ export default {
     remoteMethod(query) {
       let ret  = []
       const getList = (list) => {
-        console.log(list, 'list')
+        if (list.children) return false;
+        console.log(list, '1111222')
       }
+      this.menuList.forEach((listItem, listIndex) => {
+        getList(listItem)
+      })  
       getList(this.menuList)
-      console.log(this.menuList, '11112222333')
       if (query !== '') {
         this.loading = true;
         setTimeout(() => {
