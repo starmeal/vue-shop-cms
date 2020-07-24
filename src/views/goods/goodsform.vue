@@ -7,12 +7,12 @@
         </div>
         <el-form-item label="商品类型" prop="noticeName">
           <el-select v-model="value" placeholder="请选择商品类型" :size="size" class="">
-            <el-option
+            <!-- <el-option
               v-for="item in options"
               :key="item.value"
               :label="item.label"
               :value="item.value"
-            ></el-option>
+            ></el-option> -->
           </el-select>
         </el-form-item>
       </el-form>

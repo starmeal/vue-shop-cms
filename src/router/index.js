@@ -54,140 +54,140 @@ export const asyncRoutes = [
         },
         component: () => import('@/views/store'),
       },
-      {
-        path: '/authentication',
-        meta: {
-          title: '资质认证',
-          parentPath: '/store',
-          basePath: '/store',
-        },
-        component: () => import('@/views/authentication/index')
-      },
-      {
-        path: '/category',
-        meta: {
-          title: '类目资质认证',
-          parentPath: '/store',
-          basePath: '/store',
-        },
-        component: () => import('@/views/authentication/authentication')
-      },
-      {
-        path: '/shopNominate',
-        meta: {
-          title: '店铺命名申请',
-          parentPath: '/store',
-          basePath: '/store',
-        },
-        component: () => import('@/views/shopNominate/index')
-      },
-      {
-        path: '/shippingMethods',
-        meta: {
-          title: '配送方式',
-          parentPath: '/store',
-          basePath: '/store',
-        },
-        component: () => import('@/views/routeview'),
-        children: [
-          {
-            path: '',
-            meta: {
-              title: '快递配送',
-              parentPath: '/shippingMethods',
-              basePath: '/store',
-            },
-            component: () => import('@/views/tongchengpeisong/list'),
-          },
-          {
-            path: '/expressDeliveryAdd',
-            hidden: true,
-            meta: {
-              title: '添加',
-              parentPath: '/shippingMethods',
-              basePath: '/store',
-            },
-            component: () => import('@/views/tongchengpeisong/add'),
-          },
-          {
-            path: '/intraCity',
-            meta: {
-              title: '同城配送',
-              parentPath: '/shippingMethods',
-              basePath: '/store',
-            },
-            component: () => import('@/views/shippingMethods/index'),
-          }
-        ]
-      },
-      {
-        path: '/notice',
-        component: () => import('@/views/routeview'),
-        meta: {
-          title: '公告',
-          parentPath: '/store',
-          basePath: '/store',
-        },
-        children: [
-          {
-            path: '',
-            meta: {
-              title: '编辑公告',
-              parentPath: '/notice',
-              basePath: '/store',
-            },
-            component: () => import('@/views/notice/index'),
-          },
-          {
-            path: '/noticelist',
-            meta: {
-              title: '公告列表',
-              parentPath: '/notice',
-              basePath: '/store',
-            },
-            component: () => import('@/views/notice/noticelist'),
-          },
-        ]
-      },
-      {
-        path: '/home2',
-        meta: {
-          title: '店铺详情2',
-          parentPath: '/store',
-          basePath: '/store',
-        },
-        component: () => import('@/views/home'),
-        children: [
-          {
-            path: '',
-            meta: {
-              title: '店铺详情3',
-              parentPath: '/home2',
-              basePath: '/store',
-            },
-            component: () => import('@/views/store'),
-          },
-          {
-            path: '/home4',
-            meta: {
-              title: '店铺详情4',
-              parentPath: '/home2',
-              basePath: '/store',
-            },
-            component: () => import('@/views/home'),
-          },
-          {
-            path: '/home5',
-            meta: {
-              title: '店铺详情5',
-              parentPath: '/home2',
-              basePath: '/store',
-            },
-            component: () => import('@/views/AnnouncementManagement'),
-          }
+      // {
+      //   path: '/authentication',
+      //   meta: {
+      //     title: '资质认证',
+      //     parentPath: '/store',
+      //     basePath: '/store',
+      //   },
+      //   component: () => import('@/views/authentication/index')
+      // },
+      // {
+      //   path: '/category',
+      //   meta: {
+      //     title: '类目资质认证',
+      //     parentPath: '/store',
+      //     basePath: '/store',
+      //   },
+      //   component: () => import('@/views/authentication/authentication')
+      // },
+      // {
+      //   path: '/shopNominate',
+      //   meta: {
+      //     title: '店铺命名申请',
+      //     parentPath: '/store',
+      //     basePath: '/store',
+      //   },
+      //   component: () => import('@/views/shopNominate/index')
+      // },
+      // {
+      //   path: '/shippingMethods',
+      //   meta: {
+      //     title: '配送方式',
+      //     parentPath: '/store',
+      //     basePath: '/store',
+      //   },
+      //   component: () => import('@/views/routeview'),
+      //   children: [
+      //     {
+      //       path: '',
+      //       meta: {
+      //         title: '快递配送',
+      //         parentPath: '/shippingMethods',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/tongchengpeisong/list'),
+      //     },
+      //     {
+      //       path: '/expressDeliveryAdd',
+      //       hidden: true,
+      //       meta: {
+      //         title: '添加',
+      //         parentPath: '/shippingMethods',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/tongchengpeisong/add'),
+      //     },
+      //     {
+      //       path: '/intraCity',
+      //       meta: {
+      //         title: '同城配送',
+      //         parentPath: '/shippingMethods',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/shippingMethods/index'),
+      //     }
+      //   ]
+      // },
+      // {
+      //   path: '/notice',
+      //   component: () => import('@/views/routeview'),
+      //   meta: {
+      //     title: '公告',
+      //     parentPath: '/store',
+      //     basePath: '/store',
+      //   },
+      //   children: [
+      //     {
+      //       path: '',
+      //       meta: {
+      //         title: '编辑公告',
+      //         parentPath: '/notice',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/notice/index'),
+      //     },
+      //     {
+      //       path: '/noticelist',
+      //       meta: {
+      //         title: '公告列表',
+      //         parentPath: '/notice',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/notice/noticelist'),
+      //     },
+      //   ]
+      // },
+      // {
+      //   path: '/home2',
+      //   meta: {
+      //     title: '店铺详情2',
+      //     parentPath: '/store',
+      //     basePath: '/store',
+      //   },
+      //   component: () => import('@/views/home'),
+      //   children: [
+      //     {
+      //       path: '',
+      //       meta: {
+      //         title: '店铺详情3',
+      //         parentPath: '/home2',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/store'),
+      //     },
+      //     {
+      //       path: '/home4',
+      //       meta: {
+      //         title: '店铺详情4',
+      //         parentPath: '/home2',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/home'),
+      //     },
+      //     {
+      //       path: '/home5',
+      //       meta: {
+      //         title: '店铺详情5',
+      //         parentPath: '/home2',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/AnnouncementManagement'),
+      //     }
 
-        ]
-      }
+      //   ]
+      // }
 
     ]
   },

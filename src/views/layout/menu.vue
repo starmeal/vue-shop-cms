@@ -65,8 +65,6 @@ export default {
           deepClone(this.menuList[menuIndex].children)
         );
         this.isCollapseSecond = !!this.menuItemList.length
-      } else {
-        this.isCollapseSecond = false
       }
     });
     this.fullTitle = this.$route.matched[0].meta.fullTitle
