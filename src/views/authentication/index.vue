@@ -110,7 +110,7 @@
         </el-form-item>
         <el-form-item label="营业期限：" prop="operatingPeriodType">
           <div>
-            <el-radio v-model="form.operatingPeriodType" label="0">区间有效</el-radio>
+            <el-radio v-model="form.operatingPeriodType" :label="0">区间有效</el-radio>
             <el-date-picker
               :disabled="form.operatingPeriodType != 0"
               v-model="timevalue"
@@ -123,7 +123,7 @@
             ></el-date-picker>
           </div>
           <div>
-            <el-radio v-model="form.operatingPeriodType" label="1">长期有效</el-radio>
+            <el-radio v-model="form.operatingPeriodType" :label="1">长期有效</el-radio>
             <el-date-picker
               value-format="yyyy-MM-dd"
               :disabled="form.operatingPeriodType != 1"
@@ -144,7 +144,7 @@
           <Icon icon="jibenxinxi" class="authentication-title" />法人信息
         </div>
         <div class="faren">法定代表人信息</div>
-        <el-form-item label="手持身份证：" prop="handheldIdCardImg">
+        <!-- <el-form-item label="手持身份证：" prop="handheldIdCardImg">
           <el-upload
             class="avatar-uploader"
             action="https://jsonplaceholder.typicode.com/posts/"
@@ -169,7 +169,7 @@
               @click="showdemoIDcard"
             >查看示例</span>
           </div>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="身份证正面：" prop="legalIdCardUp">
           <div class="idcard-bg">
             <img v-if="form.legalIdCardUp" :src="form.legalIdCardUp" />
@@ -206,30 +206,33 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="证件有效期：" prop="idCardValidityType">
-          <div>
-            <el-radio v-model="form.idCardValidityType" label="0">区间有效</el-radio>
-            <el-date-picker
-              v-model="idCardvalue"
-              size="small"
-              type="daterange"
-              :disabled="form.idCardValidityType != 0"
-              range-separator="至"
-              start-placeholder="开始日期"
-              value-format="yyyy-MM-dd"
-              end-placeholder="结束日期"
-            ></el-date-picker>
-          </div>
-          <div>
-            <el-radio v-model="form.idCardValidityType" label="1">长期有效</el-radio>
-            <el-date-picker
-              v-model="idCardvalueOne"
-              type="date"
-              placeholder="选择日期"
-              value-format="yyyy-MM-dd"
-              size="small"
-              :disabled="form.idCardValidityType != 1"
-            ></el-date-picker>
-          </div>
+          <el-checkbox-group v-model="form.idCardValidityType">
+            <div>
+              22{{form.idCardValidityType}}11
+              <el-radio v-model="form.idCardValidityType" label="0">区间有效</el-radio>
+              <el-date-picker
+                v-model="idCardvalue"
+                size="small"
+                type="daterange"
+                :disabled="form.idCardValidityType != 0"
+                range-separator="至"
+                start-placeholder="开始日期"
+                value-format="yyyy-MM-dd"
+                end-placeholder="结束日期"
+              ></el-date-picker>
+            </div>
+            <div>
+              <el-radio v-model="form.idCardValidityType" label="1">长期有效</el-radio>
+              <el-date-picker
+                v-model="idCardvalueOne"
+                type="date"
+                placeholder="选择日期"
+                value-format="yyyy-MM-dd"
+                size="small"
+                :disabled="form.idCardValidityType != 1"
+              ></el-date-picker>
+            </div>
+          </el-checkbox-group>
         </el-form-item>
         <!-- <div class="title" style="margin-bottom:20px">
           <Icon icon="jibenxinxi" class="authentication-title" />其他资质
@@ -329,6 +332,8 @@ import {
   categoryInformationList,
   GetBasicDetailsByName,
   certification,
+  queryQualificationDetail,
+  qualificationDetailEdit,
 } from "@/api/authentication";
 export default {
   components: {
@@ -376,20 +381,24 @@ export default {
           },
         ],
         companyName: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { required: true, message: "请输入公司名称", trigger: "change" },
         ],
         cityCode: [
           { required: true, message: "请选择省市区", trigger: "change" },
         ],
+        addressDetail: [
+          { required: true, message: "请输入详细地址", trigger: "change" },
+        ],
         businessScope: [
-          { required: true, message: "请填写经营范围", trigger: "blur" },
+          { required: true, message: "请填写经营范围", trigger: "change" },
         ],
         socialCreditCode: [
           {
             required: true,
             message: "请填写统一社会信用代码",
-            trigger: "blur",
+            trigger: "change",
           },
+
           { min: 18, max: 18, message: "长度在 18个字符", trigger: "blur" },
         ],
         handheldIdCardImg: [
@@ -423,7 +432,7 @@ export default {
         countyName: "",
         businessScope: "",
         socialCreditCode: "",
-        operatingPeriodType: "0",
+        operatingPeriodType: 0,
         periodStartDate: "",
         period_end_date: "",
         handheldIdCardImg: "",
@@ -517,40 +526,40 @@ export default {
           }
         }
       }
-      (this.form.provinceName = this.cityArrName[0]),
-        (this.form.cityName = this.cityArrName[1]);
+      this.form.provinceName = this.cityArrName[0];
+      this.form.cityName = this.cityArrName[1];
       this.form.countyName = this.cityArrName[2];
     },
     // 详情
     getDetail() {
-      qualification().then((res) => {
-        this.textArr = [];
-        let qualificationList = [];
-        let category = res.body.category.split(",").map((el) => {
-          let obj = {
-            categoryId: el,
-            qualificationImg: [],
-          };
-          qualificationList.push(obj);
-          return parseInt(el);
-        });
-        this.category = JSON.parse(JSON.stringify(category));
+      queryQualificationDetail().then((res) => {
+        // this.textArr = [];
+        // let qualificationList = [];
+        // let category = res.body.category.split(",").map((el) => {
+        //   let obj = {
+        //     categoryId: el,
+        //     qualificationImg: [],
+        //   };
+        //   qualificationList.push(obj);
+        //   return parseInt(el);
+        // });
+        // this.category = JSON.parse(JSON.stringify(category));
+        // category.forEach((element) => {
+        //   this.selectArr.forEach((el) => {
+        //     if (element == el.id) {
+        //       let obj = {
+        //         id: el.id,
+        //         qualificationDescription: el.qualificationDescription,
+        //       };
+        //       this.textArr.push(obj);
+        //     }
+        //   });
+        // });
         this.cityvalue = [
           res.body.provinceCode,
           res.body.cityCode,
           res.body.countyCode,
         ];
-        category.forEach((element) => {
-          this.selectArr.forEach((el) => {
-            if (element == el.id) {
-              let obj = {
-                id: el.id,
-                qualificationDescription: el.qualificationDescription,
-              };
-              this.textArr.push(obj);
-            }
-          });
-        });
         if (res.body.operatingPeriodType == 0) {
           this.timevalue = [res.body.periodStartDate, res.body.periodEndDate];
         } else {
@@ -565,25 +574,41 @@ export default {
           this.idCardvalueOne = res.body.validityStartDate;
         }
         this.form = Object.assign({}, res.body, {
-          categoryName: res.body.categoryName
-            ? res.body.categoryName.split(",")
-            : 0,
-          qualificationList:
-            res.body.qualificationList.length > 0
-              ? res.body.qualificationList
-              : qualificationList,
-          category: category,
+          // categoryName: res.body.categoryName
+          //   ? res.body.categoryName.split(",")
+          //   : 0,
+          // qualificationList:
+          //   res.body.qualificationList.length > 0
+          //     ? res.body.qualificationList
+          //     : qualificationList,
+          // category: category,
         });
-        this.$refs.form.clearValidate();
+        this.$nextTick(() => {
+          this.$refs.form.clearValidate();
+        });
       });
     },
     submit() {
       let form = this.form;
       this.$refs.form.validate((valid, form) => {
         if (valid) {
+          if (!this.timevalue && !this.timevalueOne) {
+            this.$message({
+              message: "请选择营业期限",
+              type: "warning",
+            });
+            return false;
+          }
+          if (!this.idCardvalue && !this.idCardvalueOne) {
+            this.$message({
+              message: "请选择证件有效期",
+              type: "warning",
+            });
+            return false;
+          }
           let form = Object.assign({}, this.form, {
-            category: this.form.category.join(","),
-            categoryName: this.form.categoryName.join(","),
+            // category: this.form.category.join(","),
+            // categoryName: this.form.categoryName.join(","),
           });
           if (form.idCardValidityType == 0) {
             form.validityStartDate = this.idCardvalue[0];
@@ -599,7 +624,7 @@ export default {
             form.periodStartDate = this.timevalueOne;
             form.period_end_date = "";
           }
-          certification(form).then((res) => {
+          qualificationDetailEdit(form).then((res) => {
             this.$alert(
               "您的资料已经提交审核，平台审核将在1-3个工作日内完成，请您耐心等待~",
               "提示",
@@ -626,9 +651,15 @@ export default {
       this.form.qualificationList[index].qualificationImg.splice(idx, 1);
     },
     fuzhi() {
+      // https://hs-star-bucket-test.oss-cn-zhangjiakou.aliyuncs.com/hs_star/app_shop/goods/32
       this.form.addressDetail = this.keyWordContent.Address;
       this.form.companyName = this.keyWordContent.Name;
       this.form.businessScope = this.keyWordContent.Scope;
+      this.form.socialCreditCode = this.keyWordContent.CreditCode;
+      this.form.periodStartDate = this.keyWordContent.TermStart;
+      this.form.period_end_date = this.keyWordContent.TeamEnd;
+      this.timevalue = [this.form.periodStartDate, this.form.period_end_date];
+      this.form.operatingPeriodType = 0;
       this.showmessage = false;
     },
     serachcomp() {
