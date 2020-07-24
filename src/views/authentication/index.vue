@@ -2,58 +2,6 @@
   <div class="authentication">
     <div class="form-content">
       <el-form ref="form" :model="form" label-width="150px" :rules="rules">
-        <!-- <div class="title"> <Icon icon="jibenxinxi" className="authentication-title" />选择类目</div>
-        <el-form-item label="经验类目：" prop="categoryName" style="margin-bottom:10px">
-          <div class="woqu">
-            <span
-              v-for="(item,index) in form.categoryName"
-              :key="index"
-              style="margin-right:4px"
-              @click="delcategory(item)"
-            >
-              <i class="el-icon-close"></i>
-              {{item}}
-            </span>
-          </div>
-          <div class="tips">企业经营类目最多可多选五个类目</div>
-        </el-form-item>
-        <el-form-item label="增加类目：">
-          <el-select
-            style="width:90%"
-            v-model="form.category"
-            multiple
-            placeholder="请选择经营类目最多五个"
-            size="small"
-            @change="categoryChange"
-          >
-            <el-option
-              v-for="item in selectArr"
-              :key="item.value"
-              :label="item.categoryName"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="需要材料：">
-          <section class="nimem">
-            <div>1:证明合法经营的材料：三证/五证合一营业执照；</div>
-            <div style="color:#44ABF7" v-if="textArr.length">
-              请提供
-              <span v-for="(item,index) in textArr" :key="index">
-                {{item.qualificationDescription}}
-                <span v-if="index !== textArr.length - 1">或</span>
-              </span>
-            </div>
-            <div>2:证明真实经营的材料：店铺门头、店铺内景、收银台照片，无实体门店的线上商家可提供线上店铺首页、管理后台、商品照片；</div>
-            <div>3:证明实际经营人材料：法人手持证件照，法人身份证正反面照片；</div>
-            <div>4:照片规则：照片需要四角完整，清晰可辨，若加水印需保证照片重要信息清晰可辨；可提交复印件，每张复印件均需加盖完整红色公章；</div>
-            <div>5:提现、发票的主体需要与认证主题一致，请如实填写主题认证信息；</div>
-            <div>
-              6:详细资质要求可参考
-              <span style="color:#44ABF7">《认证资质要求》</span>
-            </div>
-          </section>
-        </el-form-item>-->
         <div class="title">
           <Icon icon="jibenxinxi" class="authentication-title" />营业执照信息
         </div>
@@ -109,30 +57,32 @@
           <div class="tips">请输入营业执照18位统一社会信用代码</div>
         </el-form-item>
         <el-form-item label="营业期限：" prop="operatingPeriodType">
-          <div>
-            <el-radio v-model="form.operatingPeriodType" :label="0">区间有效</el-radio>
-            <el-date-picker
-              :disabled="form.operatingPeriodType != 0"
-              v-model="timevalue"
-              value-format="yyyy-MM-dd"
-              size="small"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            ></el-date-picker>
-          </div>
-          <div>
-            <el-radio v-model="form.operatingPeriodType" :label="1">长期有效</el-radio>
-            <el-date-picker
-              value-format="yyyy-MM-dd"
-              :disabled="form.operatingPeriodType != 1"
-              v-model="timevalueOne"
-              type="date"
-              placeholder="选择日期"
-              size="small"
-            ></el-date-picker>
-          </div>
+          <el-checkbox-group v-model="form.operatingPeriodType">
+            <div>
+              <el-radio v-model="form.operatingPeriodType" label="0">区间有效</el-radio>
+              <el-date-picker
+                :disabled="form.operatingPeriodType != 0"
+                v-model="timevalue"
+                value-format="yyyy-MM-dd"
+                size="small"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              ></el-date-picker>
+            </div>
+            <div>
+              <el-radio v-model="form.operatingPeriodType" label="1">长期有效</el-radio>
+              <el-date-picker
+                value-format="yyyy-MM-dd"
+                :disabled="form.operatingPeriodType != 1"
+                v-model="timevalueOne"
+                type="date"
+                placeholder="选择日期"
+                size="small"
+              ></el-date-picker>
+            </div>
+          </el-checkbox-group>
         </el-form-item>
         <el-form-item label="营业执照照片：" prop="licenseImgUrl">
           <div class="picture-bg">
@@ -144,32 +94,6 @@
           <Icon icon="jibenxinxi" class="authentication-title" />法人信息
         </div>
         <div class="faren">法定代表人信息</div>
-        <!-- <el-form-item label="手持身份证：" prop="handheldIdCardImg">
-          <el-upload
-            class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            accept=".bmp, .png, .jpeg, .gif"
-            :show-file-list="false"
-            :http-request="uploadHttp"
-            :data="{
-              data:'handheldIdCardImg'
-            }"
-          >
-            <img v-if="form.handheldIdCardImg" :src="form.handheldIdCardImg" class="avatar" />
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            <div class="hidden-box">
-              <el-input v-model="form.handheldIdCardImg" class="hidden-input"></el-input>
-            </div>
-          </el-upload>
-          <div>
-            必须为彩色图片且小于4M，文件格式为bmp，png，jpeg，或gif。
-            <span
-              style="color:#44ABF7"
-              class="poiner"
-              @click="showdemoIDcard"
-            >查看示例</span>
-          </div>
-        </el-form-item>-->
         <el-form-item label="身份证正面：" prop="legalIdCardUp">
           <div class="idcard-bg">
             <img v-if="form.legalIdCardUp" :src="form.legalIdCardUp" />
@@ -197,18 +121,17 @@
             size="small"
           ></el-input>
         </el-form-item>
-        <el-form-item label="法人手机：" prop="legalPersonMobile">
+        <!-- <el-form-item label="法人手机：" prop="legalPersonMobile">
           <el-input
             v-model="form.legalPersonMobile"
             placeholder="请输入内容"
             style="width:90%"
             size="small"
           ></el-input>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="证件有效期：" prop="idCardValidityType">
           <el-checkbox-group v-model="form.idCardValidityType">
             <div>
-              22{{form.idCardValidityType}}11
               <el-radio v-model="form.idCardValidityType" label="0">区间有效</el-radio>
               <el-date-picker
                 v-model="idCardvalue"
@@ -234,39 +157,6 @@
             </div>
           </el-checkbox-group>
         </el-form-item>
-        <!-- <div class="title" style="margin-bottom:20px">
-          <Icon icon="jibenxinxi" class="authentication-title" />其他资质
-        </div>
-        <el-form-item v-for="(item,index) in form.qualificationList" :key="index">
-          <div class="flex-box">
-            <div class="png-s" v-for="(item,idx) in item.qualificationImg" :key="idx">
-              <img :src="item" style="width:100%;height:100%" />
-              <div class="caozuo-box">
-                <i
-                  class="el-icon-delete icon-d"
-                  style="color:#fff;font-size:30px"
-                  @click="delImg(index,idx)"
-                ></i>
-              </div>
-            </div>
-            <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
-              list-type="picture-card"
-              :show-file-list="false"
-              :http-request="uploadHttp"
-              accept=".bmp, .png, .jpeg, .gif"
-              :data="{
-               data:index
-            }"
-            >
-              <i class="el-icon-plus"></i>
-            </el-upload>
-          </div>
-          <div
-            v-if="textArr[index]"
-            class="text-text"
-          >{{textArr[index].qualificationDescription ? textArr[index].qualificationDescription : ''}}；必须为彩色图片且小于6M，文件格式为bmp、png、jpeg、或gif</div>
-        </el-form-item>-->
         <el-form-item class="submit-btn">
           <el-button type="primary" size="small" @click="submit" style="margin-bottom:0px">提交审核</el-button>
         </el-form-item>
@@ -366,7 +256,6 @@ export default {
       imageUrl: "",
       textarea: "",
       radio: 1,
-      selectArr: [],
       value: "",
       timevalue: [],
       timevalueOne: "",
@@ -401,9 +290,6 @@ export default {
 
           { min: 18, max: 18, message: "长度在 18个字符", trigger: "blur" },
         ],
-        handheldIdCardImg: [
-          { required: true, message: "手持身份证", trigger: "change" },
-        ],
         legalPersonName: [
           { required: true, message: "法人姓名", trigger: "blur" },
         ],
@@ -421,7 +307,6 @@ export default {
       },
       form: {
         category: "",
-        categoryName: "",
         companyName: "",
         addressDetail: "",
         provinceCode: "",
@@ -432,10 +317,9 @@ export default {
         countyName: "",
         businessScope: "",
         socialCreditCode: "",
-        operatingPeriodType: 0,
+        operatingPeriodType: "0",
         periodStartDate: "",
         period_end_date: "",
-        handheldIdCardImg: "",
         legalPersonName: "",
         legalPersonIdCard: "",
         legalPersonMobile: "",
@@ -479,25 +363,9 @@ export default {
           districts = res.data.districts[0].districts;
         }
       });
-    this.getSelect().then(() => {
-      this.getDetail();
-    });
+    this.getDetail();
   },
   methods: {
-    // 删除
-    delcategory(name) {
-      let id;
-      this.selectArr.forEach((item, idx) => {
-        if (item.categoryName == name) {
-          id = item.id;
-        }
-      });
-      let index = this.form.category.findIndex((el) => {
-        return el == id;
-      });
-      this.form.category.splice(index, 1);
-      this.categoryChange(this.form.category);
-    },
     showdemoIDcard() {
       this.dialogVisible = true;
     },
@@ -533,28 +401,6 @@ export default {
     // 详情
     getDetail() {
       queryQualificationDetail().then((res) => {
-        // this.textArr = [];
-        // let qualificationList = [];
-        // let category = res.body.category.split(",").map((el) => {
-        //   let obj = {
-        //     categoryId: el,
-        //     qualificationImg: [],
-        //   };
-        //   qualificationList.push(obj);
-        //   return parseInt(el);
-        // });
-        // this.category = JSON.parse(JSON.stringify(category));
-        // category.forEach((element) => {
-        //   this.selectArr.forEach((el) => {
-        //     if (element == el.id) {
-        //       let obj = {
-        //         id: el.id,
-        //         qualificationDescription: el.qualificationDescription,
-        //       };
-        //       this.textArr.push(obj);
-        //     }
-        //   });
-        // });
         this.cityvalue = [
           res.body.provinceCode,
           res.body.cityCode,
@@ -573,16 +419,7 @@ export default {
         } else {
           this.idCardvalueOne = res.body.validityStartDate;
         }
-        this.form = Object.assign({}, res.body, {
-          // categoryName: res.body.categoryName
-          //   ? res.body.categoryName.split(",")
-          //   : 0,
-          // qualificationList:
-          //   res.body.qualificationList.length > 0
-          //     ? res.body.qualificationList
-          //     : qualificationList,
-          // category: category,
-        });
+        this.form = Object.assign({}, res.body, {});
         this.$nextTick(() => {
           this.$refs.form.clearValidate();
         });
@@ -592,24 +429,23 @@ export default {
       let form = this.form;
       this.$refs.form.validate((valid, form) => {
         if (valid) {
-          if (!this.timevalue && !this.timevalueOne) {
+          if (this.timevalue.includes("") && !this.timevalueOne) {
             this.$message({
               message: "请选择营业期限",
-              type: "warning",
+              type: "error",
+              center: true,
             });
             return false;
           }
-          if (!this.idCardvalue && !this.idCardvalueOne) {
+          if (this.idCardvalue.includes("") && !this.idCardvalueOne) {
             this.$message({
               message: "请选择证件有效期",
-              type: "warning",
+              type: "error",
+              center: true,
             });
             return false;
           }
-          let form = Object.assign({}, this.form, {
-            // category: this.form.category.join(","),
-            // categoryName: this.form.categoryName.join(","),
-          });
+          let form = Object.assign({}, this.form, {});
           if (form.idCardValidityType == 0) {
             form.validityStartDate = this.idCardvalue[0];
             form.validityEndDate = this.idCardvalue[1];
@@ -647,11 +483,7 @@ export default {
         }
       });
     },
-    delImg(index, idx) {
-      this.form.qualificationList[index].qualificationImg.splice(idx, 1);
-    },
     fuzhi() {
-      // https://hs-star-bucket-test.oss-cn-zhangjiakou.aliyuncs.com/hs_star/app_shop/goods/32
       this.form.addressDetail = this.keyWordContent.Address;
       this.form.companyName = this.keyWordContent.Name;
       this.form.businessScope = this.keyWordContent.Scope;
@@ -666,14 +498,22 @@ export default {
       if (!this.keyWord) {
         this.$message({
           message: "请输入后进行查询",
-          type: "warning",
+          type: "error",
+          center: true,
         });
         return false;
       }
+      const loading = this.$loading({
+        lock: true,
+        text: "查询中请稍后",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
       let obj = {
         keyWord: this.keyWord,
       };
       GetBasicDetailsByName(obj).then((res) => {
+        loading.close();
         this.keyWordContent = res.body.Result;
         this.showmessage = true;
       });
@@ -681,133 +521,6 @@ export default {
     datechangeOne(val) {
       this.form.validityStartDate = val[0];
       this.form.validityEndDate = val[1];
-    },
-    // 分类变化
-    categoryChange(val) {
-      if (val.length > 5) {
-        val.splice(val.length - 1, 1);
-      }
-      let arr = [];
-      let textarr = [];
-      let ret = [];
-      let categoryIds = this.form.qualificationList.map((item, index) => {
-        return Number(item.categoryId);
-      });
-
-      let qualificationImgs = this.form.qualificationList.map((item, index) => {
-        return item.qualificationImg;
-      });
-      val.forEach((valItem, valIndex) => {
-        if (categoryIds.includes(valItem)) {
-          ret.push({
-            categoryId: valItem,
-            qualificationImg:
-              qualificationImgs[
-                categoryIds.findIndex((item) => item == valItem)
-              ],
-          });
-        } else {
-          ret.push({
-            categoryId: valItem,
-            qualificationImg: [],
-          });
-        }
-      });
-      this.$set(this.form, "qualificationList", ret);
-      val.forEach((element) => {
-        this.selectArr.forEach((el, idx) => {
-          if (element == el.id) {
-            arr.push(el.categoryName);
-            let obj = {
-              id: el.id,
-              qualificationDescription: el.qualificationDescription
-                ? el.qualificationDescription
-                : "",
-            };
-            let item = {
-              categoryId: el.id,
-              qualificationImg: [],
-            };
-            textarr.push(obj);
-          }
-        });
-      });
-      this.textArr = textarr;
-      this.form.categoryName = arr;
-    },
-    // 获取分类
-    getSelect() {
-      return new Promise((resolve, reject) => {
-        categoryInformationList()
-          .then((res) => {
-            if (res.code == "000000") {
-              this.selectArr = res.body;
-              resolve();
-            }
-          })
-          .catch(() => {
-            reject();
-          });
-      });
-    },
-    // 图片上传
-    uploadHttp({ file, data }) {
-      if (file.type.split("/")[0] !== "image") {
-        this.$message({
-          message: "请上传图片",
-          type: "warning",
-        });
-        return false;
-      }
-      if (file.size > 1024 * 1024 * 4) {
-        this.$message({
-          message: "上传图片过大",
-          type: "warning",
-        });
-        return false;
-      }
-      const loading = this.$loading({
-        lock: true,
-        text: "Loading",
-        spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.7)",
-      });
-      let houzhui = "";
-      let fileName = "";
-      var timestamp = Date.parse(new Date());
-      houzhui = file.name.split(".");
-      fileName = `${parseInt(
-        (Math.random() + 1) * Math.pow(10, 18 - 1)
-      )}${timestamp}.${houzhui[houzhui.length - 1]}`;
-      let consat = `hs_star/authentication/${fileName}`;
-      let that = this;
-      SSupload(consat, file)
-        .then(({ res, url, name }) => {
-          if (res && res.status == 200) {
-            if (url) {
-              // 替换文件
-              // https://hs-star-bucket-prod.oss-cn-zhangjiakou.aliyuncs.com
-              url = url.replace(
-                "https://hs-star-bucket-prod.oss-cn-zhangjiakou.aliyuncs.com",
-                "https://hs.star.oss.xingfaner.cn"
-              );
-              if (data.data == "handheldIdCardImg") {
-                that.form[data.data] = url;
-              } else {
-                that.form.qualificationList[data.data].qualificationImg.push(
-                  url
-                );
-              }
-              console.log(that.form);
-              loading.close();
-            }
-          }
-        })
-        .catch((err) => {
-          loading.close();
-          this.$message("图片上传失败");
-          console.log(`阿里云OSS上传图片失败回调`, err);
-        });
     },
   },
 };

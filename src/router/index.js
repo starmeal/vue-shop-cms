@@ -166,10 +166,30 @@ export const asyncRoutes = [
             },
             component: () => import('@/views/AnnouncementManagement'),
           }
-          
+
         ]
       }
-      
+
+    ]
+  },
+  {
+    path: '/goods',
+    component: () => import('@/views/layout/layout'),
+    meta: {
+      title: '商品',
+      fullTitle: '添加商品',
+      icon: 'zuosuojin',
+    },
+    children: [
+      {
+        path: '',
+        meta: {
+          title: '添加商品',
+          parentPath: '/goods',
+          basePath: '/goods',
+        },
+        component: () => import('@/views/goods/goodsform'),
+      },
     ]
   },
   { path: "*", redirect: "/404", hidden: true }
