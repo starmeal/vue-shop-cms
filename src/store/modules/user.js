@@ -24,12 +24,13 @@ const actions = {
       login({ nickName: username.trim(), password: password })
         .then((response) => {
           const {
-            body: { token, shopMerchantsName, shopMerchantsCode, permissions },
+            body: { token, shopMerchantsName, shopMerchantsCode, permissions,userId },
           } = response;
           commit('SET_TOKEN', token);
           commit('SET_NAME', shopMerchantsName);
           commit('SET_CODE', shopMerchantsCode);
           commit('SET_ROLES', permissions);
+          commit('userId', userId);
           resolve(response);
         })
         .catch((error) => {
