@@ -24,7 +24,7 @@
       </template>
     </el-popover>
     <div class='search-luyou-con'>
-      <el-select v-model="valueSelect" multiple filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="remoteMethod" :loading="loading">
+      <el-select :value="[]" multiple filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="remoteMethod" :loading="loading">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
@@ -139,6 +139,12 @@ export default {
   },
   methods: {
     remoteMethod(query) {
+      let ret  = []
+      const getList = (list) => {
+        console.log(list, 'list')
+      }
+      getList(this.menuList)
+      console.log(this.menuList, '11112222333')
       if (query !== '') {
         this.loading = true;
         setTimeout(() => {
@@ -240,8 +246,31 @@ export default {
     box-sizing: border-box;
     border-bottom: 1px solid #e7eaec;
     border-right: 1px solid #e7eaec;
-    & ::v-deep  .el-select__input{
-      width: 184px;
+    display: flex;
+    align-items: center;
+    width:284px;
+
+    & ::v-deep  .el-select{
+      width:100% !important;
+      border: none !important;
+      .el-input__inner{
+        border: none !important;
+        padding-right:0 !important;
+      }
+      .el-select__tags{
+        border: none !important;
+        max-width: 280px !important;
+      }
+      .el-input{
+        border: none !important;
+        padding-right:0;
+      }
+      .el-select__input{
+        max-width: 247px !important;
+      }
+      .el-input__suffix{
+        width:0 !important;
+      }
     }
   }
   .home-con {

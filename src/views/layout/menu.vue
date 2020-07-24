@@ -13,7 +13,7 @@
     </div>
 
     <div :class="['menu-second-container', {'active': isCollapseSecond}]">
-      <div :class="['second-title', {'active': isCollapseSecond}]"><span>店铺首页</span></div>
+      <div :class="['second-title', {'active': isCollapseSecond}]"><span>{{fullTitle}}</span></div>
       <el-tree :data="menuItemList" highlight-current node-key="path" @node-click='handleNodeClick' :default-expanded-keys="defaultExpandedKeys" :current-node-key='currentNodeKey'>
         <div class="second-init-title" slot-scope="{ node, data }">
           <span :class="{'has-children': data.children && data.children.length}">{{ data.meta.title }}</span>
@@ -69,6 +69,7 @@ export default {
         this.isCollapseSecond = false
       }
     });
+    this.fullTitle = this.$route.matched[0].meta.fullTitle
     this.currentNodeKey = this.$route.matched[
       this.$route.matched.length - 1
     ].path;
