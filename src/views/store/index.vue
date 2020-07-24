@@ -41,7 +41,7 @@
                       rows="6"
                       onkeyup="this.value=this.value.replace(/\s+/g,'')"></el-input>
           </el-form-item>
-          <div style="margin-bottom: 10px;">
+          <div style="margin-bottom: 10px; display:flex;align-item:center;">
             <span class="customerPhone">客服电话</span>
             <el-input class="inputStyle1" :size="size" :class="{stylePhone:isShowPhone}" v-model="areaCode" placeholder="区号"></el-input>
             <el-input class="inputStyle2" :size="size" :class="{stylePhone:isShowPhone}" v-model="phone" placeholder="如果输入手机号不填区号"></el-input>
