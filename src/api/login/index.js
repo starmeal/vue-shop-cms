@@ -22,3 +22,11 @@ export function getOrderMessage (data) {
     data
   })
 }
+//忘记密码
+export function resetPassword (data) {
+  return request({
+    url: '/cms/modifyPassword',
+    method: 'POST',
+    data
+  })
+}

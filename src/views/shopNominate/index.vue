@@ -1,22 +1,30 @@
 <template>
   <div class="shopSettings">
     <div class="containers">
-      <div class="innerContainer">
-        <div class="examine" v-if="status == 1">店铺名称正在审核中...</div>
-        <div class="failed" v-if="status == 2">
-          <p>店铺名称审核未通过</p>
-          <p style="font-size: 14px;margin-top: 20px;">原因：{{this.opinion}}</p>
-        </div>
-        <div class="success" v-if="status == 3">
-          <p>店铺名称审核通过！</p>
-        </div>
         <el-form :model="form" :rules="rules" ref="form" :size="size" label-width="200px" class="demo-form">
-          <el-form-item label="店铺类型" prop="categoryName">
-            <el-radio-group v-model="form.storeType">
-              <el-radio :label="item.id" v-for="item in radioArr" :key='item.id'>{{item.value}}</el-radio>
+          <div class="innerContainer">
+            <div style="width: 85%;">
+          <div class="examine" v-if="status == 1">店铺名称正在审核中...</div>
+          <div class="failed" v-if="status == 2">
+            <p>店铺名称审核未通过</p>
+            <p style="font-size: 14px;margin-top: 20px;">原因：{{this.opinion}}</p>
+          </div>
+          <div class="success" v-if="status == 3">
+            <p>店铺名称审核通过！</p>
+          </div>
+          <el-form-item v-if="status==null || status == 2" label="店铺类型" prop="categoryName">
+            <el-radio-group v-model="form.storeTypeId">
+              <el-radio :label="item.id"
+                        :key="item.id"
+                        :value="item.value"
+                        @change="radioChange"
+                        v-for="item in radioArr">{{item.value}}</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="店铺名称" prop="shopMerchantsName">
+          <el-form-item v-if="status==1 || status == 3" label="店铺类型" prop="categoryName">
+            <el-radio v-model="form.storeTypeName" :label="form.storeTypeName"></el-radio>
+          </el-form-item>
+          <el-form-item v-if="status==null || status == 2" label="店铺名称" prop="shopMerchantsName">
             <el-input v-model="form.shopMerchantsName"
                       show-word-limit
                       maxlength="30"
@@ -25,6 +33,16 @@
                       ></el-input>
             <div style="font-size: 12px;color:#999;">请详细阅读 <a style="color:#3976e6" href="https://hs.star.cms.xingfaner.cn/xieyi/mingmingguizhe.html" target="_blank">《店铺名称命名规范》</a></div>
             <div v-show="isShowShop" style="font-size:12px;color: #F56C6C;">店铺名称中含有违禁词：{{hotCard}}</div>
+          </el-form-item>
+          <el-form-item v-if="status == 1 || status == 3" label="店铺名称" prop="shopMerchantsName">
+            <el-input v-model="form.shopMerchantsName"
+                      show-word-limit
+                      maxlength="30"
+                      @change="shopNameChange"
+                      readonly="readonly"
+                      :class="{styleShop: isShowShop}"
+            ></el-input>
+            <div style="font-size: 12px;color:#999;">请详细阅读 <a style="color:#3976e6" href="https://hs.star.cms.xingfaner.cn/xieyi/mingmingguizhe.html">《店铺名称命名规范》</a></div>
           </el-form-item>
           <el-form-item v-if="status==null || status == 2" label="商标证书" prop="trademarkCertificateImg">
             <el-upload
@@ -109,14 +127,15 @@
               </div>
             </div>
           </el-form-item>
+            </div>
+          </div>
           <el-form-item>
-            <el-button v-if="status == null" type="danger" @click="submitForm('form')">提交审核</el-button>
-            <el-button v-if="status == 2" type="danger" @click="submitForm('form')">提交审核</el-button>
+            <el-button class="submitStyle" v-if="status == null" type="primary" @click="submitForm('form')">提交审核</el-button>
+            <el-button class="submitStyle" v-if="status == 2" type="primary" @click="submitForm('form')">提交审核</el-button>
           </el-form-item>
         </el-form>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -134,10 +153,12 @@
         status: null,
         opinion: '',
         hotCard: '',
+        storeTypeName: '',
         isShowShop: false,
         form: {
           id: '',
-          storeType: '',
+          storeTypeId: '',
+          storeTypeName: '',
           shopMerchantsName: '',
           trademarkCertificateImg: '',
           brandLogoImg: '',
@@ -173,6 +194,13 @@
       this.getInfo();
     },
     methods: {
+      radioChange(val){
+        this.radioArr.forEach( (item,index) => {
+          if(val == item.id){
+            this.form.storeTypeName = item.value;
+          }
+        })
+      },
       shopNameChange(){
         this.isShowShop = false;
       },
@@ -188,15 +216,15 @@
         let {code,body} = await shopNominateInfo();
         if(code=="000000"){
           console.log(body);
-          this.form.storeTypeId = body.storeType;
-          this.form.storeTypeName = body.storeTypeName
+          this.form.storeTypeId = body.storeTypeId;
+          this.form.storeTypeName = body.storeTypeName;
           this.form.shopMerchantsName = body.shopMerchantsName;
           this.form.trademarkCertificateImg = body.trademarkCertificateImg;
           this.form.brandLogoImg = body.brandLogoImg;
           this.form.id = body.id;
           this.opinion = body.opinion;
           this.status = body.checkStatus;
-          //this.status = 3;
+          //this.status = null;
           if(body.powerOfAttorneyImg == null){
             this.form.powerOfAttorneyImg = [];
           }else{
@@ -207,10 +235,12 @@
       submitForm(formName) {
         this.$refs[formName].validate(async(valid) => {
           if (valid) {
+            console.log(this.form);
             this.$alert('您的资料已经提交审核，平台审核将在1-3个工作日内完成，请您耐心等待', '提示', {
               confirmButtonText: '确定',
               callback: action => {
                 shopNominateSubmit(this.form).then(res => {
+                  this.getInfo();
                 }).catch(({code, body}) => {
                   if(code == '300010'){
                     console.log(body);
@@ -306,7 +336,9 @@
   }
 </style>
 <style scoped lang="scss">
-
+  .submitStyle {
+    margin-top: 20px;
+  }
   a {
     text-decoration:none;
   }
@@ -339,9 +371,7 @@
     padding: 20px 0px;
     background: #F5F7F9;
   }
-.demo-form {
-  width: 85%;
-}
+
 /*上传图片*/
 
   .avatar-uploader-icon {

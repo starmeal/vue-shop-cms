@@ -1,8 +1,9 @@
 <template>
   <div class="shopSettings">
     <div class="containers">
-      <div class="innerContainer">
-        <el-form :model="form" :rules="rules" ref="form" :size="size" label-width="200px" class="demo-form">
+      <el-form :model="form" :rules="rules" ref="form" :size="size" label-width="200px" class="demo-form">
+        <div class="innerContainer">
+          <div style="width: 85%;">
           <el-form-item label="经营类目" prop="categoryName">
             <p style="font-size: 12px;color:#333;">{{categoryName}}</p>
           </el-form-item>
@@ -41,8 +42,8 @@
                       rows="6"
                       onkeyup="this.value=this.value.replace(/\s+/g,'')"></el-input>
           </el-form-item>
-          <div style="margin-bottom: 10px; display:flex;align-item:center;">
-            <span class="customerPhone">客服电话</span>
+          <div style="margin-bottom: 10px; display: flex;flex-direction: row;">
+            <span class="customerPhone" style="min-width: 58px;">客服电话</span>
             <el-input class="inputStyle1" :size="size" :class="{stylePhone:isShowPhone}" v-model="areaCode" placeholder="区号"></el-input>
             <el-input class="inputStyle2" :size="size" :class="{stylePhone:isShowPhone}" v-model="phone" placeholder="如果输入手机号不填区号"></el-input>
             <p v-show="isShowPhone" style="margin-left: 202px;font-size:12px;color: #F56C6C;">请填写客服电话</p>
@@ -79,11 +80,12 @@
             <el-checkbox v-model="checked"></el-checkbox><span class="article">我声明，此页面所填内容均真实有效，特别是经营地址为店铺最新可联系到的地址。
           同时可以作为行政机关和司法机关送达法律文件的地址。如果上述地址有误，愿意承担由此带来的平台处罚（和商有品处罚细则）行政监管和司法诉讼风险。</span>
           </p>
-          <el-form-item>
-            <el-button type="danger" :disabled="!checked" @click="submitForm('form')">保存</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+          </div>
+        </div>
+        <el-form-item>
+          <el-button class="submitStyle" type="primary" :disabled="!checked" @click="submitForm('form')">保存</el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -350,14 +352,18 @@ export default {
 </script>
 
 <style lang="scss">
+  .submitStyle {
+    margin-top: 20px;
+  }
   a {
     text-decoration:none;
   }
   .customerPhone {
-    margin-left: 120px;
+    margin-left: 128px;
     margin-right: 15px;
-    font-size: 14px;
+    font-size: 12px;
     color: #606266;
+    font-weight: bold;
   }
   .customerPhone:before {
     content: '*';
@@ -388,16 +394,13 @@ export default {
     background: #fff;
     border-radius: 4px;
  }
-  .demo-form {
-    width: 85%;
-    min-width: 880px;
-  }
+
   .inputStyle1 {
-    width: 200px;
+    width: 200px !important;
     margin-right: 15px;
   }
   .inputStyle2 {
-    width: 463px;
+    width: 463px !important;
   }
  .avatar-uploader-icon {
    font-size: 28px;
