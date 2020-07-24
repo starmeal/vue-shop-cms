@@ -62,6 +62,7 @@ service.interceptors.response.use(
         Message({
           message: res.msg || "Error",
           type: "error",
+          center:true,
           duration: 2 * 1000
         });
         //
@@ -106,6 +107,7 @@ service.interceptors.response.use(
   error => {
     console.log("err" + error); // for debug
     Message({
+      center:true,
       message: error.msg,
       type: "error",
       duration: 5 * 1000
