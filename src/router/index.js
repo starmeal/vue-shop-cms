@@ -177,7 +177,7 @@ export const asyncRoutes = [
     component: () => import('@/views/layout/layout'),
     meta: {
       title: '商品',
-      fullTitle: '添加商品',
+      fullTitle: '商品管理',
       icon: 'zuosuojin',
     },
     children: [
