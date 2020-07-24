@@ -24,8 +24,8 @@
       </template>
     </el-popover>
     <div class='search-luyou-con'>
-      <el-select :value="[]" multiple filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="remoteMethod" :loading="loading">
-        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+      <el-select :value="[]" multiple filterable remote reserve-keyword placeholder="请输入关键词搜索" :remote-method="remoteMethod" @change='handleSelectChange'>
+        <el-option v-for="(item, index) in options" :key="index" :label="item.meta.title" :value="item">
         </el-option>
       </el-select>
     </div>
@@ -138,27 +138,42 @@ export default {
     };
   },
   methods: {
+    handleSelectChange (value) {
+      let {
+        path,
+        meta: {
+          parentPath
+        }
+    } = value[0]
+      if (path !== '') {
+        this.$router.push(path)
+        return false
+      }
+      this.$router.push(parentPath)
+    },
     remoteMethod(query) {
-      let ret  = []
-      const getList = (list) => {
-        if (list.children) return false;
-        console.log(list, '1111222')
-      }
-      this.menuList.forEach((listItem, listIndex) => {
-        getList(listItem)
-      })  
-      getList(this.menuList)
-      if (query !== '') {
-        this.loading = true;
-        setTimeout(() => {
-          this.loading = false;
-          this.options = this.list.filter((item) => {
-            return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+      let ret = [];
+      if (query.trim()) {
+        const getList = (item) => {
+          let {
+            meta: { title },
+            children,
+          } = item;
+          if (title.includes(query)) {
+            if (item.children && item.children.length) {
+              ret = ret.concat(item.children.flat(Infinity))
+            } else {
+              ret.push(item);
+            }
+          }
+        };
+        this.menuList.forEach((listItem, listIndex) => {
+          listItem.children.forEach((item, index) => {
+            getList(item)
           });
-        }, 200);
-      } else {
-        this.options = [];
+        });
       }
+      this.options = ret;
     },
     signout() {
       this.$store.dispatch('user/resetToken').then(() => {
@@ -243,7 +258,7 @@ export default {
     height: 100%;
     background: #24303c;
   }
-  .search-luyou-con{
+  .search-luyou-con {
     height: 100%;
     background: #fff;
     box-sizing: border-box;
@@ -251,28 +266,28 @@ export default {
     border-right: 1px solid #e7eaec;
     display: flex;
     align-items: center;
-    width:284px;
+    width: 284px;
 
-    & ::v-deep  .el-select{
-      width:100% !important;
+    & ::v-deep .el-select {
+      width: 100% !important;
       border: none !important;
-      .el-input__inner{
+      .el-input__inner {
         border: none !important;
-        padding-right:0 !important;
+        padding-right: 0 !important;
       }
-      .el-select__tags{
+      .el-select__tags {
         border: none !important;
         max-width: 280px !important;
       }
-      .el-input{
+      .el-input {
         border: none !important;
-        padding-right:0;
+        padding-right: 0;
       }
-      .el-select__input{
+      .el-select__input {
         max-width: 247px !important;
       }
-      .el-input__suffix{
-        width:0 !important;
+      .el-input__suffix {
+        width: 0 !important;
       }
     }
   }
