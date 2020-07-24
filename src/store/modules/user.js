@@ -30,7 +30,7 @@ const actions = {
           commit('SET_NAME', shopMerchantsName);
           commit('SET_CODE', shopMerchantsCode);
           commit('SET_ROLES', permissions);
-          commit('userId', userId);
+          commit('SET_USERID', userId);
           resolve(response);
         })
         .catch((error) => {
@@ -61,6 +61,9 @@ const actions = {
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token;
+  },
+  SET_USERID: (state, userId) => {
+    state.userId = userId
   },
   SET_NAME: (state, name) => {
     state.name = name;
