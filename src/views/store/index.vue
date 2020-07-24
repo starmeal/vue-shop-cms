@@ -80,7 +80,7 @@
           同时可以作为行政机关和司法机关送达法律文件的地址。如果上述地址有误，愿意承担由此带来的平台处罚（和商有品处罚细则）行政监管和司法诉讼风险。</span>
           </p>
           <el-form-item>
-            <el-button type="danger" :disabled="!checked" @click="submitForm('form')">保存</el-button>
+            <el-button type="primary" :disabled="!checked" @click="submitForm('form')">保存</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -393,11 +393,11 @@ export default {
     min-width: 880px;
   }
   .inputStyle1 {
-    width: 200px;
+    width: 200px !important;
     margin-right: 15px;
   }
   .inputStyle2 {
-    width: 463px;
+    width: 463px !important;
   }
  .avatar-uploader-icon {
    font-size: 28px;

@@ -48,7 +48,7 @@
           </el-form-item>
           <el-button type="primary" class="submit" @click="adminLogin(2)" :loading="loading">登录</el-button>
         </el-form>
-        <section @click="forgetPassword" class="forget-password">忘记密码&nbsp;&nbsp;&nbsp;&nbsp;？</section>
+        <section v-if="isActive === 1" @click="forgetPassword" class="forget-password">忘记密码&nbsp;&nbsp;&nbsp;&nbsp;？</section>
       </div>
       <div v-else class="resetPassword">
         <p class="z_title">密码重置</p>
@@ -56,9 +56,9 @@
           <el-form-item class="zphone" prop="mobile1">
             <el-input v-model="zform.mobile" placeholder="请输入手机号"></el-input>
           </el-form-item>
-          <el-form-item class="zimgCode" prop="imgCode">
-            <el-input v-model="zform.imgCode" placeholder="输入右侧图片验证码"></el-input>
-            <img src="" alt="">
+          <el-form-item class="zimgCode" prop="phoneCode">
+            <el-input v-model="zform.phoneCode" placeholder="请输入短信验证码"></el-input>
+
           </el-form-item>
           <el-form-item class="zpassword" prop="password1">
             <el-input v-model="zform.password1" placeholder="请输入密码" show-password autocomplete="new-password"></el-input>
@@ -110,7 +110,7 @@ export default {
       },
       zform: {
         mobile: '',
-        imgCode: '',
+        phoneCode: '',
         password: '',
         againPassword: ''
       },
@@ -152,7 +152,7 @@ export default {
             trigger: "blur"
           }
         ],
-        imgCode: [
+        phoneCode: [
           { required: true, message: "验证码不能为空", trigger: "blur" },
         ],
         password1: [
@@ -266,7 +266,8 @@ export default {
         if (valid) {
 
         }else{
-
+          console.log("error submit!!");
+          return false;
         }
       })
     }
