@@ -10,7 +10,7 @@ export const staticRoutes = [
     path: '/404',
     component: () => import('@/baseView/404/index'),
     hidden: true,
-  },
+  }
 ];
 export const asyncRoutes = [
   {
@@ -32,9 +32,9 @@ export const asyncRoutes = [
           title: '首页',
           fullTitle: '首页',
           icon: 'zuosuojin',
-        },
-      },
-    ],
+        }
+      }
+    ]
   },
   {
     path: '/store',
@@ -61,7 +61,7 @@ export const asyncRoutes = [
           parentPath: '/store',
           basePath: '/store',
         },
-        component: () => import('@/views/authentication/index'),
+        component: () => import('@/views/authentication/index')
       },
       {
         path: '/category',
@@ -70,7 +70,7 @@ export const asyncRoutes = [
           parentPath: '/store',
           basePath: '/store',
         },
-        component: () => import('@/views/authentication/authentication'),
+        component: () => import('@/views/authentication/authentication')
       },
       {
         path: '/shopNominate',
@@ -79,7 +79,7 @@ export const asyncRoutes = [
           parentPath: '/store',
           basePath: '/store',
         },
-        component: () => import('@/views/shopNominate/index'),
+        component: () => import('@/views/shopNominate/index')
       },
       {
         path: '/shippingMethods',
@@ -93,62 +93,32 @@ export const asyncRoutes = [
           {
             path: '',
             meta: {
-              title: '快递发货',
+              title: '快递配送',
               parentPath: '/shippingMethods',
               basePath: '/store',
             },
-            component: () => import('@/views/routeview'),
-            children: [
-              {
-                path: '/expressDeliveryList',
-                meta: {
-                  title: '列表',
-                  parentPath: '/shippingMethods',
-                  basePath: '/store',
-                },
-                component: () => import('@/views/shippingMethods/index'),
-              },
-              {
-                path: '/expressDeliveryAdd',
-                meta: {
-                  title: '添加',
-                  parentPath: '/shippingMethods',
-                  basePath: '/store',
-                },
-                component: () => import('@/views/shippingMethods/add'),
-              },
-            ],
+            component: () => import('@/views/tongchengpeisong/list'),
           },
           {
-            path: '/send',
+            path: '/expressDeliveryAdd',
+            hidden: true,
+            meta: {
+              title: '添加',
+              parentPath: '/shippingMethods',
+              basePath: '/store',
+            },
+            component: () => import('@/views/tongchengpeisong/add'),
+          },
+          {
+            path: '/intraCity',
             meta: {
               title: '同城配送',
               parentPath: '/shippingMethods',
               basePath: '/store',
             },
-            component: () => import('@/views/routeview'),
-            children: [
-              {
-                path: '',
-                meta: {
-                  title: '列表',
-                  parentPath: '/send',
-                  basePath: '/store',
-                },
-                component: () => import('@/views/tongchengpeisong/list.vue'),
-              },
-              {
-                path: '/sendAdd',
-                meta: {
-                  title: '添加',
-                  parentPath: '/send',
-                  basePath: '/store',
-                },
-                component: () => import('@/views/tongchengpeisong/add.vue'),
-              },
-            ],
-          },
-        ],
+            component: () => import('@/views/shippingMethods/index'),
+          }
+        ]
       },
       {
         path: '/notice',
@@ -177,7 +147,7 @@ export const asyncRoutes = [
             },
             component: () => import('@/views/notice/noticelist'),
           },
-        ],
+        ]
       },
       {
         path: '/home2',
@@ -214,20 +184,22 @@ export const asyncRoutes = [
               basePath: '/store',
             },
             component: () => import('@/views/AnnouncementManagement'),
-          },
-        ],
-      },
-    ],
+          }
+          
+        ]
+      }
+      
+    ]
   },
-  { path: '*', redirect: '/404', hidden: true },
-];
+  { path: "*", redirect: "/404", hidden: true }
+]
 Vue.use(VueRouter);
 const createRouter = () =>
   new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     scrollBehavior: () => ({ y: 0 }),
-    routes: staticRoutes,
+    routes: staticRoutes
   });
 
 const router = createRouter();
