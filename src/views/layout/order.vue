@@ -160,7 +160,6 @@ export default {
   overflow: hidden;
   width: 0px;
   transition: all 0.3s linear;
-  z-index: 10000;
   &.order-container-spread {
     width: 180px !important;
   }
