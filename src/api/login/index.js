@@ -30,3 +30,19 @@ export function resetPassword (data) {
     data
   })
 }
+//重置密码收取短信验证码
+export function getphoneMessage (data) {
+  return request({
+    url: '/cms/sendSMCodeForPassWord/v1',
+    method: 'POST',
+    data
+  })
+}
+//重置密码
+export function resetingPassword(data) {
+  return request({
+    url: '/cms/modifyPassword',
+    method: 'POST',
+    data
+  })
+}

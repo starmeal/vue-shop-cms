@@ -53,22 +53,22 @@
       <div v-else class="resetPassword">
         <p class="z_title">密码重置</p>
         <el-form key='pass-reset':model="zform" :rules="zrules" ref="zform" class="demo-form">
-          <el-form-item class="zphone" prop="mobile1">
-            <el-input v-model="zform.mobile1" placeholder="请输入手机号" ></el-input>
+          <el-form-item class="zphone" prop="mobile">
+            <el-input v-model="zform.mobile" placeholder="请输入手机号" ></el-input>
           </el-form-item>
-          <el-form-item class="login-user-con" prop="phoneCode">
-            <el-input v-model="zform.phoneCode" placeholder="请输入短信验证码" class="phone-input"></el-input>
+          <el-form-item class="login-user-con" prop="smCode">
+            <el-input v-model="zform.smCode" placeholder="请输入短信验证码" class="phone-input"></el-input>
             <el-button
+                    :disabled="disabled"
                     class="ms-btn"
-                    :disabled="count1 !== 60"
                     @click="sendOutMessage1"
-            >{{count1 === 60 ? btnMessage1 : count1}}</el-button>
+            >{{text}}</el-button>
           </el-form-item>
-          <el-form-item class="zpassword" prop="password1">
-            <el-input v-model="zform.password1" placeholder="请输入密码" show-password autocomplete="new-password"></el-input>
+          <el-form-item class="zpassword" prop="resetPassword">
+            <el-input v-model="zform.resetPassword" placeholder="请输入密码" show-password autocomplete="new-password"></el-input>
           </el-form-item>
-          <el-form-item class="zagainPassword" prop="againPassword">
-            <el-input v-model="zform.againPassword" placeholder="重复密码" show-password autocomplete="new-password"></el-input>
+          <el-form-item class="zagainPassword" prop="password">
+            <el-input v-model="zform.password" placeholder="重复密码" show-password autocomplete="new-password"></el-input>
           </el-form-item>
           <el-button type="primary" class="submit" @click="zlogin" :loading="loading">登录</el-button>
         </el-form>
@@ -79,7 +79,8 @@
 </template>
 
 <script>
-import { adminLogin } from "@/api/login";
+import { adminLogin,getphoneMessage } from "@/api/login";
+
 import { createNamespacedHelpers } from "vuex";
 const { mapActions, mapState } = createNamespacedHelpers("user");
 import md5 from "blueimp-md5";
@@ -95,7 +96,7 @@ export default {
       }
     };
     var validatePass = (rule, value, callback) => {
-      if(value !== this.zform.password1){
+      if(value !== this.zform.resetPassword){
         callback(new Error("两次密码输入不一致"));
       }else {
         callback();
@@ -106,19 +107,20 @@ export default {
       sendout: false,
       loading: false,
       btnMessage: "发送验证码",
-      btnMessage1: '发送验证码',
+      disabled:false,
+      time:5,
+      text: '发送验证码',
       isActive: 2,
       count: 60,
-      count1: 60,
+      resetPassword: '',
       mobelForm: {
         mobile: "",
         smCode: ""
       },
       zform: {
-        mobile1: '',
-        phoneCode: '',
+        mobile: '',
+        smCode: '',
         password: '',
-        againPassword: ''
       },
       userPass: {
         username: "",
@@ -151,20 +153,21 @@ export default {
          ]
       },
       zrules: {
-        mobile1: [
+        mobile: [
           { required: true, message: "手机号不能为空", trigger: "blur" },
           {
             validator: EmptyValidator,
             trigger: "blur"
           }
         ],
-        phoneCode: [
+        smCode: [
           { required: true, message: "验证码不能为空", trigger: "blur" },
+          { min: 6, max: 6, message: '验证码应为6位', trigger: 'blur' }
         ],
-        password1: [
+        resetPassword: [
           { required: true, message: "密码不能为空", trigger: "blur" },
         ],
-        againPassword: [
+        password: [
           { required: true, message: "请再次输入密码", trigger: "blur" },
           { validator: validatePass, trigger: "blur"}
         ],
@@ -210,28 +213,36 @@ export default {
     },
     // 重置密码倒计时
     sendOutMessage1() {
-      if (this.zform.mobile1 == "") {
+      if (this.zform.mobile == "") {
         this.$message({
           message: "请输入手机号",
           type: "warning"
         });
         return false;
       }
-      if (!myreg.test(this.zform.mobile1)) {
+      if (!myreg.test(this.zform.mobile)) {
         this.$message({
           message: "手机号格式有误请重新输入",
           type: "warning"
         });
         return false;
       }
-      this.count1--;
-      if (this.count1 == 0) {
-        this.count1 = 60;
-        this.btnMessage1 = "重新发送";
-      } else {
-        setTimeout(() => {
-          this.sendOutMessage1();
-        }, 1000);
+      getphoneMessage({mobile: this.zform.mobile,type: 85}).then((res) => {
+        this.time=5;
+        this.timer();
+      })
+    },
+    //发送验证码倒计时
+    timer() {
+      if (this.time > 0) {
+        this.disabled=true;
+        this.time--;
+        this.text=this.time
+        setTimeout(this.timer, 1000);
+      } else{
+        this.time=0;
+        this.text="发送验证码";
+        this.disabled=false;
       }
     },
     // 切换登录方式
@@ -296,7 +307,17 @@ export default {
     zlogin(){
       this.$refs.zform.validate(async valid => {
         if (valid) {
-
+          this.loading = true;
+          //delete this.zform.resetPassword;
+          this.$store.dispatch("user/resetPasswordLogin",{
+            ...this.zform,
+            password: md5(this.zform.password)
+        }).then(res => {
+            this.$router.push({ path: this.redirect || "/" });
+            this.loading = false;
+          }).catch(() => {
+              this.loading = false;
+          });
         }else{
           console.log("error submit!!");
           return false;

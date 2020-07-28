@@ -1,4 +1,4 @@
-import { login, plogin } from '@/api/login';
+import { login, plogin,resetingPassword  } from '@/api/login';
 const state = {
   token: '',
   name: '',
@@ -57,6 +57,26 @@ const actions = {
         });
     });
   },
+  resetPasswordLogin({ commit },userInfo){
+    const { mobile, smCode, password} = userInfo;
+    return new Promise((resolve, reject) => {
+      resetingPassword({ mobile: mobile.trim(), smCode: smCode, password: password})
+        .then(response => {
+          const { body, code } = response;
+          if (code == '000000') {
+            console.log(body, '11111');
+            commit("SET_TOKEN", body.token);
+            commit("SET_NAME", body.shopMerchantsName);
+            commit('SET_CODE', body.shopMerchantsCode);
+            commit('SET_ROLES', body.permissions);
+            resolve(response);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
 };
 const mutations = {
   SET_TOKEN: (state, token) => {
