@@ -211,6 +211,26 @@ export const asyncRoutes = [
       },
     ]
   },
+  {
+    path: '/merchantOrder',
+    component: () => import('@/views/layout/layout'),
+    meta: {
+      title: '订单',
+      fullTitle: '订单管理',
+      icon: 'zuosuojin',
+    },
+    children: [
+      {
+        path: '',
+        meta: {
+          title: '订单列表',
+          parentPath: '/merchantOrder',
+          basePath: '/merchantOrder',
+        },
+        component: () => import('@/views/merchantOrder/merchantOrderList'),
+      },
+    ]
+  },
   { path: "*", redirect: "/404", hidden: true }
 ]
 Vue.use(VueRouter);

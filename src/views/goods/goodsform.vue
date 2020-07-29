@@ -1080,7 +1080,10 @@ export default {
             goodsOriginalPrice: multiply(this.form.goodsOriginalPrice, 100),
             goodsPrice: multiply(this.form.goodsPrice, 100),
             accountMoney: multiply(this.form.accountMoney, 100),
-            discount:  this.form.goodsOriginalPrice > 0 ?  (this.form.goodsPrice / this.form.goodsOriginalPrice) * 10 : 0,
+            discount:
+              this.form.goodsOriginalPrice > 0
+                ? (this.form.goodsPrice / this.form.goodsOriginalPrice) * 10
+                : 0,
             specificationList: this.skuArr,
           });
           // goodsadd(form).then(res=>{
@@ -1129,7 +1132,6 @@ export default {
           });
           return false;
         }
-      } else {
       }
       const loading = this.$loading({
         lock: true,
@@ -1155,7 +1157,11 @@ export default {
                   this.initvideo();
                 });
               } else {
-                that.form[data.data].push(url);
+                if (data.data == "specificationList") {
+                  thta.specificationList[data.open]
+                } else {
+                  that.form[data.data].push(url);
+                }
               }
               loading.close();
             }

@@ -14,7 +14,7 @@
                       maxlength="30"
                       @change="shopNameChange"
                       @input="handleInput"></el-input>
-            <div style="font-size: 12px;color:#999;">详细阅读 <a style="color:#3976e6" href="https://hs.star.cms.xingfaner.cn/xieyi/mingmingguizhe.html">《店铺名称命名规范》</a>，如需申请“旗舰店”、“专营店”、“专卖店”，请进入<span @click="toGo" style="color:#3976e6">《店铺名称认证》</span></div>
+            <div style="font-size: 12px;color:#999;">详细阅读 <a style="color:#3976e6" href="https://hs.star.cms.xingfaner.cn/xieyi/mingmingguizhe.html" target="_blank">《店铺名称命名规范》</a>，如需申请“旗舰店”、“专营店”、“专卖店”，请进入<span @click="toGo" style="color:#3976e6">《店铺名称认证》</span></div>
             <div v-show="isShowShop" style="font-size:12px;color: #F56C6C;">店铺名称中含有违禁词：{{hotCard}}</div>
           </el-form-item>
           <el-form-item label="店铺标志" prop="thumbImg">
@@ -171,7 +171,36 @@ export default {
       this.sendData.legal_person_phone=e.target.value.replace(/[\w]/g,'');
     },
     toGo(){
-      this.$router.push({path: '/shopNominate'});
+      this.$confirm('请确认是否保存?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        editShopSettings(this.form).then( res => {
+          if(res.code == '000000'){
+            this.$message({
+              message: "保存成功",
+              type: "success"
+            });
+            this.$router.push({path: '/shopNominate'});
+          }
+        }).catch(({code, body}) => {
+          if(code == '300010'){
+            console.log(body);
+            this.isShowShop = true;
+            this.hotCard = body.join(",");
+            this.$nextTick(() => {
+              let obj = {
+                alignToTop: false,
+                block: "center",
+                behavior: "smooth"
+              };
+              document.querySelectorAll(".styleShop")[0].scrollIntoView(obj);
+            });
+          }
+        })
+      }).catch(() => {});
+      //this.$router.push({path: '/shopNominate'});
     },
     randomNum(min, max){
       return Math.floor(Math.random() * (max - min) + min)

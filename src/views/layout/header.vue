@@ -24,7 +24,7 @@
       </template>
     </el-popover>
     <div class='search-luyou-con'>
-      <el-select :value="[]" multiple filterable remote reserve-keyword placeholder="请输入关键词搜索" :remote-method="remoteMethod" @change='handleSelectChange'>
+      <el-select :value="[]" ref='select' multiple filterable remote reserve-keyword placeholder="请输入关键词搜索" :remote-method="remoteMethod" @change='handleSelectChange'>
         <el-option v-for="(item, index) in options" :key="index" :label="item.meta.title" :value="item">
         </el-option>
       </el-select>
@@ -138,18 +138,19 @@ export default {
     };
   },
   methods: {
-    handleSelectChange (value) {
+    handleSelectChange(value) {
       let {
         path,
-        meta: {
-          parentPath
-        }
-    } = value[0]
+        meta: { parentPath },
+      } = value[0];
       if (path !== '') {
-        this.$router.push(path)
-        return false
+        this.$router.push(path);
+        return false;
       }
-      this.$router.push(parentPath)
+      setTimeout(() => {
+        this.$refs.select.blur();
+        this.$router.push(parentPath);
+      }, 4);
     },
     remoteMethod(query) {
       let ret = [];
@@ -161,7 +162,7 @@ export default {
           } = item;
           if (title.includes(query)) {
             if (item.children && item.children.length) {
-              ret = ret.concat(item.children.flat(Infinity))
+              ret = ret.concat(item.children.flat(Infinity));
             } else {
               ret.push(item);
             }
@@ -169,7 +170,7 @@ export default {
         };
         this.menuList.forEach((listItem, listIndex) => {
           listItem.children.forEach((item, index) => {
-            getList(item)
+            getList(item);
           });
         });
       }
