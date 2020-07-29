@@ -367,14 +367,20 @@
               </el-table-column>
               <el-table-column label="规格照片">
                 <template slot-scope="props">
-                  <div>
+                  <div
+                    class="rea-png"
+                    v-if="props.row.goodsSkuImg"
+                    @click="delskuIMg(props.$index)"
+                  >
                     <img
                       v-if="props.row.goodsSkuImg"
                       :src="props.row.goodsSkuImg"
                       style="width:50px;height:50px"
                     />
+                    <i class="el-icon-close"></i>
                   </div>
                   <el-upload
+                    v-if="!props.row.goodsSkuImg"
                     style="overflow:hidden"
                     action
                     :multiple="true"
@@ -478,7 +484,7 @@
           <section class="time-box-s" v-if="form.status == 9">
             <el-date-picker
               placeholder="上架时间"
-              v-model="form.uptime"
+              v-model="form.putawayTime"
               :picker-options="endTimepickerOptions"
               value-format="yyyy-MM-dd HH:mm:ss"
               type="datetime"
@@ -488,7 +494,7 @@
               :size="size"
               :picker-options="endTimepickerOptions1"
               placeholder="下架时间"
-              v-model="form.downtime"
+              v-model="form.soldOutTime"
               value-format="yyyy-MM-dd HH:mm:ss"
               type="datetime"
             ></el-date-picker>
@@ -497,7 +503,7 @@
         <el-form-item class="submit-btn">
           <el-button icon="el-icon-message" @click="dialogTableVisible = true">6</el-button>
           <el-button type="primary" size="small" @click="submitForm" style="margin-bottom:0px">提交商品</el-button>
-          <el-button type="primary" size="small" @click="submitForm" style="margin-bottom:0px">返回列表</el-button>
+          <el-button type="primary" size="small" @click="golist" style="margin-bottom:0px">返回列表</el-button>
         </el-form-item>
       </el-form>
     </section>
@@ -538,6 +544,7 @@ import {
   selectShopCategoryv2,
   getMerTemplateList,
   goodsadd,
+  queryDraftBoxList,
 } from "@/api/goods";
 import Icon from "@/components/base/icon.vue";
 import cascader from "@/components/city/cascader.vue";
@@ -654,10 +661,10 @@ export default {
       selectTemplate: [],
       form: {
         weight: "",
-        uptime: "",
-        downtime: "",
+        putawayTime: "",
+        soldOutTime: "",
         status: 1,
-        resource: 2,
+        resource: 1,
         category: "",
         categoryName: "",
         goodsName: "",
@@ -693,20 +700,24 @@ export default {
         deliveryType: 1,
         isInvoice: 0,
         specification: [
-          {
-            key: "尺寸",
-            value: ["大", "中", "小"],
-          },
-          {
-            key: "颜色",
-            value: ["a", "b", "c"],
-          },
-          {
-            key: "型号",
-            value: ["1", "2", "3"],
-          },
+          // {
+          //   key: "尺寸",
+          //   value: ["大", "中", "小"],
+          // },
+          // {
+          //   key: "颜色",
+          //   value: ["a", "b", "c"],
+          // },
+          // {
+          //   key: "型号",
+          //   value: ["1", "2", "3"],
+          // },
         ],
         specificationList: [],
+        pageDate: {
+          curPage: 1,
+          pageSize: 5,
+        },
       },
     };
   },
@@ -723,7 +734,7 @@ export default {
       });
     this.getfreight();
     this.getcat();
-    this.inittable();
+    this.getDraftBoxList();
   },
   watch: {
     skuArr: {
@@ -746,6 +757,18 @@ export default {
   },
   mounted() {},
   methods: {
+    // 回到列表
+    golist() {
+      this.$router.push({
+        path: "/goods",
+      });
+    },
+    // 草稿箱列表
+    getDraftBoxList() {
+      queryDraftBoxList(this.pageDate).then((res) => {
+        console.log(res);
+      });
+    },
     // 切换规格是统一还是多规格
     resourceChange(val) {
       if (val == 2) {
@@ -754,6 +777,8 @@ export default {
         this.form.goodsPrice = "";
         this.form.stock = "";
       } else {
+        this.skuArr = [];
+        this.columnArr = [];
         this.form.specificationList = [];
         this.form.specification = [];
       }
@@ -784,6 +809,7 @@ export default {
       })
         .then(() => {
           this.form.specification.splice(index, 1);
+          this.inittable();
         })
         .catch(() => {});
     },
@@ -838,6 +864,7 @@ export default {
           let arr = this.form.specification[index].value;
           arr.splice(idx, 1);
           this.$set(this.form.specification[index], "value", arr);
+          this.inittable();
         })
         .catch(() => {});
     },
@@ -923,16 +950,19 @@ export default {
       this.pop = "";
       this.dialogVisibledeldel = false;
     },
+    // 删除sku里面的图片
+    delskuIMg(index) {
+      this.skuArr[index].goodsSkuImg = "";
+    },
     // 上下架时间处理
     dealDisabledDate(time) {
       return (
         time.getTime() + 24 * 60 * 60 * 1000 <
-        new Date(this.form.uptime).getTime() + 24 * 60 * 60 * 1000
+        new Date(this.form.putawayTime).getTime() + 24 * 60 * 60 * 1000
       );
     },
     // 编辑草稿箱
     gomdrafts(row) {},
-
     // 删除全部草稿箱
     delallmdrafts() {
       this.$confirm("确定清空草稿箱", "提示", {
@@ -979,8 +1009,8 @@ export default {
     // 状态change
     statusChange(val) {
       this.$refs.goodForm.clearValidate();
-      this.form.uptime = "";
-      this.form.downtime = "";
+      this.form.putawayTime = "";
+      this.form.soldOutTime = "";
     },
     // 保质期change
     shelfDayChange(val) {
@@ -1043,7 +1073,21 @@ export default {
     submitForm() {
       this.$refs.goodForm.validate((valid) => {
         if (valid) {
-          if (this.form.goodsPrice > this.form.goodsOriginalPrice) {
+          if (
+            this.form.status == 9 &&
+            (this.form.putawayTime == "" || this.form.soldOutTime == "")
+          ) {
+            this.$message({
+              message: "定时上下架请填写时间",
+              type: "error",
+              center: true,
+            });
+            return false
+          }
+          if (
+            !this.form.goodsOriginalPrice == 0 &&
+            this.form.goodsPrice > this.form.goodsOriginalPrice
+          ) {
             this.$message({
               message: "商品销售价格小于商品原价",
               type: "error",
@@ -1077,7 +1121,10 @@ export default {
           }
           let form = Object.assign({}, this.form, {
             anchorMoney: multiply(this.form.anchorMoney, 100),
-            goodsOriginalPrice: multiply(this.form.goodsOriginalPrice, 100),
+            goodsOriginalPrice:
+              this.form.goodsOriginalPrice == 0
+                ? ""
+                : multiply(this.form.goodsOriginalPrice, 100),
             goodsPrice: multiply(this.form.goodsPrice, 100),
             accountMoney: multiply(this.form.accountMoney, 100),
             discount:
@@ -1086,9 +1133,28 @@ export default {
                 : 0,
             specificationList: this.skuArr,
           });
-          // goodsadd(form).then(res=>{
-
-          // })
+          if (form.resource == 2 && form.specificationList.length) {
+            form.specificationList.forEach((item, index) => {
+              item.goodsPrice = multiply(item.goodsPrice, 100);
+              item.goodsOriginalPrice =
+                item.goodsOriginalPrice == 0
+                  ? ""
+                  : multiply(item.goodsOriginalPrice, 100);
+              item.accountMoney = multiply(item.goodsPrice, 100);
+              item.anchorMoney = multiply(item.goodsPrice, 100);
+            });
+          }
+          // 9 是定时后台没有变成2
+          if(form.status == 9 ){
+            form.status = 2
+          }
+          goodsadd(form).then((res) => {
+            this.$message({
+              message: "创建商品成功",
+              type: "success",
+              center: true,
+            });
+          });
         } else {
           this.$nextTick(() => {
             let obj = {
@@ -1112,6 +1178,7 @@ export default {
       }
       this.form.goodsImgs.splice(index, 1);
     },
+    // 随机数
     randomNum(min, max) {
       return Math.floor(Math.random() * (max - min) + min);
     },
@@ -1158,7 +1225,7 @@ export default {
                 });
               } else {
                 if (data.data == "specificationList") {
-                  thta.specificationList[data.open]
+                  that.skuArr[data.open].goodsSkuImg = url;
                 } else {
                   that.form[data.data].push(url);
                 }
@@ -1461,5 +1528,15 @@ export default {
 }
 .skuvalue-item {
   margin-right: 20px;
+}
+.rea-png {
+  position: relative;
+}
+.rea-png .el-icon-close {
+  position: absolute;
+  top: 0;
+  display: block;
+  right: 0;
+  cursor: pointer;
 }
 </style>

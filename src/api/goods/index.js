@@ -21,3 +21,17 @@ export function goodsadd(data) {
     data
   });
 }
+export function queryDraftBoxList(data) {
+  return request({
+    url: `/goods/queryDraftBoxList`,
+    method: "POST",
+    data
+  });
+}
+export function queryGoodsList(data) {
+  return request({
+    url: `/goods/queryGoodsList`,
+    method: "POST",
+    data
+  });
+}

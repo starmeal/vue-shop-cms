@@ -23,7 +23,7 @@
             <el-input v-model="userPass.username" placeholder="请输入用户名"></el-input>
           </el-form-item>
           <el-form-item class="login-user-con" prop="password">
-            <el-input v-model="userPass.password" placeholder="请输入验证码" show-password></el-input>
+            <el-input v-model="userPass.password" placeholder="请输入密码" show-password></el-input>
           </el-form-item>
           <el-button type="primary" class="submit" @click="adminLogin(1)" :loading="loading">登录</el-button>
         </el-form>

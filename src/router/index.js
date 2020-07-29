@@ -149,45 +149,45 @@ export const asyncRoutes = [
           },
         ]
       },
-      {
-        path: '/home2',
-        meta: {
-          title: '店铺详情2',
-          parentPath: '/store',
-          basePath: '/store',
-        },
-        component: () => import('@/views/home'),
-        children: [
-          {
-            path: '',
-            meta: {
-              title: '店铺详情3',
-              parentPath: '/home2',
-              basePath: '/store',
-            },
-            component: () => import('@/views/store'),
-          },
-          {
-            path: '/home4',
-            meta: {
-              title: '店铺详情4',
-              parentPath: '/home2',
-              basePath: '/store',
-            },
-            component: () => import('@/views/home'),
-          },
-          {
-            path: '/home5',
-            meta: {
-              title: '店铺详情5',
-              parentPath: '/home2',
-              basePath: '/store',
-            },
-            component: () => import('@/views/AnnouncementManagement'),
-          }
+      // {
+      //   path: '/home2',
+      //   meta: {
+      //     title: '店铺详情2',
+      //     parentPath: '/store',
+      //     basePath: '/store',
+      //   },
+      //   component: () => import('@/views/home'),
+      //   children: [
+      //     {
+      //       path: '',
+      //       meta: {
+      //         title: '店铺详情3',
+      //         parentPath: '/home2',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/store'),
+      //     },
+      //     {
+      //       path: '/home4',
+      //       meta: {
+      //         title: '店铺详情4',
+      //         parentPath: '/home2',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/home'),
+      //     },
+      //     {
+      //       path: '/home5',
+      //       meta: {
+      //         title: '店铺详情5',
+      //         parentPath: '/home2',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/AnnouncementManagement'),
+      //     }
 
-        ]
-      }
+      //   ]
+      // }
 
     ]
   },
@@ -202,6 +202,15 @@ export const asyncRoutes = [
     children: [
       {
         path: '',
+        meta: {
+          title: '商品列表',
+          parentPath: '/goods',
+          basePath: '/goods',
+        },
+        component: () => import('@/views/goods/index'),
+      },
+      {
+        path: '/goodsform',
         meta: {
           title: '添加商品',
           parentPath: '/goods',
