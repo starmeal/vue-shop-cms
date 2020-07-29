@@ -16,21 +16,21 @@ export function getMerTemplateList(data) {
 }
 export function goodsadd(data) {
   return request({
-    url: `/goods/add`,
+    url: `/cms/goods/add`,
     method: "POST",
     data
   });
 }
 export function queryDraftBoxList(data) {
   return request({
-    url: `/goods/queryDraftBoxList`,
+    url: `/cms/goods/queryDraftBoxList`,
     method: "POST",
     data
   });
 }
 export function queryGoodsList(data) {
   return request({
-    url: `/goods/queryGoodsList`,
+    url: `/cms/goods/queryGoodsList`,
     method: "POST",
     data
   });

@@ -1082,7 +1082,7 @@ export default {
               type: "error",
               center: true,
             });
-            return false
+            return false;
           }
           if (
             !this.form.goodsOriginalPrice == 0 &&
@@ -1120,33 +1120,15 @@ export default {
             return false;
           }
           let form = Object.assign({}, this.form, {
-            anchorMoney: multiply(this.form.anchorMoney, 100),
-            goodsOriginalPrice:
-              this.form.goodsOriginalPrice == 0
-                ? ""
-                : multiply(this.form.goodsOriginalPrice, 100),
-            goodsPrice: multiply(this.form.goodsPrice, 100),
-            accountMoney: multiply(this.form.accountMoney, 100),
             discount:
               this.form.goodsOriginalPrice > 0
                 ? (this.form.goodsPrice / this.form.goodsOriginalPrice) * 10
                 : 0,
             specificationList: this.skuArr,
           });
-          if (form.resource == 2 && form.specificationList.length) {
-            form.specificationList.forEach((item, index) => {
-              item.goodsPrice = multiply(item.goodsPrice, 100);
-              item.goodsOriginalPrice =
-                item.goodsOriginalPrice == 0
-                  ? ""
-                  : multiply(item.goodsOriginalPrice, 100);
-              item.accountMoney = multiply(item.goodsPrice, 100);
-              item.anchorMoney = multiply(item.goodsPrice, 100);
-            });
-          }
           // 9 是定时后台没有变成2
-          if(form.status == 9 ){
-            form.status = 2
+          if (form.status == 9) {
+            form.status = 2;
           }
           goodsadd(form).then((res) => {
             this.$message({

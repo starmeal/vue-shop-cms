@@ -1,6 +1,10 @@
 <template>
   <div class="merchants-container" ref="merchantsContainer">
     <section ref="merchantslabel">
+      <div
+        class="top-fixed"
+        :style="{zIndex:fiexTop ? 1000 : -1000,width:domWidth+'px',top:domTop+'px'}"
+      ></div>
       <div class="operation-container">
         <section class="flex-top">
           <div>
@@ -45,13 +49,15 @@
       </div>
     </section>
     <section class="table-container">
+      <!-- v-loading="tableloading" -->
+      <!-- height="100px"
+      v-adaptive-->
       <el-table
-        ref="multipleTable"
+        ref="noticeTable"
         :size="size"
         :data="list"
         @select="tableSelect"
         @select-all="tableSelect"
-        v-loading="tableloading"
         style="width:100%"
       >
         <el-table-column type="selection" width="55"></el-table-column>
@@ -63,7 +69,7 @@
               trigger="hover"
               :content="props.row.notice_name"
             >
-              <div class="yichu" slot="reference">{{ props.row.notice_name }}</div>
+              <div class="yichu" slot="reference">{{ props.row.notice_name }}{{fiexTop}}</div>
             </el-popover>
           </template>
         </el-table-column>
@@ -147,6 +153,11 @@ import {
 export default {
   data() {
     return {
+      monitor: null,
+      tabledomPos: 0,
+      domWidth: 0,
+      domTop: 0,
+      fiexTop: false,
       value1: "",
       dialogVisibledel: false,
       goodsName: "",
@@ -155,7 +166,63 @@ export default {
       dialogFormVisible: false,
       tableloading: true,
       tableHeight: "",
-      list: [],
+      list: [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        ,
+        19,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        ,
+        19,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        ,
+        19,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        ,
+        19,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        ,
+        19,
+      ],
       searchLoading: false,
       size: "mini",
       totalCount: "",
@@ -176,10 +243,44 @@ export default {
     };
   },
   created() {
-    this.getList();
+    // this.getList();
   },
-  mounted() {},
+  mounted() {
+    this.initscroll();
+  },
   methods: {
+    destroyed() {
+      this.monitor.removeEventListener();
+    },
+    initscroll() {
+      this.$nextTick(() => {
+        function getElementTop(elem) {
+          var elemTop = elem.offsetTop; //获得elem元素距相对定位的父元素的top
+          elem = elem.offsetParent; //将elem换成起相对定位的父元素
+          while (elem != null) {
+            //只要还有相对定位的父元素
+            //获得父元素 距他父元素的top值,累加到结果中
+            elemTop += elem.offsetTop; //再次将elem换成他相对定位的父元素上;
+            elem = elem.offsetParent;
+          }
+          return elemTop;
+        }
+        let dom = document.querySelector("#router-view");
+        this.domWidth = document.querySelector("#router-view").offsetWidth;
+        this.domTop = document.querySelector("#router-view").offsetTop;
+        this.tabledomPos = document
+          .querySelector(".el-table__header-wrapper")
+          .getBoundingClientRect().top;
+        this.monitor = dom.addEventListener("scroll", () => {
+          if (dom.scrollTop >= this.tabledomPos) {
+            this.fiexTop = true;
+          } else {
+            this.fiexTop = false;
+          }
+        });
+        this.d
+      });
+    },
     // 批量停止
     stopall() {
       if (this.arrlist.length == 0) {
@@ -404,20 +505,12 @@ export default {
   align-items: center;
   justify-content: center;
 }
-.sa {
-  width: 100%;
-  height: 480px;
-  left: 0;
-  bottom: 0;
-  position: fixed;
-  background-color: #fcc;
-  z-index: 1000;
-}
 .merchants-container {
   background-color: #fff;
   padding: 20px 30px;
   box-sizing: border-box;
   min-height: 100%;
+  position: relative;
 }
 .num-container {
   padding: 10px;
@@ -486,5 +579,22 @@ export default {
 }
 .zhuangtai {
   color: $primary;
+}
+.ossd {
+  position: absolute;
+  top: 129px;
+  width: 100%;
+  height: 10px;
+  background: #fcc;
+  z-index: 1000;
+}
+.top-fixed {
+  width: 69%;
+  height: 35px;
+  left: 18%;
+  z-index: -100;
+  background: #fcc;
+  position: fixed;
+  top: 129px;
 }
 </style>

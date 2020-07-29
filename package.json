@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env VUE_BASE_REQUEST_RUL=http://39.98.135.11:8186/shop vue-cli-service serve --mode dev",
-    "dev:test": "cross-env VUE_BASE_REQUEST_RUL=http://39.98.135.11/shop vue-cli-service serve --mode dev",
+    "dev": "cross-env VUE_BASE_REQUEST_RUL=http://192.168.1.190:8186/shop vue-cli-service serve --mode dev",
+    "dev:test": "cross-env VUE_BASE_REQUEST_RUL=http://http://39.98.135.11:8187/shop vue-cli-service serve --mode dev",
     "dev:prod": "cross-env VUE_BASE_REQUEST_RUL=https://hs.star.cms.xingfaner.cn/shop vue-cli-service  serve --mode dev",
     "build:prod": "vue-cli-service build --mode prod",
     "build:test": "vue-cli-service build --mode test"

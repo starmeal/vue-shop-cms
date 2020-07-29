@@ -8,6 +8,7 @@ import '@/styl/element-variables.scss'
 import directive from '@/directives'
 import filter from '@/filters'
 import '@/router/permission.js'
+import '@/utils/vhight'
 Vue.config.productionTip = false
 Vue.use(ElementUI, {
   size: 'small'
