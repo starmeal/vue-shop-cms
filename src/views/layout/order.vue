@@ -65,7 +65,7 @@ export default {
       afterSaleCount: '',
       evaCount: '',
       isSpread: true,
-      activeName: '1'
+      activeName: '1',
     };
   },
   created() {
@@ -73,22 +73,13 @@ export default {
   },
   computed: {
     ...mapState({
-      shopMerchantsCode: 'code'
-    })
+      shopMerchantsCode: 'code',
+    }),
   },
   mounted() {
     this.$nextTick(() => {
       this.handle();
-      window.addEventListener(
-        'resize',
-        throttle(
-          () => {
-            this.handle();
-          },
-          20,
-          true
-        )
-      );
+      this.quxiaoqi = window.addEventListener('resize', this.handle);
     });
   },
   beforeDestroy() {
@@ -97,7 +88,7 @@ export default {
   methods: {
     getOrderMessage() {
       getOrderMessage({
-        shopMerchantsCode: this.shopMerchantsCode
+        shopMerchantsCode: this.shopMerchantsCode,
       }).then(
         ({ code, body: { afterSaleCount, deliveredCount, evaCount } }) => {
           this.afterSaleCount = afterSaleCount;
@@ -106,18 +97,24 @@ export default {
         }
       );
     },
-    handle() {
-      let windowWith =
-        document.documentElement.clientWidth || document.body.clientWidth;
-      this.$refs.orderContainer.style = 'none';
-      if (windowWith < 1080 && this.isSpread) {
-        this.isSpread = false;
-        return false;
-      }
-      if (windowWith >= 1080 && !this.isSpread) {
-        this.isSpread = true;
-      }
-    },
+    handle: throttle(
+      function () {
+        this.$nextTick(() => {
+          let windowWith =
+            document.documentElement.clientWidth || document.body.clientWidth;
+          this.$refs.orderContainer.style = 'none';
+          if (windowWith < 1080 && this.isSpread) {
+            this.isSpread = false;
+            return false;
+          }
+          if (windowWith >= 1080 && !this.isSpread) {
+            this.isSpread = true;
+          }
+        });
+      },
+      20,
+      true
+    ),
     handleisSpread() {
       this.isSpread = !this.isSpread;
       let windowWith =
@@ -131,25 +128,8 @@ export default {
         this.$refs.orderContainer.style.right = '-180px';
         this.$refs.orderContainer.style.bottom = '0px';
       }
-      // if (windowWith < 1080) {
-      //   this.$nextTick(() => {
-      //     if (this.isSpread) {
-      //       console.log('2222223333');
-      //       this.$refs.orderContainer.style.position = 'fixed';
-      //       this.$refs.orderContainer.style.right = '0px';
-      //       this.$refs.orderContainer.style.bottom = '0px';
-      //     } else {
-      //       console.log('11111222');
-      //       this.$refs.orderContainer.style.position = 'fixed';
-      //       this.$refs.orderContainer.style.right = '-180px';
-      //       this.$refs.orderContainer.style.bottom = '0px';
-      //     }
-      //   });
-      // } else {
-      //   console.log('在这里输出了');
-      // }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -161,8 +141,11 @@ export default {
   width: 0px;
   transition: all 0.3s linear;
   z-index: 100;
+  border: 1px solid red;
+  right:0;top:0;
   &.order-container-spread {
     width: 180px !important;
+    flex: 0 0 180px !important
   }
   .order-container {
     width: 180px;
