@@ -79,7 +79,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.handle();
-      this.quxiaoqi = window.addEventListener('resize', this.handle);
+      window.addEventListener('resize', this.handle);
     });
   },
   beforeDestroy() {
@@ -100,9 +100,10 @@ export default {
     handle: throttle(
       function () {
         this.$nextTick(() => {
+          this.orderContainer = this.$refs.orderContainer;
           let windowWith =
             document.documentElement.clientWidth || document.body.clientWidth;
-          this.$refs.orderContainer.style = 'none';
+          this.orderContainer.style = 'none';
           if (windowWith < 1080 && this.isSpread) {
             this.isSpread = false;
             return false;
@@ -128,6 +129,23 @@ export default {
         this.$refs.orderContainer.style.right = '-180px';
         this.$refs.orderContainer.style.bottom = '0px';
       }
+      // if (windowWith < 1080) {
+      //   this.$nextTick(() => {
+      //     if (this.isSpread) {
+      //       console.log('2222223333');
+      //       this.$refs.orderContainer.style.position = 'fixed';
+      //       this.$refs.orderContainer.style.right = '0px';
+      //       this.$refs.orderContainer.style.bottom = '0px';
+      //     } else {
+      //       console.log('11111222');
+      //       this.$refs.orderContainer.style.position = 'fixed';
+      //       this.$refs.orderContainer.style.right = '-180px';
+      //       this.$refs.orderContainer.style.bottom = '0px';
+      //     }
+      //   });
+      // } else {
+      //   console.log('在这里输出了');
+      // }
     },
   },
 };
@@ -141,11 +159,8 @@ export default {
   width: 0px;
   transition: all 0.3s linear;
   z-index: 100;
-  border: 1px solid red;
-  right:0;top:0;
   &.order-container-spread {
     width: 180px !important;
-    flex: 0 0 180px !important
   }
   .order-container {
     width: 180px;
