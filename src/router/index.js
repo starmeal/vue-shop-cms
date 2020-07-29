@@ -245,7 +245,7 @@ export const asyncRoutes = [
 Vue.use(VueRouter);
 const createRouter = () =>
   new VueRouter({
-    mode: 'history',
+    mode: 'hash',
     base: process.env.BASE_URL,
     scrollBehavior: () => ({ y: 0 }),
     routes: staticRoutes

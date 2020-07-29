@@ -69,7 +69,7 @@
               trigger="hover"
               :content="props.row.notice_name"
             >
-              <div class="yichu" slot="reference">{{ props.row.notice_name }}{{fiexTop}}</div>
+              <div class="yichu" slot="reference">{{ props.row.notice_name }}</div>
             </el-popover>
           </template>
         </el-table-column>
@@ -243,15 +243,15 @@ export default {
     };
   },
   created() {
-    // this.getList();
+    this.getList();
   },
   mounted() {
-    this.initscroll();
+    // this.initscroll();
+  },
+  beforeDestroy() {
+    // this.dom.removeEventListener("scroll", () => {});
   },
   methods: {
-    destroyed() {
-      this.monitor.removeEventListener();
-    },
     initscroll() {
       this.$nextTick(() => {
         function getElementTop(elem) {
@@ -266,19 +266,27 @@ export default {
           return elemTop;
         }
         let dom = document.querySelector("#router-view");
+        this.dom = dom;
         this.domWidth = document.querySelector("#router-view").offsetWidth;
+        const myObserver = new ResizeObserver((entries) => {
+          entries.forEach((entry) => {
+            this.domWidth = document.querySelector("#router-view").offsetWidth;
+            // console.log("大小位置", entry.contentRect);
+            // console.log("监听的DOM", entry.target);
+          });
+        });
+        myObserver.observe(dom);
         this.domTop = document.querySelector("#router-view").offsetTop;
         this.tabledomPos = document
           .querySelector(".el-table__header-wrapper")
           .getBoundingClientRect().top;
-        this.monitor = dom.addEventListener("scroll", () => {
+        dom.addEventListener("scroll", () => {
           if (dom.scrollTop >= this.tabledomPos) {
             this.fiexTop = true;
           } else {
             this.fiexTop = false;
           }
         });
-        this.d
       });
     },
     // 批量停止
