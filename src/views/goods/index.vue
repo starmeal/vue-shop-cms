@@ -1,7 +1,13 @@
 <template>
-  <div>
-    <section ref="goodslist">
-      <div class="operation-container"></div>
+  <div class="goods-container">
+    <section class="screening-box">
+      <div class="felx-scr">
+        <span>全部</span>
+        <span>出售中</span>
+        <span>仓库中</span>
+        <span>库存预警</span>
+        <span>保质期预警</span>
+      </div>
     </section>
     <section class="table-container"></section>
   </div>
@@ -12,25 +18,25 @@ import { queryGoodsList } from "@/api/goods";
 export default {
   data() {
     return {
-        pageData:{
-            curPage:1,
-            pageSize:10,
-            listType:0,
-            goodsName:'',
-            goodsCode:'',
-            goodsBarCode:'',
-            category:'',
-            goodsPriceBeginStr:'',
-            goodsPriceEndStr:'',
-            shelfDayBeginStr:'',
-            shelfDayEndStr:'',
-            orderField:'',
-            sortType:'',
-        }
+      pageData: {
+        curPage: 1,
+        pageSize: 10,
+        listType: 0,
+        goodsName: "",
+        goodsCode: "",
+        goodsBarCode: "",
+        category: "",
+        goodsPriceBeginStr: "",
+        goodsPriceEndStr: "",
+        shelfDayBeginStr: "",
+        shelfDayEndStr: "",
+        orderField: "",
+        sortType: "",
+      },
     };
   },
   created() {
-      this.getlist()
+    this.getlist();
   },
   methods: {
     getlist() {
@@ -42,24 +48,26 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.font-f {
-  font-size: 12px;
-  color: #606266;
-  margin-right: 20px;
-  flex: 1;
-  text-align: right;
-}
-.flex-box {
-  width: 90%;
-  display: flex;
-  justify-content: space-between;
-}
-.hidden-box {
-  width: 0px;
-  height: 0px;
-}
-.img-licenseImgUrl {
+.goods-container {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
+}
+.screening-box {
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  background: #fff;
+  .felx-scr {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 12px;
+    font-family: Microsoft YaHei;
+    font-weight: 300;
+    color: #555555;
+    &:span{
+      margin-right: 20px;
+    }
+  }
 }
 </style>
