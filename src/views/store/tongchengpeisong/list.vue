@@ -1,18 +1,302 @@
 <template>
-  <div>
-    <el-button @click="add">添加</el-button>
+  <div class="authentication yunfeiList">
+    <div class="innerContainer">
+      <div class="top_button_w">
+        <el-button :size="size" type="success" @click="add">增加</el-button>
+        <el-input
+          v-model="listpage.templateName"
+          placeholder="请搜索模板名称"
+          :size="size"
+          clearable
+          @clear="searchlist"
+          class="el-input-w"
+        ></el-input>
+        <el-button
+          icon="el-icon-search"
+          :loading="searchLoading"
+          :size="size"
+          @click="searchlist"
+        >搜索</el-button>
+      </div>
+
+      <el-table ref="multipleTable" :data="list" v-loading="tableloading">
+        <el-table-column prop="sort" label="排序">
+          <template slot-scope="{row,$index}">
+            <div v-show="!row.isSet" @dblclick="dblclick(row,$index)">{{row.sort}}</div>
+            <el-input
+              @keyup.native="keyup(row)"
+              v-show="row.isSet"
+              style="wdith:50px"
+              @blur="blur(row,$index)"
+              v-model="row.sort"
+            ></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="templateName" label="模板名称"></el-table-column>
+        <el-table-column label="计费方式">
+          <template slot-scope="props">
+            {{
+            props.row.chargeMode == 1
+            ? "按件数"
+            : props.row.chargeMode == 2
+            ? "按重量"
+            : "按体积"
+            }}
+          </template>
+        </el-table-column>
+        <el-table-column label="是否启用" width="100">
+          <template slot-scope="{row,$index}">
+            <el-switch
+              v-model="row.isEnabled"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              @change="scwithisEnabled(row,$index)"
+            ></el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="默认" width="100">
+          <template slot-scope="{row,$index}">
+            <el-switch
+              v-model="row.isChecked"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              @change="scwithisChecked(row,$index)"
+            ></el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column prop="createTime" label="创建时间">
+          <template slot-scope="{row}">{{row.createTime || '--'}}</template>
+        </el-table-column>
+        <el-table-column prop="unreachableCityNames" width="250" label="不可到达城市">
+          <template slot-scope="props">
+            <el-popover
+              placement="top-start"
+              width="250"
+              trigger="hover"
+              :content="props.row.unreachableCityNames | addressFilters"
+            >
+              <span slot="reference">{{ props.row.unreachableCityNames | addressFilters }}</span>
+            </el-popover>
+          </template>
+        </el-table-column>
+        <el-table-column prop="caozuo" label="操作" width="250px">
+          <template slot-scope="props">
+            <el-button :size="size" type="warning" @click="deleteList(props.row)">删除</el-button>
+            <el-button :size="size" type="primary" @click="editorList(props.row.templateId)">修改</el-button>
+            <el-button :size="size" type="success" @click="toLook(props.row.templateId)">查看</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+
+    <el-dialog :title="templateName" :visible.sync="dialogVisible" width="30%">
+      <span>确认删除【{{ templateName }}】吗</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="makeSureDeleteList">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import {
+  getMerTemplateList,
+  delMerTemplate,
+  setTemplateIsEnabled,
+  setTemplateIsChecked,
+  setTemplateSort,
+} from "@/api/store/index.js";
 export default {
+  data() {
+    return {
+      dblclickNum: "",
+      templateId: "",
+      dialogVisible: false,
+      templateName: "",
+      tableloading: true,
+      list: [],
+      searchLoading: false,
+      size: "mini",
+      listpage: {
+        templateName: "",
+      },
+    };
+  },
+  filters: {
+    addressFilters: function (value) {
+      if (value.length == 0 || !value) {
+        return "--";
+      }
+      if (value[0] == "[") {
+        return JSON.parse(value).toString();
+      }
+      return value;
+    },
+  },
+  created() {
+    this.getList();
+  },
   methods: {
+    keyup(e) {
+      e.sort = parseInt(e.sort);
+    },
+    //  是否启用按钮事件
+    async scwithisEnabled(row, index) {
+      this.searchLoading = true;
+      let { body, code } = await setTemplateIsEnabled({
+        templateId: row.templateId,
+        isEnabled: row.isEnabled ? 1 : 0,
+      });
+      this.searchLoading = false;
+      if (code != "000000") {
+        this.$set(this.list[index], "isEnabled", !row.isEnabled);
+      }
+    },
+    async scwithisChecked(row, index) {
+      this.searchLoading = true;
+      let { body, code } = await setTemplateIsChecked({
+        templateId: row.templateId,
+        isChecked: row.isChecked ? 1 : 0,
+      });
+      this.searchLoading = false;
+      if (code != "000000") {
+        this.$set(this.list[index], "isChecked", !row.isChecked);
+      } else {
+        this.list.forEach((res, indexs) => {
+          if (indexs != index) {
+            res.isChecked = false;
+          }
+        });
+        this.list.push(this.list.pop());
+      }
+    },
+    dblclick(row, index) {
+      this.dblclickNum = row.sort;
+      this.list.forEach((res, indexs) => {
+        if (indexs != index) {
+          res.isSet = false;
+        } else {
+          res.isSet = true;
+        }
+      });
+    },
+    async blur(row, index) {
+      this.list[index].isSet = false;
+      if (this.dblclickNum == row.sort) {
+        return;
+      }
+      let { body, code } = await setTemplateSort({
+        templateId: row.templateId,
+        sort: row.sort,
+      });
+      if (code == "000000") {
+        this.getList();
+      }
+    },
+    toLook(templateId) {
+      this.$router.options.routes.forEach((element) => {
+        if (element.path == "/extra") {
+          element.children.forEach((el) => {
+            if (el.path == "/templateform") {
+              el.meta.title = "查看运费模板";
+              console.log(el);
+            }
+          });
+        }
+      });
+      this.$router.push({
+        path: "/templateForm",
+        query: {
+          title: "查看运费模板",
+          templateId: templateId,
+          look: "true",
+        },
+      });
+      // this.$router.push(`/templateForm?templateId=${templateId}&look=true`);
+    },
+    editorList(templateId) {
+      this.$router.options.routes.forEach((element) => {
+        if (element.path == "/extra") {
+          element.children.forEach((el) => {
+            if (el.path == "/templateform") {
+              el.meta.title = "编辑运费模板";
+              console.log(el);
+            }
+          });
+        }
+      });
+      this.$router.push({
+        path: "/templateform",
+        query: {
+          title: "编辑运费模板",
+          templateId,
+        },
+      });
+      // this.$router.push(`/templateForm?templateId=${templateId}`);
+    },
+    makeSureDeleteList() {
+      delMerTemplate({
+        templateId: this.templateId,
+      })
+        .then((res) => {
+          if (res.code == "000000") {
+            this.dialogVisible = false;
+            this.getList();
+          }
+        })
+        .catch((res) => {});
+    },
+    deleteList(row) {
+      let { templateName, templateId } = row;
+      this.templateId = templateId;
+      this.templateName = templateName;
+      this.dialogVisible = true;
+    },
+    addTemplate() {
+      this.$router.options.routes.forEach((element) => {
+        if (element.path == "/extra") {
+          element.children.forEach((el) => {
+            if (el.path == "/templateform") {
+              el.meta.title = "编辑运费模板";
+              console.log(el);
+            }
+          });
+        }
+      });
+      this.$router.push({
+        path: "/templateform",
+        query: {
+          title: "编辑运费模板",
+        },
+      });
+    },
+    // 请求列表
+    async getList() {
+      this.tableloading = true;
+      let { body } = await getMerTemplateList(this.listpage);
+      this.searchLoading = false;
+      this.tableloading = false;
+      body.map((res) => {
+        res.isChecked = res.isChecked == 1;
+        res.isEnabled = res.isEnabled == 1;
+        res.isSet = false;
+      });
+      this.list = body;
+      console.log(this.list);
+    },
+    // 条件筛选
+    searchlist() {
+      this.searchLoading = true;
+      this.getList();
+    },
+
     add(row) {
       let obj = {
         path: "/expressDeliveryAdd",
-        query:{
-          id: 'row.id',
-        }
+        query: {
+          id: "row.id",
+        },
       };
       // if (row ) {
       //   obj.query = {
@@ -25,5 +309,36 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.authentication {
+  background: #fff;
+  box-sizing: border-box;
+  padding: 20px;
+  font-family: MicrosoftYaHei-Bold;
+}
+.innerContainer {
+  width: 98%;
+  margin: 0 auto;
+  padding: 20px 0px;
+  background: #f5f7f9;
+}
+.top_button_w {
+  display: flex;
+  align-items: center;
+  margin-left: 2%;
+  margin-bottom: 30px;
+}
+.el-input-w {
+  width: 200px;
+  margin: 0 10px;
+}
+</style>
+<style lang="scss">
+.yunfeiList {
+}
+.el-table {
+  margin-top: 10px;
+  width: 96%;
+  margin: 0 auto;
+}
 </style>

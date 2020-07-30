@@ -1,9 +1,6 @@
 <template>
   <div class="authentication addYunFei">
     <div class="innerContainer">
-      <!-- <div class="title title-margin">
-          <Icon icon="jibenxinxi" class="authentication-title" />基本信息
-      </div>-->
       <el-form ref="templateForm" :model="form" :rules="rules" label-width="150px">
         <el-form-item label="模板名称" prop="templateName" class="defaulStra">
           <el-input
@@ -16,7 +13,7 @@
           ></el-input>
           <!-- :disabled="$route.query.look == 'true'" -->
         </el-form-item>
-        <el-form-item label="省市区" prop="goodsShipAddress" class="defaulStraw">
+        <!-- <el-form-item label="省市区" prop="goodsShipAddress"    class="defaulStra">
           <el-cascader
             v-model="form.goodsShipAddress"
             :options="cascaderList"
@@ -25,16 +22,15 @@
             style="width:300px;"
             @change="changeCascader"
           >
-            <!-- :disabled="$route.query.look == 'true'" -->
             <template slot-scope="{ node, data }">
               <span>{{ data.name }}</span>
               <span v-if="!node.isLeaf">({{ data.districts.length }})</span>
             </template>
           </el-cascader>
-        </el-form-item>
-        <el-form-item label="是否默认" prop="defaultBloo" class="defaulStraw">
-          <el-radio v-model="form.defaultBloo" :label="true">是</el-radio>
-          <el-radio v-model="form.defaultBloo" :label="false">否</el-radio>
+        </el-form-item>-->
+        <el-form-item label="是否默认" prop="isChecked" class="defaulStraw">
+          <el-radio v-model="form.isChecked" :label="1">是</el-radio>
+          <el-radio v-model="form.isChecked" :label="0">否</el-radio>
         </el-form-item>
         <el-form-item label="计费方式" prop="chargeMode" class="defaulStra">
           <el-radio v-model="form.chargeMode" label="1">按件计费</el-radio>
@@ -42,7 +38,7 @@
         </el-form-item>
         <el-form-item label="配送区域" prop="region" class="defaulStra">
           <el-table
-            :data="tableCityData"
+            :data="form.templateSub"
             style="width: 92%"
             row-class-name="row-class"
             :header-cell-style="headerCellStyle"
@@ -51,12 +47,8 @@
             <el-table-column label="配送到" width="300px">
               <template slot-scope="{row,$index}">
                 <div class="Nodelivery_span">
-                  <span class v-for="(item,index) in row.deliveryToThe" :key="index">{{item}}</span>
-                  <span
-                    v-if="row.type!='allCity'"
-                    @click="editDeliveryclick($index)"
-                    class="edit"
-                  >编辑</span>
+                  <span class v-for="(item,index) in row.cityNames" :key="index">{{item}}</span>
+                  <span v-if="$index!==0" @click="editDeliveryclick($index)" class="edit">编辑</span>
                 </div>
               </template>
             </el-table-column>
@@ -101,13 +93,13 @@
           <span class v-for="(item,index) in form.unreachableCityNames" :key="index">{{item}}</span>
           <span class="edit" @click="editdesignatedAreaClick">编辑</span>
         </div>
-        <el-form-item label="状态" prop="zhuangtai" class="zhuangtai">
-          <el-radio v-model="form.zhuangtai" label="1">是</el-radio>
-          <el-radio v-model="form.zhuangtai" label="2">否</el-radio>
+        <el-form-item label="状态" prop="isEnabled" class="isEnabled">
+          <el-radio v-model="form.isEnabled" label="1">启用</el-radio>
+          <el-radio v-model="form.isEnabled" label="0">禁用</el-radio>
         </el-form-item>
       </el-form>
     </div>
-    <el-button type="primary" class="submit">提交</el-button>
+    <el-button type="primary" @click="submit" class="submit">提交</el-button>
     <el-button type class="back">返回列表</el-button>
 
     <el-dialog
@@ -171,6 +163,7 @@
 </template>
 
 <script>
+import { editMerTemplate } from "@/api/store/index.js";
 import Icon from "@/components/base/icon.vue";
 import Statusimg from "./teplate/statusImg";
 import city from "./district.json";
@@ -192,27 +185,28 @@ export default {
       editIndex: "", //编辑table index
       selectType: 1, // selectType 1 不可到达城市 2 单独配送地区 3 编辑不可配送区域  4 编辑可配送区域
       size: "small",
-      tableCityData: [
-        {
-          deliveryToThe: ["全国【默认】"],
-          deliveryToTheCode: [],
-          type: "allCity",
-          designatedFirst: "1",
-          designatedFirstFreight: "",
-          designatedAddFreight: "",
-          designatedAdd: "",
-        },
-      ],
+
       form: {
-        shipProvinceCode: "", //发货地址省编码
-        shipCityCode: "", //发货地址市编码
+        // shipProvinceCode: "", //发货地址省编码
+        // shipCityCode: "", //发货地址市编码
         unreachableCityCodes: [], //快递不可到达的城市编码（多个用,分隔）
         unreachableCityNames: [], //快递不可到达的城市名称（多个用,分隔）
         templateName: "",
-        defaultBloo: true,
+        isChecked: 1,
         chargeMode: "1",
-        goodsShipAddress: [],
-        zhuangtai: "1",
+        // goodsShipAddress: [],
+        isEnabled: "1",
+
+        templateSub: [
+          {
+            cityNames: ["全国【默认】"],
+            cityCodes: [],
+            designatedFirst: 1,
+            designatedFirstFreight: 0.0,
+            designatedAddFreight: 0.0,
+            designatedAdd: 0,
+          },
+        ],
       },
 
       cascaderList: [], //级联选择器的数据
@@ -226,6 +220,9 @@ export default {
         templateName: [
           { required: true, message: "请输入模板名称", trigger: "blur" },
         ],
+        // goodsShipAddress: [
+        //   { required: true, message: "请输入发货地址", trigger: "change" },
+        // ],
       },
     };
   },
@@ -237,6 +234,54 @@ export default {
   },
 
   methods: {
+    // 确定提交
+
+    submit() {
+      this.$refs["templateForm"].validate((valid) => {
+        if (valid) {
+          this.templateEditMerTemplate();
+        }
+      });
+    },
+    templateEditMerTemplate() {
+      // let {
+      //   templateId, //模板id（添加时不传，修改时传
+      //   templateName, //模板名称
+      //   // goodsShipAddress, //商品发货地址
+      //   // shipProvinceCode, //发货地址省编码
+      //   // shipCityCode, //发货地址省编码
+      //   chargeMode, //计费方式（1按件数；2按重量；3按体积）
+      //   unreachableCityCodes, //快递不可到达的城市编码（多个用,分隔）
+      //   unreachableCityNames, //	快递不可到达的城市名称（多个用,分隔）
+      //   defaultFirst, //首（件、克、立方厘米）
+      //   defaultFirstFreight, //首运费（分）
+      //   defaultAdd, //续（件、克、立方厘米）
+      //   defaultAddFreight, //续费（分）
+      //   templateSub, //指定城市集合对象
+      // } = this.form;
+
+      let form = JSON.parse(JSON.stringify(this.form));
+
+      console.log(form, "sssssssssssssss");
+      form.templateSub.splice(0, 1);
+      if (form.templateSub.length==0) {
+        this.$message({
+          showClose: true,
+          message: "为指定城市地区设置运费未选择地址",
+          type: "warning",
+        });
+        return;
+      }
+
+      editMerTemplate(form)
+        .then((res) => {
+          if (res.code == "000000") {
+            this.$router.push("/shippingMethods");
+          }
+        })
+        .catch((err) => {});
+    },
+
     // 全选
 
     allCheckedClick(status) {
@@ -291,13 +336,12 @@ export default {
       }
       let selectType2Obj = {
         //类型selectType为2
-        deliveryToThe: [],
-        deliveryToTheCode: [],
-        type: "",
-        designatedFirst: "1",
-        designatedFirstFreight: "",
-        designatedAddFreight: "",
-        designatedAdd: "",
+        cityNames: [],
+        cityCodes: [],
+        designatedFirst: 1,
+        designatedFirstFreight: 0.0,
+        designatedAddFreight: 0.0,
+        designatedAdd: 0,
       };
       let unreachableCityCodes = [];
       let unreachableCityNames = [];
@@ -313,13 +357,13 @@ export default {
                 unreachableCityNames.push(item2.name);
               }
               if (this.selectType == 2) {
-                selectType2Obj.deliveryToThe.push(item2.name);
-                selectType2Obj.deliveryToTheCode.push(item2.adcode);
+                selectType2Obj.cityNames.push(item2.name);
+                selectType2Obj.cityCodes.push(item2.adcode);
               }
 
               if (this.selectType == 4) {
-                selectType2Obj.deliveryToThe.push(item2.name);
-                selectType2Obj.deliveryToTheCode.push(item2.adcode);
+                selectType2Obj.cityNames.push(item2.name);
+                selectType2Obj.cityCodes.push(item2.adcode);
               }
             }
           });
@@ -330,13 +374,13 @@ export default {
         this.$set(this.form, "unreachableCityNames", unreachableCityNames);
         this.$set(this.form, "unreachableCityCodes", unreachableCityCodes);
       } else if (this.selectType == 2) {
-        this.tableCityData.push(selectType2Obj);
+        this.form.templateSub.push(selectType2Obj);
       } else if (this.selectType == 4) {
-        this.tableCityData[this.editIndex].deliveryToThe =
-          selectType2Obj.deliveryToThe;
-        this.tableCityData[this.editIndex].deliveryToTheCode =
-          selectType2Obj.deliveryToTheCode;
-        this.tableCityData.push(this.tableCityData.pop());
+        this.form.templateSub[this.editIndex].cityNames =
+          selectType2Obj.cityNames;
+        this.form.templateSub[this.editIndex].cityCodes =
+          selectType2Obj.cityCodes;
+        this.form.templateSub.push(this.form.templateSub.pop());
       }
       this.cityListArr(city.districts[0].districts);
       this.dialogVisible = false;
@@ -534,30 +578,30 @@ export default {
       this.editIndex = index;
       this.disposeDisabledArr(
         this.filtrateNodelivery(this.selectType, index),
-        this.tableCityData[index].deliveryToTheCode
+        this.form.templateSub[index].cityCodes
       );
     },
     //  选出 已选的 地址
     filtrateNodelivery(type, indexs) {
       let arr = [];
       if (type == 3) {
-        this.tableCityData.map((item, index) => {
+        this.form.templateSub.map((item, index) => {
           if (index > 0) {
-            arr = [...arr, ...item.deliveryToTheCode];
+            arr = [...arr, ...item.cityCodes];
           }
         });
         return [...arr];
       } else if (type == 4) {
-        this.tableCityData.map((item, index) => {
+        this.form.templateSub.map((item, index) => {
           if (index > 0 && indexs != index) {
-            arr = [...arr, ...item.deliveryToTheCode];
+            arr = [...arr, ...item.cityCodes];
           }
         });
         return [...arr, ...this.form.unreachableCityCodes];
       } else {
-        this.tableCityData.map((item, index) => {
+        this.form.templateSub.map((item, index) => {
           if (index > 0) {
-            arr = [...arr, ...item.deliveryToTheCode];
+            arr = [...arr, ...item.cityCodes];
           }
         });
         return [...arr, ...this.form.unreachableCityCodes];
@@ -597,15 +641,15 @@ export default {
       }
     },
     // 级联选择器 改变  选择省市的code
-    changeCascader(list) {
-      let obj = this.cascaderList.filter((item, index) => {
-        return item.name == list[0];
-      })[0];
-      this.form.shipProvinceCode = obj.adcode;
-      this.form.shipCityCode = obj.districts.filter((item, index) => {
-        return item.name == list[1];
-      })[0].adcode;
-    },
+    // changeCascader(list) {
+    //   let obj = this.cascaderList.filter((item, index) => {
+    //     return item.name == list[0];
+    //   })[0];
+    //   this.form.shipProvinceCode = obj.adcode;
+    //   this.form.shipCityCode = obj.districts.filter((item, index) => {
+    //     return item.name == list[1];
+    //   })[0].adcode;
+    // },
     // 级联选择器处理的数据
     initFahuoList(list) {
       let result = [];
