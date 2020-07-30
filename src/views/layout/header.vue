@@ -35,17 +35,17 @@
     </div>
     <el-popover trigger="hover" width="154">
       <div class="user-action-con">
-        <div class="user-action-item">
+        <div class="user-action-item" @click='signout'>
           <img src="../../../static/img/qiehuan.png" />
           切换账号
         </div>
-        <div class="user-action-item">
+        <div class="user-action-item" @click='signout($event, 1)'>
           <img src="../../../static/img/xiugai.png" />
           修改密码
         </div>
       </div>
       <div class="name-con" slot="reference">
-        <div class="user-name">{{name}}</div>
+        <div class="user-name">{{userName}}</div>
         <icon icon="danjiantouxia" style="width:10px;height:10px;margin-left:9px;"></icon>
       </div>
     </el-popover>
@@ -54,6 +54,7 @@
         <icon icon="guanbikaiguan"></icon>
       </div>
     </el-tooltip>
+    <div class='store-name'>{{name}}的店铺</div>
   </div>
 </template>
 
@@ -70,6 +71,7 @@ export default {
   },
   computed: {
     ...mapState({
+      userName: 'userName',
       name: 'name',
       menuList: 'routes',
     }),
@@ -176,9 +178,10 @@ export default {
       }
       this.options = ret;
     },
-    signout() {
+    signout(event, type) {
       this.$store.dispatch('user/resetToken').then(() => {
-        window.location.hash = '/login';
+        let path = type ? `/login?type=${type}` : '/login';
+        this.$router.replace({path})
       });
     },
     reload() {
@@ -254,6 +257,16 @@ export default {
   display: flex;
   height: 54px;
   width: 100%;
+  position: relative;
+  .store-name{
+    position:absolute;
+    font-size: 14px;
+    font-family: Microsoft YaHei;
+    color: #333333;
+    left:50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+  }
   .header-menu-placeholder {
     width: 138px;
     height: 100%;
