@@ -2,6 +2,15 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 export const staticRoutes = [
   {
+    path: '/goodslist',
+    meta: {
+      title: '商品列表',
+      parentPath: '/goods',
+      basePath: '/goods',
+    },
+    component: () => import('@/views/goods/index'),
+  },
+  {
     path: '/login',
     component: () => import('@/baseView/login/index'),
     hidden: true,
@@ -200,15 +209,6 @@ export const asyncRoutes = [
       icon: 'zuosuojin',
     },
     children: [
-      {
-        path: '',
-        meta: {
-          title: '商品列表',
-          parentPath: '/goods',
-          basePath: '/goods',
-        },
-        component: () => import('@/views/goods/index'),
-      },
       {
         path: '/goodsform',
         meta: {

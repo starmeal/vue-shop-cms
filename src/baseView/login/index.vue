@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { adminLogin, getphoneMessage,cmssendSMCode  } from "@/api/login";
+import { adminLogin, getphoneMessage, cmssendSMCode } from "@/api/login";
 
 import { createNamespacedHelpers } from "vuex";
 const { mapActions, mapState } = createNamespacedHelpers("user");
@@ -213,11 +213,11 @@ export default {
         });
         return false;
       }
-      this.getphoneCode();
       cmssendSMCode({
         mobile: this.mobelForm.mobile,
         type: 81,
       }).then((res) => {
+        this.getphoneCode();
         this.$message({
           message: "发送成功",
           type: "success",
@@ -358,7 +358,7 @@ export default {
 };
 </script>
 <style>
-.mini-flexs /deep/ .el-cascader .el-input__inner{
+.mini-flexs /deep/ .el-cascader .el-input__inner {
   border-radius: 0px;
 }
 </style>

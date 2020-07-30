@@ -135,6 +135,26 @@
           >保存</el-button>
         </el-form-item>
       </el-form>
+      <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+        <section class="sbsb">
+          <div>
+            您的店铺名称中包含有违禁词
+            <span
+              v-for="(item,index) in quni"
+              :key="index"
+              class="red-color"
+            >“{{item}}”</span>。
+          </div>
+          <div>
+            请仔细阅读
+            <a
+              style="color:#3976e6"
+              href="https://hs.star.cms.xingfaner.cn/xieyi/mingmingguizhe.html"
+              target="_blank"
+            >《店铺名称命名规范》</a>后进行修改
+          </div>
+        </section>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -150,6 +170,8 @@ export default {
   data() {
     return {
       arr: [],
+      quni: [],
+      dialogVisible: false,
       size: "mini",
       checked: false,
       cityvalue: [],
@@ -217,7 +239,9 @@ export default {
   },
   methods: {
     handleInput(e) {
-      this.sendData.legal_person_phone = e.target.value.replace(/[\w]/g, "");
+      if (e) {
+        this.sendData.legal_person_phone = e.target.value.replace(/[\w]/g, "");
+      }
     },
     toGo() {
       this.$confirm("请确认是否保存?", "提示", {
@@ -359,7 +383,8 @@ export default {
             })
             .catch(({ code, body }) => {
               if (code == "300010") {
-                console.log(body);
+                this.quni = body;
+                this.dialogVisible = true;
                 this.isShowShop = true;
                 this.hotCard = body.join(",");
                 this.$nextTick(() => {
@@ -446,6 +471,9 @@ export default {
 </script>
 
 <style lang="scss">
+.sbsb {
+  font-size: 12px;
+}
 .submitStyle {
   margin-top: 20px;
 }
@@ -463,6 +491,9 @@ a {
   content: "*";
   color: #f56c6c;
   margin-right: 4px;
+}
+.red-color {
+  color: #f56c6c;
 }
 .el-textarea .el-textarea__inner {
   resize: none;

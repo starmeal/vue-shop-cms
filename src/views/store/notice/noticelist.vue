@@ -7,7 +7,7 @@
       ></div>
       <div class="operation-container">
         <section class="flex-top">
-          <div>
+          <div class="felx-top-btn">
             <el-button
               :round="false"
               type="primary"
@@ -110,7 +110,7 @@
                 v-if="props.row.publish_status == 2"
               >
                 <span slot="content" style="font-size:12px;color:#9d9d9d">停止</span>
-                <i class="el-icon-circle-close icon-content" @click="operation(props.row,2)"></i>
+                <i class="el-icon-circle-close icon-content" @click="operation(props.row,3)"></i>
               </el-tooltip>
               <el-tooltip class="item light-item" effect="light" placement="top">
                 <span slot="content" style="font-size:12px;color:#9d9d9d">删除</span>
@@ -166,63 +166,7 @@ export default {
       dialogFormVisible: false,
       tableloading: true,
       tableHeight: "",
-      list: [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        ,
-        19,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        ,
-        19,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        ,
-        19,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        ,
-        19,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        ,
-        19,
-      ],
+      list: [],
       searchLoading: false,
       size: "mini",
       totalCount: "",
@@ -606,5 +550,13 @@ export default {
   background: #fcc;
   position: fixed;
   top: 129px;
+}
+.felx-top-btn{
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+.felx-top-btn .el-button{
+  flex: 1;
 }
 </style>

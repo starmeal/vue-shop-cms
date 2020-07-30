@@ -54,9 +54,10 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     border-right: none;
     border-radius: 0px;
 }
-.mini-flexs .left-none .el-input > .el-input__inner {
+.mini-flexs .left-none  > .el-input__inner {
     border-left: none;
     border-radius: 0px;
+    width: 150px;
 }
 .mini-flexs .el-cascader> .el-input> .el-input__inner{
     border-radius: 0px !important;
@@ -72,7 +73,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 .reblc> .el-input__inner{
   border-radius: 0px;
   border-left: none;
+  text-align: center;
 }
+.reblcs > .el-input__inner{
+    border-radius: 0px;
+  }
 .el-textarea__inner {
     resize: none;
 }
@@ -105,10 +110,16 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 .deep-number .el-input__inner{
     text-align: left;
+    border-right: 0px;
+    width: 150px;
+    border-radius: 0px;
 }
 .table-deep-number {
     width: 90%;
 }
 .table-deep-number .el-input__inner{
     text-align: left;
+}
+.sel .el-input>.el-input__inner{
+    border-radius: 0px;
 }
