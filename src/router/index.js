@@ -149,45 +149,45 @@ export const asyncRoutes = [
           },
         ]
       },
-      {
-        path: '/home2',
-        meta: {
-          title: '店铺详情2',
-          parentPath: '/store',
-          basePath: '/store',
-        },
-        component: () => import('@/views/home'),
-        children: [
-          {
-            path: '',
-            meta: {
-              title: '店铺详情3',
-              parentPath: '/home2',
-              basePath: '/store',
-            },
-            component: () => import('@/views/store'),
-          },
-          {
-            path: '/home4',
-            meta: {
-              title: '店铺详情4',
-              parentPath: '/home2',
-              basePath: '/store',
-            },
-            component: () => import('@/views/home'),
-          },
-          {
-            path: '/home5',
-            meta: {
-              title: '店铺详情5',
-              parentPath: '/home2',
-              basePath: '/store',
-            },
-            component: () => import('@/views/AnnouncementManagement'),
-          }
+      // {
+      //   path: '/home2',
+      //   meta: {
+      //     title: '店铺详情2',
+      //     parentPath: '/store',
+      //     basePath: '/store',
+      //   },
+      //   component: () => import('@/views/home'),
+      //   children: [
+      //     {
+      //       path: '',
+      //       meta: {
+      //         title: '店铺详情3',
+      //         parentPath: '/home2',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/store'),
+      //     },
+      //     {
+      //       path: '/home4',
+      //       meta: {
+      //         title: '店铺详情4',
+      //         parentPath: '/home2',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/home'),
+      //     },
+      //     {
+      //       path: '/home5',
+      //       meta: {
+      //         title: '店铺详情5',
+      //         parentPath: '/home2',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/AnnouncementManagement'),
+      //     }
 
-        ]
-      }
+      //   ]
+      // }
 
     ]
   },
@@ -203,6 +203,15 @@ export const asyncRoutes = [
       {
         path: '',
         meta: {
+          title: '商品列表',
+          parentPath: '/goods',
+          basePath: '/goods',
+        },
+        component: () => import('@/views/goods/index'),
+      },
+      {
+        path: '/goodsform',
+        meta: {
           title: '添加商品',
           parentPath: '/goods',
           basePath: '/goods',
@@ -211,12 +220,32 @@ export const asyncRoutes = [
       },
     ]
   },
+  {
+    path: '/merchantOrder',
+    component: () => import('@/views/layout/layout'),
+    meta: {
+      title: '订单',
+      fullTitle: '订单管理',
+      icon: 'zuosuojin',
+    },
+    children: [
+      {
+        path: '',
+        meta: {
+          title: '订单列表',
+          parentPath: '/merchantOrder',
+          basePath: '/merchantOrder',
+        },
+        component: () => import('@/views/merchantOrder/merchantOrderList'),
+      },
+    ]
+  },
   { path: "*", redirect: "/404", hidden: true }
 ]
 Vue.use(VueRouter);
 const createRouter = () =>
   new VueRouter({
-    mode: 'history',
+    mode: 'hash',
     base: process.env.BASE_URL,
     scrollBehavior: () => ({ y: 0 }),
     routes: staticRoutes

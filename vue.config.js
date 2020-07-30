@@ -4,7 +4,7 @@ module.exports = {
   outputDir: 'dist',
   assetsDir: 'static',
   devServer: {
-    port: 9527,
+    port: 9090,
     open: true,
     host: '0.0.0.0',
        overlay: {

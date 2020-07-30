@@ -104,7 +104,6 @@
             <img v-if="form.legalIdCardUp" :src="form.legalIdCardDown" class="avatar" />
           </div>
         </el-form-item>
-        <div style="margin-left: 52px; padding: 20px 0px; font-size:12px">法人代表信息</div>
         <el-form-item label="法人代表姓名：" prop="legalPersonName">
           <el-input
             v-model="form.legalPersonName"
@@ -158,7 +157,7 @@
           </el-checkbox-group>
         </el-form-item>
         <el-form-item class="submit-btn">
-          <el-button type="primary" size="small" @click="submit" style="margin-bottom:0px">提交审核</el-button>
+          <el-button type="primary" size="small" @click="submit" style="margin-bottom:0px">提交信息</el-button>
         </el-form-item>
       </el-form>
     </div>

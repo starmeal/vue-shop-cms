@@ -85,13 +85,13 @@ export const multiply = (a, b) => {
 export const divide = (a, b) => {
   return operation(a, b, 'divide');
 };
-export const debounce = function(func, wait = 1500, immediate = false) {
+export const debounce = function (func, wait = 1500, immediate = false) {
   if (typeof func !== 'function') {
     throw new TypeError('debounce func is not a function');
     return false;
   }
   let timer;
-  return function() {
+  return function () {
     if (timer) {
       clearTimeout(timer);
     }
@@ -110,7 +110,7 @@ export const debounce = function(func, wait = 1500, immediate = false) {
     }, wait);
   };
 };
-export const throttle = function(func, wait = 500, type = 1) {
+export const throttle = function (func, wait = 500, type = 1) {
   if (typeof func !== 'function') {
     throw new TypeError('throttle func is not a function');
     return false;
@@ -119,7 +119,7 @@ export const throttle = function(func, wait = 500, type = 1) {
 
   if (type === 1) {
     let prevTime = 0;
-    return function() {
+    return function () {
       let now = new Date().getTime();
       if (now - prevTime > wait) {
         func.apply(this, arguments);
@@ -128,7 +128,7 @@ export const throttle = function(func, wait = 500, type = 1) {
     };
   }
   let timer;
-  return function() {
+  return function () {
     if (timer) {
       return false;
     }
@@ -138,19 +138,73 @@ export const throttle = function(func, wait = 500, type = 1) {
     }, wait);
   };
 };
-export const deepClone = (value,hash = new WeakMap) => { // 弱引用，不要用map
-  if(value == null || typeof value != 'object'){ return value;}
-  if(value instanceof RegExp){return new RegExp(value)}
-  if(value instanceof Date){return new Date(value)}
-  let obj = new value.constructor(); 
-  if(hash.get(value)){ 
-      return hash.get(value)
+export const deepClone = (value, hash = new WeakMap) => { // 弱引用，不要用map
+  if (value == null || typeof value != 'object') { return value; }
+  if (value instanceof RegExp) { return new RegExp(value) }
+  if (value instanceof Date) { return new Date(value) }
+  let obj = new value.constructor();
+  if (hash.get(value)) {
+    return hash.get(value)
   }
-  hash.set(value,obj);
-  for(let key in value){ 
-      if(value.hasOwnProperty(key)){
-          obj[key] = deepClone(value[key],hash);
-      }
+  hash.set(value, obj);
+  for (let key in value) {
+    if (value.hasOwnProperty(key)) {
+      obj[key] = deepClone(value[key], hash);
+    }
   }
   return obj
+}
+export function formatDate(date) {
+  var date = new Date(date);
+  var YY = date.getFullYear() + '-';
+  var MM = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+  var DD = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate());
+  var hh = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+  var mm = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+  var ss = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
+  return YY + MM + DD + " " + hh + mm + ss;
+}
+export function descartes(array) {
+  if (array.length < 2) return array[0] || [];
+  return [].reduce.call(array, function (col, set) {
+    var res = [];
+    col.forEach(function (c) {
+      set.forEach(function (s) {
+        var t = [].concat(Array.isArray(c) ? c : [c]);
+        t.push(s);
+        res.push(t);
+      });
+    });
+    return res;
+  });
+}
+export function sortArr(arr, sort) {
+  if (sort == 'mini') {
+    var min
+    for (var i = 0; i < arr.length; i++) {
+      for (var j = i; j < arr.length; j++) {
+        if (arr[i] > arr[j]) {
+          min = arr[j];
+          arr[j] = arr[i];
+          arr[i] = min;
+        }
+      }
+    }
+  } else {
+    //创建每次循环存储最大值得变量
+    var max;
+    //遍历数组，默认arr中的某一个元素为最大值，进行逐一比较
+    for (var i = 0; i < arr.length; i++) {
+      //外层循环一次，就拿arr[i] 和 内层循环arr.legend次的 arr[j] 做对比
+      for (var j = i; j < arr.length; j++) {
+        if (arr[i] < arr[j]) {
+          //如果arr[j]大就把此时的值赋值给最大值变量max
+          max = arr[j];
+          arr[j] = arr[i];
+          arr[i] = max;
+        }
+      }
+    }
+  }
+  return arr
 }

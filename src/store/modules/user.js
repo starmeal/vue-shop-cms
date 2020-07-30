@@ -1,7 +1,8 @@
-import { login, plogin } from '@/api/login';
+import { login, plogin,resetingPassword  } from '@/api/login';
 const state = {
   token: '',
   name: '',
+  userName: '',
   routes: [],
   roles: [],
   avatar: '',
@@ -11,6 +12,7 @@ const state = {
 const actions = {
   resetToken({ commit }) {
     return new Promise(resolve => {
+      commit("SET_USERNAME", "");
       commit("SET_TOKEN", "");
       commit("SET_NAME", "");
       commit("SET_CODE", "");
@@ -24,8 +26,9 @@ const actions = {
       login({ nickName: username.trim(), password: password })
         .then((response) => {
           const {
-            body: { token, shopMerchantsName, shopMerchantsCode, permissions,userId },
+            body: { name, token, shopMerchantsName, shopMerchantsCode, permissions,userId },
           } = response;
+          commit("SET_USERNAME", name);
           commit('SET_TOKEN', token);
           commit('SET_NAME', shopMerchantsName);
           commit('SET_CODE', shopMerchantsCode);
@@ -45,6 +48,7 @@ const actions = {
         .then(response => {
           const { body, code } = response;
           if (code == '000000') {
+            commit("SET_USERNAME", body.name);
             commit("SET_TOKEN", body.token);
             commit("SET_NAME", body.shopMerchantsName);
             commit('SET_CODE', body.shopMerchantsCode);
@@ -57,6 +61,27 @@ const actions = {
         });
     });
   },
+  resetPasswordLogin({ commit },userInfo){
+    const { mobile, smCode, password} = userInfo;
+    return new Promise((resolve, reject) => {
+      resetingPassword({ mobile: mobile.trim(), smCode: smCode, password: password})
+        .then(response => {
+          const { body, code } = response;
+          if (code == '000000') {
+            console.log(body, '11111');
+            commit("SET_USERNAME", body.name);
+            commit("SET_TOKEN", body.token);
+            commit("SET_NAME", body.shopMerchantsName);
+            commit('SET_CODE', body.shopMerchantsCode);
+            commit('SET_ROLES', body.permissions);
+            resolve(response);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
 };
 const mutations = {
   SET_TOKEN: (state, token) => {
@@ -67,6 +92,9 @@ const mutations = {
   },
   SET_NAME: (state, name) => {
     state.name = name;
+  },
+  SET_USERNAME: (state, userName) => {
+    state.userName = userName;
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles;

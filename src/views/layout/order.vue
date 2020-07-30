@@ -65,7 +65,7 @@ export default {
       afterSaleCount: '',
       evaCount: '',
       isSpread: true,
-      activeName: '1'
+      activeName: '1',
     };
   },
   created() {
@@ -73,22 +73,13 @@ export default {
   },
   computed: {
     ...mapState({
-      shopMerchantsCode: 'code'
-    })
+      shopMerchantsCode: 'code',
+    }),
   },
   mounted() {
     this.$nextTick(() => {
       this.handle();
-      window.addEventListener(
-        'resize',
-        throttle(
-          () => {
-            this.handle();
-          },
-          20,
-          true
-        )
-      );
+      window.addEventListener('resize', this.handle);
     });
   },
   beforeDestroy() {
@@ -97,7 +88,7 @@ export default {
   methods: {
     getOrderMessage() {
       getOrderMessage({
-        shopMerchantsCode: this.shopMerchantsCode
+        shopMerchantsCode: this.shopMerchantsCode,
       }).then(
         ({ code, body: { afterSaleCount, deliveredCount, evaCount } }) => {
           this.afterSaleCount = afterSaleCount;
@@ -106,18 +97,25 @@ export default {
         }
       );
     },
-    handle() {
-      let windowWith =
-        document.documentElement.clientWidth || document.body.clientWidth;
-      this.$refs.orderContainer.style = 'none';
-      if (windowWith < 1080 && this.isSpread) {
-        this.isSpread = false;
-        return false;
-      }
-      if (windowWith >= 1080 && !this.isSpread) {
-        this.isSpread = true;
-      }
-    },
+    handle: throttle(
+      function () {
+        this.$nextTick(() => {
+          this.orderContainer = this.$refs.orderContainer;
+          let windowWith =
+            document.documentElement.clientWidth || document.body.clientWidth;
+          this.orderContainer.style = 'none';
+          if (windowWith < 1080 && this.isSpread) {
+            this.isSpread = false;
+            return false;
+          }
+          if (windowWith >= 1080 && !this.isSpread) {
+            this.isSpread = true;
+          }
+        });
+      },
+      20,
+      true
+    ),
     handleisSpread() {
       this.isSpread = !this.isSpread;
       let windowWith =
@@ -148,8 +146,8 @@ export default {
       // } else {
       //   console.log('在这里输出了');
       // }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -160,6 +158,7 @@ export default {
   overflow: hidden;
   width: 0px;
   transition: all 0.3s linear;
+  z-index: 100;
   &.order-container-spread {
     width: 180px !important;
   }

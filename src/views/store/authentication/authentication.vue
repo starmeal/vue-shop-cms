@@ -266,7 +266,7 @@
           >{{textArr[index].qualificationDescription ? textArr[index].qualificationDescription : ''}}；必须为彩色图片且小于6M，文件格式为bmp、png、jpeg、或gif</div>
         </el-form-item>
         <el-form-item class="submit-btn">
-          <el-button type="primary" size="small" @click="submit" style="margin-bottom:0px">提交审核</el-button>
+          <el-button type="primary" size="small" @click="submit" style="margin-bottom:0px">提交信息</el-button>
         </el-form-item>
       </el-form>
     </div>
