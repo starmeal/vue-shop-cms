@@ -184,7 +184,11 @@ export default {
       },
     };
   },
-  created() {},
+  created() {
+    if (this.$route.query.type == 1) {
+      this.isShow  = false
+    }
+  },
   watch: {
     $route: {
       handler: function (route) {
