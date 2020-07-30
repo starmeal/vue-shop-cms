@@ -43,11 +43,35 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 .el-tooltip__popper.is-light[x-placement^="top"] .popper__arrow {
     border-top-color: #f1f1f1;
 }
-.mini-flex .el-input__inner {
+ .mini-flex .el-input__inner {
     border-radius: 0px;
 }
-.mini-flex > .el-input-s > .el-input__inner {
+.mini-flexs .el-input-s > .el-input__inner {
     border-right: none;
+    border-radius: 0px;
+}
+.mini-flexs .deep-number .el-input > .el-input__inner {
+    border-right: none;
+    border-radius: 0px;
+}
+.mini-flexs .left-none .el-input > .el-input__inner {
+    border-left: none;
+    border-radius: 0px;
+}
+.mini-flexs .el-cascader> .el-input> .el-input__inner{
+    border-radius: 0px !important;
+}
+.mini-flexs > .el-input-s > .el-input__inner::placeholder {
+    font-size: 12px;
+    color: #888888;
+}
+.mini-flexs .el-cascader> .el-input> .el-input__inner::placeholder{
+    font-size: 12px;
+    color: #888888;
+}
+.reblc> .el-input__inner{
+  border-radius: 0px;
+  border-left: none;
 }
 .el-textarea__inner {
     resize: none;

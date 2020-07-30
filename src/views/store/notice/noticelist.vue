@@ -478,6 +478,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+
 .flex-top {
   width: 100%;
   display: flex;
@@ -538,6 +539,7 @@ export default {
 }
 .table-container {
   border-top: 10px solid #ffffff;
+  width: 100%;
 }
 .count-num {
   display: inline-block;

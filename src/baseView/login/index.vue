@@ -12,7 +12,7 @@
         </div>
         <!-- 账户密码登录 -->
         <el-form
-          key='pass'
+          key="pass"
           class="login-con"
           :model="userPass"
           :rules="userRules"
@@ -48,27 +48,37 @@
           </el-form-item>
           <el-button type="primary" class="submit" @click="adminLogin(2)" :loading="loading">登录</el-button>
         </el-form>
-        <section v-if="isActive === 1" @click="forgetPassword" class="forget-password">忘记密码&nbsp;&nbsp;&nbsp;&nbsp;？</section>
+        <section
+          v-if="isActive === 1"
+          @click="forgetPassword"
+          class="forget-password"
+        >忘记密码&nbsp;&nbsp;&nbsp;&nbsp;？</section>
       </div>
       <div v-else class="resetPassword">
         <p class="z_title">密码重置</p>
-        <el-form key='pass-reset':model="zform" :rules="zrules" ref="zform" class="demo-form">
+        <el-form key="pass-reset" :model="zform" :rules="zrules" ref="zform" class="demo-form">
           <el-form-item class="zphone" prop="mobile">
-            <el-input v-model="zform.mobile" placeholder="请输入手机号" ></el-input>
+            <el-input v-model="zform.mobile" placeholder="请输入手机号"></el-input>
           </el-form-item>
           <el-form-item class="login-user-con" prop="smCode">
             <el-input v-model="zform.smCode" placeholder="请输入短信验证码" class="phone-input"></el-input>
-            <el-button
-                    :disabled="disabled"
-                    class="ms-btn"
-                    @click="sendOutMessage1"
-            >{{text}}</el-button>
+            <el-button :disabled="disabled" class="ms-btn" @click="sendOutMessage1">{{text}}</el-button>
           </el-form-item>
           <el-form-item class="zpassword" prop="resetPassword">
-            <el-input v-model="zform.resetPassword" placeholder="请输入密码" show-password autocomplete="new-password"></el-input>
+            <el-input
+              v-model="zform.resetPassword"
+              placeholder="请输入密码"
+              show-password
+              autocomplete="new-password"
+            ></el-input>
           </el-form-item>
           <el-form-item class="zagainPassword" prop="password">
-            <el-input v-model="zform.password" placeholder="重复密码" show-password autocomplete="new-password"></el-input>
+            <el-input
+              v-model="zform.password"
+              placeholder="重复密码"
+              show-password
+              autocomplete="new-password"
+            ></el-input>
           </el-form-item>
           <el-button type="primary" class="submit" @click="zlogin" :loading="loading">登录</el-button>
         </el-form>
@@ -79,7 +89,7 @@
 </template>
 
 <script>
-import { adminLogin,getphoneMessage } from "@/api/login";
+import { adminLogin, getphoneMessage,cmssendSMCode  } from "@/api/login";
 
 import { createNamespacedHelpers } from "vuex";
 const { mapActions, mapState } = createNamespacedHelpers("user");
@@ -88,7 +98,7 @@ var myreg = /^[1][3,4,5,6,7,8,9,][0-9]{9}$/;
 export default {
   data() {
     var EmptyValidator = (rule, value, callback) => {
-      console.log(value)
+      console.log(value);
       if (!myreg.test(value)) {
         callback(new Error("手机号格式有误请重新输入"));
       } else {
@@ -96,9 +106,9 @@ export default {
       }
     };
     var validatePass = (rule, value, callback) => {
-      if(value !== this.zform.resetPassword){
+      if (value !== this.zform.resetPassword) {
         callback(new Error("两次密码输入不一致"));
-      }else {
+      } else {
         callback();
       }
     };
@@ -107,81 +117,81 @@ export default {
       sendout: false,
       loading: false,
       btnMessage: "发送验证码",
-      disabled:false,
-      time:5,
-      text: '发送验证码',
+      disabled: false,
+      time: 5,
+      text: "发送验证码",
       isActive: 2,
       count: 60,
-      resetPassword: '',
+      resetPassword: "",
       mobelForm: {
         mobile: "",
-        smCode: ""
+        smCode: "",
       },
       zform: {
-        mobile: '',
-        smCode: '',
-        password: '',
+        mobile: "",
+        smCode: "",
+        password: "",
       },
       userPass: {
         username: "",
-        password: ""
+        password: "",
       },
       userRules: {
         username: [
-          { required: true, message: "用户名不能为空", trigger: "blur" }
+          { required: true, message: "用户名不能为空", trigger: "blur" },
         ],
         password: [
           {
             required: true,
             min: 6,
             message: "密码长度不能小于6位",
-            trigger: "blur"
-          }
-        ]
+            trigger: "blur",
+          },
+        ],
       },
       mobelFormRules: {
         mobile: [
           { required: true, message: "手机号不能为空", trigger: "blur" },
           {
             validator: EmptyValidator,
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         smCode: [
           { required: true, message: "验证码不能为空", trigger: "blur" },
-          { min: 6, max: 6, message: '验证码应为6位', trigger: 'blur' }
-         ]
+          { min: 6, max: 6, message: "验证码应为6位", trigger: "blur" },
+        ],
       },
       zrules: {
         mobile: [
           { required: true, message: "手机号不能为空", trigger: "blur" },
           {
             validator: EmptyValidator,
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         smCode: [
           { required: true, message: "验证码不能为空", trigger: "blur" },
-          { min: 6, max: 6, message: '验证码应为6位', trigger: 'blur' }
+          { min: 6, max: 6, message: "验证码应为6位", trigger: "blur" },
         ],
         resetPassword: [
           { required: true, message: "密码不能为空", trigger: "blur" },
         ],
         password: [
           { required: true, message: "请再次输入密码", trigger: "blur" },
-          { validator: validatePass, trigger: "blur"}
+          { validator: validatePass, trigger: "blur" },
         ],
-      }
+      },
     };
   },
   created() {},
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         this.redirect = route.query && route.query.redirect;
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     ...mapActions(["login"]),
@@ -190,24 +200,39 @@ export default {
       if (this.mobelForm.mobile == "") {
         this.$message({
           message: "请输入手机号",
-          type: "warning"
+          type: "error",
+          center: true,
         });
         return false;
       }
       if (!myreg.test(this.mobelForm.mobile)) {
         this.$message({
           message: "手机号格式有误请重新输入",
-          type: "warning"
+          type: "error",
+          center: true,
         });
         return false;
       }
+      this.getphoneCode();
+      cmssendSMCode({
+        mobile: this.mobelForm.mobile,
+        type: 81,
+      }).then((res) => {
+        this.$message({
+          message: "发送成功",
+          type: "success",
+          center: true,
+        });
+      });
+    },
+    getphoneCode() {
       this.count--;
       if (this.count == 0) {
         this.count = 60;
         this.btnMessage = "重新发送";
       } else {
         setTimeout(() => {
-          this.sendOutMessage();
+          this.getphoneCode();
         }, 1000);
       }
     },
@@ -216,33 +241,35 @@ export default {
       if (this.zform.mobile == "") {
         this.$message({
           message: "请输入手机号",
-          type: "warning"
+          type: "error",
+          center: true,
         });
         return false;
       }
       if (!myreg.test(this.zform.mobile)) {
         this.$message({
           message: "手机号格式有误请重新输入",
-          type: "warning"
+          type: "error",
+          center: true,
         });
         return false;
       }
-      getphoneMessage({mobile: this.zform.mobile,type: 85}).then((res) => {
-        this.time=5;
+      getphoneMessage({ mobile: this.zform.mobile, type: 85 }).then((res) => {
+        this.time = 60;
         this.timer();
-      })
+      });
     },
     //发送验证码倒计时
     timer() {
       if (this.time > 0) {
-        this.disabled=true;
+        this.disabled = true;
         this.time--;
-        this.text=this.time
+        this.text = this.time;
         setTimeout(this.timer, 1000);
-      } else{
-        this.time=0;
-        this.text="发送验证码";
-        this.disabled=false;
+      } else {
+        this.time = 0;
+        this.text = "发送验证码";
+        this.disabled = false;
       }
     },
     // 切换登录方式
@@ -260,12 +287,12 @@ export default {
     adminLogin(type) {
       //  1账户密码2手机
       if (type === 1) {
-        this.$refs.adminLogin.validate(async valid => {
+        this.$refs.adminLogin.validate(async (valid) => {
           if (valid) {
             this.loading = true;
             this.login({
               ...this.userPass,
-              password: md5(this.userPass.password)
+              password: md5(this.userPass.password),
             })
               .then(({ code }) => {
                 this.loading = false;
@@ -273,18 +300,18 @@ export default {
                   this.$router.push({ path: this.redirect || "/" });
                 }
               })
-              .catch(err => {
+              .catch((err) => {
                 this.loading = false;
               });
           }
         });
       } else {
-        this.$refs.mobelForm.validate(valid => {
+        this.$refs.mobelForm.validate((valid) => {
           if (valid) {
             this.loading = true;
             this.$store
               .dispatch("user/phonelogin", this.mobelForm)
-              .then(res => {
+              .then((res) => {
                 this.$router.push({ path: this.redirect || "/" });
                 this.loading = false;
               })
@@ -298,36 +325,43 @@ export default {
         });
       }
     },
-    forgetPassword(){
+    forgetPassword() {
       this.isShow = false;
     },
-    toLogin(){
+    toLogin() {
       this.isShow = true;
     },
-    zlogin(){
-      this.$refs.zform.validate(async valid => {
+    zlogin() {
+      this.$refs.zform.validate(async (valid) => {
         if (valid) {
           this.loading = true;
           //delete this.zform.resetPassword;
-          this.$store.dispatch("user/resetPasswordLogin",{
-            ...this.zform,
-            password: md5(this.zform.password)
-        }).then(res => {
-            this.$router.push({ path: this.redirect || "/" });
-            this.loading = false;
-          }).catch(() => {
+          this.$store
+            .dispatch("user/resetPasswordLogin", {
+              ...this.zform,
+              password: md5(this.zform.password),
+            })
+            .then((res) => {
+              this.$router.push({ path: this.redirect || "/" });
               this.loading = false;
-          });
-        }else{
+            })
+            .catch(() => {
+              this.loading = false;
+            });
+        } else {
           console.log("error submit!!");
           return false;
         }
-      })
-    }
-  }
+      });
+    },
+  },
 };
 </script>
-
+<style>
+.mini-flexs /deep/ .el-cascader .el-input__inner{
+  border-radius: 0px;
+}
+</style>
 <style lang='scss' scoped>
 .login-container {
   width: 100%;
