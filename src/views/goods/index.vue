@@ -1,6 +1,7 @@
 <template>
-  <div class="goods-container">
-    <section class="screening-box">
+  <div>
+    <div class="goods-container">
+      <section class="screening-box">
       <div class="felx-scr">
         <div
           v-for="(item,index) in textarr"
@@ -80,16 +81,11 @@
       </div>
     </section>
     <section class="screening-box-one">
-      <el-button type="primary" class="btn-search">发布商品</el-button>
+      <el-button type="primary" class="btn-search" @click="goform()">发布商品</el-button>
       <el-button class="btn-search" @click="exportlist">导出</el-button>
     </section>
     <section class="table-container">
-      <el-table
-        :data="list"
-        style="width:800px"
-        v-loading="loading"
-      >
-              <!-- :span-method="arraySpanMethod" -->
+      <el-table :data="list" v-loading="loading" style="width: 100%">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="sort" label="排序" width="50px"></el-table-column>
         <el-table-column prop="id" label="ID" width="50px"></el-table-column>
@@ -119,12 +115,12 @@
             <el-switch v-model="props.row.isRecommend" :active-value="1" size="mini"></el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="120px">
+        <el-table-column label="操作" width="150px">
           <template slot-scope="props">
             <div class="flex-btn" v-if="listpage.listType != 5">
               <el-tooltip class="item light-item" effect="light" placement="top">
                 <span slot="content" style="font-size:12px;color:#9d9d9d">详情</span>
-                <i class="el-icon-picture-outline icon-content" @click="gomodify(props.row)"></i>
+                <i class="el-icon-picture-outline icon-content" @click="goform(props.row)"></i>
               </el-tooltip>
               <el-tooltip class="item light-item" effect="light" placement="top">
                 <span slot="content" style="font-size:12px;color:#9d9d9d">复制</span>
@@ -162,8 +158,8 @@
           </template>
         </el-table-column>
       </el-table>
-    </section>
-    <!-- <section class="page-box">
+      </section>
+      <section class="page-box">
       <el-pagination
         v-if="list.length > 0"
         @size-change="handleSizeChange"
@@ -174,14 +170,15 @@
         :total="totalCount"
         :page-sizes="[10, 20, 30, 50]"
       ></el-pagination>
-    </section> -->
-    <el-dialog title="提示" :visible.sync="dialogVisibledel" width="30%" :before-close="handleClose">
+      </section>
+      <el-dialog title="提示" :visible.sync="dialogVisibledel" width="30%" :before-close="handleClose">
       <span>您确定要此操作吗？</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisibledel = false">取 消</el-button>
         <el-button type="primary" @click="delgoods">确 定</el-button>
       </span>
-    </el-dialog>
+      </el-dialog>
+    </div> 
   </div>
 </template>
 <script>
@@ -190,6 +187,7 @@ import {
   fakeDeleteGoods,
   selectShopGoodsCategory,
   exportGoodsList,
+  dictoptions
 } from "@/api/goods";
 export default {
   data() {
@@ -215,14 +213,6 @@ export default {
           val: "2",
           text: "仓库中",
         },
-        // {
-        //   val: "3",
-        //   text: "库存预警",
-        // },
-        // {
-        //   val: "4",
-        //   text: "保质期预警",
-        // },
         {
           val: "5",
           text: "回收站",
@@ -253,15 +243,16 @@ export default {
     this.getcat();
   },
   methods: {
-    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-      if (rowIndex % 3 === 0) {
-          return {
-            rowspan: 1,
-            colspan: 4
-          };
-        } else if (columnIndex === 1) {
-          return [0, 0]
-        }
+    goform(row) {
+      let obj = {
+        path: "/goodsform",
+      };
+      if (row) {
+        obj.query = {
+          goodsCode: row.goodsCode,
+        };
+      }
+      this.$router.push(obj);
     },
     exportlist() {
       exportGoodsList(this.listpage).then((res) => {
@@ -387,9 +378,7 @@ export default {
   align-items: center;
   justify-content: center;
 }
-.table-container {
-  width: 700px;
-}
+
 .btn-search {
   border-radius: 0px;
   margin-left: 20px;

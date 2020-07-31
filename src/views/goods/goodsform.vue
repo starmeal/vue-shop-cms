@@ -501,7 +501,10 @@
           </section>
         </el-form-item>
         <el-form-item class="submit-btn">
-          <el-button icon="el-icon-message" @click="dialogTableVisible = true">6</el-button>
+          <el-button
+            icon="el-icon-message"
+            @click="dialogTableVisible = true"
+          >{{DraftBoxList.total}}</el-button>
           <el-button type="primary" size="small" @click="submitForm" style="margin-bottom:0px">提交商品</el-button>
           <el-button type="primary" size="small" @click="golist" style="margin-bottom:0px">返回列表</el-button>
         </el-form-item>
@@ -509,16 +512,16 @@
     </section>
     <el-dialog :visible.sync="dialogTableVisible">
       <div class="flex-dialog">
-        <div>您在当前草稿箱（6）</div>
+        <div>您在当前草稿箱（{{DraftBoxList.total}}）</div>
         <el-button type="primary" class="btn-search" @click="delallmdrafts">清空全部</el-button>
       </div>
-      <el-table :data="gridData">
+      <el-table :data="DraftBoxList.records">
         <el-table-column>
           <template slot-scope="props">
             <div class="flex-dialog-one">
               <div>
-                <div>这里是产品名称</div>
-                <div>2020-05-28</div>
+                <div>{{props.row.goodsName}}</div>
+                <div>{{props.row.createTime}}</div>
               </div>
               <div>
                 <i
@@ -545,6 +548,7 @@ import {
   getMerTemplateList,
   goodsadd,
   queryDraftBoxList,
+  detail,
 } from "@/api/goods";
 import Icon from "@/components/base/icon.vue";
 import cascader from "@/components/city/cascader.vue";
@@ -588,6 +592,7 @@ export default {
           return this.dealDisabledDate(time);
         },
       },
+      DraftBoxList: [],
       gridData: [1, 2, 3],
       dialogTableVisible: false,
       valArr: [],
@@ -673,7 +678,6 @@ export default {
         goodsImgs: [],
         goodsOriginalPrice: "",
         weight: "",
-        volume: "",
         goodsPrice: "",
         goodsPickUpAddress: "",
         detail: [],
@@ -732,9 +736,13 @@ export default {
           districts = res.data.districts[0].districts;
         }
       });
+    if (this.$route.query.goodsCode) {
+      this.getDetail(this.$route.query.goodsCode);
+    }
     this.getfreight();
     this.getcat();
     this.getDraftBoxList();
+    this.getype();
   },
   watch: {
     skuArr: {
@@ -757,6 +765,24 @@ export default {
   },
   mounted() {},
   methods: {
+    gettype() {
+      let obj = {
+        type: "shop_service",
+      };
+      dictoptions(obj).then((res) => {
+        console.log(res);
+      });
+    },
+    getDetail(code) {
+      let obj = {
+        goodsCode: code,
+      };
+      detail(obj).then((res) => {
+        let { body } = res;
+        body.status = parseInt(body.status);
+        this.form = body;
+      });
+    },
     // 回到列表
     golist() {
       this.$router.push({
@@ -766,6 +792,7 @@ export default {
     // 草稿箱列表
     getDraftBoxList() {
       queryDraftBoxList(this.pageDate).then((res) => {
+        this.DraftBoxList = res.body;
         console.log(res);
       });
     },

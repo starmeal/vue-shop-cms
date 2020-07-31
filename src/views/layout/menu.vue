@@ -1,34 +1,51 @@
 <template>
-  <div class='menu-container'>
+  <div class="menu-container">
     <div :class="['menu-con', {'is-collapse': isCollapse}]">
-      <div class='menu-top-item' :class="{'is-collapse': isCollapse}" @click='changeIsCollapse'>
+      <div class="menu-top-item" :class="{'is-collapse': isCollapse}" @click="changeIsCollapse">
         <Icon :icon="isCollapse ? 'yousuojin':'zuosuojin'" />
       </div>
-      <template v-for="(menuItem, index ) in menuList" >
-        <div v-if='!menuItem.alwaysHidden' :key='menuItem.path' class='menu-item' :class="{'is-collapse': isCollapse, 'is-collapse-color': menuItem.path  === $route.path || menuItem.path === basePath}" @click='switchRouter(menuItem, index)'>
-          <Icon :icon='menuItem.meta.icon' />
-          <div class='menu-item-name' v-show='isCollapse'>{{menuItem.meta.title}}</div>
+      <template v-for="(menuItem, index ) in menuList">
+        <div
+          v-if="!menuItem.alwaysHidden"
+          :key="menuItem.path"
+          class="menu-item"
+          :class="{'is-collapse': isCollapse, 'is-collapse-color': menuItem.path  === $route.path || menuItem.path === basePath}"
+          @click="switchRouter(menuItem, index)"
+        >
+          <Icon :icon="menuItem.meta.icon" />
+          <div class="menu-item-name" v-show="isCollapse">{{menuItem.meta.title}}</div>
         </div>
       </template>
     </div>
 
     <div :class="['menu-second-container', {'active': isCollapseSecond}]">
-      <div :class="['second-title', {'active': isCollapseSecond}]"><span>{{fullTitle}}</span></div>
-      <el-tree :data="menuItemList" highlight-current node-key="path" @node-click='handleNodeClick' :default-expanded-keys="defaultExpandedKeys" :current-node-key='currentNodeKey'>
+      <div :class="['second-title', {'active': isCollapseSecond}]">
+        <span>{{fullTitle}}</span>
+      </div>
+      <el-tree
+        :data="menuItemList"
+        highlight-current
+        node-key="path"
+        @node-click="handleNodeClick"
+        :default-expanded-keys="defaultExpandedKeys"
+        :current-node-key="currentNodeKey"
+      >
         <div class="second-init-title" slot-scope="{ node, data }">
-          <span :class="{'has-children': data.children && data.children.length}">{{ data.meta.title }}</span>
+          <span
+            :class="{'has-children': data.children && data.children.length}"
+          >{{ data.meta.title }}</span>
         </div>
       </el-tree>
     </div>
-    <div class='close' @click='handleIsCollapseSecond' v-if='menuItemList.length'></div>
+    <div class="close" @click="handleIsCollapseSecond" v-if="menuItemList.length"></div>
   </div>
 </template>
 
 <script>
-import { deepClone } from '@/utils/util';
-import Icon from '@/components/base/icon.vue';
-import { createNamespacedHelpers } from 'vuex';
-const { mapState } = createNamespacedHelpers('user');
+import { deepClone } from "@/utils/util";
+import Icon from "@/components/base/icon.vue";
+import { createNamespacedHelpers } from "vuex";
+const { mapState } = createNamespacedHelpers("user");
 export default {
   data() {
     return {
@@ -36,38 +53,39 @@ export default {
       isCollapseSecond: true,
       menuItemList: [],
       defaultProps: {
-        children: 'children',
-        label: 'title'
+        children: "children",
+        label: "title",
       },
       menuFilterList: [],
       defaultExpandedKeys: [],
-      currentNodeKey: ''
+      currentNodeKey: "",
     };
   },
   components: {
-    Icon
+    Icon,
   },
   computed: {
     ...mapState({
-      menuList: 'routes'
-    })
+      menuList: "routes",
+    }),
   },
   created() {
     let {
       path,
-      meta: { basePath, parentPath }
+      meta: { basePath, parentPath },
     } = this.$route;
     this.defaultExpandedKeys = [path];
     this.basePath = basePath;
     this.menuList.forEach((menuItem, menuIndex) => {
-      if (menuItem.path != '/' && menuItem.path == basePath) {
+      if (menuItem.path != "/" && menuItem.path == basePath) {
         this.menuItemList = this.filterMenuItem(
           deepClone(this.menuList[menuIndex].children)
         );
-        this.isCollapseSecond = !!this.menuItemList.length
+        this.isCollapseSecond = !!this.menuItemList.length;
       }
+
     });
-    this.fullTitle = this.$route.matched[0].meta.fullTitle
+    this.fullTitle = this.$route.matched[0].meta.fullTitle;
     this.currentNodeKey = this.$route.matched[
       this.$route.matched.length - 1
     ].path;
@@ -77,22 +95,22 @@ export default {
       let {
         path,
         meta: { parentPath },
-        children
+        children,
       } = data;
       if (children && children.length > 0) {
         return false;
       }
-      this.$router.push(path.replace(/\/$/g, ''));
+      this.$router.push(path.replace(/\/$/g, ""));
     },
     filterMenuItem(list) {
       let result = [];
       list.forEach((menuItem, menuIndex) => {
         let {
           path,
-          meta: { basePath, parentPath }
+          meta: { basePath, parentPath },
         } = menuItem;
-        if (menuItem.path == '') {
-          menuItem.path = (parentPath || basePath) + '/';
+        if (menuItem.path == "") {
+          menuItem.path = (parentPath || basePath) + "/";
         }
         if (!menuItem.hidden) {
           result.push(menuItem);
@@ -113,11 +131,35 @@ export default {
     },
     changeIsCollapse() {
       this.isCollapse = !this.isCollapse;
+      this.handleIsExpand();
+    },
+    handleIsExpand() {
+      if (this.isCollapseSecond && this.isCollapse) {
+        document.querySelector(".layout-main-container").style.marginLeft =
+          258 + "px";
+        return false;
+      }
+      if (!this.isCollapseSecond && this.isCollapse) {
+        document.querySelector(".layout-main-container").style.marginLeft =
+          120 + "px";
+        return false;
+      }
+      if (this.isCollapseSecond && !this.isCollapse) {
+        document.querySelector(".layout-main-container").style.marginLeft =
+          198 + "px";
+        return false;
+      }
+      if (!this.isCollapseSecond && !this.isCollapse) {
+        document.querySelector(".layout-main-container").style.marginLeft =
+          60 + "px";
+        return false;
+      }
     },
     handleIsCollapseSecond() {
       this.isCollapseSecond = !this.isCollapseSecond;
-    }
-  }
+      this.handleIsExpand();
+    },
+  },
 };
 </script>
 
@@ -125,6 +167,9 @@ export default {
 .menu-container {
   display: flex;
   position: relative;
+  position: fixed;
+  left: 0;
+  bottom: 0;
   height: calc(100vh - 54px);
   .close {
     position: absolute;

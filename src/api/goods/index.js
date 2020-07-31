@@ -55,7 +55,19 @@ export function exportGoodsList(data) {
     method: "POST",
     responseType: 'blob',
     data
-    
   });
 }
-
+export function detail(data) {
+  return request({
+    url: `/cms/goods/detail`,
+    method: "POST",
+    data
+  });
+}
+export function dictoptions(data) {
+  return request({
+    url: `/dict/options`,
+    method: "POST",
+    data
+  });
+}
