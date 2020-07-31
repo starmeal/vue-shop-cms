@@ -1,6 +1,6 @@
 $--color-primary: #44abf7 !default;
 $formBg: #F7F6F9;
-/* 改变 icon 字体路径变量，必需 */
+// /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import "~element-ui/packages/theme-chalk/src/index";
 .el-message{
@@ -43,12 +43,41 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 .el-tooltip__popper.is-light[x-placement^="top"] .popper__arrow {
     border-top-color: #f1f1f1;
 }
-.mini-flex .el-input__inner {
+ .mini-flex .el-input__inner {
     border-radius: 0px;
 }
-.mini-flex > .el-input-s > .el-input__inner {
+.mini-flexs .el-input-s > .el-input__inner {
     border-right: none;
+    border-radius: 0px;
 }
+.mini-flexs .deep-number .el-input > .el-input__inner {
+    border-right: none;
+    border-radius: 0px;
+}
+.mini-flexs .left-none  > .el-input__inner {
+    border-left: none;
+    border-radius: 0px;
+    width: 150px;
+}
+.mini-flexs .el-cascader> .el-input> .el-input__inner{
+    border-radius: 0px !important;
+}
+.mini-flexs > .el-input-s > .el-input__inner::placeholder {
+    font-size: 12px;
+    color: #888888;
+}
+.mini-flexs .el-cascader> .el-input> .el-input__inner::placeholder{
+    font-size: 12px;
+    color: #888888;
+}
+.reblc> .el-input__inner{
+  border-radius: 0px;
+  border-left: none;
+  text-align: center;
+}
+.reblcs > .el-input__inner{
+    border-radius: 0px;
+  }
 .el-textarea__inner {
     resize: none;
 }
@@ -81,10 +110,16 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 .deep-number .el-input__inner{
     text-align: left;
+    border-right: 0px;
+    width: 150px;
+    border-radius: 0px;
 }
 .table-deep-number {
     width: 90%;
 }
 .table-deep-number .el-input__inner{
     text-align: left;
+}
+.sel .el-input>.el-input__inner{
+    border-radius: 0px;
 }

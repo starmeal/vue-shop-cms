@@ -35,3 +35,39 @@ export function queryGoodsList(data) {
     data
   });
 }
+export function fakeDeleteGoods(data) {
+  return request({
+    url: `/cms/goods/fakeDeleteGoods`,
+    method: "POST",
+    data
+  });
+}
+export function selectShopGoodsCategory(data) {
+  return request({
+    url: `/cms/goods/selectShopGoodsCategory`,
+    method: "POST",
+    data
+  });
+}
+export function exportGoodsList(data) {
+  return request({
+    url: `/cms/goods/exportGoodsList`,
+    method: "POST",
+    responseType: 'blob',
+    data
+  });
+}
+export function detail(data) {
+  return request({
+    url: `/cms/goods/detail`,
+    method: "POST",
+    data
+  });
+}
+export function dictoptions(data) {
+  return request({
+    url: `/dict/options`,
+    method: "POST",
+    data
+  });
+}

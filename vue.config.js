@@ -27,11 +27,11 @@ module.exports = {
     },
   },
   // 修改打包之后js文件 加上缓存
-  configureWebpack: (config) => {
-    config.output.filename = `static/js/[name].[hash:8].js`;
-    config.output.chunkFilename = `static/js/[name].[hash:8].js`;
-    config.resolve.alias = {
-      '@': path.resolve('src')
-    };
-  },
+  // configureWebpack: (config) => {
+  //   config.output.filename = `static/js/[name].[hash:8].js`;
+  //   config.output.chunkFilename = `static/js/[name].[hash:8].js`;
+  //   config.resolve.alias = {
+  //     '@': path.resolve('src')
+  //   };
+  // },
 };

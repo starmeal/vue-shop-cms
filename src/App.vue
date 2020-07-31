@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  name: 'App'
+  name: "App",
 };
 </script>
 <style lang="scss">
@@ -19,9 +19,10 @@ export default {
   height: 100vh;
   background: #f5f7f9;
   min-width: 1080px;
-  overflow: scroll;
-  position:relative;
+  overflow: none;
+  position: relative;
 }
+
 ::-webkit-scrollbar {
   /*滚动条整体样式*/
 
@@ -42,7 +43,7 @@ export default {
 }
 
 .el-popover {
-    overflow-y: scroll;
-    max-height:60vh;
-  }
+  overflow-y: scroll;
+  max-height: 60vh;
+}
 </style>

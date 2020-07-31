@@ -12,7 +12,7 @@
             v-model="form.noticeName"
             :rows="2"
             maxlength="30"
-            :placeholder="`公告名称在50字以内`"
+            :placeholder="`公告名称在30字以内`"
             clearable
           ></el-input>
         </el-form-item>
@@ -53,8 +53,8 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="是否发布" v-if="!$route.query.id">
-          <el-radio v-model="form.publishStatus" label="1">是</el-radio>
-          <el-radio v-model="form.publishStatus" label="2">否</el-radio>
+          <el-radio v-model="form.publishStatus" label="2">是</el-radio>
+          <el-radio v-model="form.publishStatus" label="1">否</el-radio>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -152,17 +152,19 @@ export default {
           if (this.form.displayEndTime == "") {
             this.$message({
               message: "警告，请选择结束时间",
-              type: "warning"
+              type: "error",
+              center:true,
             });
             return false;
           }
           if (
-            new Date(this.form.displayBeginTime).getTime() >
+            new Date(this.form.displayBeginTime).getTime() >=
             new Date(this.form.displayEndTime).getTime()
           ) {
             this.$message({
               message: "警告，公告的结束时间要大于开始时间！",
-              type: "warning"
+              type: "error",
+              center:true,
             });
             return false;
           }

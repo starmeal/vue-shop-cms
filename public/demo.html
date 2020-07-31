@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <title>Document</title>
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        .wb-nav {
+            position: fixed;
+            left: 0;
+            top: 50px;
+            bottom: 0;
+            width: 130px;
+            background: #24303c;
+            color: #fff;
+            text-align: center;
+            z-index: 10;
+            -webkit-transition: all 0.3s;
+            transition: all 0.3s;
+            z-index: 101;
+        }
+
+        .wb-container {
+            margin: 60px 170px 0 130px;
+            background: #f5f7f9;
+            padding-bottom: 50px;
+            height: 100%;
+            display: block;
+            -webkit-transition: all 0.3s;
+            transition: all 0.3s;
+            position: relative;
+            height: auto;
+        }
+
+        .wb-panel-fold {
+            position: fixed;
+            opacity: 0.4;
+            top: 50px;
+            bottom: 0;
+            width: 170px;
+            right: 0px;
+            font-size: 12px;
+            color: #888;
+            overflow: hidden;
+            -webkit-transition: all 0.3s;
+            transition: all 0.3s;
+            background: #abcdef;
+            z-index: 100;
+        }
+
+        .abcdef {
+            background: #888;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="wb-nav"></div>
+        <div class="wb-container">
+            <div class="abcdef">
+                <el-table :data="list" v-loading="loading" style="width: 100%">
+                    <el-table-column type="selection" width="55"></el-table-column>
+                    <el-table-column prop="sort" label="排序" width="50px"></el-table-column>
+                    <el-table-column prop="id" label="ID" width="50px"></el-table-column>
+                    <el-table-column prop="address" label="主图">
+                        <template slot-scope="props">
+                            <img :src="props.row.thumbImg" style="width:100%;height:100%;" />
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="goodsName" label="商品名称" width="100px">
+                        <template slot-scope="props">
+                            <span class="elsiner">{{props.row.goodsName || '--'}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="goodsOriginalPrice" label="市场价"></el-table-column>
+                    <el-table-column prop="goodsPrice" label="销售价"></el-table-column>
+                    <el-table-column prop="anchorMoney" label="主播佣金"></el-table-column>
+                    <el-table-column prop="accountMoney" label="分享佣金"></el-table-column>
+                    <el-table-column prop="stock" label="库存"></el-table-column>
+                    <el-table-column prop="selled" label="销量"></el-table-column>
+                    <el-table-column prop="shelfDay" label="保质期" width="60px">
+                        <template slot-scope="props">
+                            <span>{{props.row.shelfDay || '--'}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="是否推荐">
+                        <template slot-scope="props">
+                            <el-switch v-model="props.row.isRecommend" :active-value="1" size="mini"></el-switch>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="150px">
+                        <template slot-scope="props">
+                            <div class="flex-btn" v-if="listpage.listType != 5">
+                                <el-tooltip class="item light-item" effect="light" placement="top">
+                                    <span slot="content" style="font-size:12px;color:#9d9d9d">详情</span>
+                                    <i class="el-icon-picture-outline icon-content" @click="goform(props.row)"></i>
+                                </el-tooltip>
+                                <el-tooltip class="item light-item" effect="light" placement="top">
+                                    <span slot="content" style="font-size:12px;color:#9d9d9d">复制</span>
+                                    <i class="el-icon-copy-document icon-content"></i>
+                                </el-tooltip>
+                                <el-tooltip class="item light-item" effect="light" placement="top">
+                                    <span slot="content" style="font-size:12px;color:#9d9d9d">删除</span>
+                                    <i class="el-icon-delete icon-content" @click="delgoods(props.row)"></i>
+                                </el-tooltip>
+                                <el-tooltip class="item light-item" effect="light" placement="top"
+                                    v-if="listpage.listType == 2">
+                                    <span slot="content" style="font-size:12px;color:#9d9d9d">上架</span>
+                                    <i class="el-icon-top icon-content"></i>
+                                </el-tooltip>
+                                <el-tooltip class="item light-item" effect="light" placement="top"
+                                    v-if="listpage.listType ==1 ">
+                                    <span slot="content" style="font-size:12px;color:#9d9d9d">下架</span>
+                                    <i class="el-icon-bottom icon-content"></i>
+                                </el-tooltip>
+                            </div>
+                            <div class="flex-btn" v-else>
+                                <el-tooltip class="item light-item" effect="light" placement="top">
+                                    <span slot="content" style="font-size:12px;color:#9d9d9d">恢复</span>
+                                    <i class="el-icon-refresh icon-content" @click="gomodify(props.row)"></i>
+                                </el-tooltip>
+                            </div>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+        <div class="wb-panel-fold">{{ss}}</div>
+    </div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            list: []
+        }
+    })
+</script>
+
+</html>

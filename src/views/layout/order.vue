@@ -1,71 +1,70 @@
 <template>
-  <div class='order-main-container' :class="{'order-container-spread': isSpread}">
-    <div :class="['order-container', {'order-container-spread': isSpread}]" ref='orderContainer'>
+  <div class="order-main-container" :class="{'order-container-spread': isSpread}">
+    <div :class="['order-container', {'order-container-spread': isSpread}]" ref="orderContainer">
       <el-collapse v-model="activeName">
         <el-collapse-item name="1">
-          <div slot="title" class='order-icon-container'>
+          <div slot="title" class="order-icon-container">
             <i class="order-icon el-icon-info"></i>订单
           </div>
-          <div class='order-item-con' v-if='deliveredCount'>
+          <div class="order-item-con" v-if="deliveredCount">
             待发货订单
-            <div class='count'>({{deliveredCount}})</div>
+            <div class="count">({{deliveredCount}})</div>
           </div>
-          <div class='order-item-con' v-if='afterSaleCount'>
+          <div class="order-item-con" v-if="afterSaleCount">
             售后订单
-            <div class='count'>({{afterSaleCount}})</div>
+            <div class="count">({{afterSaleCount}})</div>
           </div>
-          <div class='order-item-con' v-if='!deliveredCount && !afterSaleCount'>
-            <template>
-              暂无提醒消息
-            </template>
+          <div class="order-item-con" v-if="!deliveredCount && !afterSaleCount">
+            <template>暂无提醒消息</template>
           </div>
         </el-collapse-item>
         <el-collapse-item name="2">
-          <div slot="title" class='order-icon-container'>
+          <div slot="title" class="order-icon-container">
             <i class="order-icon el-icon-info"></i>咨询
           </div>
-          <div class='order-item-con'>
+          <div class="order-item-con">
             订单咨询
-            <div class='count'>(2)</div>
+            <div class="count">(2)</div>
           </div>
         </el-collapse-item>
         <el-collapse-item name="3">
-          <div slot="title" class='order-icon-container'>
+          <div slot="title" class="order-icon-container">
             <i class="order-icon el-icon-info"></i>评价
           </div>
-          <div class='order-item-con' v-if='evaCount'>
+          <div class="order-item-con" v-if="evaCount">
             <template>
               待评价回复
-              <div class='count'>({{evaCount}})</div>
+              <div class="count">({{evaCount}})</div>
             </template>
           </div>
-          <div class='order-item-con' v-else>
-            <template>
-              暂无提醒消息
-            </template>
+          <div class="order-item-con" v-else>
+            <template>暂无提醒消息</template>
           </div>
         </el-collapse-item>
       </el-collapse>
-      <div class="order-bottom" @click='handleisSpread'>收起面板</div>
+      <div class="order-bottom" @click="handleisSpread">收起面板</div>
     </div>
-    <div :class="['order-bottom-notice', {'order-bottom-notice-spread': !isSpread}]" @click='handleisSpread'>消息提醒</div>
+    <div
+      :class="['order-bottom-notice', {'order-bottom-notice-spread': !isSpread}]"
+      @click="handleisSpread"
+    >消息提醒</div>
   </div>
 </template>
 
 <script>
-import { throttle } from '@/utils/util.js';
-import { getOrderMessage } from '@/api/login';
-import { createNamespacedHelpers } from 'vuex';
-const { mapState } = createNamespacedHelpers('user');
+import { throttle } from "@/utils/util.js";
+import { getOrderMessage } from "@/api/login";
+import { createNamespacedHelpers } from "vuex";
+const { mapState } = createNamespacedHelpers("user");
 export default {
-  name: 'order',
+  name: "order",
   data() {
     return {
-      deliveredCount: '',
-      afterSaleCount: '',
-      evaCount: '',
+      deliveredCount: "",
+      afterSaleCount: "",
+      evaCount: "",
       isSpread: true,
-      activeName: '1',
+      activeName: "1",
     };
   },
   created() {
@@ -73,17 +72,17 @@ export default {
   },
   computed: {
     ...mapState({
-      shopMerchantsCode: 'code',
+      shopMerchantsCode: "code",
     }),
   },
   mounted() {
     this.$nextTick(() => {
       this.handle();
-      window.addEventListener('resize', this.handle);
+      window.addEventListener("resize", this.handle);
     });
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.handle);
+    window.removeEventListener("resize", this.handle);
   },
   methods: {
     getOrderMessage() {
@@ -103,7 +102,7 @@ export default {
           this.orderContainer = this.$refs.orderContainer;
           let windowWith =
             document.documentElement.clientWidth || document.body.clientWidth;
-          this.orderContainer.style = 'none';
+          this.orderContainer.style = "none";
           if (windowWith < 1080 && this.isSpread) {
             this.isSpread = false;
             return false;
@@ -121,14 +120,20 @@ export default {
       let windowWith =
         document.documentElement.clientWidth || document.body.clientWidth;
       if (this.isSpread) {
-        this.$refs.orderContainer.style.position = 'fixed';
-        this.$refs.orderContainer.style.right = '0px';
-        this.$refs.orderContainer.style.bottom = '0px';
+        this.$refs.orderContainer.style.position = "fixed";
+        this.$refs.orderContainer.style.right = "0px";
+        this.$refs.orderContainer.style.bottom = "0px";
+        document.querySelector(".layout-main-container").style.marginRight =
+          180 + "px";
       } else {
-        this.$refs.orderContainer.style.position = 'fixed';
-        this.$refs.orderContainer.style.right = '-180px';
-        this.$refs.orderContainer.style.bottom = '0px';
+        this.$refs.orderContainer.style.position = "fixed";
+        this.$refs.orderContainer.style.right = "-180px";
+        this.$refs.orderContainer.style.bottom = "0px";
+        document.querySelector(".layout-main-container").style.marginRight =
+          0 + "px";
       }
+
+      // this.$emit('handleisSpread', this.isSpread)
       // if (windowWith < 1080) {
       //   this.$nextTick(() => {
       //     if (this.isSpread) {
@@ -153,7 +158,9 @@ export default {
 
 <style scoped lang='scss'>
 .order-main-container {
-  position: relative;
+  position: fixed;
+  right: 0;
+  bottom: 0;
   height: calc(100vh - 54px);
   overflow: hidden;
   width: 0px;

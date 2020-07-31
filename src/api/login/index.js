@@ -46,3 +46,11 @@ export function resetingPassword(data) {
     data
   })
 }
+// 短信登录发送验证啊
+export function cmssendSMCode(data) {
+  return request({
+    url: '/cms/sendSMCode/v1',
+    method: 'POST',
+    data
+  })
+}
