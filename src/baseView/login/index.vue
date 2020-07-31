@@ -108,6 +108,9 @@ export default {
         'v',
         'w',
         'x',
+        6,
+        7,
+        8,
         'y',
         'z',
         'A',
@@ -117,6 +120,9 @@ export default {
         'E',
         'F',
         'G',
+        4,
+        5,
+
         'H',
         'I',
         'J',
@@ -129,6 +135,9 @@ export default {
         'Q',
         'R',
         'S',
+        2,
+        3,
+
         'T',
         'U',
         'V',
@@ -136,6 +145,8 @@ export default {
         'X',
         'Y',
         'Z',
+        1,
+        9,
       ],
       identifyCode: '',
       isShow: true,
@@ -241,7 +252,6 @@ export default {
         identifyCode += this.identifyCodes[this.randomNum(i, 51)];
       }
       this.identifyCode = identifyCode;
-      console.log(identifyCode, 'identifyCodeidentifyCode');
     },
     ...mapActions(['login']),
     // 倒计时
@@ -383,10 +393,7 @@ export default {
     zlogin() {
       this.$refs.zform.validate(async (valid) => {
         if (valid) {
-          if (
-            this.identifyCode.toLowerCase() ===
-            this.zform.tupianmCode.toLowerCase()
-          ) {
+          if (this.identifyCode === this.zform.tupianmCode) {
             this.loading = true;
             //delete this.zform.resetPassword;
             this.$store
@@ -402,11 +409,11 @@ export default {
                 this.loading = false;
               });
           } else {
-             this.$message({
-                message: '图形验证码输入不正确',
-                type: 'error',
-                center: true,
-              });
+            this.$message({
+              message: '图形验证码输入不正确',
+              type: 'error',
+              center: true,
+            });
           }
         } else {
           console.log('error submit!!');
