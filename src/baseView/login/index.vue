@@ -10,7 +10,7 @@
         <!-- 账户密码登录 -->
         <el-form key="pass" class="login-con" :model="userPass" :rules="userRules" ref="adminLogin" v-if="isActive === 1">
           <el-form-item class="login-user-con" prop="username">
-            <el-input v-model="userPass.username" placeholder="请输入用户名"></el-input>
+            <el-input v-model="userPass.username" placeholder="请输入用户名/手机号"></el-input>
           </el-form-item>
           <el-form-item class="login-user-con" prop="password">
             <el-input v-model="userPass.password" placeholder="请输入密码" show-password></el-input>
@@ -67,6 +67,16 @@ import md5 from 'blueimp-md5';
 var myreg = /^[1][3,4,5,6,7,8,9,][0-9]{9}$/;
 export default {
   data() {
+    var passWorldRules = (rule, value, callback) => {
+      console.log(value);
+      if (value == '') {
+        callback(new Error('密码不能为空'));
+      } if (value != '' && value.length < 6) {
+        callback(new Error('密码小于六位数'));
+      }else {
+        callback();
+      }
+    };
     var EmptyValidator = (rule, value, callback) => {
       console.log(value);
       if (!myreg.test(value)) {
@@ -175,13 +185,12 @@ export default {
       },
       userRules: {
         username: [
-          { required: true, message: '用户名不能为空', trigger: 'blur' },
+          { required: true, message: '用户名/手机号不能为空', trigger: 'blur' },
         ],
         password: [
           {
             required: true,
-            min: 6,
-            message: '密码长度不能小于6位',
+            validator: passWorldRules,
             trigger: 'blur',
           },
         ],
