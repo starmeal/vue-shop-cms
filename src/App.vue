@@ -40,4 +40,9 @@ export default {
   display: none !important;
   background: transparent !important;
 }
+
+.el-popover {
+    overflow-y: scroll;
+    max-height:60vh;
+  }
 </style>

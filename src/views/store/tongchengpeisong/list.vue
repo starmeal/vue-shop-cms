@@ -70,12 +70,17 @@
         <el-table-column prop="unreachableCityNames" width="250" label="不可到达城市">
           <template slot-scope="props">
             <el-popover
+              popper-class="popper-class-w"
               placement="top-start"
               width="250"
+              height="500"
               trigger="hover"
               :content="props.row.unreachableCityNames | addressFilters"
             >
-              <span slot="reference">{{ props.row.unreachableCityNames | addressFilters }}</span>
+              <div
+                class="hidden3"
+                slot="reference"
+              >{{ props.row.unreachableCityNames | addressFilters }}</div>
             </el-popover>
           </template>
         </el-table-column>
@@ -139,7 +144,8 @@ export default {
   },
   methods: {
     keyup(e) {
-      e.sort = parseInt(e.sort);
+      let sort = parseInt(e.sort);
+      e.sort = sort ? sort : 0;
     },
     //  是否启用按钮事件
     async scwithisEnabled(row, index) {
@@ -195,44 +201,53 @@ export default {
       }
     },
     toLook(templateId) {
-      this.$router.options.routes.forEach((element) => {
-        if (element.path == "/extra") {
-          element.children.forEach((el) => {
-            if (el.path == "/templateform") {
-              el.meta.title = "查看运费模板";
-              console.log(el);
-            }
-          });
-        }
-      });
-      this.$router.push({
-        path: "/templateForm",
+      let obj = {
+        path: "/expressDeliveryAdd",
         query: {
-          title: "查看运费模板",
           templateId: templateId,
-          look: "true",
+          lock: true,
         },
-      });
+      };
+      this.$router.push(obj);
+      // this.$router.options.routes.forEach((element) => {
+      //   if (element.path == "/extra") {
+      //     element.children.forEach((el) => {
+      //       if (el.path == "/templateform") {
+      //         el.meta.title = "查看运费模板";
+      //         console.log(el);
+      //       }
+      //     });
+      //   }
+      // });
+      // this.$router.push({
+      //   path: "/templateForm",
+      //   query: {
+      //     title: "查看运费模板",
+      //     templateId: templateId,
+      //     look: "true",
+      //   },
+      // });
       // this.$router.push(`/templateForm?templateId=${templateId}&look=true`);
     },
     editorList(templateId) {
-      this.$router.options.routes.forEach((element) => {
-        if (element.path == "/extra") {
-          element.children.forEach((el) => {
-            if (el.path == "/templateform") {
-              el.meta.title = "编辑运费模板";
-              console.log(el);
-            }
-          });
-        }
-      });
-      this.$router.push({
-        path: "/templateform",
+      // this.$router.options.routes.forEach((element) => {
+      //   if (element.path == "/extra") {
+      //     element.children.forEach((el) => {
+      //       if (el.path == "/templateform") {
+      //         el.meta.title = "编辑运费模板";
+      //         console.log(el);
+      //       }
+      //     });
+      //   }
+      // });
+      let obj = {
+        path: "/expressDeliveryAdd",
         query: {
-          title: "编辑运费模板",
-          templateId,
+          templateId: templateId,
+          lock: false,
         },
-      });
+      };
+      this.$router.push(obj);
       // this.$router.push(`/templateForm?templateId=${templateId}`);
     },
     makeSureDeleteList() {
@@ -253,24 +268,7 @@ export default {
       this.templateName = templateName;
       this.dialogVisible = true;
     },
-    addTemplate() {
-      this.$router.options.routes.forEach((element) => {
-        if (element.path == "/extra") {
-          element.children.forEach((el) => {
-            if (el.path == "/templateform") {
-              el.meta.title = "编辑运费模板";
-              console.log(el);
-            }
-          });
-        }
-      });
-      this.$router.push({
-        path: "/templateform",
-        query: {
-          title: "编辑运费模板",
-        },
-      });
-    },
+
     // 请求列表
     async getList() {
       this.tableloading = true;
@@ -283,26 +281,20 @@ export default {
         res.isSet = false;
       });
       this.list = body;
-      console.log(this.list);
     },
     // 条件筛选
     searchlist() {
       this.searchLoading = true;
       this.getList();
     },
-
-    add(row) {
+    add() {
       let obj = {
         path: "/expressDeliveryAdd",
         query: {
-          id: "row.id",
+          templateId: "",
+          lock: false,
         },
       };
-      // if (row ) {
-      //   obj.query = {
-      //     id: row.id,
-      //   };
-      // }
       this.$router.push(obj);
     },
   },
@@ -332,13 +324,25 @@ export default {
   width: 200px;
   margin: 0 10px;
 }
+.hidden3 {
+  -webkit-line-clamp: 4;
+  line-height: 1.5em;
+  display: -webkit-box;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>
 <style lang="scss">
 .yunfeiList {
-}
-.el-table {
-  margin-top: 10px;
-  width: 96%;
-  margin: 0 auto;
+  .el-table {
+    margin-top: 10px;
+    width: 96%;
+    margin: 0 auto;
+  }
+  .el-popover {
+    height: 20px;
+  }
 }
 </style>

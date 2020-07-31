@@ -66,3 +66,11 @@ export function setTemplateSort(data) {
     data: data
   });
 }
+//商家运费模板详情
+export function getMerTemplateDetails(data) {
+  return request({
+    url: "/template/getMerTemplateDetails",
+    method: "post",
+    data: data
+  });
+}

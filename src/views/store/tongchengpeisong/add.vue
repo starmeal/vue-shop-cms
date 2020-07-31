@@ -4,6 +4,7 @@
       <el-form ref="templateForm" :model="form" :rules="rules" label-width="150px">
         <el-form-item label="模板名称" prop="templateName" class="defaulStra">
           <el-input
+            :disabled="lock"
             maxlength="20"
             v-model="form.templateName"
             :size="size"
@@ -29,12 +30,12 @@
           </el-cascader>
         </el-form-item>-->
         <el-form-item label="是否默认" prop="isChecked" class="defaulStraw">
-          <el-radio v-model="form.isChecked" :label="1">是</el-radio>
-          <el-radio v-model="form.isChecked" :label="0">否</el-radio>
+          <el-radio :disabled="lock" v-model="form.isChecked" label="1">是</el-radio>
+          <el-radio :disabled="lock" v-model="form.isChecked" label="0">否</el-radio>
         </el-form-item>
         <el-form-item label="计费方式" prop="chargeMode" class="defaulStra">
-          <el-radio v-model="form.chargeMode" label="1">按件计费</el-radio>
-          <el-radio v-model="form.chargeMode" label="2">按重量计费</el-radio>
+          <el-radio :disabled="lock" v-model="form.chargeMode" label="1">按件计费</el-radio>
+          <el-radio :disabled="lock" v-model="form.chargeMode" label="2">按重量计费</el-radio>
         </el-form-item>
         <el-form-item label="配送区域" prop="region" class="defaulStra">
           <el-table
@@ -48,33 +49,74 @@
               <template slot-scope="{row,$index}">
                 <div class="Nodelivery_span">
                   <span class v-for="(item,index) in row.cityNames" :key="index">{{item}}</span>
-                  <span v-if="$index!==0" @click="editDeliveryclick($index)" class="edit">编辑</span>
+                  <span v-show="!lock">
+                    <span v-if="$index!==0" @click="editDeliveryclick($index)" class="edit">编辑</span>
+                  </span>
                 </div>
               </template>
             </el-table-column>
             <el-table-column :label="'首'+danwei">
-              <template slot-scope="{row}">
-                <el-input type="number" v-model="row.designatedFirst" style="width:60%;"></el-input>
+              <template slot-scope="{row,$index}">
+                <el-input
+                  :disabled="lock"
+                 @blur="
+                      e => {
+                        burTableChange(
+                          e.target.value,
+                          'designatedFirst',
+                        $index
+                        );
+                      }
+                    "
+                  v-model="row.designatedFirst"
+                  style="width:60%;"
+                ></el-input>
               </template>
             </el-table-column>
             <el-table-column label="运费(元)">
-              <template slot-scope="{row}">
-                <el-input type="number" v-model="row.designatedFirstFreight" style="width:60%;"></el-input>
+              <template slot-scope="{row,$index}">
+                <el-input
+                  :disabled="lock"
+                 @blur="
+                      e => {
+                        burTableChange(
+                          e.target.value,
+                          'designatedFirstFreight',
+                        $index
+                        );
+                      }
+                    "
+                  v-model="row.designatedFirstFreight"
+                  style="width:60%;"
+                ></el-input>
               </template>
             </el-table-column>
             <el-table-column :label="'续'+danwei+'('+danwei+')'">
-              <template slot-scope="{row}">
-                <el-input type="number" v-model="row.designatedAddFreight" style="width:60%;"></el-input>
+              <template slot-scope="{row, $index}">
+                <el-input
+                  :disabled="lock"
+                 @blur="
+                      e => {
+                        burTableChange(
+                          e.target.value,
+                          'designatedAdd',
+                        $index
+                        );
+                      }
+                    "
+                  v-model="row.designatedAdd"
+                  style="width:60%;"
+                ></el-input>
               </template>
             </el-table-column>
             <el-table-column label="运费(元)">
               <template slot-scope="{row}">
-                <el-input type="number" v-model="row.designatedAdd" style="width:60%;"></el-input>
+                <el-input :disabled="lock" v-model="row.designatedAddFreight" style="width:60%;"></el-input>
               </template>
             </el-table-column>
             <el-table-column label>
               <template slot-scope="{row,$index}">
-                <span @click="rowClick(row,$index)" :hidden="$index==0">
+                <span v-show="!lock" @click="rowClick(row,$index)" :hidden="$index==0">
                   <i class="el-icon-close"></i>
                 </span>
               </template>
@@ -82,25 +124,32 @@
           </el-table>
         </el-form-item>
         <el-button
+          :disabled="lock"
           type="primary"
           @click="seledtAreaClick"
           class="designatedArea"
           icon="el-icon-circle-plus-outline"
         >指定区域运费</el-button>
         <div class="Tips">根据件数来计算运费，当物品不足“首件数量”时，按照“首件费用”计算，超过部分按照“续建重量和“续建费用”乘机来计算</div>
-        <el-button type="primary" @click="editdesignatedAreaClick" class="designatedArea">不可配送地区</el-button>
+        <el-button
+          :disabled="lock"
+          type="primary"
+          @click="editdesignatedAreaClick"
+          class="designatedArea"
+        >不可配送地区</el-button>
         <div class="Nodelivery" v-if="form.unreachableCityNames.length">
           <span class v-for="(item,index) in form.unreachableCityNames" :key="index">{{item}}</span>
-          <span class="edit" @click="editdesignatedAreaClick">编辑</span>
+          <span class="edit" v-show="!lock" @click="editdesignatedAreaClick">编辑</span>
         </div>
         <el-form-item label="状态" prop="isEnabled" class="isEnabled">
-          <el-radio v-model="form.isEnabled" label="1">启用</el-radio>
-          <el-radio v-model="form.isEnabled" label="0">禁用</el-radio>
+          <el-radio :disabled="lock" v-model="form.isEnabled" label="1">启用</el-radio>
+          <el-radio :disabled="lock" v-model="form.isEnabled" label="0">禁用</el-radio>
         </el-form-item>
       </el-form>
     </div>
-    <el-button type="primary" @click="submit" class="submit">提交</el-button>
-    <el-button type class="back">返回列表</el-button>
+    <el-button v-show="!lock" type="primary" 
+    v-loading.fullscreen.lock="fullscreenLoading"  @click="submit" class="submit">提交</el-button>
+    <el-button v-show="!lock" type class="back">返回列表</el-button>
 
     <el-dialog
       :title="selectType==1?'选择不可配送区域':'选择配送区域' "
@@ -163,10 +212,11 @@
 </template>
 
 <script>
-import { editMerTemplate } from "@/api/store/index.js";
+import { editMerTemplate, getMerTemplateDetails } from "@/api/store/index.js";
 import Icon from "@/components/base/icon.vue";
 import Statusimg from "./teplate/statusImg";
 import city from "./district.json";
+
 export default {
   components: {
     Icon,
@@ -174,6 +224,8 @@ export default {
   },
   data() {
     return {
+      fullscreenLoading:false,
+      lock: false,
       // 所有城市数量 394
       allbuttonStatus: "unselected", //全选按钮状态 checkAll unselected  forbidden
       cityListLength: 0, //所有城市数量
@@ -186,13 +238,30 @@ export default {
       selectType: 1, // selectType 1 不可到达城市 2 单独配送地区 3 编辑不可配送区域  4 编辑可配送区域
       size: "small",
 
+      // chargeMode: "1"
+      // defaultAdd: (...)
+      // defaultAddFreight: (...)
+      // defaultFirst: (...)
+      // defaultFirstFreight: (...)
+      // goodsShipAddress: (...)
+      // isChecked: null
+      // isEnabled: null
+      // shipCityCode: (...)
+      // shipProvinceCode: (...)
+      // sort: (...)
+      // templateId: (...)
+      // templateName: (...)
+      // templateSub: (...)
+      // unreachableCityCodes: (...)
+      // unreachableCityNames: (...)
       form: {
+        templateId: "",
         // shipProvinceCode: "", //发货地址省编码
         // shipCityCode: "", //发货地址市编码
         unreachableCityCodes: [], //快递不可到达的城市编码（多个用,分隔）
         unreachableCityNames: [], //快递不可到达的城市名称（多个用,分隔）
         templateName: "",
-        isChecked: 1,
+        isChecked: "1",
         chargeMode: "1",
         // goodsShipAddress: [],
         isEnabled: "1",
@@ -202,8 +271,8 @@ export default {
             cityNames: ["全国【默认】"],
             cityCodes: [],
             designatedFirst: 1,
-            designatedFirstFreight: 0.0,
-            designatedAddFreight: 0.0,
+            designatedFirstFreight: '0.00',
+            designatedAddFreight: '0.00',
             designatedAdd: 0,
           },
         ],
@@ -231,12 +300,57 @@ export default {
     this.initFahuoList(JSON.parse(JSON.stringify(city.districts[0].districts)));
     //用于选择可选 不可选城市的数组
     this.cityListArr(JSON.parse(JSON.stringify(city.districts[0].districts)));
+
+    let { templateId, lock } = this.$route.query;
+    this.form.templateId = templateId;
+    this.lock = Boolean(lock);
+
+    if (templateId) {
+      this.getInfo(templateId);
+    }
   },
 
   methods: {
+     burTableChange(value, propertyName, index) {
+      this.$set(
+       this.form.templateSub[index],
+        propertyName,
+        Number.isNaN(Number(value)) ? 0 : Number(value)
+      );
+    },
+    async getInfo(templateId) {
+      let { body, code } = await getMerTemplateDetails({ templateId });
+      let newObj = {
+        cityNames: ["全国【默认】"],
+        cityCodes: [],
+        designatedAddFreight: body.defaultAddFreight / 100,
+        designatedFirstFreight: body.defaultFirstFreight / 100,
+        designatedFirst: body.defaultFirst,
+        designatedAdd: body.defaultAdd,
+      };
+      body.unreachableCityCodes = JSON.parse(body.unreachableCityCodes);
+      body.unreachableCityNames = JSON.parse(body.unreachableCityNames);
+      body.templateSub = body.templateSubs;
+      body.templateSub.map((res) => {
+        res.designatedFirstFreight = res.designatedFirstFreight / 100;
+        res.designatedAddFreight = res.designatedAddFreight / 100;
+        res.cityCodes = JSON.parse(res.cityCodes);
+        res.cityNames = JSON.parse(res.cityNames);
+ 
+        delete res.freightTemplateId;
+      });
+      body.templateSub = [newObj, ...body.templateSub];
+      delete body.templateSubs;
+      delete body.sort;
+      delete body.createTime;
+      delete body.merchantsCode;
+      console.log(body);
+      this.form = body;
+    },
     // 确定提交
 
     submit() {
+    
       this.$refs["templateForm"].validate((valid) => {
         if (valid) {
           this.templateEditMerTemplate();
@@ -244,27 +358,28 @@ export default {
       });
     },
     templateEditMerTemplate() {
-      // let {
-      //   templateId, //模板id（添加时不传，修改时传
-      //   templateName, //模板名称
-      //   // goodsShipAddress, //商品发货地址
-      //   // shipProvinceCode, //发货地址省编码
-      //   // shipCityCode, //发货地址省编码
-      //   chargeMode, //计费方式（1按件数；2按重量；3按体积）
-      //   unreachableCityCodes, //快递不可到达的城市编码（多个用,分隔）
-      //   unreachableCityNames, //	快递不可到达的城市名称（多个用,分隔）
-      //   defaultFirst, //首（件、克、立方厘米）
-      //   defaultFirstFreight, //首运费（分）
-      //   defaultAdd, //续（件、克、立方厘米）
-      //   defaultAddFreight, //续费（分）
-      //   templateSub, //指定城市集合对象
-      // } = this.form;
-
       let form = JSON.parse(JSON.stringify(this.form));
+      let spliceArr = form.templateSub.splice(0, 1);
+      console.log(spliceArr[0]);
 
-      console.log(form, "sssssssssssssss");
-      form.templateSub.splice(0, 1);
-      if (form.templateSub.length==0) {
+      let {
+        designatedFirstFreight,
+        designatedAddFreight,
+        designatedFirst,
+        designatedAdd,
+      } = spliceArr[0];
+
+      form.defaultFirst = designatedFirst;
+      form.defaultFirstFreight = designatedFirstFreight * 100;
+      form.defaultAdd = designatedAdd;
+      form.defaultAddFreight = designatedAddFreight * 100;
+
+      form.templateSub.map((res) => {
+        res.designatedFirstFreight = res.designatedFirstFreight * 100;
+        res.designatedAddFreight = res.designatedAddFreight * 100;
+      });
+      console.log(form);
+      if (form.templateSub.length == 0) {
         this.$message({
           showClose: true,
           message: "为指定城市地区设置运费未选择地址",
@@ -272,9 +387,10 @@ export default {
         });
         return;
       }
-
+   this.fullscreenLoading = true;
       editMerTemplate(form)
         .then((res) => {
+            this.fullscreenLoading = false;
           if (res.code == "000000") {
             this.$router.push("/shippingMethods");
           }
@@ -311,10 +427,7 @@ export default {
             } else {
               item0.selectedNum += 1;
             }
-            // if (item1.total == item1.selectedNum) {
-            //   //如果选择的城市数量==城市的数量 全选
-            //   item1.checked = "forbidden";
-            // }
+
             item1.checked != "forbidden" &&
               (item1.checked = this.chuliIF(item1.checkedNum, item1.total));
           });
@@ -339,8 +452,8 @@ export default {
         cityNames: [],
         cityCodes: [],
         designatedFirst: 1,
-        designatedFirstFreight: 0.0,
-        designatedAddFreight: 0.0,
+        designatedFirstFreight:'0.00',
+        designatedAddFreight: '0.00',
         designatedAdd: 0,
       };
       let unreachableCityCodes = [];
@@ -531,14 +644,6 @@ export default {
                 item0.name
               ));
           }
-          // console.log(
-          //   item0.checkedNum,
-          //   item0.selectedNum,
-          //   item0.total,
-          //   item0.checked,
-          //   item0.name,
-          //   item0
-          // );
         });
         this.NOcityListLength += item0.selectedNum;
         this.IScityListLength += item0.checkedNum;
@@ -693,7 +798,9 @@ export default {
       this.cityList = list;
     },
     // 点击删除表格 行
-    rowClick(row, index) {},
+    rowClick(row, index) {
+      this.form.templateSub.splice(index, 1);
+    },
     // 修改table header行的背景色
     headerCellStyle({ row, column, rowIndex, columnIndex }) {
       return " background:#f5f7f9;padding-top: 0;";
