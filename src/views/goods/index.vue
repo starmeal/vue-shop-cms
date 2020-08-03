@@ -187,7 +187,6 @@ import {
   fakeDeleteGoods,
   selectShopGoodsCategory,
   exportGoodsList,
-  dictoptions
 } from "@/api/goods";
 export default {
   data() {

@@ -155,6 +155,9 @@
           </div>
         </section>
       </el-dialog>
+      <el-dialog title="提示" :visible.sync="dialogVisibles" width="30%">
+        <div>您的店铺基本设置成功，请完善店铺资质</div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -172,6 +175,7 @@ export default {
       arr: [],
       quni: [],
       dialogVisible: false,
+      dialogVisibles: false,
       size: "mini",
       checked: false,
       cityvalue: [],
@@ -316,8 +320,9 @@ export default {
         this.form.shopPicturesImg = shopPicturesImg;
         this.form.addressDetail = addressDetail;
         this.form.shopMerchantsIntroduction = shopMerchantsIntroduction;
-        var phone = /\d{11}/;
-        if (phone.test(customerMobile)) {
+        // var phone = /\d{11}/;
+
+        if (customerMobile.indexOf("-") == -1) {
           this.phone = customerMobile;
         } else {
           var arr = customerMobile.split("-");
@@ -337,6 +342,35 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          var re = /^[0-9]+.?[0-9]*/;
+          if (this.areaCode && !re.test(this.areaCode)) {
+            this.$message({
+              message: "区号只能输入数字",
+              type: "error",
+            });
+            return false;
+          }
+          if (this.areaCode && this.areaCode.length <= 2) {
+            this.$message({
+              message: "区号输入有误",
+              type: "error",
+            });
+            return false;
+          }
+          if (!re.test(this.phone)) {
+            this.$message({
+              message: "电话只能输入数字",
+              type: "error",
+            });
+            return false;
+          }
+          if (this.phone.length != 11 && !this.areaCode) {
+            this.$message({
+              message: "非手机号请输入区号",
+              type: "error",
+            });
+            return false;
+          }
           if (this.areaCode == "") {
             this.form.customerMobile = this.phone;
           } else {
@@ -374,10 +408,11 @@ export default {
           editShopSettings(this.form)
             .then((res) => {
               if (res.code == "000000") {
-                this.$message({
-                  message: "保存成功",
-                  type: "success",
-                });
+                // this.$message({
+                //   message: "保存成功",
+                //   type: "success",
+                // });
+                this.dialogVisibles = true;
                 this.getInfo();
               }
             })

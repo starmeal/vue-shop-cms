@@ -12,6 +12,7 @@
         </div>
         <el-form-item label="商品类型" prop="category">
           <el-cascader
+            :disabled="disabled"
             v-if="valArr.length"
             ref="cascader1"
             :size="size"
@@ -25,6 +26,7 @@
         </el-form-item>
         <el-form-item label="商品名称" prop="goodsName">
           <el-input
+            :disabled="disabled"
             class="input-update"
             type="text"
             placeholder="请输入内容"
@@ -36,6 +38,7 @@
         </el-form-item>
         <el-form-item label="商品类目" prop="goodsItemType">
           <el-select
+            :disabled="disabled"
             v-model="form.goodsItemType"
             placeholder="请选择商品类型"
             :size="size"
@@ -50,10 +53,18 @@
           </el-select>
         </el-form-item>
         <el-form-item label="商品所在地">
-          <cascader v-model="cityvalue" @change="citychange" level="city" size="small" width="90%"></cascader>
+          <cascader
+            v-model="cityvalue"
+            @change="citychange"
+            level="city"
+            size="small"
+            width="90%"
+            :disabled="disabled"
+          ></cascader>
         </el-form-item>
         <el-form-item label="商品重量（克）">
           <el-input-number
+            :disabled="disabled"
             class="deep-number"
             v-model="form.weight"
             :controls="false"
@@ -62,22 +73,24 @@
           ></el-input-number>
         </el-form-item>
         <el-form-item label="商品图片" prop="goodsImgs">
-          <el-upload
-            action
-            multiple
-            class="bili"
-            accept=".png, .jpg, .gif"
-            :http-request="uploadHttp"
-            :show-file-list="false"
-            :data="{
+          <div v-show="!disabled">
+            <el-upload
+              action
+              multiple
+              class="bili"
+              accept=".png, .jpg, .gif"
+              :http-request="uploadHttp"
+              :show-file-list="false"
+              :data="{
             data:'goodsImgs'
           }"
-          >
-            <section class="input-con">
-              <input placeholder="批量上传图片" size="small" class="input-cla" />
-              <div class="btnsss">选择图片</div>
-            </section>
-          </el-upload>
+            >
+              <section class="input-con">
+                <input placeholder="批量上传图片" size="small" class="input-cla" />
+                <div class="btnsss">选择图片</div>
+              </section>
+            </el-upload>
+          </div>
           <div v-if="form.goodsImgs.length">
             <draggable
               class="img-content"
@@ -93,7 +106,7 @@
                   :key="item + '' + index"
                   @click="delImg(index)"
                 >
-                  <i class="el-icon-close close-i"></i>
+                  <i class="el-icon-close close-i" v-if="!disabled"></i>
                   <img :src="item" class="img-items" />
                 </div>
               </transition-group>
@@ -105,6 +118,7 @@
         </el-form-item>
         <el-form-item label="首图视频">
           <el-upload
+            v-show="!disabled"
             action
             multiple
             class="bili"
@@ -120,7 +134,6 @@
               <div class="btnsss">选择文件</div>
             </section>
           </el-upload>
-          {{form.vedio}}
           <div id="mse" style="margin-top:20px" v-show="form.vedio"></div>
           <div class="hidden-box">
             <el-input v-model="form.vedio" class="hidden-input"></el-input>
@@ -135,6 +148,7 @@
             <el-input v-model="form.detail[0]" class="hidden-input"></el-input>
           </div>
           <el-upload
+            v-show="!disabled"
             action
             multiple
             class="bili"
@@ -167,7 +181,7 @@
                     :key="item + '' + ix"
                     @click="delImg(ix,1)"
                   >
-                    <i class="el-icon-close close-i"></i>
+                    <i class="el-icon-close close-i" v-if="!disabled"></i>
                     <img :src="item" class="img-items" />
                   </div>
                 </transition-group>
@@ -190,14 +204,15 @@
         </div>
         <el-form-item label="是否临期">
           <el-switch
+            :disabled="disabled"
             v-model="form.isOnTime"
-            :active-value="1"
+            active-value="1"
             @change="isOnTimeChange"
-            :inactive-value="0"
+            inactive-value="0"
           ></el-switch>
         </el-form-item>
         <el-form-item label="商品规格" prop="resource">
-          <el-radio-group v-model="form.resource" @change="resourceChange">
+          <el-radio-group v-model="form.resource" @change="resourceChange" :disabled="disabled">
             <el-radio :label="1">统一规格</el-radio>
             <el-radio :label="2">多规格</el-radio>
           </el-radio-group>
@@ -205,6 +220,7 @@
         <section v-if="form.resource == 1">
           <el-form-item label="设置生产日期" v-if="form.isOnTime == 1">
             <el-date-picker
+              :disabled="disabled"
               v-model="form.manufactureTime"
               value-format="yyyy-MM-dd HH:mm:ss"
               type="date"
@@ -212,6 +228,7 @@
             ></el-date-picker>
             <span class="xiaoxue">保质期天数</span>
             <el-input-number
+              :disabled="disabled"
               v-model="form.shelfDay"
               @change="shelfDayChange"
               :controls="false"
@@ -229,6 +246,7 @@
           </el-form-item>
           <el-form-item label="主播佣金">
             <el-input-number
+              :disabled="disabled"
               v-model="form.anchorMoney"
               :controls="false"
               label="描述文字"
@@ -238,6 +256,7 @@
           </el-form-item>
           <el-form-item label="分享佣金">
             <el-input-number
+              :disabled="disabled"
               :max="9999999"
               v-model="form.accountMoney"
               :controls="false"
@@ -256,7 +275,13 @@
                 <section class="flex-sku">
                   <div>
                     规格名称：
-                    <el-input placeholder v-model="item.key" size="mini" style="width:200px;"></el-input>
+                    <el-input
+                      placeholder
+                      v-model="item.key"
+                      @input="changeskuName(index)"
+                      size="mini"
+                      style="width:200px;"
+                    ></el-input>
                     <i class="el-icon-delete" @click="delsku(index)" style="margin-left:20px"></i>
                   </div>
                   <div>
@@ -410,6 +435,7 @@
         </section>
         <el-form-item label="市场价">
           <el-input-number
+            :disabled="disabled"
             v-model="form.goodsOriginalPrice"
             :controls="false"
             label="描述文字"
@@ -419,6 +445,7 @@
         </el-form-item>
         <el-form-item label="销售价格" prop="goodsPrice">
           <el-input-number
+            :disabled="disabled"
             v-model="form.goodsPrice"
             :controls="false"
             label="描述文字"
@@ -428,6 +455,7 @@
         </el-form-item>
         <el-form-item label="总库存" prop="stock">
           <el-input-number
+            :disabled="disabled"
             :max="9999999"
             v-model="form.stock"
             :controls="false"
@@ -436,9 +464,9 @@
           ></el-input-number>
         </el-form-item>
         <el-form-item label="库存扣减方式" prop="stockReduceType">
-          <el-radio-group v-model="form.stockReduceType">
-            <el-radio :label="1">拍下减少库存</el-radio>
-            <el-radio :label="2">付款减库存</el-radio>
+          <el-radio-group v-model="form.stockReduceType" :disabled="disabled">
+            <el-radio label="1">拍下减少库存</el-radio>
+            <el-radio label="2">付款减库存</el-radio>
           </el-radio-group>
         </el-form-item>
         <div style="border-top: 13px solid rgb(255, 255, 255);"></div>
@@ -446,14 +474,19 @@
           <Icon icon="jibenxinxi" class="authentication-title" />物流与服务
         </div>
         <el-form-item label="配送方式" prop="deliveryType">
-          <el-radio-group v-model="form.deliveryType">
-            <el-radio :label="1">快递发货</el-radio>
-            <el-radio :label="2">同城配送</el-radio>
-            <el-radio :label="3">到店自提</el-radio>
+          <el-radio-group v-model="form.deliveryType" :disabled="disabled">
+            <el-radio label="1">快递发货</el-radio>
+            <el-radio label="2">同城配送</el-radio>
+            <el-radio label="3">到店自提</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="运费模板" prop="templateId">
-          <el-select v-model="form.templateId" placeholder="请选择" class="input-update">
+          <el-select
+            v-model="form.templateId"
+            placeholder="请选择"
+            class="input-update"
+            :disabled="disabled"
+          >
             <el-option
               v-for="item in selectTemplate"
               :key="item.templateId"
@@ -463,19 +496,22 @@
           </el-select>
         </el-form-item>
         <el-form-item label="商品服务">
-          <el-radio-group v-model="form.serviceAssurance">
-            <el-radio :label="1">七天无理由</el-radio>
-            <el-radio :label="2">申请换货</el-radio>
-          </el-radio-group>
+          <el-checkbox-group
+            v-model="form.serviceAssurance"
+            @change="serviceAssuranceChange"
+            :disabled="disabled"
+          >
+            <el-checkbox v-for="(el) in sblist" :key="el.id" :label="el.code"></el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
         <el-form-item label="发票设置">
-          <el-radio-group v-model="form.isInvoice">
-            <el-radio :label="0">关闭</el-radio>
-            <el-radio :label="1">开启</el-radio>
+          <el-radio-group v-model="form.isInvoice" :disabled="disabled">
+            <el-radio label="0">关闭</el-radio>
+            <el-radio label="1">开启</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="是否上架">
-          <el-radio-group v-model="form.status" @change="statusChange">
+          <el-radio-group v-model="form.status" @change="statusChange" :disabled="disabled">
             <el-radio :label="1">立刻上架</el-radio>
             <el-radio :label="2">放入仓库</el-radio>
             <el-radio :label="9">定时上下架</el-radio>
@@ -484,6 +520,7 @@
           <section class="time-box-s" v-if="form.status == 9">
             <el-date-picker
               placeholder="上架时间"
+              :disabled="disabled"
               v-model="form.putawayTime"
               :picker-options="endTimepickerOptions"
               value-format="yyyy-MM-dd HH:mm:ss"
@@ -492,6 +529,7 @@
             <span style="width: 40px;display: inline-block;"></span>
             <el-date-picker
               :size="size"
+              :disabled="disabled"
               :picker-options="endTimepickerOptions1"
               placeholder="下架时间"
               v-model="form.soldOutTime"
@@ -505,7 +543,14 @@
             icon="el-icon-message"
             @click="dialogTableVisible = true"
           >{{DraftBoxList.total}}</el-button>
-          <el-button type="primary" size="small" @click="submitForm" style="margin-bottom:0px">提交商品</el-button>
+          <el-button type="primary" size="small" style="margin-bottom:0px" @click="bianji">编辑</el-button>
+          <el-button
+            type="primary"
+            size="small"
+            @click="submitForm"
+            style="margin-bottom:0px"
+            :disabled="disabled"
+          >提交商品</el-button>
           <el-button type="primary" size="small" @click="golist" style="margin-bottom:0px">返回列表</el-button>
         </el-form-item>
       </el-form>
@@ -535,20 +580,30 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination layout="prev, pager, next" :total="DraftBoxContent"></el-pagination>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { multiply, formatDate, descartes, sortArr } from "@/utils/util";
+import {
+  multiply,
+  formatDate,
+  descartes,
+  sortArr,
+  deepClone,
+} from "@/utils/util";
 import { SSupload } from "@/utils/upload";
 import Player from "xgplayer";
 import {
+  update,
   selectShopCategoryv2,
   getMerTemplateList,
   goodsadd,
   queryDraftBoxList,
   detail,
+  dictoptions,
+  realDeleteGoods,
 } from "@/api/goods";
 import Icon from "@/components/base/icon.vue";
 import cascader from "@/components/city/cascader.vue";
@@ -580,6 +635,8 @@ export default {
       }
     };
     return {
+      DraftBoxContent: 0,
+      disabled: false,
       skuArr: [],
       columnArr: [],
       endTimepickerOptions: {
@@ -605,15 +662,15 @@ export default {
       options: [
         {
           label: "实物商品（快递发货）",
-          value: 1,
+          value: "1",
         },
         {
           label: "虚拟商品（无需物流）",
-          value: 2,
+          value: "2",
         },
         {
           label: "蛋糕烘培（同城自提）",
-          value: 3,
+          value: "3",
         },
       ],
       cityvalue: [],
@@ -664,7 +721,10 @@ export default {
       },
       numberDay: "",
       selectTemplate: [],
+      sblist: [],
       form: {
+        isNoReason: "0",
+        isExchange: "0",
         weight: "",
         putawayTime: "",
         soldOutTime: "",
@@ -677,17 +737,15 @@ export default {
         selled: 0,
         goodsImgs: [],
         goodsOriginalPrice: "",
-        weight: "",
         goodsPrice: "",
-        goodsPickUpAddress: "",
+        weight: "",
         detail: [],
-        serviceAssurance: "",
+        serviceAssurance: [],
         vedio: "",
         shopMerchantsCode: "",
         discount: "",
         accountMoney: "",
         templateId: "",
-        sort: "",
         shelfDay: "",
         manufactureTime: "",
         anchorMoney: "",
@@ -700,9 +758,9 @@ export default {
         cityName: "",
         isOnTime: "",
         goodsBarCode: "",
-        stockReduceType: 1,
-        deliveryType: 1,
-        isInvoice: 0,
+        stockReduceType: "1",
+        deliveryType: "1",
+        isInvoice: "0",
         specification: [
           // {
           //   key: "尺寸",
@@ -717,6 +775,7 @@ export default {
           //   value: ["1", "2", "3"],
           // },
         ],
+        CloneTable: [],
         specificationList: [],
         pageDate: {
           curPage: 1,
@@ -745,34 +804,69 @@ export default {
     this.getype();
   },
   watch: {
-    skuArr: {
-      handler(newval) {
-        this.form.stock = 0;
-        let arr = [];
-        newval.forEach((el, idx) => {
-          if (el.stock > 0) {
-            this.form.stock += el.stock;
-          }
-          if (el.goodsPrice > 0) {
-            arr.push(el.goodsPrice);
-          }
-        });
-        this.form.goodsPrice = sortArr(arr, "mini")[0];
-      },
-      deep: true,
-      immediate: true,
-    },
+    // skuArr: {
+    //   handler(newval) {
+    //     this.form.stock = 0;
+    //     this.form.goodsPrice = "";
+    //     this.form.goodsOriginalPrice = "";
+    //     let arr = [];
+    //     let soArr = [];
+    //     this.$nextTick(() => {
+    //       this.$refs.goodForm.clearValidate();
+    //     });
+    //     newval.forEach((el, idx) => {
+    //       if (el.stock > 0) {
+    //         this.form.stock += el.stock;
+    //       }
+    //       if (el.goodsPrice > 0) {
+    //         arr.push(el.goodsPrice);
+    //       }
+    //       if (el.goodsOriginalPrice > 0) {
+    //         soArr.push(el.goodsOriginalPrice);
+    //       }
+    //     });
+    //     if (arr.length) {
+    //       this.form.goodsPrice = sortArr(arr, "mini")[0];
+    //     }
+    //     if (soArr.length) {
+    //       this.form.goodsOriginalPrice = sortArr(soArr, "")[0];
+    //     }
+    //   },
+    //   deep: true,
+    //   immediate: true,
+    // },
   },
   mounted() {},
   methods: {
-    gettype() {
+    changeskuName(index) {
+      this.columnArr[index].prop = this.form.specification[index].key;
+      this.columnArr[index].label = this.form.specification[index].key;
+      this.inittable()
+    },
+    bianji() {
+      this.disabled = !this.disabled;
+    },
+    serviceAssuranceChange(val) {
+      if (val.includes("七天无理由退货")) {
+        this.form.isNoReason = "1";
+      } else {
+        this.form.isNoReason = "0";
+      }
+      if (val.includes("申请换货")) {
+        this.form.isExchange = "1";
+      } else {
+        this.form.isExchange = "0";
+      }
+    },
+    getype() {
       let obj = {
-        type: "shop_service",
+        type: "goods_service_assurance",
       };
       dictoptions(obj).then((res) => {
-        console.log(res);
+        this.sblist = res.body.list0;
       });
     },
+    // 详情
     getDetail(code) {
       let obj = {
         goodsCode: code,
@@ -780,7 +874,45 @@ export default {
       detail(obj).then((res) => {
         let { body } = res;
         body.status = parseInt(body.status);
+        body.category = body.category.split(",");
+        let category = [];
+        body.category.forEach((el) => {
+          category.push(Number(el));
+        });
+        body.categoryName = body.categoryName.split(",");
+        this.cityvalue = [body.provinceCode, body.cityCode];
+        // this.disabled = true;
+        this.serviceAssuranceChange(body.serviceAssurance);
         this.form = body;
+        this.form.category = category;
+        this.form.resource = body.specification.length > 0 ? 2 : 1;
+        if (body.specificationList.length > 0) {
+          let skuArr = [];
+          let mapObj = {};
+          this.inittable();
+          // 生成表格头跟表格数据
+          body.specificationList.forEach((item, index) => {
+            let obj = {};
+            mapObj[item.specsSeq] = item;
+            this.columnArr.forEach((itemkey, index) => {
+              obj[itemkey.label] = item.goodsSkuName.split(" ")[index];
+            });
+            item = Object.assign({}, item, obj);
+            skuArr.push(item);
+          });
+          this.mapObj = mapObj;
+          // 克隆回显表格一份
+          this.CloneTable = deepClone(skuArr);
+          // 获取唯一sku集合
+          this.skupapa = this.CloneTable.map((el, index) => {
+            return el.specsSeq;
+          });
+          this.update = true;
+          this.skuArr = skuArr;
+        }
+        this.$nextTick(() => {
+          this.initvideo();
+        });
       });
     },
     // 回到列表
@@ -793,22 +925,26 @@ export default {
     getDraftBoxList() {
       queryDraftBoxList(this.pageDate).then((res) => {
         this.DraftBoxList = res.body;
-        console.log(res);
+        this.DraftBoxContent = res.body.total;
       });
     },
     // 切换规格是统一还是多规格
     resourceChange(val) {
-      if (val == 2) {
+      if (this.form.resource == 2) {
         this.form.accountMoney = "";
         this.form.anchorMoney = "";
         this.form.goodsPrice = "";
         this.form.stock = "";
+        this.form.goodsOriginalPrice = "";
       } else {
         this.skuArr = [];
         this.columnArr = [];
         this.form.specificationList = [];
         this.form.specification = [];
       }
+      this.$nextTick(() => {
+        this.$refs.goodForm.clearValidate();
+      });
     },
     //增加规格
     addspecificationKey() {
@@ -865,7 +1001,7 @@ export default {
           });
           return false;
         }
-      } else {
+      } else if (item.time) {
         let numDate = item.day * 24 * 60 * 60 * 1000;
         let newDate = new Date(
           parseInt(new Date(item.date).getTime() + numDate)
@@ -878,6 +1014,7 @@ export default {
       arr = [...this.form.specification[index].value, ...arr];
       this.$set(this.form.specification[index], "value", arr);
       this.$set(this.form.specification[index], "skuvalue", "");
+      this.update = false;
       this.inittable();
     },
     // 删除规格值
@@ -925,6 +1062,7 @@ export default {
           anchorMoney: 0,
           shelfDay: "",
           goodsBarCode: "",
+          goodsOriginalPrice: "",
         };
         obj.goodsSkuName = el.constructor === Array ? el.join(" ") : el;
         obj.specsSeq = el.constructor === Array ? el.join(":") : el;
@@ -933,6 +1071,33 @@ export default {
         });
         lineArr.push(obj);
       });
+      if (!this.update) {
+        let newskupapa = this.skuArr.map((item, index) => {
+          return item.specsSeq;
+        });
+        let oldskupapa = newskupapa.filter((v) => {
+          return this.skupapa.indexOf(v) > -1;
+        });
+        let oldSku = [];
+        let newIndex = [];
+        oldskupapa.forEach((item, index) => {
+          lineArr.forEach((el, idx) => {
+            if (item == el.specsSeq) {
+              oldSku.push(this.CloneTable[index]);
+              newIndex.push(index);
+            }
+          });
+        });
+        for (let i = 0; i < newIndex.length; i++) {
+          lineArr.splice(lineArr[i], 1);
+        }
+        lineArr = [...oldSku, ...lineArr];
+        console.log(lineArr);
+        // console.log(oldskuvalueIndex);
+        // console.log(this.CloneTable);
+        // console.log(this.CloneTable);
+      }
+
       this.skuArr = lineArr;
       this.columnArr = columnArr;
     },
@@ -997,7 +1162,22 @@ export default {
         confirmButtonText: "确定",
         type: "none",
       })
-        .then(() => {})
+        .then(() => {
+          let obj = {
+            goodsCodes: [],
+          };
+          this.DraftBoxList.forEach((el) => {
+            obj.goodsCodes.push(el.goodsCode);
+          });
+          realDeleteGoods(obj).then((res) => {
+            this.$message({
+              showClose: true,
+              message: "删除成功",
+              type: "success",
+            });
+            this.getDraftBoxList();
+          });
+        })
         .catch(() => {});
     },
     // 删除草稿箱
@@ -1007,7 +1187,19 @@ export default {
         confirmButtonText: "确定",
         type: "none",
       })
-        .then(() => {})
+        .then(() => {
+          let obj = {
+            goodsCodes: [row.goodsCode],
+          };
+          realDeleteGoods(obj).then((res) => {
+            this.$message({
+              showClose: true,
+              message: "删除成功",
+              type: "success",
+            });
+            this.getDraftBoxList();
+          });
+        })
         .catch(() => {});
     },
     // 是否临期change
@@ -1022,6 +1214,10 @@ export default {
           time: true,
         };
         this.form.specification.push(obj);
+      }
+      if (val == 0) {
+        this.form.manufactureTime = "";
+        this.form.shelfDay = "";
       }
       if (val == 0 && this.form.resource == 2) {
         let delIndex;
@@ -1152,16 +1348,34 @@ export default {
                 ? (this.form.goodsPrice / this.form.goodsOriginalPrice) * 10
                 : 0,
             specificationList: this.skuArr,
+            category: this.form.category.join(","),
+            categoryName: this.form.categoryName.join(","),
           });
           // 9 是定时后台没有变成2
           if (form.status == 9) {
             form.status = 2;
+          }
+          if (this.$route.query.goodsCode) {
+            update(form).then((res) => {
+              this.$message({
+                message: "修改商品成功",
+                type: "success",
+                center: true,
+              });
+              this.$router.push({
+                path: "/goods",
+              });
+            });
+            return false;
           }
           goodsadd(form).then((res) => {
             this.$message({
               message: "创建商品成功",
               type: "success",
               center: true,
+            });
+            this.$router.push({
+              path: "/goods",
             });
           });
         } else {
