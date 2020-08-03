@@ -203,7 +203,7 @@ export default {
           { required: true, message: "请输入店铺名称", trigger: "blur" },
         ],
         thumbImg: [
-          { required: true, message: "请上传图片", trigger: "change" },
+          { required: true, message: "请上传店铺标志", trigger: "change" },
         ],
         shopMerchantsIntroduction: [
           { required: true, message: "请输入店铺介绍", trigger: "blur" },

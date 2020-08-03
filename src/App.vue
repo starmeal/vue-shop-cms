@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  name: 'App'
+  name: "App",
 };
 </script>
 <style lang="scss">
@@ -20,6 +20,30 @@ export default {
   background: #f5f7f9;
   min-width: 1080px;
   overflow: none;
-  position:relative;
+  position: relative;
+}
+
+::-webkit-scrollbar {
+  /*滚动条整体样式*/
+
+  display: none !important;
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  display: none !important;
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  display: none !important;
+  background: transparent !important;
+}
+
+.el-popover {
+  overflow-y: scroll;
+  max-height: 60vh;
 }
 </style>
