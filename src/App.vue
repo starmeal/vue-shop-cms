@@ -22,26 +22,6 @@ export default {
   overflow: none;
   position: relative;
 }
-
-::-webkit-scrollbar {
-  /*滚动条整体样式*/
-
-  display: none !important;
-  background: transparent !important;
-}
-
-::-webkit-scrollbar-thumb {
-  /*滚动条里面小方块*/
-  display: none !important;
-  background: transparent !important;
-}
-
-::-webkit-scrollbar-track {
-  /*滚动条里面轨道*/
-  display: none !important;
-  background: transparent !important;
-}
-
 .el-popover {
   overflow-y: scroll;
   max-height: 60vh;
