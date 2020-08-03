@@ -267,7 +267,7 @@
         </section>
         <section v-if="form.resource == 2">
           <el-form-item>
-            <el-button type="primary" @click="addspecificationKey"  :disabled="disabled">新增规格</el-button>
+            <el-button type="primary" @click="addspecificationKey" :disabled="disabled">新增规格</el-button>
           </el-form-item>
           <section>
             <div class="guige" v-for="(item, index) in form.specification" :key="index">
@@ -356,7 +356,7 @@
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
-                     :disabled="disabled"
+                    :disabled="disabled"
                     v-model="props.row.goodsOriginalPrice"
                     :controls="false"
                     class="table-deep-number"
@@ -367,7 +367,7 @@
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
-                     :disabled="disabled"
+                    :disabled="disabled"
                     v-model="props.row.goodsPrice"
                     :controls="false"
                     class="table-deep-number"
@@ -378,7 +378,7 @@
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
-                     :disabled="disabled"
+                    :disabled="disabled"
                     v-model="props.row.anchorMoney"
                     :controls="false"
                     class="table-deep-number"
@@ -388,7 +388,7 @@
               <el-table-column label="分享佣金">
                 <template slot-scope="props">
                   <el-input-number
-                   :disabled="disabled"
+                    :disabled="disabled"
                     :max="9999999"
                     v-model="props.row.accountMoney"
                     :controls="false"
@@ -400,7 +400,7 @@
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
-                     :disabled="disabled"
+                    :disabled="disabled"
                     v-model="props.row.stock"
                     :controls="false"
                     class="table-deep-number"
@@ -409,16 +409,13 @@
               </el-table-column>
               <el-table-column label="规格照片">
                 <template slot-scope="props">
-                  <div
-                    class="rea-png"
-                    v-if="props.row.goodsSkuImg"
-                  >
+                  <div class="rea-png" v-if="props.row.goodsSkuImg">
                     <img
                       v-if="props.row.goodsSkuImg"
                       :src="props.row.goodsSkuImg"
                       style="width:50px;height:50px"
                     />
-                    <i class="el-icon-close"  v-if="!disabled"   @click="delskuIMg(props.$index)"></i>
+                    <i class="el-icon-close" v-if="!disabled" @click="delskuIMg(props.$index)"></i>
                   </div>
                   <el-upload
                     v-if="!props.row.goodsSkuImg"
@@ -438,12 +435,17 @@
               </el-table-column>
               <el-table-column label="商品条码">
                 <template slot-scope="props">
-                  <el-input v-model="props.row.goodsBarCode"  :disabled="disabled"></el-input>
+                  <el-input v-model="props.row.goodsBarCode" :disabled="disabled"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="props">
-                  <el-button type="warning" @click="delgoodsType(props)" size="mini"  :disabled="disabled">删除</el-button>
+                  <el-button
+                    type="warning"
+                    @click="delgoodsType(props)"
+                    size="mini"
+                    :disabled="disabled"
+                  >删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -560,7 +562,13 @@
             :disabled="disabled"
             @click="dialogTableVisible = true"
           >{{DraftBoxList.total}}</el-button>
-          <el-button type="primary" size="small" style="margin-bottom:0px" @click="bianji">编辑</el-button>
+          <el-button
+            type="primary"
+            size="small"
+            style="margin-bottom:0px"
+            @click="bianji"
+            v-if="$route.query.goodsCode"
+          >编辑</el-button>
           <el-button
             type="primary"
             size="small"
@@ -591,7 +599,11 @@
                   class="el-icon-edit icon-content"
                   @click="gomdrafts(props.row)"
                 ></i>
-                <i class="el-icon-delete icon-content" @click="delmdrafts(props.row)"></i>
+                <i
+                  class="el-icon-delete icon-content"
+                  @click="delmdrafts(props.row)"
+                  v-if="props.row.goodsCode !== $route.query.goodsCode"
+                ></i>
               </div>
             </div>
           </template>
@@ -958,6 +970,11 @@ export default {
         this.form.stock = "";
         this.form.goodsOriginalPrice = "";
       } else {
+        this.form.accountMoney = "";
+        this.form.anchorMoney = "";
+        this.form.goodsPrice = "";
+        this.form.stock = "";
+        this.form.goodsOriginalPrice = "";
         this.skuArr = [];
         this.columnArr = [];
         this.form.specificationList = [];
@@ -1170,19 +1187,24 @@ export default {
       );
     },
     // 编辑草稿箱
-    gomdrafts(row) {},
+    gomdrafts(row) {
+      this.getDetail(row.goodsCode);
+      this.dialogTableVisible = false;
+    },
     // 删除全部草稿箱
     delallmdrafts() {
+      let that = this;
       this.$confirm("确定清空草稿箱", "提示", {
         cancelButtonText: "取消",
         confirmButtonText: "确定",
         type: "none",
       })
         .then(() => {
+          console.log();
           let obj = {
             goodsCodes: [],
           };
-          this.DraftBoxList.forEach((el) => {
+          that.DraftBoxList.records.forEach((el) => {
             obj.goodsCodes.push(el.goodsCode);
           });
           realDeleteGoods(obj).then((res) => {
