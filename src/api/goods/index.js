@@ -85,3 +85,11 @@ export function update(data) {
     data
   });
 }
+export function modifyRecommendationStatus(data) {
+  return request({
+    url: `/goods/modifyRecommendationStatus`,
+    method: "POST",
+    data
+  });
+}
+

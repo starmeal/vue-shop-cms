@@ -839,9 +839,13 @@ export default {
   mounted() {},
   methods: {
     changeskuName(index) {
+      this.skuArr.forEach((item, idx) => {
+        item[this.form.specification[index].key] =
+          item[this.columnArr[index].prop];
+        delete item[this.columnArr[index].prop];
+      });
       this.columnArr[index].prop = this.form.specification[index].key;
       this.columnArr[index].label = this.form.specification[index].key;
-      this.inittable()
     },
     bianji() {
       this.disabled = !this.disabled;
@@ -881,7 +885,7 @@ export default {
         });
         body.categoryName = body.categoryName.split(",");
         this.cityvalue = [body.provinceCode, body.cityCode];
-        // this.disabled = true;
+        this.disabled = true;
         this.serviceAssuranceChange(body.serviceAssurance);
         this.form = body;
         this.form.category = category;
@@ -1071,35 +1075,30 @@ export default {
         });
         lineArr.push(obj);
       });
-      if (!this.update) {
+      this.skuArr = lineArr;
+      this.columnArr = columnArr;
+      this.skuArr = lineArr;
+      if (!this.update && this.skupapa) {
         let newskupapa = this.skuArr.map((item, index) => {
           return item.specsSeq;
         });
         let oldskupapa = newskupapa.filter((v) => {
           return this.skupapa.indexOf(v) > -1;
         });
-        let oldSku = [];
-        let newIndex = [];
-        oldskupapa.forEach((item, index) => {
-          lineArr.forEach((el, idx) => {
-            if (item == el.specsSeq) {
-              oldSku.push(this.CloneTable[index]);
-              newIndex.push(index);
-            }
-          });
+        lineArr.forEach((el, idx) => {
+          if (oldskupapa.includes(el.specsSeq)) {
+            let oldvalIndex = this.CloneTable.findIndex((element) => {
+              return element.specsSeq == el.specsSeq;
+            });
+            lineArr.splice(
+              idx,
+              1,
+              Object.assign({}, el, this.CloneTable[oldvalIndex])
+            );
+          }
         });
-        for (let i = 0; i < newIndex.length; i++) {
-          lineArr.splice(lineArr[i], 1);
-        }
-        lineArr = [...oldSku, ...lineArr];
-        console.log(lineArr);
-        // console.log(oldskuvalueIndex);
-        // console.log(this.CloneTable);
-        // console.log(this.CloneTable);
+        this.skuArr = lineArr;
       }
-
-      this.skuArr = lineArr;
-      this.columnArr = columnArr;
     },
     // 删除sku列表某一项
     delgoodsType(pop) {
@@ -1355,7 +1354,7 @@ export default {
           if (form.status == 9) {
             form.status = 2;
           }
-          if (this.$route.query.goodsCode) {
+          if (this.$route.query.goodsCode && !this.$route.query.status) {
             update(form).then((res) => {
               this.$message({
                 message: "修改商品成功",
@@ -1367,17 +1366,29 @@ export default {
               });
             });
             return false;
+          } else if (this.$route.query.goodsCode && this.$route.query.status) {
+            goodsadd(form).then((res) => {
+              this.$message({
+                message: "复制商品成功",
+                type: "success",
+                center: true,
+              });
+              this.$router.push({
+                path: "/goods",
+              });
+            });
+          } else {
+            goodsadd(form).then((res) => {
+              this.$message({
+                message: "创建商品成功",
+                type: "success",
+                center: true,
+              });
+              this.$router.push({
+                path: "/goods",
+              });
+            });
           }
-          goodsadd(form).then((res) => {
-            this.$message({
-              message: "创建商品成功",
-              type: "success",
-              center: true,
-            });
-            this.$router.push({
-              path: "/goods",
-            });
-          });
         } else {
           this.$nextTick(() => {
             let obj = {
