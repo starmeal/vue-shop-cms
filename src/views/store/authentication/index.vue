@@ -490,7 +490,7 @@ export default {
       this.form.periodStartDate = this.keyWordContent.TermStart;
       this.form.period_end_date = this.keyWordContent.TeamEnd;
       this.timevalue = [this.form.periodStartDate, this.form.period_end_date];
-      this.form.operatingPeriodType = 0;
+      this.form.operatingPeriodType = '0';
       this.showmessage = false;
     },
     serachcomp() {
