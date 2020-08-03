@@ -193,7 +193,7 @@ export default {
     // this.initscroll();
   },
   beforeDestroy() {
-    // this.dom.removeEventListener("scroll", () => {});
+    this.dom.removeEventListener("scroll", () => {});
   },
   methods: {
     initscroll() {

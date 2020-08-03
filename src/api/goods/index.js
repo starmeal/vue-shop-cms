@@ -71,3 +71,25 @@ export function dictoptions(data) {
     data
   });
 }
+export function realDeleteGoods(data) {
+  return request({
+    url: `/cms/goods/realDeleteGoods`,
+    method: "POST",
+    data
+  });
+}
+export function update(data) {
+  return request({
+    url: `/cms/goods/update`,
+    method: "POST",
+    data
+  });
+}
+export function modifyRecommendationStatus(data) {
+  return request({
+    url: `/goods/modifyRecommendationStatus`,
+    method: "POST",
+    data
+  });
+}
+

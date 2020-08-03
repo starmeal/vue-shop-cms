@@ -210,6 +210,7 @@ export const asyncRoutes = [
         component: () => import('@/views/goods/index'),
       },
       {
+        hidden: true,
         path: '/goodsform',
         meta: {
           title: '添加商品',
