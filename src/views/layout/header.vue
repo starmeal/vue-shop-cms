@@ -39,7 +39,7 @@
           <img src="../../../static/img/qiehuan.png" />
           切换账号
         </div>
-        <div class="user-action-item" @click='signout($event, 1)'>
+        <div class="user-action-item" @click='signout($event, 1)' v-if='roles[0] !== "*"'>
           <img src="../../../static/img/xiugai.png" />
           修改密码
         </div>
@@ -71,6 +71,7 @@ export default {
   },
   computed: {
     ...mapState({
+      roles: "roles",
       userName: 'userName',
       name: 'name',
       menuList: 'routes',
