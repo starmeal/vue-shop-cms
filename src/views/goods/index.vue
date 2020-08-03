@@ -166,7 +166,7 @@
           </el-table-column>
         </el-table>
       </section>
-     <section class="page-box">
+      <section class="page-box">
         <el-pagination
           v-if="list.length > 0"
           @size-change="handleSizeChange"

@@ -1,11 +1,10 @@
 <template>
   <div class="layout-container" :key="$route.path">
+    <Menu />
     <header-container></header-container>
     <div class="layout-main-con">
-      <Menu />
       <div class="layout-main-container">
-        <!-- style="height:calc(100% - 59px);overflow-y: scroll;" -->
-        <router-view id="router-view"></router-view>
+        <router-view id="router-view" style="height:calc(100% - 59px);overflow-y: scroll;"></router-view>
         <div class="botton-container">Powered by BOSS开播v2.5.7 © 2014-2015 升级微信1976633855</div>
       </div>
       <Order />
@@ -32,9 +31,9 @@ export default {
   height: 100%;
   width: 100%;
   overflow: hidden;
-  // .layout-main-con {
-  //   height: calc(100vh - 54px);
-  // }
+  .layout-main-con {
+    height: calc(100vh - 54px);
+  }
   .layout-main-container {
     transition: all 0.3s;
     margin-left: 258px;
@@ -57,23 +56,23 @@ export default {
     }
   }
 }
-// #router-view {
-//   &::-webkit-scrollbar {
-//     /*滚动条整体样式*/
-//     display: none !important;
-//     background: transparent !important;
-//   }
+#router-view {
+  &::-webkit-scrollbar {
+    /*滚动条整体样式*/
+    display: none !important;
+    background: transparent !important;
+  }
 
-//   &::-webkit-scrollbar-thumb {
-//     /*滚动条里面小方块*/
-//     display: none !important;
-//     background: transparent !important;
-//   }
+  &::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    display: none !important;
+    background: transparent !important;
+  }
 
-//   &::-webkit-scrollbar-track {
-//     /*滚动条里面轨道*/
-//     display: none !important;
-//     background: transparent !important;
-//   }
-// }
+  &::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    display: none !important;
+    background: transparent !important;
+  }
+}
 </style>

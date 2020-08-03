@@ -267,7 +267,7 @@
         </section>
         <section v-if="form.resource == 2">
           <el-form-item>
-            <el-button type="primary" @click="addspecificationKey">新增规格</el-button>
+            <el-button type="primary" @click="addspecificationKey"  :disabled="disabled">新增规格</el-button>
           </el-form-item>
           <section>
             <div class="guige" v-for="(item, index) in form.specification" :key="index">
@@ -277,6 +277,7 @@
                     规格名称：
                     <el-input
                       placeholder
+                      :disabled="disabled"
                       v-model="item.key"
                       @input="changeskuName(index)"
                       size="mini"
@@ -308,14 +309,25 @@
                         type="date"
                         style="width:140px;"
                         class="gelu"
+                        :disabled="disabled"
                         placeholder="填写生产日期"
                       ></el-date-picker>
-                      <el-input v-model="item.day" size="mini" style="width:200px;">
+                      <el-input
+                        v-model="item.day"
+                        size="mini"
+                        style="width:200px;"
+                        :disabled="disabled"
+                      >
                         <el-button type="primary" slot="append" @click="addskuvalue(item,index)">添加</el-button>
                       </el-input>
                     </template>
                     <template v-else>
-                      <el-input v-model="item.skuvalue" size="mini" style="width:200px;">
+                      <el-input
+                        v-model="item.skuvalue"
+                        size="mini"
+                        style="width:200px;"
+                        :disabled="disabled"
+                      >
                         <el-button type="primary" slot="append" @click="addskuvalue(item,index)">添加</el-button>
                       </el-input>
                     </template>
@@ -344,6 +356,7 @@
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
+                     :disabled="disabled"
                     v-model="props.row.goodsOriginalPrice"
                     :controls="false"
                     class="table-deep-number"
@@ -354,6 +367,7 @@
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
+                     :disabled="disabled"
                     v-model="props.row.goodsPrice"
                     :controls="false"
                     class="table-deep-number"
@@ -364,6 +378,7 @@
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
+                     :disabled="disabled"
                     v-model="props.row.anchorMoney"
                     :controls="false"
                     class="table-deep-number"
@@ -373,6 +388,7 @@
               <el-table-column label="分享佣金">
                 <template slot-scope="props">
                   <el-input-number
+                   :disabled="disabled"
                     :max="9999999"
                     v-model="props.row.accountMoney"
                     :controls="false"
@@ -384,6 +400,7 @@
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
+                     :disabled="disabled"
                     v-model="props.row.stock"
                     :controls="false"
                     class="table-deep-number"
@@ -395,14 +412,13 @@
                   <div
                     class="rea-png"
                     v-if="props.row.goodsSkuImg"
-                    @click="delskuIMg(props.$index)"
                   >
                     <img
                       v-if="props.row.goodsSkuImg"
                       :src="props.row.goodsSkuImg"
                       style="width:50px;height:50px"
                     />
-                    <i class="el-icon-close"></i>
+                    <i class="el-icon-close"  v-if="!disabled"   @click="delskuIMg(props.$index)"></i>
                   </div>
                   <el-upload
                     v-if="!props.row.goodsSkuImg"
@@ -422,12 +438,12 @@
               </el-table-column>
               <el-table-column label="商品条码">
                 <template slot-scope="props">
-                  <el-input v-model="props.row.goodsBarCode"></el-input>
+                  <el-input v-model="props.row.goodsBarCode"  :disabled="disabled"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="props">
-                  <el-button type="warning" @click="delgoodsType(props)" size="mini">删除</el-button>
+                  <el-button type="warning" @click="delgoodsType(props)" size="mini"  :disabled="disabled">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -541,6 +557,7 @@
         <el-form-item class="submit-btn">
           <el-button
             icon="el-icon-message"
+            :disabled="disabled"
             @click="dialogTableVisible = true"
           >{{DraftBoxList.total}}</el-button>
           <el-button type="primary" size="small" style="margin-bottom:0px" @click="bianji">编辑</el-button>
