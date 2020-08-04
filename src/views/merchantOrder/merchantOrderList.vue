@@ -191,7 +191,7 @@
           ></el-pagination>
         </section>
       </div>
-      <el-dialog title="发货" :visible.sync="examine" width="600px">
+      <!-- <el-dialog title="发货" :visible.sync="examine" width="600px">
         <el-form :model="dialogForm" ref="dialogForm">
           <el-form-item label="联系人 :" label-width="80px" prop="contact">
             <el-input
@@ -234,8 +234,20 @@
         <div slot="footer">
           <el-button type="primary">保存</el-button>
         </div>
-      </el-dialog>
+      </el-dialog>-->
     </div>
+    <section class="page-box">
+      <el-pagination
+        v-if="list.length > 0"
+        @size-change="handleSizeChange"
+        @current-change="changepage"
+        layout="sizes,total, prev, pager, next, jumper"
+        :page-size="form.pageSize"
+        :current-page.sync="form.curPage"
+        :total="totalCount"
+        :page-sizes="[10, 20, 30, 50]"
+      ></el-pagination>
+    </section>
   </div>
 </template>
 

@@ -59,7 +59,7 @@
               <template slot-scope="{row,$index}">
                 <el-input
                   :disabled="lock"
-                 @blur="
+                  @blur="
                       e => {
                         burTableChange(
                           e.target.value,
@@ -77,7 +77,7 @@
               <template slot-scope="{row,$index}">
                 <el-input
                   :disabled="lock"
-                 @blur="
+                  @blur="
                       e => {
                         burTableChange(
                           e.target.value,
@@ -95,7 +95,7 @@
               <template slot-scope="{row, $index}">
                 <el-input
                   :disabled="lock"
-                 @blur="
+                  @blur="
                       e => {
                         burTableChange(
                           e.target.value,
@@ -147,9 +147,14 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-button v-show="!lock" type="primary" 
-    v-loading.fullscreen.lock="fullscreenLoading"  @click="submit" class="submit">提交</el-button>
-    <el-button v-show="!lock" type class="back">返回列表</el-button>
+    <el-button
+      type="primary"
+      v-loading.fullscreen.lock="fullscreenLoading"
+      @click="submit"
+      class="submit"
+      :disabled="lock"
+    >提交</el-button>
+    <el-button @click="back" type class="back">返回列表</el-button>
 
     <el-dialog
       :title="selectType==1?'选择不可配送区域':'选择配送区域' "
@@ -224,7 +229,7 @@ export default {
   },
   data() {
     return {
-      fullscreenLoading:false,
+      fullscreenLoading: false,
       lock: false,
       // 所有城市数量 394
       allbuttonStatus: "unselected", //全选按钮状态 checkAll unselected  forbidden
@@ -271,8 +276,8 @@ export default {
             cityNames: ["全国【默认】"],
             cityCodes: [],
             designatedFirst: 1,
-            designatedFirstFreight: '0.00',
-            designatedAddFreight: '0.00',
+            designatedFirstFreight: "0.00",
+            designatedAddFreight: "0.00",
             designatedAdd: 0,
           },
         ],
@@ -311,9 +316,12 @@ export default {
   },
 
   methods: {
-     burTableChange(value, propertyName, index) {
+    back() {
+      this.$router.go(-1);
+    },
+    burTableChange(value, propertyName, index) {
       this.$set(
-       this.form.templateSub[index],
+        this.form.templateSub[index],
         propertyName,
         Number.isNaN(Number(value)) ? 0 : Number(value)
       );
@@ -336,7 +344,7 @@ export default {
         res.designatedAddFreight = res.designatedAddFreight / 100;
         res.cityCodes = JSON.parse(res.cityCodes);
         res.cityNames = JSON.parse(res.cityNames);
- 
+
         delete res.freightTemplateId;
       });
       body.templateSub = [newObj, ...body.templateSub];
@@ -350,7 +358,6 @@ export default {
     // 确定提交
 
     submit() {
-    
       this.$refs["templateForm"].validate((valid) => {
         if (valid) {
           this.templateEditMerTemplate();
@@ -379,18 +386,18 @@ export default {
         res.designatedAddFreight = res.designatedAddFreight * 100;
       });
       console.log(form);
-      if (form.templateSub.length == 0) {
-        this.$message({
-          showClose: true,
-          message: "为指定城市地区设置运费未选择地址",
-          type: "warning",
-        });
-        return;
-      }
-   this.fullscreenLoading = true;
+      // if (form.templateSub.length == 0) {
+      //   this.$message({
+      //     showClose: true,
+      //     message: "为指定城市地区设置运费未选择地址",
+      //     type: "warning",
+      //   });
+      //   return;
+      // }
+      this.fullscreenLoading = true;
       editMerTemplate(form)
         .then((res) => {
-            this.fullscreenLoading = false;
+          this.fullscreenLoading = false;
           if (res.code == "000000") {
             this.$router.push("/shippingMethods");
           }
@@ -452,8 +459,8 @@ export default {
         cityNames: [],
         cityCodes: [],
         designatedFirst: 1,
-        designatedFirstFreight:'0.00',
-        designatedAddFreight: '0.00',
+        designatedFirstFreight: "0.00",
+        designatedAddFreight: "0.00",
         designatedAdd: 0,
       };
       let unreachableCityCodes = [];
