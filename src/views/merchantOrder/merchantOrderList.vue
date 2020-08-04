@@ -5,7 +5,7 @@
         <div ref="forms" class="forms">
           <el-form ref="form" :model="form" :size="size" label-width="70px">
             <el-form-item label="订单搜索">
-              <el-select v-model="form.orderId" clearable>
+              <el-select v-model="form.search" clearable>
                 <el-option
                   v-for="(item, index) in orderArr"
                   :label="item.label"
@@ -17,14 +17,14 @@
                 style="margin-left: 20px;"
                 clearable
                 class="inputStyle"
-                v-model="form.order"
+                v-model="form.value"
               ></el-input>
             </el-form-item>
             <el-form-item label="下单时间">
               <p class="orderTime">
                 <el-date-picker
                   :size="size"
-                  v-model="createTime"
+                  v-model="listpage.queryType"
                   class="timeInput"
                   type="datetimerange"
                   range-separator="至"
@@ -49,7 +49,7 @@
                 ></el-input>
               </el-form-item>
               <el-form-item label="订单状态">
-                <el-select v-model="form.orderStatus" clearable placeholder="全部">
+                <el-select v-model="listpage.queryStatus" clearable placeholder="全部">
                   <el-option
                     v-for="(item, index) in orderStatusArr"
                     :label="item.label"
@@ -75,6 +75,7 @@
                 icon="el-icon-search"
                 :loading="searchLoading"
                 :size="size"
+                @click="serachList"
                 type="primary"
               >筛选</el-button>
               <el-button style="margin-left:20px;" :size="size" @click="exportList">导出</el-button>
@@ -236,18 +237,6 @@
         </div>
       </el-dialog>-->
     </div>
-    <section class="page-box">
-      <el-pagination
-        v-if="list.length > 0"
-        @size-change="handleSizeChange"
-        @current-change="changepage"
-        layout="sizes,total, prev, pager, next, jumper"
-        :page-size="form.pageSize"
-        :current-page.sync="form.curPage"
-        :total="totalCount"
-        :page-sizes="[10, 20, 30, 50]"
-      ></el-pagination>
-    </section>
   </div>
 </template>
 
@@ -284,15 +273,15 @@ export default {
       ],
       orderArr: [
         {
-          value: 0,
+          value: "orderCode",
           label: "订单编号",
         },
         {
-          value: 1,
+          value: "userNickName",
           label: "收货人姓名",
         },
         {
-          value: 2,
+          value: "userTel",
           label: "买家手机号",
         },
       ],
@@ -303,15 +292,15 @@ export default {
         },
         {
           value: 1,
-          label: "待付款",
+          label: "待买家付款",
         },
         {
           value: 2,
-          label: "代发货",
+          label: "待发货",
         },
         {
           value: 3,
-          label: "已发货",
+          label: "已发货（待收货）",
         },
         {
           value: 4,
@@ -319,7 +308,11 @@ export default {
         },
         {
           value: 5,
-          label: "已关闭",
+          label: "待评价",
+        },
+        {
+          value: 6,
+          label: "已取消",
         },
         {
           value: 6,
@@ -341,15 +334,8 @@ export default {
         },
       ],
       form: {
-        orderId: "",
-        order: "",
-        startTime: "",
-        endTime: "",
-        goodsName: "",
-        orderStatus: 0,
-        serviceStatus: 0,
-        pageSize: 10,
-        curPage: 1,
+       search:'',
+       value:'',
       },
       dialogForm: {
         contact: "",
@@ -385,6 +371,12 @@ export default {
         this.list = records;
         this.totalCount = total;
       });
+    },
+    // 搜索按钮
+    serachList(){
+      this.listpage.curPage = 1
+      this.listpage[this.form.search] = this.form.value
+      this.getList()
     },
     //今天按钮
     today() {
@@ -464,11 +456,6 @@ export default {
           type: "success",
         });
         return false;
-      }
-    },
-    sendGoods() {
-      if (this.examine == false) {
-        this.examine = true;
       }
     },
   },

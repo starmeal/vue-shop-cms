@@ -12,7 +12,7 @@ export default {
 * {
   margin: 0;
   padding: 0;
-  user-select: none;
+  // user-select: none;
 }
 #app {
   width: 100%;

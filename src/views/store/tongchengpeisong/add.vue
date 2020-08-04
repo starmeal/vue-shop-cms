@@ -130,7 +130,14 @@
           class="designatedArea"
           icon="el-icon-circle-plus-outline"
         >指定区域运费</el-button>
-        <div class="Tips">根据件数来计算运费，当物品不足“首件数量”时，按照“首件费用”计算，超过部分按照“续建重量和“续建费用”乘机来计算</div>
+        <div
+          class="Tips"
+          v-if="form.chargeMode == 1"
+        >根据件数来计算运费，当物品不足“首件数量”时，按照“首件费用”计算，超过部分按照“续件重量和“续件费用”乘积来计算</div>
+        <div
+          class="Tips"
+          v-if="form.chargeMode == 2"
+        >根据重量来计算运费，当物品不足“首重重量”时，按照“首重费用“计算，超过部分按照“续重重量”和“续重费用”乘积来计算。</div>
         <el-button
           :disabled="lock"
           type="primary"
