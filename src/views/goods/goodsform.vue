@@ -790,6 +790,7 @@ export default {
         stockReduceType: "1",
         deliveryType: "1",
         isInvoice: "0",
+        qualityTime:"",
         specification: [
           // {
           //   key: "尺寸",
@@ -1279,6 +1280,7 @@ export default {
       let newDate = new Date(
         parseInt(new Date(this.form.manufactureTime).getTime() + numDate)
       ).getTime();
+      this.newDate = formatDate(this.newDate)
       let nowDate = parseInt(new Date().getTime());
       let number = (newDate - nowDate) / (60 * 60 * 24 * 1000);
       this.numberDay = parseInt(number);
@@ -1388,6 +1390,7 @@ export default {
             specificationList: this.skuArr,
             category: this.form.category.join(","),
             categoryName: this.form.categoryName.join(","),
+            qualityTime: this.newDate
           });
           // 9 是定时后台没有变成2
           if (form.status == 9) {

@@ -24,7 +24,7 @@
               <p class="orderTime">
                 <el-date-picker
                   :size="size"
-                  v-model="listpage.queryType"
+                  v-model="createTime"
                   class="timeInput"
                   type="datetimerange"
                   range-separator="至"
@@ -45,11 +45,16 @@
                   clearable
                   class="inputStyle"
                   placeholder="请输入商品名称"
-                  v-model="form.goodsName"
+                  v-model="listpage.productName"
                 ></el-input>
               </el-form-item>
               <el-form-item label="订单状态">
-                <el-select v-model="listpage.queryStatus" clearable placeholder="全部">
+                <el-select
+                  v-model="listpage.orderStatus"
+                  clearable
+                  placeholder="全部"
+                  @change="changeStatus"
+                >
                   <el-option
                     v-for="(item, index) in orderStatusArr"
                     :label="item.label"
@@ -59,7 +64,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="售后状态">
-                <el-select v-model="form.serviceStatus" clearable placeholder="全部">
+                <el-select v-model="listpage.afterSaleStatus" clearable placeholder="全部">
                   <el-option
                     v-for="(item, index) in serviceStatusArr"
                     :label="item.label"
@@ -85,23 +90,25 @@
         <p class="retrievalList">
           <span
             :class="{active: index===isTrue}"
-            @click="tabRetrieval(index)"
-            v-for="(item,index) in retrievalList"
+            @click="tabRetrieval(index,item)"
+            v-for="(item,index) in orderStatusArr"
             :key="index"
-          >{{item}}</span>
+          >{{item.label}}</span>
         </p>
-        <section class="table-container" ref="table">
+        <section class="table-container" ref="table" v-loading="loading">
           <table style="width:100%; border-collapse: collapse; border: none;table-layout:fixed">
             <tr style="width:100%" class="header-tr">
               <td style="width:50%">
                 <div class="header-flex">
                   <section>商品</section>
                   <section>单价（元）/数量</section>
+                  <section>售后</section>
                 </div>
               </td>
-              <td style="width:10%">售后</td>
+              <!-- <td style="width:10%">售后</td> -->
               <td style="width:10%">买家/收货人</td>
               <td style="width:10%">配送方式</td>
+              <td style="width:10%">实收金额（元）</td>
               <td style="width:10%">订单状态</td>
               <td style="width:10%">操作</td>
             </tr>
@@ -114,9 +121,7 @@
               <span
                 style="margin-right:30px;margin-left:18px;font-size:12px;"
               >订单时间：{{ its.createTime }}</span>
-              <span
-                style="margin-right:30px;margin-left:18px;font-size:12px;"
-              >订单时间：微信/微信支付</span>
+              <span style="margin-right:30px;margin-left:18px;font-size:12px;">订单时间：微信/微信支付</span>
               <p class="detail" @click="goOrderdetail(its)">查看详情</p>
             </div>
             <table
@@ -128,27 +133,35 @@
               <tr class="tspi" style="width:100%">
                 <td style="width:50%">
                   <section class="flex-box" v-for="(item, idx) in its.detail" :key="idx">
-                    <img class="thumbImg" :src="item.thumbImg.split(',')[0]" />
-                    <div class="product-name">
-                      <p class="thumbImg-right">{{ item.productName }}</p>
-                      <div
-                        style="margin-left:10px;margin-top:10px"
-                        v-show="item.goodsSku"
-                      >{{item.goodsSku}}</div>
+                    <div>
+                      <img class="thumbImg" :src="item.thumbImg.split(',')[0]" />
+                      <div class="product-name">
+                        <p class="thumbImg-right">{{ item.productName }}</p>
+                        <div
+                          style="margin-left:10px;margin-top:10px"
+                          v-show="item.goodsSku"
+                        >{{item.goodsSku}}</div>
+                      </div>
                     </div>
-                    <div style="padding:0 20px;text-align: center;">
+                    <div>
                       <div>{{ item.payPrice / 100 }}</div>
                       <div>{{ item.number }}件</div>
                     </div>
+                    <div>
+                      <div>{{ item.aftersaleStatusText}}</div>
+                    </div>
                   </section>
                 </td>
-                <td style="width:10%"></td>
+                <!-- <td style="width:10%"></td> -->
                 <td style="width:10%">
                   <p class="qusibaps">{{ its.nickName }}</p>
                   <p class="qusibap">{{ its.mobile }}</p>
                 </td>
                 <td style="width:10%">
-                  <p class="qusibap" @click="goOrderdetail(its)">详情</p>
+                  <p class="qusibap">{{ its.pickupType }}</p>
+                </td>
+                <td style="width:10%">
+                  <div class="qusibap">{{its.payAmount / 100}}</div>
                 </td>
                 <td style="width:10%">
                   <p class="qusibap">{{ its.orderStatusText }}</p>
@@ -241,7 +254,11 @@
 </template>
 
 <script>
-import { getMerShopOrderList } from "@/api/merchantOrder";
+import {
+  getMerShopOrderList,
+  merShopOrderListExportExcel,
+} from "@/api/merchantOrder";
+import { formatDate } from "@/utils/util";
 export default {
   name: "merchantOrderList",
   data() {
@@ -250,17 +267,9 @@ export default {
       tableHeight: "",
       createTime: "",
       examine: false,
+      loading: true,
       searchLoading: false,
       isTrue: 0, //检索按钮样式
-      retrievalList: [
-        "全部",
-        "待付款",
-        "代发货",
-        "已发货",
-        "已完成",
-        "已关闭",
-        "售后中",
-      ],
       listType: [
         "商品",
         "单价(元)/数量",
@@ -287,12 +296,12 @@ export default {
       ],
       orderStatusArr: [
         {
-          value: 0,
+          value: "",
           label: "全部",
         },
         {
           value: 1,
-          label: "待买家付款",
+          label: "待付款",
         },
         {
           value: 2,
@@ -300,23 +309,15 @@ export default {
         },
         {
           value: 3,
-          label: "已发货（待收货）",
+          label: "已发货",
         },
         {
           value: 4,
           label: "已完成",
         },
         {
-          value: 5,
-          label: "待评价",
-        },
-        {
           value: 6,
-          label: "已取消",
-        },
-        {
-          value: 6,
-          label: "售后中",
+          label: "已关闭",
         },
       ],
       serviceStatusArr: [
@@ -334,8 +335,8 @@ export default {
         },
       ],
       form: {
-       search:'',
-       value:'',
+        search: "",
+        value: "",
       },
       dialogForm: {
         contact: "",
@@ -345,7 +346,6 @@ export default {
       listpage: {
         curPage: 1,
         pageSize: 10,
-        shopMerchantsCode: "",
         orderStatus: "",
         afterSaleStatus: "",
         orderCode: "",
@@ -363,20 +363,29 @@ export default {
   },
   mounted() {},
   methods: {
+    changeStatus(val) {
+      let Idx = this.orderStatusArr.findIndex((el) => {
+        return val == el.value;
+      });
+      this.isTrue = Idx;
+    },
     getList() {
+      this.loading = true;
       getMerShopOrderList(this.listpage).then((res) => {
+        let dom = document.querySelector("#router-view");
+        dom.scrollTop = 0;
         this.searchLoading = false;
-        this.tableloading = false;
+        this.loading = false;
         let { records, total } = res.body;
         this.list = records;
         this.totalCount = total;
       });
     },
     // 搜索按钮
-    serachList(){
-      this.listpage.curPage = 1
-      this.listpage[this.form.search] = this.form.value
-      this.getList()
+    serachList() {
+      this.listpage.curPage = 1;
+      this.listpage[this.form.search] = this.form.value;
+      this.getList();
     },
     //今天按钮
     today() {
@@ -389,6 +398,8 @@ export default {
           1
       );
       this.createTime = [start, end];
+      this.listpage.createTimeBegin = formatDate(start);
+      this.listpage.createTimeEnd = formatDate(end);
     },
     //昨天按钮
     yesterday() {
@@ -402,6 +413,8 @@ export default {
           1
       );
       this.createTime = [start, end];
+      this.listpage.createTimeBegin = formatDate(start);
+      this.listpage.createTimeEnd = formatDate(end);
     },
     //最近7天按钮
     lastSeven() {
@@ -415,6 +428,8 @@ export default {
           1
       );
       this.createTime = [start, end];
+      this.listpage.createTimeBegin = formatDate(start);
+      this.listpage.createTimeEnd = formatDate(end);
     },
     //最近30天按钮
     lastThirty() {
@@ -428,6 +443,8 @@ export default {
           1
       );
       this.createTime = [start, end];
+      this.listpage.createTimeBegin = formatDate(start);
+      this.listpage.createTimeEnd = formatDate(end);
     },
     // 翻页
     changepage(page) {
@@ -444,10 +461,14 @@ export default {
     },
     //时间选择器
     timeChange(val) {
-      console.log(val);
+      this.listpage.createTimeBegin = "";
+      this.listpage.createTimeEnd = "";
+      this.getList();
     },
-    tabRetrieval(index) {
+    tabRetrieval(index, item) {
       this.isTrue = index;
+      this.listpage.orderStatus = item.value;
+      this.serachList();
     },
     exportList() {
       if (this.createTime == "" || this.createTime == null) {
@@ -457,6 +478,9 @@ export default {
         });
         return false;
       }
+      merShopOrderListExportExcel(this.listpage).then(res=>{
+        
+      })
     },
   },
 };
@@ -465,11 +489,22 @@ export default {
 .header-flex {
   width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding-left: 20px;
   padding-right: 10px;
   box-sizing: border-box;
+}
+.header-flex > section:nth-of-type(1) {
+  text-align: left;
+  flex: 1;
+  margin-right: 10px;
+}
+.header-flex > section:nth-of-type(2) {
+  flex: 0 0 20%;
+}
+.header-flex > section:nth-of-type(3) {
+  flex: 0 0 20%;
+  text-align: center;
 }
 .forms {
   margin-bottom: 20px;
@@ -549,6 +584,19 @@ ul li {
   padding: 10px 0px 10px 20px;
   border-bottom: solid 1px #d5d5d5;
 }
+.flex-box > div:first-of-type {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  flex: 1;
+  margin-right: 10px;
+}
+.flex-box > div:nth-of-type(2) {
+  flex: 0 0 20%;
+}
+.flex-box > div:nth-of-type(3) {
+  flex: 0 0 20%;
+}
 .flex-box:last-of-type {
   border-bottom: none;
 }
@@ -614,6 +662,7 @@ ul li {
 .table-container {
   /* padding: 10px; */
   position: relative;
+  min-height: 300px;
   border-top: solid 1px #d5d5d5;
   /* overflow-y: scroll; */
 }
@@ -724,6 +773,7 @@ ul li {
   text-align: center;
   border: 1px solid #d5d5d5;
   border-bottom: none;
+  cursor: pointer;
 }
 .retrievalList span:not(:last-child) {
   border-right: none;
@@ -732,8 +782,10 @@ ul li {
   width: 100%;
   overflow: hidden;
 }
-.active {
-  background: #fff;
+.retrievalList .active {
+  background: #44abf7;
+  color: #fff;
+  border: 1px solid #44abf7;
 }
 /*表格样式*/
 ul,

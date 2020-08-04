@@ -16,7 +16,7 @@ export default {
 }
 #app {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   min-height: 100vh;
   background: #f5f7f9;
   min-width: 1080px;

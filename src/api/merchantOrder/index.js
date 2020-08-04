@@ -7,3 +7,10 @@ export function getMerShopOrderList(data) {
         data
     });
 }
+export function merShopOrderListExportExcel(data) {
+    return request({
+        url: `/order/merShopOrderListExportExcel`,
+        method: "POST",
+        data
+    });
+}
