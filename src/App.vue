@@ -9,6 +9,10 @@ export default {
 };
 </script>
 <style lang="scss">
+html, body{
+  width:100%;
+  height: 100vh;
+}
 * {
   margin: 0;
   padding: 0;

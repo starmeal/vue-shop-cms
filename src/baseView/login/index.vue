@@ -109,11 +109,12 @@ export default {
   data() {
     var passWorldRules = (rule, value, callback) => {
       console.log(value);
-      if (value == '') {
-        callback(new Error('密码不能为空'));
-      } if (value != '' && value.length < 6) {
-        callback(new Error('密码小于六位数'));
-      }else {
+      if (value == "") {
+        callback(new Error("密码不能为空"));
+      }
+      if (value != "" && value.length < 6) {
+        callback(new Error("密码小于六位数"));
+      } else {
         callback();
       }
     };
@@ -225,23 +226,14 @@ export default {
       },
       userRules: {
         username: [
-<<<<<<< HEAD
-          { required: true, message: "用户名不能为空", trigger: "blur" },
-=======
-          { required: true, message: '用户名/手机号不能为空', trigger: 'blur' },
->>>>>>> 22d7815fc40c765818f58d624b3167b308bc7540
+          { required: true, message: "用户名/手机号不能为空", trigger: "blur" },
         ],
         password: [
           {
             required: true,
-<<<<<<< HEAD
-            min: 6,
-            message: "密码长度不能小于6位",
-            trigger: "blur",
-=======
+
             validator: passWorldRules,
-            trigger: 'blur',
->>>>>>> 22d7815fc40c765818f58d624b3167b308bc7540
+            trigger: "blur",
           },
         ],
       },
@@ -484,6 +476,7 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+
 .mini-flexs ::v-deep .el-cascader .el-input__inner {
   border-radius: 0px;
 }

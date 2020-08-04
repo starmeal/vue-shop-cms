@@ -336,15 +336,19 @@ export default {
         designatedFirst: body.defaultFirst,
         designatedAdd: body.defaultAdd,
       };
-      body.unreachableCityCodes = JSON.parse(body.unreachableCityCodes);
-      body.unreachableCityNames = JSON.parse(body.unreachableCityNames);
+
+      body.unreachableCityCodes = body.unreachableCityCodes
+        ? JSON.parse(body.unreachableCityCodes)
+        : [];
+      body.unreachableCityNames = body.unreachableCityNames
+        ? JSON.parse(body.unreachableCityNames)
+        : [];
       body.templateSub = body.templateSubs;
       body.templateSub.map((res) => {
         res.designatedFirstFreight = res.designatedFirstFreight / 100;
         res.designatedAddFreight = res.designatedAddFreight / 100;
         res.cityCodes = JSON.parse(res.cityCodes);
         res.cityNames = JSON.parse(res.cityNames);
-
         delete res.freightTemplateId;
       });
       body.templateSub = [newObj, ...body.templateSub];

@@ -84,14 +84,12 @@
                 :loading="searchLoading"
                 :size="size"
                 type="primary"
-                @click
               >筛选</el-button>
               <el-button style="margin-left:20px;" :size="size" @click="exportList">导出</el-button>
             </p>
           </el-form>
         </div>
-       自定义的table表格  elment-ui table 可切换选择
-      
+自定义的table表格 elment-ui table 可切换选择
         <div class="header-contet">
           <ul class="header">
             <li class="li1 flexSb">
@@ -169,20 +167,7 @@
             </div>
           </div>
         </div>
-        <!-- <el-table ref="multipleTable" :data="list" v-loading="tableloading">
-          <el-table-column prop="info" label="商品信息">
-            <template slot-scope="{row,$index}">
-              <div v-show="!row.isSet" @dblclick="dblclick(row,$index)">{{row.sort}}</div>
-              <el-input
-                @keyup.native="keyup(row)"
-                v-show="row.isSet"
-                style="wdith:50px"
-                @blur="blur(row,$index)"
-                v-model="row.sort"
-              ></el-input>
-            </template>
-          </el-table-column>
-        </el-table>-->
+     
 
         <div v-if="list.length==0" class="no-data">暂无数据</div>
       </div>
@@ -251,7 +236,6 @@ export default {
   name: "merchantOrderList",
   data() {
     return {
-      
       size: "mini",
       tableHeight: "",
       createTime: "",
