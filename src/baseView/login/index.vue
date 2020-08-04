@@ -109,11 +109,12 @@ export default {
   data() {
     var passWorldRules = (rule, value, callback) => {
       console.log(value);
-      if (value == '') {
-        callback(new Error('密码不能为空'));
-      } if (value != '' && value.length < 6) {
-        callback(new Error('密码小于六位数'));
-      }else {
+      if (value == "") {
+        callback(new Error("密码不能为空"));
+      }
+      if (value != "" && value.length < 6) {
+        callback(new Error("密码小于六位数"));
+      } else {
         callback();
       }
     };
@@ -474,6 +475,7 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+
 .mini-flexs ::v-deep .el-cascader .el-input__inner {
   border-radius: 0px;
 }
