@@ -65,7 +65,7 @@
         <el-form-item label="商品重量（克）">
           <el-input-number
             :disabled="disabled"
-            class="deep-number"
+            class="deep-numbers"
             v-model="form.weight"
             :controls="false"
             controls-position="right"
@@ -233,7 +233,7 @@
               @change="shelfDayChange"
               :controls="false"
               label="描述文字"
-              class="deep-number"
+              class="deep-numbers"
               :max="9999999"
             ></el-input-number>
             <span class="xiaoxue" v-show="form.manufactureTime && form.shelfDay">
@@ -242,7 +242,12 @@
             </span>
           </el-form-item>
           <el-form-item label="商品条码">
-            <el-input v-model="form.goodsBarCode" class="input-update" placeholder="请输入内容"></el-input>
+            <el-input
+              v-model="form.goodsBarCode"
+              :disabled="disabled"
+              class="input-update"
+              placeholder="请输入内容"
+            ></el-input>
           </el-form-item>
           <el-form-item label="主播佣金">
             <el-input-number
@@ -250,7 +255,7 @@
               v-model="form.anchorMoney"
               :controls="false"
               label="描述文字"
-              class="deep-number"
+              class="deep-numbers"
               :max="9999999"
             ></el-input-number>
           </el-form-item>
@@ -261,7 +266,7 @@
               v-model="form.accountMoney"
               :controls="false"
               label="描述文字"
-              class="deep-number"
+              class="deep-numbers"
             ></el-input-number>
           </el-form-item>
         </section>
@@ -301,7 +306,7 @@
                     ></i>
                   </div>
                   <div>
-                    填写规格值：
+                    规格值：
                     <template v-if="item.time">
                       <el-date-picker
                         v-model="item.date"
@@ -310,7 +315,7 @@
                         style="width:140px;"
                         class="gelu"
                         :disabled="disabled"
-                        placeholder="填写生产日期"
+                        placeholder="生产日期"
                       ></el-date-picker>
                       <el-input
                         v-model="item.day"
@@ -352,58 +357,58 @@
                 :label="col.label"
                 :key="index"
               ></el-table-column>
-              <el-table-column label="市场价">
+              <el-table-column label="市场价" >
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
                     :disabled="disabled"
                     v-model="props.row.goodsOriginalPrice"
                     :controls="false"
-                    class="table-deep-number"
+                    class="table-deep-numbers"
                   ></el-input-number>
                 </template>
               </el-table-column>
-              <el-table-column label="销售价">
+              <el-table-column label="销售价" width="90px">
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
                     :disabled="disabled"
                     v-model="props.row.goodsPrice"
                     :controls="false"
-                    class="table-deep-number"
+                    class="table-deep-numbers"
                   ></el-input-number>
                 </template>
               </el-table-column>
-              <el-table-column label="主播佣金">
+              <el-table-column label="主播佣金" width="90px">
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
                     :disabled="disabled"
                     v-model="props.row.anchorMoney"
                     :controls="false"
-                    class="table-deep-number"
+                    class="table-deep-numbers"
                   ></el-input-number>
                 </template>
               </el-table-column>
-              <el-table-column label="分享佣金">
+              <el-table-column label="分享佣金" width="90px">
                 <template slot-scope="props">
                   <el-input-number
                     :disabled="disabled"
                     :max="9999999"
                     v-model="props.row.accountMoney"
                     :controls="false"
-                    class="table-deep-number"
+                    class="table-deep-numbers"
                   ></el-input-number>
                 </template>
               </el-table-column>
-              <el-table-column label="库存">
+              <el-table-column label="库存" width="90px">
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
                     :disabled="disabled"
                     v-model="props.row.stock"
                     :controls="false"
-                    class="table-deep-number"
+                    class="table-deep-numbers"
                   ></el-input-number>
                 </template>
               </el-table-column>
@@ -433,12 +438,12 @@
                   </el-upload>
                 </template>
               </el-table-column>
-              <el-table-column label="商品条码">
+              <el-table-column label="商品条码" width="90px">
                 <template slot-scope="props">
                   <el-input v-model="props.row.goodsBarCode" :disabled="disabled"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="操作">
+              <el-table-column label="操作" width="90px">
                 <template slot-scope="props">
                   <el-button
                     type="warning"
@@ -457,7 +462,7 @@
             v-model="form.goodsOriginalPrice"
             :controls="false"
             label="描述文字"
-            class="deep-number"
+            class="deep-numbers"
             :max="9999999"
           ></el-input-number>
         </el-form-item>
@@ -467,7 +472,7 @@
             v-model="form.goodsPrice"
             :controls="false"
             label="描述文字"
-            class="deep-number"
+            class="deep-numbers"
             :max="9999999"
           ></el-input-number>
         </el-form-item>
@@ -478,7 +483,7 @@
             v-model="form.stock"
             :controls="false"
             label="描述文字"
-            class="deep-number"
+            class="deep-numbers"
           ></el-input-number>
         </el-form-item>
         <el-form-item label="库存扣减方式" prop="stockReduceType">
@@ -790,7 +795,7 @@ export default {
         stockReduceType: "1",
         deliveryType: "1",
         isInvoice: "0",
-        qualityTime:"",
+        qualityTime: "",
         specification: [
           // {
           //   key: "尺寸",
@@ -834,48 +839,54 @@ export default {
     this.getype();
   },
   watch: {
-    // skuArr: {
-    //   handler(newval) {
-    //     this.form.stock = 0;
-    //     this.form.goodsPrice = "";
-    //     this.form.goodsOriginalPrice = "";
-    //     let arr = [];
-    //     let soArr = [];
-    //     this.$nextTick(() => {
-    //       this.$refs.goodForm.clearValidate();
-    //     });
-    //     newval.forEach((el, idx) => {
-    //       if (el.stock > 0) {
-    //         this.form.stock += el.stock;
-    //       }
-    //       if (el.goodsPrice > 0) {
-    //         arr.push(el.goodsPrice);
-    //       }
-    //       if (el.goodsOriginalPrice > 0) {
-    //         soArr.push(el.goodsOriginalPrice);
-    //       }
-    //     });
-    //     if (arr.length) {
-    //       this.form.goodsPrice = sortArr(arr, "mini")[0];
-    //     }
-    //     if (soArr.length) {
-    //       this.form.goodsOriginalPrice = sortArr(soArr, "")[0];
-    //     }
-    //   },
-    //   deep: true,
-    //   immediate: true,
-    // },
+    skuArr: {
+      handler(newval) {
+        this.form.stock = 0;
+        this.form.goodsPrice = "";
+        this.form.goodsOriginalPrice = "";
+        let arr = [];
+        let soArr = [];
+        this.$nextTick(() => {
+          this.$refs.goodForm.clearValidate();
+        });
+        newval.forEach((el, idx) => {
+          if (el.stock > 0) {
+            this.form.stock += el.stock;
+          }
+          if (el.goodsPrice > 0) {
+            arr.push(el.goodsPrice);
+          }
+          if (el.goodsOriginalPrice > 0) {
+            soArr.push(el.goodsOriginalPrice);
+          }
+        });
+        if (arr.length) {
+          this.form.goodsPrice = sortArr(arr, "mini")[0];
+        }
+        if (soArr.length) {
+          this.form.goodsOriginalPrice = sortArr(soArr, "")[0];
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
   },
   mounted() {},
   methods: {
     changeskuName(index) {
-      this.skuArr.forEach((item, idx) => {
-        item[this.form.specification[index].key] =
-          item[this.columnArr[index].prop];
-        delete item[this.columnArr[index].prop];
-      });
-      this.columnArr[index].prop = this.form.specification[index].key;
-      this.columnArr[index].label = this.form.specification[index].key;
+      if (
+        this.skuArr.length > 0 &&
+        this.columnArr[index] &&
+        this.columnArr[index].prop
+      ) {
+        this.skuArr.forEach((item, idx) => {
+          item[this.form.specification[index].key] =
+            item[this.columnArr[index].prop];
+          delete item[this.columnArr[index].prop];
+        });
+        this.columnArr[index].prop = this.form.specification[index].key;
+        this.columnArr[index].label = this.form.specification[index].key;
+      }
     },
     bianji() {
       this.disabled = !this.disabled;
@@ -920,6 +931,7 @@ export default {
         this.form = body;
         this.form.category = category;
         this.form.resource = body.specification.length > 0 ? 2 : 1;
+        this.shelfDayChange(parseInt(body.shelfDay));
         if (body.specificationList.length > 0) {
           let skuArr = [];
           let mapObj = {};
@@ -964,12 +976,15 @@ export default {
     },
     // 切换规格是统一还是多规格
     resourceChange(val) {
+      this.form.isOnTime = "0";
       if (this.form.resource == 2) {
         this.form.accountMoney = "";
         this.form.anchorMoney = "";
         this.form.goodsPrice = "";
         this.form.stock = "";
         this.form.goodsOriginalPrice = "";
+        this.form.manufactureTime = "";
+        this.form.shelfDay = "";
       } else {
         this.form.accountMoney = "";
         this.form.anchorMoney = "";
@@ -1087,6 +1102,7 @@ export default {
           lineArr.push(item.value);
         }
       });
+
       let gridData = descartes(lineArr);
       lineArr = [];
       gridData.forEach((el, idx) => {
@@ -1103,13 +1119,15 @@ export default {
           goodsBarCode: "",
           goodsOriginalPrice: "",
         };
+        keyArr.forEach((item, index) => {
+          obj[item] = el.constructor === Array ? el[index] : el;
+        });
         obj.goodsSkuName = el.constructor === Array ? el.join(" ") : el;
         obj.specsSeq = el.constructor === Array ? el.join(":") : el;
-        keyArr.forEach((item, index) => {
-          obj[item] = el[index];
-        });
+        console.log(obj, 1);
         lineArr.push(obj);
       });
+      console.log(lineArr);
       this.skuArr = lineArr;
       this.columnArr = columnArr;
       this.skuArr = lineArr;
@@ -1280,7 +1298,8 @@ export default {
       let newDate = new Date(
         parseInt(new Date(this.form.manufactureTime).getTime() + numDate)
       ).getTime();
-      this.newDate = formatDate(this.newDate)
+      this.newDate = formatDate(newDate);
+      console.log(this.newDate);
       let nowDate = parseInt(new Date().getTime());
       let number = (newDate - nowDate) / (60 * 60 * 24 * 1000);
       this.numberDay = parseInt(number);
@@ -1390,11 +1409,11 @@ export default {
             specificationList: this.skuArr,
             category: this.form.category.join(","),
             categoryName: this.form.categoryName.join(","),
-            qualityTime: this.newDate
+            qualityTime: this.newDate,
           });
-          // 9 是定时后台没有变成2
+          // 9 是定时后台没有变成1
           if (form.status == 9) {
-            form.status = 2;
+            form.status = 1;
           }
           if (this.$route.query.goodsCode && !this.$route.query.status) {
             update(form).then((res) => {
@@ -1542,6 +1561,9 @@ export default {
 };
 </script>
 <style>
+.guige {
+  margin-bottom: 10px;
+}
 .gelu .el-input__inner {
   line-height: 28px !important;
   height: 28px !important;
@@ -1592,7 +1614,8 @@ export default {
 <style scoped lang="scss">
 .sku-box {
   padding: 20px;
-  width: 100%;
+  width: 84%;
+  margin: 0 auto;
   box-sizing: border-box;
   border: solid 1px #afafaf;
   margin-top: 10px;
@@ -1600,6 +1623,8 @@ export default {
 .sku-table {
   margin-top: 10px;
   margin-bottom: 10px;
+  width: 90%;
+  margin: 0 auto;
 }
 .icon-content {
   border: solid 1px #efefef;

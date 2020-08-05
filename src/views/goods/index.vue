@@ -84,100 +84,106 @@
         <el-button type="primary" class="btn-search" @click="goform()">发布商品</el-button>
         <el-button class="btn-search" @click="exportlist">导出</el-button>
       </section>
-      <section class="table-container">
-        <el-table :data="list" v-loading="loading" style="width: 100%">
-          <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column prop="sort" label="排序" width="50px"></el-table-column>
-          <el-table-column prop="createTime" label="创建时间"></el-table-column>
-          <el-table-column prop="sort" label="上架时间"></el-table-column>
-          <el-table-column prop="sort" label="排序" width="50px"></el-table-column>
-          <el-table-column prop="id" label="ID" width="50px"></el-table-column>
-          <el-table-column prop="address" label="主图">
-            <template slot-scope="props">
-              <img :src="props.row.thumbImg" style="width:100%;height:100%;" />
-            </template>
-          </el-table-column>
-          <el-table-column prop="goodsName" label="商品名称" width="100px">
-            <template slot-scope="props">
-              <span class="elsiner">{{props.row.goodsName || '--'}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="goodsOriginalPrice" label="市场价"></el-table-column>
-          <el-table-column prop="goodsPrice" label="销售价"></el-table-column>
-          <el-table-column prop="anchorMoney" label="主播佣金"></el-table-column>
-          <el-table-column prop="accountMoney" label="分享佣金"></el-table-column>
-          <el-table-column prop="stock" label="库存"></el-table-column>
-          <el-table-column prop="selled" label="销量"></el-table-column>
-          <el-table-column prop="shelfDay" label="保质期" width="60px">
-            <template slot-scope="props">
-              <span>{{props.row.shelfDay || '--'}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="是否推荐">
-            <template slot-scope="props">
-              <el-switch v-model="props.row.isRecommend" :active-value="1" size="mini"></el-switch>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" width="150px">
-            <template slot-scope="props">
-              <div class="flex-btn" v-if="listpage.listType != 5">
-                <el-tooltip class="item light-item" effect="light" placement="top">
-                  <span slot="content" style="font-size:12px;color:#9d9d9d">详情</span>
-                  <i class="el-icon-picture-outline icon-content" @click="goform(props.row)"></i>
-                </el-tooltip>
-                <el-tooltip class="item light-item" effect="light" placement="top">
-                  <span slot="content" style="font-size:12px;color:#9d9d9d">复制</span>
-                  <i class="el-icon-copy-document icon-content" @click="goform(props.row,'copy')"></i>
-                </el-tooltip>
-                <el-tooltip class="item light-item" effect="light" placement="top">
-                  <span slot="content" style="font-size:12px;color:#9d9d9d">删除</span>
-                  <i class="el-icon-delete icon-content" @click="delgoods(props.row)"></i>
-                </el-tooltip>
-                <el-tooltip class="item light-item" effect="light" placement="top">
-                  <span slot="content" style="font-size:12px;color:#9d9d9d">备注</span>
-                  <i class="el-icon-info icon-content" @click="addremark(props.row)"></i>
-                </el-tooltip>
-                <el-tooltip
-                  class="item light-item"
-                  effect="light"
-                  placement="top"
-                  v-if="listpage.listType == 2"
-                >
-                  <span slot="content" style="font-size:12px;color:#9d9d9d">上架</span>
-                  <i class="el-icon-top icon-content"></i>
-                </el-tooltip>
-                <el-tooltip
-                  class="item light-item"
-                  effect="light"
-                  placement="top"
-                  v-if="listpage.listType ==1 "
-                >
-                  <span slot="content" style="font-size:12px;color:#9d9d9d">下架</span>
-                  <i class="el-icon-bottom icon-content"></i>
-                </el-tooltip>
-              </div>
-              <div class="flex-btn" v-else>
-                <el-tooltip class="item light-item" effect="light" placement="top">
-                  <span slot="content" style="font-size:12px;color:#9d9d9d">恢复</span>
-                  <i class="el-icon-refresh icon-content" @click="gomodify(props.row)"></i>
-                </el-tooltip>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-      </section>
-      <section class="page-box">
-        <el-pagination
-          v-if="list.length > 0"
-          @size-change="handleSizeChange"
-          @current-change="changepage"
-          layout="sizes,total, prev, pager, next, jumper"
-          :page-size="listpage.pageSize"
-          :current-page.sync="listpage.curPage"
-          :total="totalCount"
-          :page-sizes="[10, 20, 30, 50]"
-        ></el-pagination>
-      </section>
+        <section class="table-container">
+          <el-table :data="list" v-loading="loading" style="width: 100%">
+            <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column prop="sort" label="排序" width="50px"></el-table-column>
+            <el-table-column prop="createTime" label="创建时间"></el-table-column>
+            <el-table-column prop="sort" label="上架时间"></el-table-column>
+            <el-table-column prop="sort" label="排序" width="50px"></el-table-column>
+            <el-table-column prop="id" label="ID" width="50px"></el-table-column>
+            <el-table-column prop="address" label="主图">
+              <template slot-scope="props">
+                <img :src="props.row.thumbImg" style="width:100%;height:100%;" />
+              </template>
+            </el-table-column>
+            <el-table-column prop="goodsName" label="商品名称" width="100px">
+              <template slot-scope="props">
+                <span class="elsiner">{{props.row.goodsName || '--'}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="goodsOriginalPrice" label="市场价"></el-table-column>
+            <el-table-column prop="goodsPrice" label="销售价"></el-table-column>
+            <el-table-column prop="anchorMoney" label="主播佣金"></el-table-column>
+            <el-table-column prop="accountMoney" label="分享佣金"></el-table-column>
+            <el-table-column prop="stock" label="库存"></el-table-column>
+            <el-table-column prop="selled" label="销量"></el-table-column>
+            <el-table-column prop="shelfDay" label="保质期" width="60px">
+              <template slot-scope="props">
+                <span>{{props.row.shelfDay || '--'}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="是否推荐">
+              <template slot-scope="props">
+                <el-switch
+                  v-model="props.row.isRecommend"
+                  active-value="1"
+                  inactive-value="0"
+                  size="mini"
+                  @change="(val)=>{switchChange(val,props)}"
+                ></el-switch>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="150px">
+              <template slot-scope="props">
+                <div class="flex-btn" v-if="listpage.listType != 5">
+                  <el-tooltip class="item light-item" effect="light" placement="top">
+                    <span slot="content" style="font-size:12px;color:#9d9d9d">详情</span>
+                    <i class="el-icon-picture-outline icon-content" @click="goform(props.row)"></i>
+                  </el-tooltip>
+                  <el-tooltip class="item light-item" effect="light" placement="top">
+                    <span slot="content" style="font-size:12px;color:#9d9d9d">复制</span>
+                    <i class="el-icon-copy-document icon-content" @click="goform(props.row,'copy')"></i>
+                  </el-tooltip>
+                  <el-tooltip class="item light-item" effect="light" placement="top">
+                    <span slot="content" style="font-size:12px;color:#9d9d9d">删除</span>
+                    <i class="el-icon-delete icon-content" @click="delgoods(props.row)"></i>
+                  </el-tooltip>
+                  <el-tooltip class="item light-item" effect="light" placement="top">
+                    <span slot="content" style="font-size:12px;color:#9d9d9d">备注</span>
+                    <i class="el-icon-info icon-content" @click="addremark(props.row)"></i>
+                  </el-tooltip>
+                  <el-tooltip
+                    class="item light-item"
+                    effect="light"
+                    placement="top"
+                    v-if="listpage.listType == 2"
+                  >
+                    <span slot="content" style="font-size:12px;color:#9d9d9d">上架</span>
+                    <i class="el-icon-top icon-content"></i>
+                  </el-tooltip>
+                  <el-tooltip
+                    class="item light-item"
+                    effect="light"
+                    placement="top"
+                    v-if="listpage.listType ==1 "
+                  >
+                    <span slot="content" style="font-size:12px;color:#9d9d9d">下架</span>
+                    <i class="el-icon-bottom icon-content"></i>
+                  </el-tooltip>
+                </div>
+                <div class="flex-btn" v-else>
+                  <el-tooltip class="item light-item" effect="light" placement="top">
+                    <span slot="content" style="font-size:12px;color:#9d9d9d">恢复</span>
+                    <i class="el-icon-refresh icon-content" @click="gomodify(props.row)"></i>
+                  </el-tooltip>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+        </section>
+        <section class="page-box">
+          <el-pagination
+            v-if="list.length > 0"
+            @size-change="handleSizeChange"
+            @current-change="changepage"
+            layout="sizes,total, prev, pager, next, jumper"
+            :page-size="listpage.pageSize"
+            :current-page.sync="listpage.curPage"
+            :total="totalCount"
+            :page-sizes="[10, 20, 30, 50]"
+          ></el-pagination>
+        </section>
       <el-dialog
         title="提示"
         :visible.sync="dialogVisibledel"
@@ -287,6 +293,21 @@ export default {
     exportlist() {
       exportGoodsList(this.listpage).then((res) => {
         console.log(res);
+      });
+    },
+    switchChange(val, prpp) {
+      console.log(val);
+      let obj = {
+        goodsCode: prpp.row.goodsCode,
+        status: val,
+      };
+      modifyRecommendationStatus(obj).then((res) => {
+        this.$set(this.list[prpp.$index], "isRecommend", val);
+        this.$message({
+          message: "修改成功",
+          type: "success",
+          center: true,
+        });
       });
     },
     addremark(row) {

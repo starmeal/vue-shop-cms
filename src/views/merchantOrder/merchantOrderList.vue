@@ -120,8 +120,10 @@
               >订单号：{{ its.orderCode }}</span>
               <span
                 style="margin-right:30px;margin-left:18px;font-size:12px;"
-              >订单时间：{{ its.createTime }}</span>
-              <span style="margin-right:30px;margin-left:18px;font-size:12px;">订单时间：微信/微信支付</span>
+              >下单时间：{{ its.createTime }}</span>
+              <span
+                style="margin-right:30px;margin-left:18px;font-size:12px;"
+              >{{its.payType == 2 ? '余额' : '微信'}}</span>
               <p class="detail" @click="goOrderdetail(its)">查看详情</p>
             </div>
             <table
@@ -169,19 +171,19 @@
                 <td style="width:10%">
                   <p
                     class="qusibap"
-                    @click="goOrderdetail(its, 'address')"
+                    @click="updatewuliu(its)"
                     style="color:#44abf7;SC;cursor: pointer;font-size:12px"
-                    v-if="its.orderStatus == 2"
-                  >修改地址</p>
-                  <!-- <p
+                    v-if="its.orderStatus == 3 && its.updateLogisticsTime == ''"
+                  >修改物流</p>
+                  <p
                     class="qusibap poiner"
-                    @click="goOrderdetail(its, 'goods')"
+                    @click="ggosd(its)"
                     style="font-weight:600;color:green"
                     v-if="its.orderStatus == 2"
                   >
-                    <el-button size="mini" type="primary" round style="color:#fff">发货</el-button>
+                    <el-button size="mini">发货</el-button>
                   </p>
-                  <p
+                  <!-- <p
                     class="poiner"
                     @click="goOrderdetail(its, 'price')"
                     style="font-weight:600;color:#ff0000"
@@ -205,50 +207,89 @@
           ></el-pagination>
         </section>
       </div>
-      <!-- <el-dialog title="发货" :visible.sync="examine" width="600px">
-        <el-form :model="dialogForm" ref="dialogForm">
-          <el-form-item label="联系人 :" label-width="80px" prop="contact">
-            <el-input
-              class="inputStyle1"
-              :size="size"
-              v-model="dialogForm.contact"
-              placeholder="请填写联系人姓名"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="联系方式 :" label-width="80px" prop="contact">
-            <el-input
-              class="inputStyle1"
-              :size="size"
-              v-model="dialogForm.phone"
-              placeholder="请填写手机号"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="座机 :" label-width="80px" prop="contact">
-            <el-input
-              class="inputStyle2"
-              :size="size"
-              v-model="dialogForm.phone"
-              placeholder="请填写区号"
-            ></el-input>
-            <el-input
-              class="inputStyle2"
-              :size="size"
-              v-model="dialogForm.phone"
-              placeholder="请填写座机号"
-            ></el-input>
-            <el-input
-              class="inputStyle2"
-              :size="size"
-              v-model="dialogForm.phone"
-              placeholder="分机号(选填)"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="联系地址 :" label-width="80px" prop="contact"></el-form-item>
-        </el-form>
-        <div slot="footer">
-          <el-button type="primary">保存</el-button>
+      <el-dialog title="修改物流" :visible.sync="dialogStatus"></el-dialog>
+      <el-dialog title="订单发货" :visible.sync="dialogTableVisible">
+        <div class="dilogTitle">
+          <span>选择商品</span>
+          <span>待发货{{fahuoinfo.unDeliveryNum}}</span>
+          <span>已发货{{fahuoinfo.deliveryedNum}}</span>
         </div>
-      </el-dialog>-->
+        <el-table
+          :data="gridData"
+          @selection-change="handleSelectionChange"
+          @select-all="handleSelectionChange"
+        >
+          <el-table-column type="selection" width="55" :selectable="selectable"></el-table-column>
+          <el-table-column property="date" label="商品" width="300px">
+            <template slot-scope="props">
+              <section class="flex-box" style="width:100%;padding: 0;">
+                <div>
+                  <img class="thumbImg" :src="props.row.thumbImg.split(',')[0]" />
+                  <div class="product-name">
+                    <p class="thumbImg-right">{{ props.row.productName }}</p>
+                    <div
+                      style="margin-left:10px;margin-top:10px"
+                      v-show="props.row.goodsSku"
+                    >{{props.row.goodsSku}}</div>
+                  </div>
+                </div>
+              </section>
+            </template>
+          </el-table-column>
+          <el-table-column property="number" label="数量"></el-table-column>
+          <el-table-column property="deliveryStatus" label="状态">
+            <template slot-scope="props">
+              <section class="flex-box" style="width:100%;padding: 0;">
+                <span v-if="props.row.deliveryStatus == 1">处理退款</span>
+                <span v-if="props.row.deliveryStatus == 2">处理换货</span>
+                <span v-if="props.row.deliveryStatus == 3">已发货</span>
+                <span v-if="props.row.deliveryStatus == 4">待发货</span>
+              </section>
+            </template>
+          </el-table-column>
+          <el-table-column property="address" label="运单号"></el-table-column>
+        </el-table>
+        <el-form label-width="70px">
+          <el-form-item label="配送信息">
+            <div class="ems">
+              <div>配送方式：{{fahuoinfo.pickupType}}</div>
+              <div>收货人：{{fahuoinfo.custName}}{{fahuoinfo.custMobile}}</div>
+              <div>收获地址：{{fahuoinfo.custAddress}}</div>
+            </div>
+          </el-form-item>
+          <el-form-item label="发货方式">
+            <span style="font-size:12px" class="ems">自己联系快递</span>
+            <div>
+              <el-input
+                v-model="fahuoform.logisticsCode"
+                size="mini"
+                @blur="onSubmit"
+                style="width:300px;margin-right:20px"
+                onkeyup="value=value.replace(/[\W]/g,'')"
+              ></el-input>
+            </div>
+            <div>
+              <el-select
+                v-model="fahuoform.shipperCode"
+                placeholder="请选择"
+                size="mini"
+                style="width:300px"
+              >
+                <el-option
+                  v-for="(item, index) in kuaidiarr"
+                  :key="index"
+                  :label="item.ShipperName"
+                  :value="item.ShipperCode"
+                ></el-option>
+              </el-select>
+            </div>
+            <div style="font-size:12px;color:#999">*请仔细填写物流公司及物流单号，发货后72小时内仅支持做一次更正，逾期不可修改</div>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" class="disp" @click="fahuola">发货</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -257,12 +298,21 @@
 import {
   getMerShopOrderList,
   merShopOrderListExportExcel,
+  getDeliveryDetails,
+  setLogisticsInfoNew,
+  distinguishHandle,
+  updateShopOrderParcelInfo,
+  getShopOrderDetailNew,
 } from "@/api/merchantOrder";
 import { formatDate } from "@/utils/util";
 export default {
   name: "merchantOrderList",
   data() {
     return {
+      dialogStatus: false,
+      kuaidiarr: [],
+      gridData: [],
+      dialogTableVisible: false,
       size: "mini",
       tableHeight: "",
       createTime: "",
@@ -342,7 +392,10 @@ export default {
         contact: "",
         phone: "",
       },
+      radio: 0,
       list: [],
+      fahuoinfo: "",
+      shipperName: [],
       listpage: {
         curPage: 1,
         pageSize: 10,
@@ -356,6 +409,13 @@ export default {
         createTimeEnd: "",
       },
       totalCount: 0,
+      fahuoform: {
+        orderDetailIds: "",
+        shipperCode: "",
+        shipperName: "",
+        logisticsCode: "",
+        orderCode: "",
+      },
     };
   },
   created() {
@@ -363,6 +423,104 @@ export default {
   },
   mounted() {},
   methods: {
+    updatewuliu(item) {
+      let obj = {
+        orderCode: item.orderCode,
+      };
+      getShopOrderDetailNew(obj).then((res) => {
+        this.parcelInfo = res.body.parcelInfo;
+      });
+      console.log(item);
+      //  obj.orderDetailIds = item.detail.map((el)=>{
+      //     return el.orderDetailId
+      //   })
+      //  getShopOrderDetailNew().then(res=>{
+      //    console.log(res)
+      //  })
+    },
+    selectable(row, index) {
+      console.log(row, index);
+      if (row.deliveryStatus == 4) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    fahuola() {
+      if (!this.fahuoform.logisticsCode) {
+        this.$message({
+          message: "请输入快递单号",
+          type: "error",
+          center: true,
+        });
+        return false;
+      }
+      this.fahuoform.shipperName = this.kuaidiarr.find(
+        (el) => el.ShipperCode == this.fahuoform.shipperCode
+      ).ShipperName;
+      if (!this.fahuoform.shipperName) {
+        this.$message({
+          message: "请选择物流公司",
+          type: "error",
+          center: true,
+        });
+        return false;
+      }
+      this.fahuoform.orderDetailIds =
+        this.orderDetailIds && this.orderDetailIds.length > 0
+          ? this.orderDetailIds.join(",")
+          : "";
+      if (!this.orderDetailIds || !this.orderDetailIds.length) {
+        this.$message({
+          message: "请选择发货商品",
+          type: "error",
+          center: true,
+        });
+        return false;
+      }
+      setLogisticsInfoNew(this.fahuoform).then((res) => {
+        this.$message({
+          message: "恭喜你，发货成功啦",
+          type: "success",
+          center: true,
+        });
+        this.dialogTableVisible = false;
+        this.getList();
+      });
+    },
+    onSubmit() {
+      if (this.fahuoform.logisticsCode.length <= 0) {
+        this.$message({
+          message: "请输入物流单号后查询",
+          type: "error",
+          center: true,
+        });
+        return false;
+      }
+      let obj = {
+        logisticCode: this.fahuoform.logisticsCode,
+      };
+      distinguishHandle(obj).then((res) => {
+        console.log(res);
+        if (!res.body) {
+          this.$message({
+            message: "没查到",
+            type: "error",
+            center: true,
+          });
+          return false;
+        }
+        this.fahuoform.shipperCode = res.body[0].ShipperCode;
+        this.kuaidiarr = res.body;
+      });
+    },
+    handleSelectionChange(val) {
+      if (val.length > 0) {
+        this.orderDetailIds = val.map((element) => {
+          return element.orderDetailId;
+        });
+      }
+    },
     changeStatus(val) {
       let Idx = this.orderStatusArr.findIndex((el) => {
         return val == el.value;
@@ -379,6 +537,20 @@ export default {
         let { records, total } = res.body;
         this.list = records;
         this.totalCount = total;
+      });
+    },
+    ggosd(item) {
+      let obj = {
+        orderCode: item.orderCode,
+      };
+      getDeliveryDetails(obj).then((res) => {
+        this.gridData = res.body.productInfo;
+        this.fahuoinfo = res.body;
+        this.kuaidiarr = [];
+        this.dialogTableVisible = true;
+        this.fahuoform.orderCode = item.orderCode;
+        console.log(res);
+        // this.gridData = item.detail;
       });
     },
     // 搜索按钮
@@ -478,14 +650,37 @@ export default {
         });
         return false;
       }
-      merShopOrderListExportExcel(this.listpage).then(res=>{
-
-      })
+      merShopOrderListExportExcel(this.listpage).then((res) => {});
     },
   },
 };
 </script>
 <style scoped>
+* {
+  font-family: Microsoft YaHei;
+}
+.disp {
+  float: right;
+}
+.ems {
+  font-size: 12px;
+  color: #666666;
+}
+.dilogTitle {
+  color: rgb(31, 31, 31);
+}
+.dilogTitle span:first-of-type {
+  font-weight: 500;
+  margin-right: 20px;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.dilogTitle span:not(:first-of-type) {
+  font-weight: 500;
+  display: inline-block;
+  font-size: 14px;
+}
 .header-flex {
   width: 100%;
   display: flex;

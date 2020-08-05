@@ -14,3 +14,40 @@ export function merShopOrderListExportExcel(data) {
         data
     });
 }
+
+export function getDeliveryDetails(data) {
+    return request({
+        url: `/order/getDeliveryDetails`,
+        method: "POST",
+        data
+    });
+}
+export function setLogisticsInfoNew(data) {
+    return request({
+        url: `/order/setLogisticsInfoNew`,
+        method: "POST",
+        data
+    });
+}
+export function distinguishHandle(data) {
+    return request({
+      url: "/order/logistics/distinguishHandle",
+      method: "POST",
+      data
+    });
+}
+export function updateShopOrderParcelInfo(data) {
+    return request({
+      url: "/order/updateShopOrderParcelInfo",
+      method: "POST",
+      data
+    });
+}
+export function getShopOrderDetailNew(data) {
+    return request({
+      url: "/order/getShopOrderDetailNew",
+      method: "POST",
+      data
+    });
+}
+
