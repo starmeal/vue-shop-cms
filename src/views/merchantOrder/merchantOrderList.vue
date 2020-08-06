@@ -183,20 +183,6 @@
                   >
                     <el-button size="mini">发货</el-button>
                   </p>
-                  <p
-                    class="qusibap poiner"
-                    @click="updateAddress(its)"
-                    style="font-weight:600;color:green"
-                    v-if="its.orderStatus == 2"
-                  >
-                    <el-button size="mini">修改地址</el-button>
-                  </p>
-                  <!-- <p
-                    class="poiner"
-                    @click="goOrderdetail(its, 'price')"
-                    style="font-weight:600;color:#ff0000"
-                    v-if="its.orderStatus == 1"
-                  >修改价格</p>-->
                 </td>
               </tr>
             </table>
@@ -366,42 +352,6 @@
           </el-form-item>
         </el-form>
       </el-dialog>
-      <!-- 修改地址弹窗 -->
-      <el-dialog title="修改收货地址" :visible.sync="dialogFormVisible">
-        <el-alert title="仅支持修改一次,请务必在买家知情且同意下修改收货信息" type="warning" :closable="false"></el-alert>
-        <el-form
-          :model="addressform"
-          :rules="addressformrules"
-          label-width="90px"
-          style="margin-top:20px"
-        >
-          <el-form-item label="收货人" prop="custName">
-            <el-input v-model="addressform.custName" style="width:300px"></el-input>
-          </el-form-item>
-          <el-form-item label="联系电话" prop="custMobile">
-            <el-input v-model="addressform.custMobile" style="width:300px"></el-input>
-          </el-form-item>
-          <el-form-item label="联系地址">
-            <el-select v-model="addressform.custAddressD" placeholder="请选择城市区" style="width:300px">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="详细地址" prop="custAddress">
-            <el-input
-              type="textarea"
-              :rows="3"
-              placeholder="请输入详细地址"
-              v-model="addressform.custAddress"
-              style="width:300px"
-            ></el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="updateAddress">确 定</el-button>
-        </div>
-      </el-dialog>
     </div>
   </div>
 </template>
@@ -450,7 +400,6 @@ export default {
           { required: true, message: "请选择联系地址", trigger: "change" },
         ],
       },
-      dialogFormVisible: false,
       queArr: [],
       tableDdialog: false,
       parcelInfo: [],
@@ -568,34 +517,14 @@ export default {
   },
   mounted() {},
   methods: {
-    // 修改地址
-    updateAddress(item) {
-      console.log(item);
-      if (!this.dialogFormVisible) {
-        let { orderCode, custMobile, custName, custAddress } = item;
-        this.addressform.orderCode = orderCode;
-        this.addressform.custMobile = custMobile;
-        this.addressform.custName = custName;
-        this.addressform.custAddress = custAddress;
-        this.dialogFormVisible = true;
-        console.log(this.addressform);
-      } else {
-        updateCustAddressInfo(this.addressform).then((res) => {
-          this.$message({
-            message: "修改地址成功啦",
-            type: "success",
-            center: true,
-          });
-          this.dialogFormVisible = false;
-          this.addressform = {
-            orderCode: "",
-            custName: "",
-            custMobile: "",
-            custAddress: "",
-            custAddressD: "",
-          };
-        });
-      }
+    // 订单详情跳转
+    goOrderdetail(its){
+      this.$router.push({
+        path:'/orderDetail',
+        query:{
+          orderId:its.orderCode
+        }
+      })
     },
     // 修改物流返回
     fanhui() {

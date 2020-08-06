@@ -114,6 +114,7 @@
         </el-form-item>
         <el-form-item label="证件号码：" prop="legalPersonIdCard">
           <el-input
+            @input="noneChinese"
             v-model="form.legalPersonIdCard"
             placeholder="请输入内容"
             style="width:90%"
@@ -365,6 +366,12 @@ export default {
     this.getDetail();
   },
   methods: {
+    noneChinese(val) {
+      this.form.legalPersonIdCard = val.replace(
+        /[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/g,
+        ""
+      );
+    },
     showdemoIDcard() {
       this.dialogVisible = true;
     },
@@ -490,7 +497,7 @@ export default {
       this.form.periodStartDate = this.keyWordContent.TermStart;
       this.form.period_end_date = this.keyWordContent.TeamEnd;
       this.timevalue = [this.form.periodStartDate, this.form.period_end_date];
-      this.form.operatingPeriodType = '0';
+      this.form.operatingPeriodType = "0";
       this.showmessage = false;
     },
     serachcomp() {

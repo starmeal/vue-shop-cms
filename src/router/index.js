@@ -239,6 +239,15 @@ export const asyncRoutes = [
         },
         component: () => import('@/views/merchantOrder/merchantOrderList'),
       },
+      {
+        path: '/orderDetail',
+        meta: {
+          title: '订单详情',
+          parentPath: '/merchantOrder',
+          basePath: '/merchantOrder',
+        },
+        component: () => import('@/views/merchantOrder/orderDetail'),
+      },
     ]
   },
   { path: "*", redirect: "/404", hidden: true }

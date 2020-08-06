@@ -357,6 +357,13 @@ export default {
             });
             return false;
           }
+          if (this.phone == '') {
+            this.$message({
+              message: "请输入客服电话",
+              type: "error",
+            });
+            return false;
+          }
           if (!re.test(this.phone)) {
             this.$message({
               message: "电话只能输入数字",

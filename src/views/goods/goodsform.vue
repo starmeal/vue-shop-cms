@@ -662,8 +662,19 @@ export default {
   },
   data() {
     var nums = (rule, value, callback) => {
+      var text = /[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/g;
       if (value == 0) {
-        return callback(new Error("输入的值不能为0"));
+        return callback(new Error("总库存值不能为0"));
+      } else if (text.test(value)) {
+        return callback(new Error("请输入正整数"));
+      } else {
+        callback();
+      }
+    };
+    var nums1 = (rule, value, callback) => {
+      var text = /[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/g;
+      if (value <= 0) {
+        return callback(new Error("销售价格不能小于等于0"));
       } else {
         callback();
       }
@@ -736,11 +747,11 @@ export default {
           { required: true, message: "请选择商品规格", trigger: "change" },
         ],
         goodsPrice: [
-          { required: true, message: "请填写销售价格", trigger: "change" },
-          { validator: nums, trigger: "change" },
+          { required: true, message: "请填写销售价格", trigger: "blur" },
+          { validator: nums1, trigger: "change" },
         ],
         stock: [
-          { required: true, message: "请填写总库存", trigger: "change" },
+          { required: true, message: "请填写总库存", trigger: "blur" },
           { validator: nums, trigger: "change" },
         ],
         stockReduceType: [
@@ -1439,10 +1450,10 @@ export default {
             }
           });
           form.specificationList.forEach((el) => {
-            if (el["保质期"] && el["保质期"]!=='') {
-                el.manufactureTime = el['保质期'].split("至")[0];
-                el.qualityTime = el['保质期'].split("至")[1];
-              }
+            if (el["保质期"] && el["保质期"] !== "") {
+              el.manufactureTime = el["保质期"].split("至")[0];
+              el.qualityTime = el["保质期"].split("至")[1];
+            }
           });
           console.log(form);
           if (this.$route.query.goodsCode && !this.$route.query.status) {
@@ -1513,14 +1524,32 @@ export default {
         if (file.type.split("/")[0] !== "image") {
           this.$message({
             message: "请上传图片",
-            type: "warning",
+            type: "error",
+            center: true,
+          });
+          return false;
+        }
+        if (data.data === "goodsImgs" && this.form.goodsImgs.length == 15) {
+          this.$message({
+            message: "上传图片在15张以内",
+            type: "error",
+            center: true,
+          });
+          return false;
+        }
+        if (data.data === "detail" && this.form.detail.length == 15) {
+          this.$message({
+            message: "上传图片在15张以内",
+            type: "error",
+            center: true,
           });
           return false;
         }
         if (file.size > 1024 * 1024 * 1) {
           this.$message({
             message: "上传图片过大请上传1M以下的图片",
-            type: "warning",
+            type: "error",
+            center: true,
           });
           return false;
         }
@@ -1553,6 +1582,24 @@ export default {
                   that.skuArr[data.open].goodsSkuImg = url;
                 } else {
                   that.form[data.data].push(url);
+                  if (
+                    data.data === "goodsImgs" &&
+                    that.form.goodsImgs.length > 15
+                  ) {
+                    that.form.goodsImgs.splice(
+                      14,
+                      that.form.goodsImgs.length - 15
+                    );
+                  }
+                  if (
+                    data.data === "detail" &&
+                    that.form.detail.length > 15
+                  ) {
+                    that.form.detail.splice(
+                      14,
+                      that.form.detail.length - 15
+                    );
+                  }
                 }
               }
               loading.close();
