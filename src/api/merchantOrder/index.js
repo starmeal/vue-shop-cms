@@ -50,4 +50,10 @@ export function getShopOrderDetailNew(data) {
       data
     });
 }
-
+export function updateCustAddressInfo(data) {
+    return request({
+      url: "/order/updateCustAddressInfo",
+      method: "POST",
+      data
+    });
+}

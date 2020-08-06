@@ -183,6 +183,14 @@
                   >
                     <el-button size="mini">发货</el-button>
                   </p>
+                  <p
+                    class="qusibap poiner"
+                    @click="updateAddress(its)"
+                    style="font-weight:600;color:green"
+                    v-if="its.orderStatus == 2"
+                  >
+                    <el-button size="mini">修改地址</el-button>
+                  </p>
                   <!-- <p
                     class="poiner"
                     @click="goOrderdetail(its, 'price')"
@@ -207,7 +215,75 @@
           ></el-pagination>
         </section>
       </div>
-      <el-dialog title="修改物流" :visible.sync="dialogStatus"></el-dialog>
+      <!-- 修改物流弹窗 -->
+      <el-dialog title="修改物流" :visible.sync="dialogStatus">
+        <el-alert title="物流信息仅支持1次更正，请仔细填写并核对" type="warning" :closable="false"></el-alert>
+        <el-form label-width="80px" v-for="(item,index) in parcelInfo" :key="index + 's'">
+          <el-form-item :label="`包裹${index+1}：`">
+            <div class="ems">
+              <div>共{{item.productNum}}件商品</div>
+            </div>
+          </el-form-item>
+          <el-form-item label="发货方式：">
+            <el-radio-group v-model="item.pickupType" disabled>
+              <el-radio label="快递">需要物流</el-radio>
+              <el-radio label>无需物流</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="物流公司：">
+            <section class="form-flex">
+              <div>
+                <el-input
+                  v-model="item.logisticsCode"
+                  size="mini"
+                  @blur="onlistBlur(item,index)"
+                  style="width:200px;margin-right:20px"
+                  onkeyup="value=value.replace(/[\W]/g,'')"
+                ></el-input>
+              </div>
+              <div class="ems">
+                <div style="font-weight: bold;">运单编号：</div>
+              </div>
+              <div>
+                <el-select
+                  v-model="item.shipperCode"
+                  placeholder="请选择"
+                  size="mini"
+                  style="width:200px"
+                >
+                  <el-option
+                    v-for="(its, idx) in item.kuaidiarr"
+                    :key="idx"
+                    :label="its.ShipperName"
+                    :value="its.ShipperCode"
+                  ></el-option>
+                </el-select>
+              </div>
+            </section>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogStatus = false">取 消</el-button>
+          <el-button type="primary" @click="xiugaiwuliu">保 存</el-button>
+        </div>
+      </el-dialog>
+      <!-- 确认修改物流表格 -->
+      <el-dialog title="确认修改信息" :visible.sync="tableDdialog">
+        <el-table :data="queArr">
+          <el-table-column label="包裹名">
+            <template slot-scope="props">包裹{{props.row.idx + 1}}</template>
+          </el-table-column>
+          <el-table-column property="number" label="商品数量"></el-table-column>
+          <el-table-column property="pickupType" label="发货方式"></el-table-column>
+          <el-table-column property="shipperName" label="物流公司"></el-table-column>
+          <el-table-column property="logisticsCode" label="快递单号"></el-table-column>
+        </el-table>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="fanhui">返回修改</el-button>
+          <el-button type="primary" @click="xiugaiwuliu">确认修改</el-button>
+        </div>
+      </el-dialog>
+      <!-- 发货弹窗 -->
       <el-dialog title="订单发货" :visible.sync="dialogTableVisible">
         <div class="dilogTitle">
           <span>选择商品</span>
@@ -290,6 +366,42 @@
           </el-form-item>
         </el-form>
       </el-dialog>
+      <!-- 修改地址弹窗 -->
+      <el-dialog title="修改收货地址" :visible.sync="dialogFormVisible">
+        <el-alert title="仅支持修改一次,请务必在买家知情且同意下修改收货信息" type="warning" :closable="false"></el-alert>
+        <el-form
+          :model="addressform"
+          :rules="addressformrules"
+          label-width="90px"
+          style="margin-top:20px"
+        >
+          <el-form-item label="收货人" prop="custName">
+            <el-input v-model="addressform.custName" style="width:300px"></el-input>
+          </el-form-item>
+          <el-form-item label="联系电话" prop="custMobile">
+            <el-input v-model="addressform.custMobile" style="width:300px"></el-input>
+          </el-form-item>
+          <el-form-item label="联系地址">
+            <el-select v-model="addressform.custAddressD" placeholder="请选择城市区" style="width:300px">
+              <el-option label="区域一" value="shanghai"></el-option>
+              <el-option label="区域二" value="beijing"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="详细地址" prop="custAddress">
+            <el-input
+              type="textarea"
+              :rows="3"
+              placeholder="请输入详细地址"
+              v-model="addressform.custAddress"
+              style="width:300px"
+            ></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="updateAddress">确 定</el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -303,12 +415,45 @@ import {
   distinguishHandle,
   updateShopOrderParcelInfo,
   getShopOrderDetailNew,
+  updateCustAddressInfo,
 } from "@/api/merchantOrder";
 import { formatDate } from "@/utils/util";
 export default {
   name: "merchantOrderList",
   data() {
+    var EmptyValidator = (rule, value, callback) => {
+      console.log(value);
+      if (!myreg.test(value)) {
+        callback(new Error("输入有误请重新输入"));
+      } else {
+        callback();
+      }
+    };
     return {
+      addressform: {
+        orderCode: "",
+        custName: "",
+        custMobile: "",
+        custAddress: "",
+        custAddressD: "",
+      },
+      addressformrules: {
+        custName: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        custMobile: [
+          { required: true, message: "请输入联系方式", trigger: "blur" },
+          {
+            validator: EmptyValidator,
+            trigger: "blur",
+          },
+        ],
+        custAddress: [
+          { required: true, message: "请选择联系地址", trigger: "change" },
+        ],
+      },
+      dialogFormVisible: false,
+      queArr: [],
+      tableDdialog: false,
+      parcelInfo: [],
       dialogStatus: false,
       kuaidiarr: [],
       gridData: [],
@@ -423,21 +568,121 @@ export default {
   },
   mounted() {},
   methods: {
+    // 修改地址
+    updateAddress(item) {
+      console.log(item);
+      if (!this.dialogFormVisible) {
+        let { orderCode, custMobile, custName, custAddress } = item;
+        this.addressform.orderCode = orderCode;
+        this.addressform.custMobile = custMobile;
+        this.addressform.custName = custName;
+        this.addressform.custAddress = custAddress;
+        this.dialogFormVisible = true;
+        console.log(this.addressform);
+      } else {
+        updateCustAddressInfo(this.addressform).then((res) => {
+          this.$message({
+            message: "修改地址成功啦",
+            type: "success",
+            center: true,
+          });
+          this.dialogFormVisible = false;
+          this.addressform = {
+            orderCode: "",
+            custName: "",
+            custMobile: "",
+            custAddress: "",
+            custAddressD: "",
+          };
+        });
+      }
+    },
+    // 修改物流返回
+    fanhui() {
+      this.dialogStatus = true;
+      this.tableDdialog = false;
+    },
+    // 修改物流
+    xiugaiwuliu() {
+      if (!this.tableDdialog) {
+        let obj = {
+          orderCode: this.xiugaiData.orderInfo.orderCode,
+          parcelInfo: [],
+        };
+        obj.parcelInfo = this.parcelInfo.map((el) => {
+          let object = {
+            orderDetailIds: "",
+            shipperCode: el.shipperCode,
+            shipperName: "",
+            logisticsCode: el.logisticsCode,
+          };
+          el.kuaidiarr.forEach((item) => {
+            if (item.ShipperCode == el.shipperCode) {
+              el.shipperName = item.ShipperName;
+              object.shipperName = item.ShipperName;
+            }
+          });
+          object.orderDetailIds = el.parcelProductVo.map((item) => {
+            return item.orderDetailId;
+          });
+          object.orderDetailIds = object.orderDetailIds.join(",");
+          return object;
+        });
+        this.queArr = [];
+        this.parcelInfo.forEach((el, idx) => {
+          el.parcelProductVo.forEach((item, index) => {
+            item.idx = idx;
+            item.pickupType = el.pickupType;
+            item.logisticsCode = el.logisticsCode;
+            item.shipperName = el.shipperName;
+            item.orderCode = this.xiugaiData.orderInfo.orderCode;
+            console.log(item);
+            this.queArr.push(item);
+          });
+        });
+        console.log(this.parcelInfo);
+        console.log(this.queArr);
+        this.tableDdialog = true;
+        this.dialogStatus = false;
+        this.logisticsData = obj;
+      } else {
+        updateShopOrderParcelInfo(this.logisticsData).then((res) => {
+          this.$message({
+            message: "修改成功",
+            type: "success",
+            center: true,
+          });
+          this.dialogStatus = false;
+          this.tableDdialog = false;
+        });
+      }
+    },
+    // 修改物流详情
     updatewuliu(item) {
       let obj = {
         orderCode: item.orderCode,
       };
-      getShopOrderDetailNew(obj).then((res) => {
-        this.parcelInfo = res.body.parcelInfo;
+      getShopOrderDetailNew(obj).then((ret) => {
+        var addresolve = 0;
+        this.xiugaiData = ret.body;
+        ret.body.parcelInfo.forEach((item, index) => {
+          new Promise((resolve, reject) => {
+            let obj = {
+              logisticCode: item.logisticsCode,
+            };
+            distinguishHandle(obj).then((res) => {
+              item.kuaidiarr = res.body;
+              resolve(addresolve++);
+              if (addresolve == ret.body.parcelInfo.length) {
+                this.parcelInfo = ret.body.parcelInfo;
+                this.dialogStatus = true;
+              }
+            });
+          });
+        });
       });
-      console.log(item);
-      //  obj.orderDetailIds = item.detail.map((el)=>{
-      //     return el.orderDetailId
-      //   })
-      //  getShopOrderDetailNew().then(res=>{
-      //    console.log(res)
-      //  })
     },
+    // 发货过滤不能发的商品
     selectable(row, index) {
       console.log(row, index);
       if (row.deliveryStatus == 4) {
@@ -446,6 +691,7 @@ export default {
         return false;
       }
     },
+    // 确认发货
     fahuola() {
       if (!this.fahuoform.logisticsCode) {
         this.$message({
@@ -488,6 +734,35 @@ export default {
         this.getList();
       });
     },
+    // 修改物流查询物流公司
+    onlistBlur(item, index) {
+      console.log(item);
+      if (item.logisticsCode.length <= 0) {
+        this.$message({
+          message: "请输入物流单号后查询",
+          type: "error",
+          center: true,
+        });
+        return false;
+      }
+      let obj = {
+        logisticCode: item.logisticsCode,
+      };
+      distinguishHandle(obj).then((res) => {
+        console.log(res);
+        if (!res.body) {
+          this.$message({
+            message: "没查到",
+            type: "error",
+            center: true,
+          });
+          return false;
+        }
+        item.shipperCode = res.body[0].ShipperCode;
+        item.kuaidiarr = res.body;
+      });
+    },
+    // 发货查询物流公司
     onSubmit() {
       if (this.fahuoform.logisticsCode.length <= 0) {
         this.$message({
@@ -514,6 +789,7 @@ export default {
         this.kuaidiarr = res.body;
       });
     },
+    // 发货复选框选中
     handleSelectionChange(val) {
       if (val.length > 0) {
         this.orderDetailIds = val.map((element) => {
@@ -1100,5 +1376,8 @@ li {
 .inputStyle2 {
   width: 120px;
   margin-right: 5px;
+}
+.form-flex {
+  display: flex;
 }
 </style>

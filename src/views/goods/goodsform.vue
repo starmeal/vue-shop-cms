@@ -222,7 +222,7 @@
             <el-date-picker
               :disabled="disabled"
               v-model="form.manufactureTime"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="yyyy-MM-dd"
               type="date"
               placeholder="选择日期"
             ></el-date-picker>
@@ -310,7 +310,7 @@
                     <template v-if="item.time">
                       <el-date-picker
                         v-model="item.date"
-                        value-format="yyyy-MM-dd HH:mm:ss"
+                        value-format="yyyy-MM-dd"
                         type="date"
                         style="width:140px;"
                         class="gelu"
@@ -357,7 +357,7 @@
                 :label="col.label"
                 :key="index"
               ></el-table-column>
-              <el-table-column label="市场价" >
+              <el-table-column label="市场价">
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
@@ -1056,6 +1056,14 @@ export default {
           return false;
         }
       } else if (item.time) {
+        if (!item.date || !item.day) {
+          this.$message({
+            message: "请填写日期保质期",
+            type: "error",
+            center: true,
+          });
+          return false;
+        }
         let numDate = item.day * 24 * 60 * 60 * 1000;
         let newDate = new Date(
           parseInt(new Date(item.date).getTime() + numDate)
@@ -1294,15 +1302,16 @@ export default {
     },
     // 保质期change
     shelfDayChange(val) {
-      let numDate = val * 24 * 60 * 60 * 1000;
-      let newDate = new Date(
-        parseInt(new Date(this.form.manufactureTime).getTime() + numDate)
-      ).getTime();
-      this.newDate = formatDate(newDate);
-      console.log(this.newDate);
-      let nowDate = parseInt(new Date().getTime());
-      let number = (newDate - nowDate) / (60 * 60 * 24 * 1000);
-      this.numberDay = parseInt(number);
+      if (val) {
+        let numDate = val * 24 * 60 * 60 * 1000;
+        let newDate = new Date(
+          parseInt(new Date(this.form.manufactureTime).getTime() + numDate)
+        ).getTime();
+        this.newDate = formatDate(newDate);
+        let nowDate = parseInt(new Date().getTime());
+        let number = (newDate - nowDate) / (60 * 60 * 24 * 1000);
+        this.numberDay = parseInt(number);
+      }
     },
     // 分类change
     goodsobjchange(value) {
@@ -1415,6 +1424,27 @@ export default {
           if (form.status == 9) {
             form.status = 1;
           }
+          form.specification.forEach((el) => {
+            if (el.skuvalue) {
+              delete el.skuvalue;
+            }
+            if (el.time) {
+              delete el.time;
+            }
+            if (el.day) {
+              delete el.day;
+            }
+            if (el.date) {
+              delete el.date;
+            }
+          });
+          form.specificationList.forEach((el) => {
+            if (el["保质期"] && el["保质期"]!=='') {
+                el.manufactureTime = el['保质期'].split("至")[0];
+                el.qualityTime = el['保质期'].split("至")[1];
+              }
+          });
+          console.log(form);
           if (this.$route.query.goodsCode && !this.$route.query.status) {
             update(form).then((res) => {
               this.$message({

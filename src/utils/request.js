@@ -59,13 +59,16 @@ service.interceptors.response.use(
       }
     } else {
       if (res.code !== "000000") {
-        if(res.code == '300010'){
+        if (res.code == '300010') {
+          return Promise.reject(res)
+        }
+        if (res.code == '500550') {
           return Promise.reject(res)
         }
         Message({
           message: res.msg || "Error",
           type: "error",
-          center:true,
+          center: true,
           duration: 2 * 1000
         });
         if (res.code == "400000") {
@@ -106,7 +109,7 @@ service.interceptors.response.use(
   error => {
     console.log("err" + error); // for debug
     Message({
-      center:true,
+      center: true,
       message: error.msg,
       type: "error",
       duration: 5 * 1000
