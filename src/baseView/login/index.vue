@@ -12,6 +12,7 @@
         </div>
         <!-- 账户密码登录 -->
         <el-form
+          @submit.native.prevent
           key="pass"
           class="login-con"
           :model="userPass"
@@ -23,12 +24,18 @@
             <el-input v-model="userPass.username" placeholder="请输入用户名/手机号"></el-input>
           </el-form-item>
           <el-form-item class="login-user-con" prop="password">
-            <el-input v-model="userPass.password" placeholder="请输入密码" show-password></el-input>
+            <el-input
+              v-model="userPass.password"
+              placeholder="请输入密码"
+              show-password
+              @keyup.enter.native="adminLogin(1)"
+            ></el-input>
           </el-form-item>
           <el-button type="primary" class="submit" @click="adminLogin(1)" :loading="loading">登录</el-button>
         </el-form>
         <!-- 手机登录 -->
         <el-form
+          @submit.native.prevent
           class="login-con"
           :model="mobelForm"
           :rules="mobelFormRules"
@@ -39,7 +46,12 @@
             <el-input v-model="mobelForm.mobile" placeholder="请输入手机号"></el-input>
           </el-form-item>
           <el-form-item class="login-user-con" prop="smCode">
-            <el-input v-model="mobelForm.smCode" placeholder="请输入短信验证码" class="phone-input"></el-input>
+            <el-input
+              v-model="mobelForm.smCode"
+              placeholder="请输入短信验证码"
+              class="phone-input"
+              @keyup.enter.native="adminLogin(2)"
+            ></el-input>
             <el-button
               class="ms-btn"
               :disabled="count !== 60"
@@ -226,13 +238,13 @@ export default {
       },
       userRules: {
         username: [
-          { required: true, message: '用户名/手机号不能为空', trigger: 'blur' },
+          { required: true, message: "用户名/手机号不能为空", trigger: "blur" },
         ],
         password: [
           {
             required: true,
             validator: passWorldRules,
-            trigger: 'blur',
+            trigger: "blur",
           },
         ],
       },
@@ -475,7 +487,6 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-
 .mini-flexs ::v-deep .el-cascader .el-input__inner {
   border-radius: 0px;
 }

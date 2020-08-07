@@ -9,6 +9,9 @@ import directive from '@/directives'
 import filter from '@/filters'
 import '@/router/permission.js'
 import '@/utils/vhight'
+import VueClipboard from 'vue-clipboard2'
+VueClipboard.config.autoSetContainer = true
+Vue.use(VueClipboard)
 Vue.config.productionTip = false
 Vue.use(ElementUI, {
   size: 'small'

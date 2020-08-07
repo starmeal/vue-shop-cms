@@ -95,111 +95,135 @@
             :key="index"
           >{{item.label}}</span>
         </p>
-        <section class="table-container" ref="table" v-loading="loading">
-          <table style="width:100%; border-collapse: collapse; border: none;table-layout:fixed">
-            <tr style="width:100%" class="header-tr">
-              <td style="width:50%">
-                <div class="header-flex">
-                  <section>商品</section>
-                  <section>单价（元）/数量</section>
-                  <section>售后</section>
-                </div>
-              </td>
-              <!-- <td style="width:10%">售后</td> -->
-              <td style="width:10%">买家/收货人</td>
-              <td style="width:10%">配送方式</td>
-              <td style="width:10%">实收金额（元）</td>
-              <td style="width:10%">订单状态</td>
-              <td style="width:10%">操作</td>
-            </tr>
-          </table>
-          <div class="mock-table" v-for="(its, index) in list" :key="index">
-            <div style="width:100%;position: relative;">
-              <span
-                style="margin-right:30px;margin-left:18px;font-size:12px;"
-              >订单号：{{ its.orderCode }}</span>
-              <span
-                style="margin-right:30px;margin-left:18px;font-size:12px;"
-              >下单时间：{{ its.createTime }}</span>
-              <span
-                style="margin-right:30px;margin-left:18px;font-size:12px;"
-              >{{its.payType == 2 ? '余额' : '微信'}}</span>
-              <p class="detail" @click="goOrderdetail(its)">查看详情</p>
-            </div>
-            <table
-              border="1"
-              cellspacing="0"
-              cellpadding="0"
-              style="width:100%; border-collapse: collapse; border: none;table-layout:fixed"
+        <div class="page-content">
+          <section class="table-container" ref="table" v-loading="loading">
+            <div
+              class="top-fixed"
+              :style="{zIndex:fiexTop ? 1000 : -1000,width:domWidth+'px',top:domTop+'px'}"
             >
-              <tr class="tspi" style="width:100%">
+              <table style="width:100%; border-collapse: collapse; border: none;table-layout:fixed">
+                <tr style="width:100%" class="header-tr">
+                  <td style="width:50%">
+                    <div class="header-flex">
+                      <section>商品</section>
+                      <section>单价（元）/数量</section>
+                      <section>售后</section>
+                    </div>
+                  </td>
+                  <!-- <td style="width:10%">售后</td> -->
+                  <td style="width:10%">买家/收货人</td>
+                  <td style="width:10%">配送方式</td>
+                  <td style="width:10%">实收金额（元）</td>
+                  <td style="width:10%">订单状态</td>
+                  <td style="width:10%">操作</td>
+                </tr>
+              </table>
+            </div>
+            <table style="width:100%; border-collapse: collapse; border: none;table-layout:fixed">
+              <tr style="width:100%" class="header-tr">
                 <td style="width:50%">
-                  <section class="flex-box" v-for="(item, idx) in its.detail" :key="idx">
-                    <div>
-                      <img class="thumbImg" :src="item.thumbImg.split(',')[0]" />
-                      <div class="product-name">
-                        <p class="thumbImg-right">{{ item.productName }}</p>
-                        <div
-                          style="margin-left:10px;margin-top:10px"
-                          v-show="item.goodsSku"
-                        >{{item.goodsSku}}</div>
-                      </div>
-                    </div>
-                    <div>
-                      <div>{{ item.payPrice / 100 }}</div>
-                      <div>{{ item.number }}件</div>
-                    </div>
-                    <div>
-                      <div>{{ item.aftersaleStatusText}}</div>
-                    </div>
-                  </section>
+                  <div class="header-flex">
+                    <section>商品</section>
+                    <section>单价（元）/数量</section>
+                    <section>售后</section>
+                  </div>
                 </td>
-                <!-- <td style="width:10%"></td> -->
-                <td style="width:10%">
-                  <p class="qusibaps">{{ its.nickName }}</p>
-                  <p class="qusibap">{{ its.mobile }}</p>
-                </td>
-                <td style="width:10%">
-                  <p class="qusibap">{{ its.pickupType }}</p>
-                </td>
-                <td style="width:10%">
-                  <div class="qusibap">{{its.payAmount / 100}}</div>
-                </td>
-                <td style="width:10%">
-                  <p class="qusibap">{{ its.orderStatusText }}</p>
-                </td>
-                <td style="width:10%">
-                  <p
-                    class="qusibap"
-                    @click="updatewuliu(its)"
-                    style="color:#44abf7;SC;cursor: pointer;font-size:12px"
-                    v-if="its.orderStatus == 3 && its.updateLogisticsTime == ''"
-                  >修改物流</p>
-                  <p
-                    class="qusibap poiner"
-                    @click="ggosd(its)"
-                    style="font-weight:600;color:green"
-                    v-if="its.orderStatus == 2"
-                  >
-                    <el-button size="mini">发货</el-button>
-                  </p>
-                </td>
+                <!-- <td style="width:10%">售后</td> -->
+                <td style="width:10%">买家/收货人</td>
+                <td style="width:10%">配送方式</td>
+                <td style="width:10%">实收金额（元）</td>
+                <td style="width:10%">订单状态</td>
+                <td style="width:10%">操作</td>
               </tr>
             </table>
-          </div>
-        </section>
-        <section class="page-box">
-          <el-pagination
-            v-if="list.length > 0"
-            @size-change="handleSizeChange"
-            @current-change="changepage"
-            layout="sizes,total, prev, pager, next, jumper"
-            :page-size="listpage.pageSize"
-            :current-page.sync="listpage.curPage"
-            :total="totalCount"
-            :page-sizes="[10, 20, 30, 50]"
-          ></el-pagination>
-        </section>
+            <div class="mock-table" v-for="(its, index) in list" :key="index">
+              <div style="width:100%;position: relative;">
+                <span
+                  style="margin-right:30px;margin-left:18px;font-size:12px;"
+                >订单号：{{ its.orderCode }}</span>
+                <span
+                  style="margin-right:30px;margin-left:18px;font-size:12px;"
+                >下单时间：{{ its.createTime }}</span>
+                <span
+                  style="margin-right:30px;margin-left:18px;font-size:12px;"
+                >{{its.payType == 2 ? '余额' : '微信'}}</span>
+                <p class="detail" @click="goOrderdetail(its)">查看详情</p>
+              </div>
+              <table
+                border="1"
+                cellspacing="0"
+                cellpadding="0"
+                style="width:100%; border-collapse: collapse; border: none;table-layout:fixed"
+              >
+                <tr class="tspi" style="width:100%">
+                  <td style="width:50%">
+                    <section class="flex-box" v-for="(item, idx) in its.detail" :key="idx">
+                      <div>
+                        <img class="thumbImg" :src="item.thumbImg.split(',')[0]" />
+                        <div class="product-name">
+                          <p class="thumbImg-right">{{ item.productName }}</p>
+                          <div
+                            style="margin-left:10px;margin-top:10px"
+                            v-show="item.goodsSku"
+                          >{{item.goodsSku}}</div>
+                        </div>
+                      </div>
+                      <div>
+                        <div>{{ item.payPrice / 100 }}</div>
+                        <div>{{ item.number }}件</div>
+                      </div>
+                      <div>
+                        <div>{{ item.aftersaleStatusText}}</div>
+                      </div>
+                    </section>
+                  </td>
+                  <!-- <td style="width:10%"></td> -->
+                  <td style="width:10%">
+                    <p class="qusibaps">{{ its.nickName }}</p>
+                    <p class="qusibap">{{ its.mobile }}</p>
+                  </td>
+                  <td style="width:10%">
+                    <p class="qusibap">{{ its.pickupType }}</p>
+                  </td>
+                  <td style="width:10%">
+                    <div class="qusibap">{{its.payAmount / 100}}</div>
+                  </td>
+                  <td style="width:10%">
+                    <p class="qusibap">{{ its.orderStatusText }}</p>
+                  </td>
+                  <td style="width:10%">
+                    <p
+                      class="qusibap"
+                      @click="updatewuliu(its)"
+                      style="color:#44abf7;SC;cursor: pointer;font-size:12px"
+                      v-if="its.orderStatus == 3 && its.updateLogisticsTime == ''"
+                    >修改物流</p>
+                    <p
+                      class="qusibap poiner"
+                      @click="ggosd(its)"
+                      style="font-weight:600;color:green"
+                      v-if="its.orderStatus == 2"
+                    >
+                      <el-button size="mini">发货</el-button>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </section>
+          <section class="page-box">
+            <el-pagination
+              v-if="list.length > 0"
+              @size-change="handleSizeChange"
+              @current-change="changepage"
+              layout="sizes,total, prev, pager, next, jumper"
+              :page-size="listpage.pageSize"
+              :current-page.sync="listpage.curPage"
+              :total="totalCount"
+              :page-sizes="[10, 20, 30, 50]"
+            ></el-pagination>
+          </section>
+        </div>
       </div>
       <!-- 修改物流弹窗 -->
       <el-dialog title="修改物流" :visible.sync="dialogStatus">
@@ -365,41 +389,12 @@ import {
   distinguishHandle,
   updateShopOrderParcelInfo,
   getShopOrderDetailNew,
-  updateCustAddressInfo,
 } from "@/api/merchantOrder";
 import { formatDate } from "@/utils/util";
 export default {
   name: "merchantOrderList",
   data() {
-    var EmptyValidator = (rule, value, callback) => {
-      console.log(value);
-      if (!myreg.test(value)) {
-        callback(new Error("输入有误请重新输入"));
-      } else {
-        callback();
-      }
-    };
     return {
-      addressform: {
-        orderCode: "",
-        custName: "",
-        custMobile: "",
-        custAddress: "",
-        custAddressD: "",
-      },
-      addressformrules: {
-        custName: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-        custMobile: [
-          { required: true, message: "请输入联系方式", trigger: "blur" },
-          {
-            validator: EmptyValidator,
-            trigger: "blur",
-          },
-        ],
-        custAddress: [
-          { required: true, message: "请选择联系地址", trigger: "change" },
-        ],
-      },
       queArr: [],
       tableDdialog: false,
       parcelInfo: [],
@@ -486,6 +481,9 @@ export default {
         contact: "",
         phone: "",
       },
+      fiexTop: false,
+      domTop: 0,
+      domWidth: 0,
       radio: 0,
       list: [],
       fahuoinfo: "",
@@ -515,16 +513,55 @@ export default {
   created() {
     this.getList();
   },
-  mounted() {},
+  mounted() {
+    this.initscroll();
+  },
   methods: {
-    // 订单详情跳转
-    goOrderdetail(its){
-      this.$router.push({
-        path:'/orderDetail',
-        query:{
-          orderId:its.orderCode
+    initscroll() {
+      this.$nextTick(() => {
+        function getElementTop(elem) {
+          var elemTop = elem.offsetTop; //获得elem元素距相对定位的父元素的top
+          elem = elem.offsetParent; //将elem换成起相对定位的父元素
+          while (elem != null) {
+            //只要还有相对定位的父元素
+            //获得父元素 距他父元素的top值,累加到结果中
+            elemTop += elem.offsetTop; //再次将elem换成他相对定位的父元素上;
+            elem = elem.offsetParent;
+          }
+          return elemTop;
         }
-      })
+        let dom = document.querySelector("#router-view");
+        this.dom = dom;
+        this.domWidth = document.querySelector("#router-view").offsetWidth;
+        const myObserver = new ResizeObserver((entries) => {
+          entries.forEach((entry) => {
+            this.domWidth = document.querySelector("#router-view").offsetWidth;
+            // console.log("大小位置", entry.contentRect);
+            // console.log("监听的DOM", entry.target);
+          });
+        });
+        myObserver.observe(dom);
+        this.domTop = document.querySelector("#router-view").offsetTop;
+        this.tabledomPos = document
+          .querySelector(".table-container")
+          .getBoundingClientRect().top;
+        dom.addEventListener("scroll", () => {
+          if (dom.scrollTop >= this.tabledomPos) {
+            this.fiexTop = true;
+          } else {
+            this.fiexTop = false;
+          }
+        });
+      });
+    },
+    // 订单详情跳转
+    goOrderdetail(its) {
+      this.$router.push({
+        path: "/orderDetail",
+        query: {
+          orderId: its.orderCode,
+        },
+      });
     },
     // 修改物流返回
     fanhui() {
@@ -838,8 +875,10 @@ export default {
     },
     //时间选择器
     timeChange(val) {
-      this.listpage.createTimeBegin = "";
-      this.listpage.createTimeEnd = "";
+      if (!val) {
+        this.listpage.createTimeBegin = "";
+        this.listpage.createTimeEnd = "";
+      }
       this.getList();
     },
     tabRetrieval(index, item) {
@@ -1146,6 +1185,7 @@ ul li {
   top: 50%;
   transform: translate(0, -50%);
   color: #44abf7;
+  cursor: pointer;
 }
 </style>
 <style scoped>
@@ -1309,5 +1349,17 @@ li {
 }
 .form-flex {
   display: flex;
+}
+.top-fixed {
+  width: 69%;
+  height: 30px;
+  left: 18%;
+  z-index: -100;
+  position: fixed;
+  top: 129px;
+}
+.page-content {
+  padding-bottom: 20px;
+  position: relative;
 }
 </style>

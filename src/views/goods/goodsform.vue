@@ -10,7 +10,7 @@
         <div class="title title-margin">
           <Icon icon="jibenxinxi" class="authentication-title" />基本信息
         </div>
-        <el-form-item label="商品类型" prop="category">
+        <el-form-item label="商品类目" prop="category">
           <el-cascader
             :disabled="disabled"
             v-if="valArr.length"
@@ -31,12 +31,13 @@
             type="text"
             placeholder="请输入内容"
             v-model="form.goodsName"
-            maxlength="10"
+            maxlength="30"
+            @input="nospace"
             show-word-limit
             :size="size"
           ></el-input>
         </el-form-item>
-        <el-form-item label="商品类目" prop="goodsItemType">
+        <el-form-item label="商品类型" prop="goodsItemType">
           <el-select
             :disabled="disabled"
             v-model="form.goodsItemType"
@@ -134,6 +135,9 @@
               <div class="btnsss">选择文件</div>
             </section>
           </el-upload>
+          <div v-show="form.vedio" @click="delvideo" style="margin-top:20px">
+            <el-button type="primary">删除视频</el-button>
+          </div>
           <div id="mse" style="margin-top:20px" v-show="form.vedio"></div>
           <div class="hidden-box">
             <el-input v-model="form.vedio" class="hidden-input"></el-input>
@@ -211,6 +215,29 @@
             inactive-value="0"
           ></el-switch>
         </el-form-item>
+        <el-form-item label="设置生产日期" v-if="form.isOnTime == 1">
+          <el-date-picker
+            :disabled="disabled"
+            v-model="form.manufactureTime"
+            value-format="yyyy-MM-dd"
+            type="date"
+            placeholder="选择日期"
+          ></el-date-picker>
+          <span class="xiaoxue">保质期天数</span>
+          <el-input-number
+            :disabled="disabled"
+            v-model="form.shelfDay"
+            @change="shelfDayChange"
+            :controls="false"
+            label="描述文字"
+            class="deep-numbers"
+            :max="9999999"
+          ></el-input-number>
+          <span class="xiaoxue" v-show="form.manufactureTime && form.shelfDay">
+            剩余保质期：
+            <span>共:{{numberDay}}天</span>
+          </span>
+        </el-form-item>
         <el-form-item label="商品规格" prop="resource">
           <el-radio-group v-model="form.resource" @change="resourceChange" :disabled="disabled">
             <el-radio :label="1">统一规格</el-radio>
@@ -218,29 +245,6 @@
           </el-radio-group>
         </el-form-item>
         <section v-if="form.resource == 1">
-          <el-form-item label="设置生产日期" v-if="form.isOnTime == 1">
-            <el-date-picker
-              :disabled="disabled"
-              v-model="form.manufactureTime"
-              value-format="yyyy-MM-dd"
-              type="date"
-              placeholder="选择日期"
-            ></el-date-picker>
-            <span class="xiaoxue">保质期天数</span>
-            <el-input-number
-              :disabled="disabled"
-              v-model="form.shelfDay"
-              @change="shelfDayChange"
-              :controls="false"
-              label="描述文字"
-              class="deep-numbers"
-              :max="9999999"
-            ></el-input-number>
-            <span class="xiaoxue" v-show="form.manufactureTime && form.shelfDay">
-              剩余保质期：
-              <span>共:{{numberDay}}天</span>
-            </span>
-          </el-form-item>
           <el-form-item label="商品条码">
             <el-input
               v-model="form.goodsBarCode"
@@ -255,6 +259,7 @@
               v-model="form.anchorMoney"
               :controls="false"
               label="描述文字"
+              :min="0"
               class="deep-numbers"
               :max="9999999"
             ></el-input-number>
@@ -263,6 +268,7 @@
             <el-input-number
               :disabled="disabled"
               :max="9999999"
+              :min="0"
               v-model="form.accountMoney"
               :controls="false"
               label="描述文字"
@@ -361,6 +367,7 @@
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
+                    :min="0"
                     :disabled="disabled"
                     v-model="props.row.goodsOriginalPrice"
                     :controls="false"
@@ -372,6 +379,7 @@
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
+                    :min="0"
                     :disabled="disabled"
                     v-model="props.row.goodsPrice"
                     :controls="false"
@@ -383,6 +391,7 @@
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
+                    :min="0"
                     :disabled="disabled"
                     v-model="props.row.anchorMoney"
                     :controls="false"
@@ -395,6 +404,7 @@
                   <el-input-number
                     :disabled="disabled"
                     :max="9999999"
+                    :min="0"
                     v-model="props.row.accountMoney"
                     :controls="false"
                     class="table-deep-numbers"
@@ -405,6 +415,7 @@
                 <template slot-scope="props">
                   <el-input-number
                     :max="9999999"
+                    :min="0"
                     :disabled="disabled"
                     v-model="props.row.stock"
                     :controls="false"
@@ -462,6 +473,7 @@
             v-model="form.goodsOriginalPrice"
             :controls="false"
             label="描述文字"
+            :min="0"
             class="deep-numbers"
             :max="9999999"
           ></el-input-number>
@@ -472,6 +484,7 @@
             v-model="form.goodsPrice"
             :controls="false"
             label="描述文字"
+            :min="0"
             class="deep-numbers"
             :max="9999999"
           ></el-input-number>
@@ -480,6 +493,7 @@
           <el-input-number
             :disabled="disabled"
             :max="9999999"
+            :precision="0"
             v-model="form.stock"
             :controls="false"
             label="描述文字"
@@ -499,8 +513,8 @@
         <el-form-item label="配送方式" prop="deliveryType">
           <el-radio-group v-model="form.deliveryType" :disabled="disabled">
             <el-radio label="1">快递发货</el-radio>
-            <el-radio label="2">同城配送</el-radio>
-            <el-radio label="3">到店自提</el-radio>
+            <!-- <el-radio label="2">同城配送</el-radio>
+            <el-radio label="3">到店自提</el-radio>-->
           </el-radio-group>
         </el-form-item>
         <el-form-item label="运费模板" prop="templateId">
@@ -748,11 +762,11 @@ export default {
         ],
         goodsPrice: [
           { required: true, message: "请填写销售价格", trigger: "blur" },
-          { validator: nums1, trigger: "change" },
+          { validator: nums1, trigger: "blur" },
         ],
         stock: [
           { required: true, message: "请填写总库存", trigger: "blur" },
-          { validator: nums, trigger: "change" },
+          { validator: nums, trigger: "blur" },
         ],
         stockReduceType: [
           { required: true, message: "请选择库存扣减方式", trigger: "change" },
@@ -884,6 +898,9 @@ export default {
   },
   mounted() {},
   methods: {
+    nospace(val) {
+      this.form.goodsName = val.replace(/\s+/g, "");
+    },
     changeskuName(index) {
       if (
         this.skuArr.length > 0 &&
@@ -923,7 +940,7 @@ export default {
       });
     },
     // 详情
-    getDetail(code) {
+    getDetail(code, index) {
       let obj = {
         goodsCode: code,
       };
@@ -937,7 +954,12 @@ export default {
         });
         body.categoryName = body.categoryName.split(",");
         this.cityvalue = [body.provinceCode, body.cityCode];
-        this.disabled = true;
+        if (index) {
+          this.disabled = false;
+        } else {
+          this.disabled = true;
+        }
+
         this.serviceAssuranceChange(body.serviceAssurance);
         this.form = body;
         this.form.category = category;
@@ -1226,7 +1248,7 @@ export default {
     },
     // 编辑草稿箱
     gomdrafts(row) {
-      this.getDetail(row.goodsCode);
+      this.getDetail(row.goodsCode, 1);
       this.dialogTableVisible = false;
     },
     // 删除全部草稿箱
@@ -1369,12 +1391,27 @@ export default {
       };
       getMerTemplateList(obj).then((res) => {
         this.selectTemplate = res.body;
+        let element = this.selectTemplate.find((el) => {
+          return el.isChecked == 1;
+        });
+        this.form.templateId = element.templateId;
       });
     },
     // 提交表单
     submitForm() {
       this.$refs.goodForm.validate((valid) => {
         if (valid) {
+          if (
+            this.form.goodsPrice <
+            this.form.accountMoney + this.form.anchorMoney
+          ) {
+            this.$message({
+              message: "主播佣金+分享佣金应小于销售价格",
+              type: "error",
+              center: true,
+            });
+            return false;
+          }
           if (
             this.form.status == 9 &&
             (this.form.putawayTime == "" || this.form.soldOutTime == "")
@@ -1397,11 +1434,7 @@ export default {
             });
             return false;
           }
-          if (
-            this.form.resource == 1 &&
-            this.form.isOnTime == 1 &&
-            this.form.manufactureTime == ""
-          ) {
+          if (this.form.isOnTime == 1 && this.form.manufactureTime == "") {
             this.$message({
               message: "请填写生产日期",
               type: "error",
@@ -1409,13 +1442,17 @@ export default {
             });
             return false;
           }
-          if (
-            this.form.resource == 1 &&
-            this.form.isOnTime == 1 &&
-            !this.form.shelfDay
-          ) {
+          if (this.form.isOnTime == 1 && !this.form.shelfDay) {
             this.$message({
               message: "请填写保质期",
+              type: "error",
+              center: true,
+            });
+            return false;
+          }
+          if (this.form.isOnTime == 1 && this.numberDay <= 0) {
+            this.$message({
+              message: "商品已过期",
               type: "error",
               center: true,
             });
@@ -1427,9 +1464,11 @@ export default {
                 ? (this.form.goodsPrice / this.form.goodsOriginalPrice) * 10
                 : 0,
             specificationList: this.skuArr,
-            category: this.form.category.join(","),
-            categoryName: this.form.categoryName.join(","),
-            qualityTime: this.newDate,
+            category: this.form.category ? this.form.category.join(",") : "",
+            categoryName: this.form.categoryName
+              ? this.form.categoryName.join(",")
+              : "",
+            qualityTime: this.newDate ? this.newDate : "",
           });
           // 9 是定时后台没有变成1
           if (form.status == 9) {
@@ -1545,9 +1584,9 @@ export default {
           });
           return false;
         }
-        if (file.size > 1024 * 1024 * 1) {
+        if (file.size > (1024 * 1024 * 1) / 2) {
           this.$message({
-            message: "上传图片过大请上传1M以下的图片",
+            message: "上传图片过大请上传500kb以下的图片",
             type: "error",
             center: true,
           });
@@ -1591,14 +1630,8 @@ export default {
                       that.form.goodsImgs.length - 15
                     );
                   }
-                  if (
-                    data.data === "detail" &&
-                    that.form.detail.length > 15
-                  ) {
-                    that.form.detail.splice(
-                      14,
-                      that.form.detail.length - 15
-                    );
+                  if (data.data === "detail" && that.form.detail.length > 15) {
+                    that.form.detail.splice(14, that.form.detail.length - 15);
                   }
                 }
               }
@@ -1612,14 +1645,21 @@ export default {
           console.log(`阿里云OSS上传图片失败回调`, err);
         });
     },
+    delvideo() {
+      this.videoplayer.pause();
+      this.videoplayer.reload();
+      this.videoplayer.destroy(true);
+      this.form.vedio = "";
+      this.videoplayer = "";
+    },
     // 初始化video
     initvideo() {
+      let that = this;
       if (this.videoplayer) {
-        this.videoplayer.pause();
         this.videoplayer.reload();
+        this.videoplayer.pause();
         this.videoplayer.destroy();
       }
-      let that = this;
       this.videoplayer = new Player({
         id: "mse",
         autoplay: false,

@@ -31,9 +31,9 @@ const actions = {
           commit("SET_USERNAME", name);
           commit('SET_TOKEN', token);
           commit('SET_NAME', shopMerchantsName);
-          commit('SET_CODE', shopMerchantsCode);
+          // commit('SET_CODE', shopMerchantsCode);
           commit('SET_ROLES', permissions);
-          commit('SET_USERID', userId);
+          // commit('SET_USERID', userId);
           resolve(response);
         })
         .catch((error) => {
@@ -51,7 +51,7 @@ const actions = {
             commit("SET_USERNAME", body.name);
             commit("SET_TOKEN", body.token);
             commit("SET_NAME", body.shopMerchantsName);
-            commit('SET_CODE', body.shopMerchantsCode);
+            // commit('SET_CODE', body.shopMerchantsCode);
             commit('SET_ROLES', body.permissions);
             resolve();
           }
@@ -68,11 +68,10 @@ const actions = {
         .then(response => {
           const { body, code } = response;
           if (code == '000000') {
-            console.log(body, '11111');
             commit("SET_USERNAME", body.name);
             commit("SET_TOKEN", body.token);
             commit("SET_NAME", body.shopMerchantsName);
-            commit('SET_CODE', body.shopMerchantsCode);
+            // commit('SET_CODE', body.shopMerchantsCode);
             commit('SET_ROLES', body.permissions);
             resolve(response);
           }

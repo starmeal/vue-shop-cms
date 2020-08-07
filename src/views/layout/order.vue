@@ -54,8 +54,6 @@
 <script>
 import { throttle } from "@/utils/util.js";
 import { getOrderMessage } from "@/api/login";
-import { createNamespacedHelpers } from "vuex";
-const { mapState } = createNamespacedHelpers("user");
 export default {
   name: "order",
   data() {
@@ -70,11 +68,6 @@ export default {
   created() {
     this.getOrderMessage();
   },
-  computed: {
-    ...mapState({
-      shopMerchantsCode: "code",
-    }),
-  },
   mounted() {
     this.$nextTick(() => {
       this.handle();
@@ -86,9 +79,7 @@ export default {
   },
   methods: {
     getOrderMessage() {
-      getOrderMessage({
-        shopMerchantsCode: this.shopMerchantsCode,
-      }).then(
+      getOrderMessage().then(
         ({ code, body: { afterSaleCount, deliveredCount, evaCount } }) => {
           this.afterSaleCount = afterSaleCount;
           this.deliveredCount = deliveredCount;

@@ -85,9 +85,24 @@ export function update(data) {
     data
   });
 }
+export function updateStatus(data) {
+  return request({
+    url: `/cms/goods/updateStatus`,
+    method: "POST",
+    data
+  });
+}
+
 export function modifyRecommendationStatus(data) {
   return request({
     url: `/goods/modifyRecommendationStatus`,
+    method: "POST",
+    data
+  });
+}
+export function modifyProductStatus(data) {
+  return request({
+    url: `/goods/modifyProductStatus`,
     method: "POST",
     data
   });

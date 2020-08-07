@@ -250,6 +250,35 @@ export const asyncRoutes = [
       },
     ]
   },
+  {
+    path: '/aftersale',
+    component: () => import('@/views/layout/layout'),
+    meta: {
+      title: '售后',
+      fullTitle: '售后管理',
+      icon: 'zuosuojin',
+    },
+    children: [
+      {
+        path: '',
+        meta: {
+          title: '售后列表',
+          parentPath: '/aftersale',
+          basePath: '/aftersale',
+        },
+        component: () => import('@/views/aftersale/index'),
+      },
+      // {
+      //   path: '/orderDetail',
+      //   meta: {
+      //     title: '订单详情',
+      //     parentPath: '/merchantOrder',
+      //     basePath: '/merchantOrder',
+      //   },
+      //   component: () => import('@/views/merchantOrder/orderDetail'),
+      // },
+    ]
+  },
   { path: "*", redirect: "/404", hidden: true }
 ]
 Vue.use(VueRouter);
