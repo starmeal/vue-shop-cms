@@ -52,6 +52,40 @@
               </el-select>
             </div>
           </el-form-item>
+          <el-form-item label="发货状态">
+            <div>
+              <el-select v-model="listPage.deliveryStatus" placeholder="请选择">
+                <el-option :key="0" label="售中退款" value="0"></el-option>
+                <el-option :key="1" label="售后退款" value="1"></el-option>
+              </el-select>
+              <span class="mock-label">售后状态</span>
+              <el-select
+                v-model="listPage.aftersaleStatus"
+                placeholder="请选择"
+                style="margin-left:20px"
+              >
+                <el-option :key="1" label="售中退款" value="1"></el-option>
+                <el-option :key="2" label="售后退款" value="2"></el-option>
+                <el-option :key="3" label="售中退款" value="1"></el-option>
+                <el-option :key="4" label="售后退款" value="2"></el-option>
+                <el-option :key="5" label="售中退款" value="1"></el-option>
+                <el-option :key="6" label="售后退款" value="2"></el-option>
+                <el-option :key="7" label="售中退款" value="1"></el-option>
+                <el-option :key="8" label="售后退款" value="2"></el-option>
+                <el-option :key="9" label="售中退款" value="1"></el-option>
+              </el-select>
+              <span class="mock-label">退货物流</span>
+              <el-select
+                v-model="listPage.aftersaleType"
+                placeholder="请选择"
+                style="margin-left:20px"
+              >
+                <el-option :key="1" label="仅退款" value="1"></el-option>
+                <el-option :key="3" label="退货退款" value="3"></el-option>
+                <el-option :key="4" label="换货" value="4"></el-option>
+              </el-select>
+            </div>
+          </el-form-item>
         </el-form>
         <!-- <p class="retrievalList">
           <span

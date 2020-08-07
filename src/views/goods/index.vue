@@ -235,7 +235,6 @@ export default {
         children: "Children",
       },
       objform: {
-        goodsCode: "",
         status: "",
         remark: "",
       },
@@ -354,7 +353,7 @@ export default {
         this.dialogFormVisible = true;
         this.remarkRow = row;
       } else {
-        let objform = Object.assign({}, this.objform, this.remarkRow);
+        let objform = Object.assign({}, this.remarkRow,this.objform);
         modifyRecommendationStatus(objform).then((res) => {
           this.$message({
             message: "备注添加成功",
