@@ -352,6 +352,7 @@ export default {
       if (!this.dialogFormVisible) {
         this.dialogFormVisible = true;
         this.remarkRow = row;
+        this.objform.remark = row.remark
       } else {
         let objform = Object.assign({}, this.remarkRow,this.objform);
         modifyRecommendationStatus(objform).then((res) => {
