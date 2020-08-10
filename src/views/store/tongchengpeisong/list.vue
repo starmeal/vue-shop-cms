@@ -67,7 +67,7 @@
         <el-table-column prop="createTime" label="创建时间">
           <template slot-scope="{row}">{{row.createTime || '--'}}</template>
         </el-table-column>
-        <el-table-column prop="unreachableCityNames" width="250" label="不可到达城市">
+        <el-table-column prop="unreachableCityNames" width="200" label="不可到达城市">
           <template slot-scope="props">
             <el-popover
               popper-class="popper-class-w"
@@ -84,11 +84,20 @@
             </el-popover>
           </template>
         </el-table-column>
-        <el-table-column prop="caozuo" label="操作" width="250px">
+        <el-table-column prop="caozuo" label="操作" width="200px">
           <template slot-scope="props">
-            <el-button :size="size" type="warning" @click="deleteList(props.row)">删除</el-button>
-            <el-button :size="size" type="primary" @click="editorList(props.row.templateId)">修改</el-button>
-            <el-button :size="size" type="success" @click="toLook(props.row.templateId)">查看</el-button>
+            <el-tooltip class="item light-item" effect="light" placement="top">
+              <span slot="content" style="font-size:12px;color:#9d9d9d">删除</span>
+              <i class="el-icon-delete icon-content" @click="deleteList(props.row)"></i>
+            </el-tooltip>
+            <el-tooltip class="item light-item" effect="light" placement="top">
+              <span slot="content" style="font-size:12px;color:#9d9d9d">修改</span>
+              <i class="el-icon-edit icon-content" @click="editorList(props.row.templateId)"></i>
+            </el-tooltip>
+            <el-tooltip class="item light-item" effect="light" placement="top">
+              <span slot="content" style="font-size:12px;color:#9d9d9d">查看</span>
+              <i class="el-icon-edit icon-content" @click="toLook(props.row.templateId)"></i>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -305,20 +314,22 @@ export default {
 .authentication {
   background: #fff;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 10px;
+  height: 100%;
   font-family: MicrosoftYaHei-Bold;
 }
 .innerContainer {
-  width: 98%;
+  /* width: 98%;
   margin: 0 auto;
-  padding: 20px 0px;
-  background: #f5f7f9;
+  padding: 20px 0px; */
+  background: #fff;
 }
 .top_button_w {
   display: flex;
   align-items: center;
-  margin-left: 2%;
-  margin-bottom: 30px;
+  background: #fff;
+  padding: 10px 0px;
+  margin-bottom: 10px;
 }
 .el-input-w {
   width: 200px;
@@ -338,7 +349,7 @@ export default {
 .yunfeiList {
   .el-table {
     margin-top: 10px;
-    width: 96%;
+    // width: 96%;
     margin: 0 auto;
   }
   .el-popover {

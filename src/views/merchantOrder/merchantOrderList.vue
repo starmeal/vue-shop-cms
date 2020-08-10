@@ -16,6 +16,7 @@
               <el-input
                 style="margin-left: 20px;"
                 clearable
+                @change="kongkong"
                 class="inputStyle"
                 v-model="form.value"
               ></el-input>
@@ -94,6 +95,7 @@
             v-for="(item,index) in orderStatusArr"
             :key="index"
           >{{item.label}}</span>
+          <span @click="shohouzhong" :class="{active: isTrue  == 99 }">售后中</span>
         </p>
         <div class="page-content">
           <section class="table-container" ref="table" v-loading="loading">
@@ -517,6 +519,16 @@ export default {
     this.initscroll();
   },
   methods: {
+    kongkong(val){
+      if(!val){
+        this.listpage[this.form.search] = ''
+      }
+    },
+    shohouzhong() {
+      this.isTrue = 99;
+      this.listpage.afterSaleStatus = 1;
+      this.getList();
+    },
     initscroll() {
       this.$nextTick(() => {
         function getElementTop(elem) {
@@ -800,6 +812,7 @@ export default {
     serachList() {
       this.listpage.curPage = 1;
       this.listpage[this.form.search] = this.form.value;
+      console.log(this.listpage)
       this.getList();
     },
     //今天按钮

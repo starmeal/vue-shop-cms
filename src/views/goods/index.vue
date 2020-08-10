@@ -113,11 +113,11 @@
           <el-table-column prop="accountMoney" label="分享佣金"></el-table-column>
           <el-table-column prop="stock" label="库存"></el-table-column>
           <el-table-column prop="selled" label="销量"></el-table-column>
-          <el-table-column prop="shelfDay" label="保质期" width="60px">
+          <!-- <el-table-column prop="shelfDay" label="保质期" width="60px">
             <template slot-scope="props">
               <span>{{props.row.shelfDay || '--'}}</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column label="是否推荐">
             <template slot-scope="props">
               <el-switch
@@ -352,9 +352,9 @@ export default {
       if (!this.dialogFormVisible) {
         this.dialogFormVisible = true;
         this.remarkRow = row;
-        this.objform.remark = row.remark
+        this.objform.remark = row.remark;
       } else {
-        let objform = Object.assign({}, this.remarkRow,this.objform);
+        let objform = Object.assign({}, this.remarkRow, this.objform);
         modifyRecommendationStatus(objform).then((res) => {
           this.$message({
             message: "备注添加成功",
@@ -420,7 +420,10 @@ export default {
         });
         return false;
       }
-      if (this.listpage.goodsPriceBeginStr > this.listpage.goodsPriceEndStr) {
+      if (
+        parseInt(this.listpage.goodsPriceBeginStr) >
+        parseInt(this.listpage.goodsPriceEndStr)
+      ) {
         this.$message({
           showClose: true,
           message: "价格区间输入有误无法进行搜索",
@@ -612,7 +615,7 @@ export default {
   padding: 4px;
   display: inline-block;
   box-sizing: border-box;
-  font-size: 12px;
+  font-size: 15px;
 }
 .reblcs {
   margin-left: 20px;

@@ -38,7 +38,10 @@
         </div>
       </el-tree>
     </div>
-    <div class="close" @click="handleIsCollapseSecond" v-if="menuItemList.length"></div>
+    <div class="close" @click="handleIsCollapseSecond" v-if="menuItemList.length">
+      <span v-if="!isCollapseSecond" class="iconfont icon-xiangzuoshuangjiantou"></span>
+      <span v-if="isCollapseSecond" class="iconfont icon-xiangyoushuangjiantou1"></span>
+    </div>
   </div>
 </template>
 
@@ -166,8 +169,8 @@ export default {
 <style scoped lang='scss'>
 .iconfont {
   color: #fff;
-  vertical-align: middle;
   font-size: 14px;
+  margin-top: 4px;
 }
 .menu-container {
   display: flex;
@@ -184,6 +187,12 @@ export default {
     right: -18px;
     top: 0;
     cursor: pointer;
+    .iconfont{
+      color: #000;
+      line-height: 36px;
+      text-align: center;
+      width: 100%;
+    }
   }
   .menu-con {
     flex: 0 0 60px;

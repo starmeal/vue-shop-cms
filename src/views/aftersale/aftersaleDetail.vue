@@ -222,7 +222,7 @@
     </el-dialog>
     <!-- 同意跟拒绝收货弹窗 -->
     <el-dialog :visible.sync="dialogVisible3" width="40%">
-      <span style="font-size:16px" slot="title">售后维权处理3</span>
+      <span style="font-size:16px" slot="title">售后维权处理</span>
       <el-alert
         title="需要你同意退款申请，买家才能退货给你，买家退货后你需要再次确认收货后，退款将自动原路退回至买家账户"
         type="warning"
@@ -486,9 +486,17 @@ export default {
         this.dialogTableVisible1 = true;
       }
       // 同意买家退款
-      if (dialogType[index] == 2) {
+      if (dialogType[index] == 2 || dialogType[index] == 4) {
         this.dialogVisible = true;
       }
+      // 已收到退货,立即退款
+      if (dialogType[index] == 3) {
+        this.shouhuo(1)
+      }
+       if (dialogType[index] == 6) {
+        this.queren()
+      }
+      
     },
     // 发货查询物流公司
     onSubmit() {
@@ -681,6 +689,7 @@ export default {
               center: true,
             });
             this.dialogVisible = false;
+            this.dialogVisible2 = false;
             this.getDetail(this.aftersaleinfo.asaleCode);
           });
         }

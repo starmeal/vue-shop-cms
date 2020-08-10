@@ -105,9 +105,8 @@
                   class="img-item list-group-item"
                   v-for="(item,index) in form.goodsImgs"
                   :key="item + '' + index"
-                  @click="delImg(index)"
                 >
-                  <i class="el-icon-close close-i" v-if="!disabled"></i>
+                  <i class="el-icon-close close-i" v-if="!disabled" @click="delImg(index)"></i>
                   <img :src="item" class="img-items" />
                 </div>
               </transition-group>
@@ -135,7 +134,7 @@
               <div class="btnsss">选择文件</div>
             </section>
           </el-upload>
-          <div v-show="form.vedio" @click="delvideo" style="margin-top:20px">
+          <div v-show="form.vedio && !disabled" @click="delvideo" style="margin-top:20px">
             <el-button type="primary">删除视频</el-button>
           </div>
           <div id="mse" style="margin-top:20px" v-show="form.vedio"></div>
@@ -183,9 +182,8 @@
                     class="img-item list-group-item"
                     v-for="(item,ix) in form.detail"
                     :key="item + '' + ix"
-                    @click="delImg(ix,1)"
                   >
-                    <i class="el-icon-close close-i" v-if="!disabled"></i>
+                    <i class="el-icon-close close-i" v-if="!disabled" @click="delImg(ix,1)"></i>
                     <img :src="item" class="img-items" />
                   </div>
                 </transition-group>
@@ -1587,6 +1585,15 @@ export default {
         if (file.size > (1024 * 1024 * 1) / 2) {
           this.$message({
             message: "上传图片过大请上传500kb以下的图片",
+            type: "error",
+            center: true,
+          });
+          return false;
+        }
+      } else {
+        if (file.type.split("/")[0] != "video") {
+          this.$message({
+            message: "只能上传视频",
             type: "error",
             center: true,
           });

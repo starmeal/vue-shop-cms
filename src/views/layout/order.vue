@@ -4,7 +4,7 @@
       <el-collapse v-model="activeName">
         <el-collapse-item name="1">
           <div slot="title" class="order-icon-container">
-            <i class="order-icon el-icon-info"></i>订单
+            <i class="iconfont icon-dingdan1"></i>订单
           </div>
           <div class="order-item-con" v-if="deliveredCount">
             待发货订单
@@ -20,7 +20,7 @@
         </el-collapse-item>
         <el-collapse-item name="2">
           <div slot="title" class="order-icon-container">
-            <i class="order-icon el-icon-info"></i>咨询
+            <i class="iconfont icon-zixun"></i>咨询
           </div>
           <div class="order-item-con">
             订单咨询
@@ -29,7 +29,7 @@
         </el-collapse-item>
         <el-collapse-item name="3">
           <div slot="title" class="order-icon-container">
-            <i class="order-icon el-icon-info"></i>评价
+            <i class="iconfont icon-pingjia"></i>评价
           </div>
           <div class="order-item-con" v-if="evaCount">
             <template>
@@ -148,6 +148,9 @@ export default {
 </script>
 
 <style scoped lang='scss'>
+.iconfont {
+  color: #000;
+}
 .order-main-container {
   position: fixed;
   right: 0;
@@ -212,9 +215,10 @@ export default {
       font-size: 13px;
       font-family: Microsoft YaHei;
       color: rgba(51, 51, 51, 1);
-      .order-icon {
-        font-size: 16px;
+      .iconfont  {
+        font-size: 14px;
         margin-right: 10px;
+        margin-top: 7px;
       }
     }
   }
