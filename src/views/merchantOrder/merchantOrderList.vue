@@ -535,7 +535,8 @@ export default {
         this.domWidth = document.querySelector("#router-view").offsetWidth;
         const myObserver = new ResizeObserver((entries) => {
           entries.forEach((entry) => {
-            this.domWidth = document.querySelector("#router-view").offsetWidth;
+            this.domWidth =
+              document.querySelector("#router-view").offsetWidth - 19;
             // console.log("大小位置", entry.contentRect);
             // console.log("监听的DOM", entry.target);
           });
@@ -1165,7 +1166,7 @@ ul li {
   line-height: 30px;
   font-size: 12px;
   font-weight: 400;
-  background: #d5d5d5;
+  background: #edf6ff;
   color: rgba(51, 51, 51, 1);
 }
 .header-tr > td {
@@ -1353,7 +1354,7 @@ li {
 .top-fixed {
   width: 69%;
   height: 30px;
-  left: 18%;
+  left: 18.8%;
   z-index: -100;
   position: fixed;
   top: 129px;

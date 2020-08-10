@@ -22,7 +22,14 @@
           ></div>
           <div class="top-last">
             <span v-if="aftersaleinfo.canDoText && aftersaleinfo.canDoText.length">还可以：</span>
-            <span v-for="(item,index) in aftersaleinfo.canDoText" :key="index" @click="justsoso(index)">{{item}}</span>
+            <span
+              v-for="(item,index) in aftersaleinfo.canDoText"
+              :key="index"
+              @click="justsoso(index)"
+            >
+              {{item}}
+              <span v-if="index != aftersaleinfo.canDoText.length-1">,</span>
+            </span>
             <span style="color:#666" v-if="aftersaleinfo.isYellow == 1">还可以：</span>
             <span
               @click="lookmoeny"
@@ -33,7 +40,7 @@
             <!-- <span>立即发货</span> -->
           </div>
         </div>
-        <div class="tips-box">
+        <div class="tips-box" v-if="aftersaleinfo.remindText && aftersaleinfo.remindText.length">
           <div>和商有品提醒：</div>
           <div class="tips-text">
             <div v-for="(item,index) in aftersaleinfo.remindText" :key="index">{{item}}</div>
@@ -165,7 +172,7 @@
           <span style="color:#44abf7">{{aftersaleinfo.orderCode}}</span>
         </div>
       </div>
-      <el-table :data="huotable">
+      <el-table :data="gridData">
         <el-table-column property="refundId" label="退款流水号">
           <template slot-scope="prop">{{prop.row.refundId ? prop.row.refundId : '--'}}</template>
         </el-table-column>
@@ -261,7 +268,7 @@
       </span>
     </el-dialog>
     <!-- 确认收货并发货弹窗 -->
-    <el-dialog title="订单发货" :visible.sync="dialogTableVisible1">
+    <el-dialog title="确认收货并发货" :visible.sync="dialogTableVisible1">
       <div class="dilogTitle">
         <el-alert title="换货商品重新发货不会引起库存变化" type="warning" :center="true" :closable="false"></el-alert>
       </div>
@@ -318,6 +325,61 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <!-- 还可以发货弹窗 -->
+    <el-dialog title="发货" :visible.sync="dialogTableVisible2">
+      <el-table :data="huotable">
+        <el-table-column property="date" label="商品" width="300px">
+          <template slot-scope="props">
+            <section class="flex-box" style="width:100%;padding: 0;">
+              <div>
+                <img class="thumbImg" :src="props.row.thumbImg" />
+                <div class="product-name">
+                  <p class="thumbImg-right">{{ props.row.productName }}</p>
+                  <div
+                    style="margin-left:10px;margin-top:10px"
+                    v-show="props.row.goodsSku"
+                  >{{props.row.goodsSku}}</div>
+                </div>
+              </div>
+            </section>
+          </template>
+        </el-table-column>
+        <el-table-column property="aftersaleNum" label="数量"></el-table-column>
+        <el-table-column property="userLogisticsCode" label="运单号"></el-table-column>
+      </el-table>
+      <el-form label-width="70px">
+        <el-form-item label="发货方式">
+          <span style="font-size:12px" class="ems">自己联系快递</span>
+          <div>
+            <el-input
+              v-model="fahuoform1.logisticsCode"
+              size="mini"
+              @blur="onSubmit1"
+              style="width:300px;margin-right:20px"
+              onkeyup="value=value.replace(/[\W]/g,'')"
+            ></el-input>
+          </div>
+          <div>
+            <el-select
+              v-model="fahuoform1.shipperCode"
+              placeholder="请选择"
+              size="mini"
+              style="width:300px"
+            >
+              <el-option
+                v-for="(item, index) in kuaidiarr"
+                :key="index"
+                :label="item.ShipperName"
+                :value="item.ShipperCode"
+              ></el-option>
+            </el-select>
+          </div>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" class="disp" @click="haikeyifahuo">发货</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -332,6 +394,7 @@ import {
   merAfterSaleRefuseReceipt,
   merAfterSaleLogisticsInfo,
 } from "@/api/aftersale";
+import { setLogisticsInfoNew } from "@/api/merchantOrder";
 import { distinguishHandle } from "@/api/merchantOrder";
 export default {
   data() {
@@ -342,6 +405,13 @@ export default {
         merShipperName: "",
         merLogisticsCode: "",
       },
+      fahuoform1: {
+        asaleCode: "",
+        orderDetailIds: "",
+        shipperCode: "",
+        shipperName: "",
+        logisticsCode: "",
+      },
       indexStaus: "",
       radio: "",
       listPage: {
@@ -351,6 +421,7 @@ export default {
       AddressData: [],
       gridData: [],
       huotable: [],
+      dialogTableVisible2: false,
       dialogTableVisible1: false,
       dialogTableVisible: false,
       juejuetext: "",
@@ -372,12 +443,56 @@ export default {
     this.getaddress();
   },
   methods: {
-    justsoso(index){
-      let dialogType = this.aftersaleinfo.dialogType.split(',')
-      console.log(dialogType[index])
+    haikeyifahuo() {
+      if (!this.fahuoform1.logisticsCode) {
+        this.$message({
+          message: "请输入快递单号",
+          type: "error",
+          center: true,
+        });
+        return false;
+      }
+      this.fahuoform1.shipperName = this.kuaidiarr.find(
+        (el) => el.ShipperCode == this.fahuoform1.shipperCode
+      ).ShipperName;
+      if (!this.fahuoform1.shipperName) {
+        this.$message({
+          message: "请选择物流公司",
+          type: "error",
+          center: true,
+        });
+        return false;
+      }
+      this.fahuoform1.asaleCode = this.aftersaleinfo.asaleCode;
+      this.fahuoform1.orderDetailIds = [this.aftersaleinfo.orderDetailId];
+      setLogisticsInfoNew(this.fahuoform1).then((res) => {
+        this.$message({
+          message: "恭喜你，发货成功啦",
+          type: "success",
+          center: true,
+        });
+        this.dialogTableVisible2 = false;
+      });
+    },
+    justsoso(index) {
+      let dialogType = this.aftersaleinfo.dialogType.split(",");
+      console.log(dialogType[index]);
+      // dialogType  == 1 立即发货
+      if (dialogType[index] == 1) {
+        this.dialogTableVisible2 = true;
+      }
+      //  dialogType  == 5  已收到退货立即发货
+      if (dialogType[index] == 5) {
+        this.dialogTableVisible1 = true;
+      }
+      // 同意买家退款
+      if (dialogType[index] == 2) {
+        this.dialogVisible = true;
+      }
     },
     // 发货查询物流公司
     onSubmit() {
+      console.log(this.fahuoform);
       if (this.fahuoform.merLogisticsCode.length <= 0) {
         this.$message({
           message: "请输入物流单号后查询",
@@ -400,6 +515,32 @@ export default {
           return false;
         }
         this.fahuoform.merShipperCode = res.body[0].ShipperCode;
+        this.kuaidiarr = res.body;
+      });
+    },
+    onSubmit1() {
+      if (this.fahuoform1.logisticsCode.length <= 0) {
+        this.$message({
+          message: "请输入物流单号后查询",
+          type: "error",
+          center: true,
+        });
+        return false;
+      }
+      let obj = {
+        logisticCode: this.fahuoform1.logisticsCode,
+      };
+      distinguishHandle(obj).then((res) => {
+        console.log(res);
+        if (!res.body) {
+          this.$message({
+            message: "没查到",
+            type: "error",
+            center: true,
+          });
+          return false;
+        }
+        this.fahuoform1.shipperCode = res.body[0].ShipperCode;
         this.kuaidiarr = res.body;
       });
     },
@@ -590,24 +731,22 @@ export default {
           this.aftersaleinfo.canDoText = [];
         }
         // aftersaleinfo.remindText
-        if(this.aftersaleinfo.remindText){
-          this.aftersaleinfo.remindText = this.aftersaleinfo.remindText.split('。')
+        if (this.aftersaleinfo.remindText) {
+          this.aftersaleinfo.remindText = this.aftersaleinfo.remindText.split(
+            "。"
+          );
         }
-        if (this.aftersaleinfo.aftersaleType == 4) {
-          this.huotable = [
-            {
-              productName: this.aftersaleinfo.productName,
-              goodsSku: this.aftersaleinfo.goodsSku,
-              thumbImg: this.aftersaleinfo.thumbImg,
-              aftersaleNum: this.aftersaleinfo.aftersaleNum,
-              userLogisticsCode: this.aftersaleinfo.userLogisticsCode,
-              orderDeliveryStatus:
-                this.aftersaleinfo.orderDeliveryStatus == 0
-                  ? "未发货"
-                  : "已发货",
-            },
-          ];
-        }
+        this.huotable = [
+          {
+            productName: this.aftersaleinfo.productName,
+            goodsSku: this.aftersaleinfo.goodsSku,
+            thumbImg: this.aftersaleinfo.thumbImg,
+            aftersaleNum: this.aftersaleinfo.aftersaleNum,
+            userLogisticsCode: this.aftersaleinfo.userLogisticsCode,
+            orderDeliveryStatus:
+              this.aftersaleinfo.orderDeliveryStatus == 0 ? "未发货" : "已发货",
+          },
+        ];
         if (this.aftersaleinfo.countDownText) {
           this.opop = this.aftersaleinfo.countDownText.split("countdown");
           this.cutdown(0);
@@ -622,7 +761,7 @@ export default {
           this.aftersaleinfo.processOverTimeStamp * 1000
         );
 
-        this.aftersaleinfo.countDownText = `${this.opop[0]}<span>${this.timetime}</span>${this.opop[1]}`;
+        this.aftersaleinfo.countDownText = `${this.opop[0]}<span class="time-box" style="font-size: 16px;color: rgb(240, 186, 8);font-weight: bold;">${this.timetime}</span>${this.opop[1]}`;
         // console.log(this.aftersaleinfo.countDownText);
         this.cutdown(1000);
       }, num);
@@ -782,6 +921,9 @@ export default {
 .top-last > span {
   cursor: pointer;
   color: #44abf7;
+}
+.top-last > span:first-of-type {
+  color: #666;
 }
 .tips-box {
   width: 100%;

@@ -5,6 +5,7 @@ import store from './store'
 import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
 import '@/styl/element-variables.scss'
+import '@/styl/icon/iconfont.css'
 import directive from '@/directives'
 import filter from '@/filters'
 import '@/router/permission.js'

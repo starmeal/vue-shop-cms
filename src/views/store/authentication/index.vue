@@ -63,6 +63,7 @@
               <el-date-picker
                 :disabled="form.operatingPeriodType != 0"
                 v-model="timevalue"
+                style="width:300px"
                 value-format="yyyy-MM-dd"
                 size="small"
                 type="daterange"
@@ -71,9 +72,10 @@
                 end-placeholder="结束日期"
               ></el-date-picker>
             </div>
-            <div>
+            <div style="margin-top:10px">
               <el-radio v-model="form.operatingPeriodType" label="1">长期有效</el-radio>
               <el-date-picker
+                style="width:300px"
                 value-format="yyyy-MM-dd"
                 :disabled="form.operatingPeriodType != 1"
                 v-model="timevalueOne"
@@ -142,9 +144,10 @@
                 start-placeholder="开始日期"
                 value-format="yyyy-MM-dd"
                 end-placeholder="结束日期"
+                style="width:300px"
               ></el-date-picker>
             </div>
-            <div>
+            <div  style="margin-top:10px">
               <el-radio v-model="form.idCardValidityType" label="1">长期有效</el-radio>
               <el-date-picker
                 v-model="idCardvalueOne"
@@ -152,6 +155,7 @@
                 placeholder="选择日期"
                 value-format="yyyy-MM-dd"
                 size="small"
+                style="width:300px"
                 :disabled="form.idCardValidityType != 1"
               ></el-date-picker>
             </div>

@@ -42,7 +42,7 @@ export const asyncRoutes = [
     meta: {
       title: '店铺',
       fullTitle: '店铺首页',
-      icon: 'zuosuojin',
+      icon: 'dianpu',
     },
     children: [
       {
@@ -197,7 +197,7 @@ export const asyncRoutes = [
     meta: {
       title: '商品',
       fullTitle: '商品管理',
-      icon: 'zuosuojin',
+      icon: 'shangpinguanliicon',
     },
     children: [
       {
@@ -227,7 +227,7 @@ export const asyncRoutes = [
     meta: {
       title: '订单',
       fullTitle: '订单管理',
-      icon: 'zuosuojin',
+      icon: 'dingdan',
     },
     children: [
       {
@@ -256,7 +256,7 @@ export const asyncRoutes = [
     meta: {
       title: '售后',
       fullTitle: '售后管理',
-      icon: 'zuosuojin',
+      icon: 'shouhou-01',
     },
     children: [
       {

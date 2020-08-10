@@ -14,7 +14,8 @@
           </div>
         </div>
         <div class="flex-container">
-          <el-steps :active="orderInfo.orderStatus" align-center style="width:90%">
+          <!-- style="width:90%" -->
+          <el-steps :active="orderInfo.orderStatus" align-center style="width:90%;margin:0 auto">
             <el-step title="买家下单"></el-step>
             <el-step title="买家付款"></el-step>
             <el-step title="确认库存"></el-step>
@@ -346,6 +347,7 @@ export default {
   color: #000;
 }
 .flex-container {
+
   display: flex;
   align-items: center;
 }

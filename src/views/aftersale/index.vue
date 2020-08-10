@@ -248,7 +248,10 @@
 </template>
 
 <script>
-import { merAfterSaleListNew,merAfterSaleListExportExcel } from "@/api/aftersale";
+import {
+  merAfterSaleListNew,
+  merAfterSaleListExportExcel,
+} from "@/api/aftersale";
 import { formatDate } from "@/utils/util";
 export default {
   data() {
@@ -297,20 +300,57 @@ export default {
   created() {
     this.getList();
   },
+  mounted(){
+    this.initscroll()
+  },
   methods: {
-    
-    toExper(){
-      merAfterSaleListExportExcel(this.listpage).then(res=>{
-
-      })
-    },
-    goOrderdetail(item){
-      this.$router.push({
-        path:'/aftersaleDetail',
-        query:{
-          asaleCode:item.asaleCode
+    initscroll() {
+      this.$nextTick(() => {
+        function getElementTop(elem) {
+          var elemTop = elem.offsetTop; //获得elem元素距相对定位的父元素的top
+          elem = elem.offsetParent; //将elem换成起相对定位的父元素
+          while (elem != null) {
+            //只要还有相对定位的父元素
+            //获得父元素 距他父元素的top值,累加到结果中
+            elemTop += elem.offsetTop; //再次将elem换成他相对定位的父元素上;
+            elem = elem.offsetParent;
+          }
+          return elemTop;
         }
-      })
+        let dom = document.querySelector("#router-view");
+        this.dom = dom;
+        this.domWidth = document.querySelector("#router-view").offsetWidth;
+        const myObserver = new ResizeObserver((entries) => {
+          entries.forEach((entry) => {
+            this.domWidth = document.querySelector("#router-view").offsetWidth - 19;
+            // console.log("大小位置", entry.contentRect);
+            // console.log("监听的DOM", entry.target);
+          });
+        });
+        myObserver.observe(dom);
+        this.domTop = document.querySelector("#router-view").offsetTop;
+        this.tabledomPos = document
+          .querySelector(".table-container")
+          .getBoundingClientRect().top;
+        dom.addEventListener("scroll", () => {
+          if (dom.scrollTop >= this.tabledomPos) {
+            this.fiexTop = true;
+          } else {
+            this.fiexTop = false;
+          }
+        });
+      });
+    },
+    toExper() {
+      merAfterSaleListExportExcel(this.listpage).then((res) => {});
+    },
+    goOrderdetail(item) {
+      this.$router.push({
+        path: "/aftersaleDetail",
+        query: {
+          asaleCode: item.asaleCode,
+        },
+      });
     },
     search(index) {
       if (index && index == 1) {
@@ -697,7 +737,7 @@ ul li {
   line-height: 30px;
   font-size: 12px;
   font-weight: 400;
-  background: #d5d5d5;
+  background: #edf6ff;
   color: rgba(51, 51, 51, 1);
 }
 .header-tr > td {
@@ -897,7 +937,7 @@ li {
 .top-fixed {
   width: 69%;
   height: 30px;
-  left: 18%;
+  left: 18.8%;
   z-index: -100;
   position: fixed;
   top: 129px;

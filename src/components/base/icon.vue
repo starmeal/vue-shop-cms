@@ -7,6 +7,7 @@
 <script>
 import "./icon";
 import "./iconone";
+import "./iconfont";
 export default {
   name: "base-icon",
   props: {

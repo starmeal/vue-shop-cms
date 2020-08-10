@@ -12,7 +12,8 @@
           :class="{'is-collapse': isCollapse, 'is-collapse-color': menuItem.path  === $route.path || menuItem.path === basePath}"
           @click="switchRouter(menuItem, index)"
         >
-          <Icon :icon="menuItem.meta.icon" />
+          <span class="iconfont" :class="`icon-${menuItem.meta.icon}`"></span>
+          <!-- <Icon :icon="menuItem.meta.icon" /> -->
           <div class="menu-item-name" v-show="isCollapse">{{menuItem.meta.title}}</div>
         </div>
       </template>
@@ -83,7 +84,6 @@ export default {
         );
         this.isCollapseSecond = !!this.menuItemList.length;
       }
-
     });
     this.fullTitle = this.$route.matched[0].meta.fullTitle;
     this.currentNodeKey = this.$route.matched[
@@ -164,6 +164,11 @@ export default {
 </script>
 
 <style scoped lang='scss'>
+.iconfont {
+  color: #fff;
+  vertical-align: middle;
+  font-size: 14px;
+}
 .menu-container {
   display: flex;
   position: relative;

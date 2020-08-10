@@ -19,13 +19,13 @@ module.exports = {
       },
     },
   },
-  css: {
-    loaderOptions: {
-      scss: {
-        prependData: `@import "~@/styl/variables.scss";`,
-      },
-    },
-  },
+  // css: {
+  //   loaderOptions: {
+  //     scss: {
+  //       prependData: `@import "~@/styl/variables.scss";`,
+  //     },
+  //   },
+  // },
   // 修改打包之后js文件 加上缓存
   // configureWebpack: (config) => {
   //   config.output.filename = `static/js/[name].[hash:8].js`;

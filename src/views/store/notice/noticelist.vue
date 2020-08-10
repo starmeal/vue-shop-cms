@@ -532,7 +532,7 @@ export default {
   cursor: pointer;
 }
 .zhuangtai {
-  color: $primary;
+  // color: $primary;
 }
 .ossd {
   position: absolute;
