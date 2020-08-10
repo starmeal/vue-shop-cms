@@ -651,7 +651,7 @@ export default {
     // 发货过滤不能发的商品
     selectable(row, index) {
       console.log(row, index);
-      if (row.deliveryStatus == 4) {
+      if (row.isSelect == 1) {
         return true;
       } else {
         return false;

@@ -5,10 +5,16 @@
         <el-form>
           <el-form-item label="商品名称">
             <div>
-              <el-input v-model="listPage.productName" placeholder="商品名称" style="width:200px"></el-input>
+              <el-input
+                clearable
+                v-model="listpage.productName"
+                placeholder="商品名称"
+                style="width:200px"
+              ></el-input>
               <span class="mock-label">订单编号</span>
               <el-input
-                v-model="listPage.orderCode"
+                clearable
+                v-model="listpage.orderCode"
                 placeholder="订单编号"
                 style="width:200px;margin-left:20px"
               ></el-input>
@@ -26,23 +32,34 @@
                 @change="timeChange"
                 value-format="yyyy-MM-dd HH:mm:ss"
               ></el-date-picker>
-              <!-- <el-button type="primary" plain @click="today">今天</el-button>
+              <el-button type="primary" plain @click="today">今天</el-button>
               <el-button type="primary" plain @click="yesterday">昨天</el-button>
               <el-button type="primary" plain @click="lastSeven">最近7天</el-button>
-              <el-button type="primary" plain @click="lastThirty">最近30天</el-button>-->
+              <el-button type="primary" plain @click="lastThirty">最近30天</el-button>
             </p>
           </el-form-item>
           <el-form-item label="售后编号">
             <div>
-              <el-input v-model="listPage.asaleCode" placeholder="售后编号" style="width:200px"></el-input>
+              <el-input
+                clearable
+                v-model="listpage.asaleCode"
+                placeholder="售后编号"
+                style="width:200px"
+              ></el-input>
               <span class="mock-label">退款类型</span>
-              <el-select v-model="listPage.refundType" placeholder="请选择" style="margin-left:20px">
+              <el-select
+                clearable
+                v-model="listpage.refundType"
+                placeholder="请选择"
+                style="margin-left:20px"
+              >
                 <el-option :key="1" label="售中退款" value="1"></el-option>
                 <el-option :key="2" label="售后退款" value="2"></el-option>
               </el-select>
               <span class="mock-label">售后方式</span>
               <el-select
-                v-model="listPage.aftersaleType"
+                clearable
+                v-model="listpage.aftersaleType"
                 placeholder="请选择售后方式"
                 style="margin-left:20px"
               >
@@ -54,48 +71,61 @@
           </el-form-item>
           <el-form-item label="发货状态">
             <div>
-              <el-select v-model="listPage.deliveryStatus" placeholder="请选择">
+              <el-select clearable v-model="listpage.deliveryStatus" placeholder="请选择">
                 <el-option :key="0" label="售中退款" value="0"></el-option>
                 <el-option :key="1" label="售后退款" value="1"></el-option>
               </el-select>
               <span class="mock-label">售后状态</span>
               <el-select
-                v-model="listPage.aftersaleStatus"
+                clearable
+                v-model="listpage.aftersaleStatus"
                 placeholder="请选择"
                 style="margin-left:20px"
               >
-                <el-option :key="1" label="售中退款" value="1"></el-option>
-                <el-option :key="2" label="售后退款" value="2"></el-option>
-                <el-option :key="3" label="售中退款" value="1"></el-option>
-                <el-option :key="4" label="售后退款" value="2"></el-option>
-                <el-option :key="5" label="售中退款" value="1"></el-option>
-                <el-option :key="6" label="售后退款" value="2"></el-option>
-                <el-option :key="7" label="售中退款" value="1"></el-option>
-                <el-option :key="8" label="售后退款" value="2"></el-option>
-                <el-option :key="9" label="售中退款" value="1"></el-option>
+                <el-option :key="1" label="售后处理中" value="1"></el-option>
+                <el-option :key="2" label="售后申请待商家处理" value="2"></el-option>
+                <el-option :key="3" label="商家不同意售后申请,待买家处理" value="3"></el-option>
+                <el-option :key="4" label="商家已同意售后申请" value="4"></el-option>
+                <el-option :key="5" label="买家已退货,待商家确认收货" value="5"></el-option>
+                <el-option :key="6" label="售后关闭" value="6"></el-option>
+                <el-option :key="7" label="商家拒绝收货，待买家处理" value="7"></el-option>
+                <el-option :key="8" label="商家已发货，待买家确认收货" value="8"></el-option>
+                <el-option :key="9" label="售后成功" value="9"></el-option>
               </el-select>
               <span class="mock-label">退货物流</span>
               <el-select
-                v-model="listPage.aftersaleType"
+                clearable
+                v-model="listpage.aftersaleType"
                 placeholder="请选择"
                 style="margin-left:20px"
               >
-                <el-option :key="1" label="仅退款" value="1"></el-option>
-                <el-option :key="3" label="退货退款" value="3"></el-option>
-                <el-option :key="4" label="换货" value="4"></el-option>
+                <el-option :key="1" label="商家未签收" value="0"></el-option>
+                <el-option :key="3" label="商家已签收" value="1"></el-option>
               </el-select>
             </div>
           </el-form-item>
+          <el-form-item>
+            <div style="margin-left:60px">
+              <el-button @click="search" type="primary">筛选</el-button>
+              <el-button @click="toExper">导出</el-button>
+            </div>
+          </el-form-item>
         </el-form>
-        <!-- <p class="retrievalList">
+        <p class="retrievalList">
           <span
             :class="{active: index===isTrue}"
             @click="tabRetrieval(index,item)"
             v-for="(item,index) in orderStatusArr"
             :key="index"
           >{{item.label}}</span>
-        </p>-->
-        <!-- <div class="page-content">
+        </p>
+        <div class="button-group">
+          <el-button-group>
+            <el-button :type="listpage.sortType == 1  ? 'primary' : ''" @click="search(1)">按最近申请排序</el-button>
+            <el-button :type="listpage.sortType == 2  ? 'primary' : ''" @click="search(2)">按临近超时排序</el-button>
+          </el-button-group>
+        </div>
+        <div class="page-content">
           <section class="table-container" ref="table" v-loading="loading">
             <div
               class="top-fixed"
@@ -103,34 +133,33 @@
             >
               <table style="width:100%; border-collapse: collapse; border: none;table-layout:fixed">
                 <tr style="width:100%" class="header-tr">
-                  <td style="width:50%">
+                  <td style="width:40%">
                     <div class="header-flex">
                       <section>商品</section>
-                      <section>单价（元）/数量</section>
-                      <section>售后</section>
                     </div>
                   </td>
-                  <td style="width:10%">买家/收货人</td>
-                  <td style="width:10%">配送方式</td>
-                  <td style="width:10%">实收金额（元）</td>
-                  <td style="width:10%">订单状态</td>
+                  <td style="width:10%">订单金额</td>
+                  <td style="width:10%">退款金额</td>
+                  <td style="width:10%">申请时间</td>
+                  <td style="width:10%">超时时间</td>
+                  <td style="width:10%">售后状态</td>
                   <td style="width:10%">操作</td>
                 </tr>
               </table>
             </div>
             <table style="width:100%; border-collapse: collapse; border: none;table-layout:fixed">
               <tr style="width:100%" class="header-tr">
-                <td style="width:50%">
+                <td style="width:30%">
                   <div class="header-flex">
                     <section>商品</section>
-                    <section>单价（元）/数量</section>
-                    <section>售后</section>
                   </div>
                 </td>
-                <td style="width:10%">买家/收货人</td>
-                <td style="width:10%">配送方式</td>
-                <td style="width:10%">实收金额（元）</td>
-                <td style="width:10%">订单状态</td>
+                <td style="width:10%">发货状态</td>
+                <td style="width:10%">订单金额</td>
+                <td style="width:10%">退款金额</td>
+                <td style="width:10%">申请时间</td>
+                <td style="width:10%">超时时间</td>
+                <td style="width:10%">售后状态</td>
                 <td style="width:10%">操作</td>
               </tr>
             </table>
@@ -138,14 +167,23 @@
               <div style="width:100%;position: relative;">
                 <span
                   style="margin-right:30px;margin-left:18px;font-size:12px;"
-                >订单号：{{ its.orderCode }}</span>
+                >售后编号：{{ its.asaleCode }}</span>
                 <span
                   style="margin-right:30px;margin-left:18px;font-size:12px;"
-                >下单时间：{{ its.createTime }}</span>
+                >订单编号：{{ its.orderCode }}</span>
                 <span
                   style="margin-right:30px;margin-left:18px;font-size:12px;"
-                >{{its.payType == 2 ? '余额' : '微信'}}</span>
-                <p class="detail" @click="goOrderdetail(its)">查看详情</p>
+                  v-if="its.aftersaleType == 1"
+                >退款</span>
+                <span
+                  style="margin-right:30px;margin-left:18px;font-size:12px;"
+                  v-if="its.aftersaleType == 3"
+                >退货退款</span>
+                <span
+                  style="margin-right:30px;margin-left:18px;font-size:12px;"
+                  v-if="its.aftersaleType == 4"
+                >换货</span>
+                <!-- <p class="detail" @click="goOrderdetail(its)">查看详情</p> -->
               </div>
               <table
                 border="1"
@@ -154,55 +192,38 @@
                 style="width:100%; border-collapse: collapse; border: none;table-layout:fixed"
               >
                 <tr class="tspi" style="width:100%">
-                  <td style="width:50%">
-                    <section class="flex-box" v-for="(item, idx) in its.detail" :key="idx">
+                  <td style="width:30%">
+                    <section class="flex-box">
                       <div>
-                        <img class="thumbImg" :src="item.thumbImg.split(',')[0]" />
                         <div class="product-name">
-                          <p class="thumbImg-right">{{ item.productName }}</p>
-                          <div
-                            style="margin-left:10px;margin-top:10px"
-                            v-show="item.goodsSku"
-                          >{{item.goodsSku}}</div>
+                          <p class="thumbImg-right">{{ its.productNames }}</p>
                         </div>
                       </div>
                       <div>
-                        <div>{{ item.payPrice / 100 }}</div>
-                        <div>{{ item.number }}件</div>
-                      </div>
-                      <div>
-                        <div>{{ item.aftersaleStatusText}}</div>
+                        <div v-show="its.goodsSkus">{{its.goodsSkus}}</div>
                       </div>
                     </section>
                   </td>
                   <td style="width:10%">
-                    <p class="qusibaps">{{ its.nickName }}</p>
-                    <p class="qusibap">{{ its.mobile }}</p>
+                    <p class="qusibap">{{ its.deliveryStatus == 1 ? '已发货' : '未发货' }}</p>
                   </td>
                   <td style="width:10%">
-                    <p class="qusibap">{{ its.pickupType }}</p>
+                    <p class="qusibap">{{ its.payAmount }}</p>
                   </td>
                   <td style="width:10%">
-                    <div class="qusibap">{{its.payAmount / 100}}</div>
+                    <p class="qusibap">{{ its.refundAmounts }}</p>
                   </td>
                   <td style="width:10%">
-                    <p class="qusibap">{{ its.orderStatusText }}</p>
+                    <p class="qusibap">{{ its.applyTime }}</p>
                   </td>
                   <td style="width:10%">
-                    <p
-                      class="qusibap"
-                      @click="updatewuliu(its)"
-                      style="color:#44abf7;SC;cursor: pointer;font-size:12px"
-                      v-if="its.orderStatus == 3 && its.updateLogisticsTime == ''"
-                    >修改物流</p>
-                    <p
-                      class="qusibap poiner"
-                      @click="ggosd(its)"
-                      style="font-weight:600;color:green"
-                      v-if="its.orderStatus == 2"
-                    >
-                      <el-button size="mini">发货</el-button>
-                    </p>
+                    <div class="qusibap">{{its.merOverTime}}</div>
+                  </td>
+                  <td style="width:10%">
+                    <p class="qusibap">{{ its.aftersaleStatusText }}</p>
+                  </td>
+                  <td style="width:10%">
+                    <p class="detail-btn" @click="goOrderdetail(its)">{{its.operationText}}</p>
                   </td>
                 </tr>
               </table>
@@ -220,21 +241,41 @@
               :page-sizes="[10, 20, 30, 50]"
             ></el-pagination>
           </section>
-        </div>-->
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { merAfterSaleListNew } from "@/api/aftersale";
+import { merAfterSaleListNew,merAfterSaleListExportExcel } from "@/api/aftersale";
+import { formatDate } from "@/utils/util";
 export default {
   data() {
     return {
+      isTrue: 0, //检索按钮样式
+      loading: true,
+      fiexTop: false,
+      domTop: 0,
+      domWidth: 0,
+      orderStatusArr: [
+        {
+          label: "全部",
+          value: "",
+        },
+        {
+          label: "待商家处理",
+          value: 1,
+        },
+        {
+          label: "待买家处理",
+          value: 2,
+        },
+      ],
       createTime: "",
       list: [],
       totalCount: 0,
-      listPage: {
+      listpage: {
         curPage: 1,
         pageSize: 10,
         shopMerchantsCode: "",
@@ -248,7 +289,8 @@ export default {
         deliveryStatus: "",
         aftersaleStatus: "",
         refundSigning: "",
-        sortType: "",
+        sortType: "1",
+        waitProcessor: "",
       },
     };
   },
@@ -256,11 +298,56 @@ export default {
     this.getList();
   },
   methods: {
+    
+    toExper(){
+      merAfterSaleListExportExcel(this.listpage).then(res=>{
+
+      })
+    },
+    goOrderdetail(item){
+      this.$router.push({
+        path:'/aftersaleDetail',
+        query:{
+          asaleCode:item.asaleCode
+        }
+      })
+    },
+    search(index) {
+      if (index && index == 1) {
+        this.listpage.sortType = 1;
+      }
+      if (index && index == 2) {
+        this.listpage.sortType = 2;
+      }
+      this.listpage.curPage = 1;
+      this.loading = true;
+      this.getList();
+    },
+    tabRetrieval(index, item) {
+      this.isTrue = index;
+      this.listpage.waitProcessor = item.value;
+      this.search();
+    },
+    // 翻页
+    changepage(page) {
+      var oOverScroll = this.$refs.table;
+      oOverScroll.scrollTop = 0;
+      this.listpage.curPage = page;
+      this.getList();
+    },
+    // 修改页总数
+    handleSizeChange(val) {
+      this.listpage.pageSize = val;
+      this.getList();
+    },
     //时间选择器
     timeChange(val) {
       if (!val) {
         this.listpage.applyTimeBegin = "";
         this.listpage.applyTimeEnd = "";
+      } else {
+        this.listpage.applyTimeBegin = val[0];
+        this.listpage.applyTimeEnd = val[1];
       }
       this.getList();
     },
@@ -275,8 +362,8 @@ export default {
           1
       );
       this.createTime = [start, end];
-      this.listpage.createTimeBegin = formatDate(start);
-      this.listpage.createTimeEnd = formatDate(end);
+      this.listpage.applyTimeBegin = formatDate(start);
+      this.listpage.applyTimeEnd = formatDate(end);
     },
     //昨天按钮
     yesterday() {
@@ -290,8 +377,8 @@ export default {
           1
       );
       this.createTime = [start, end];
-      this.listpage.createTimeBegin = formatDate(start);
-      this.listpage.createTimeEnd = formatDate(end);
+      this.listpage.applyTimeBegin = formatDate(start);
+      this.listpage.applyTimeEnd = formatDate(end);
     },
     //最近7天按钮
     lastSeven() {
@@ -305,8 +392,8 @@ export default {
           1
       );
       this.createTime = [start, end];
-      this.listpage.createTimeBegin = formatDate(start);
-      this.listpage.createTimeEnd = formatDate(end);
+      this.listpage.applyTimeBegin = formatDate(start);
+      this.listpage.applyTimeEnd = formatDate(end);
     },
     //最近30天按钮
     lastThirty() {
@@ -320,11 +407,14 @@ export default {
           1
       );
       this.createTime = [start, end];
-      this.listpage.createTimeBegin = formatDate(start);
-      this.listpage.createTimeEnd = formatDate(end);
+      this.listpage.applyTimeBegin = formatDate(start);
+      this.listpage.applyTimeEnd = formatDate(end);
     },
     getList() {
-      merAfterSaleListNew(this.listPage).then((res) => {
+      merAfterSaleListNew(this.listpage).then((res) => {
+        let dom = document.querySelector("#router-view");
+        dom.scrollTop = 0;
+        this.loading = false;
         let { records, total } = res.body;
         this.list = records;
         this.totalCount = total;
@@ -547,7 +637,6 @@ ul li {
   /* padding: 10px; */
   position: relative;
   min-height: 300px;
-  border-top: solid 1px #d5d5d5;
   /* overflow-y: scroll; */
 }
 .count-num {
@@ -586,11 +675,10 @@ ul li {
 }
 .thumbImg-right {
   width: 95%;
-  margin-left: 10px;
+  margin-left: 0px;
   flex: 1;
   font-size: 12px;
   font-weight: 400;
-  color: #44abf7;
   line-height: 1.2;
   -webkit-line-clamp: 2;
   display: -webkit-box;
@@ -631,6 +719,11 @@ ul li {
   color: #44abf7;
   cursor: pointer;
 }
+.detail-btn {
+  color: #44abf7;
+  cursor: pointer;
+  text-align: center;
+}
 </style>
 <style scoped>
 .containers {
@@ -649,6 +742,11 @@ ul li {
   display: flex;
   flex-direction: row;
 }
+.retrievalList {
+  width: 100%;
+  border-bottom: solid 1px #d5d5d5;
+  font-size: 0px;
+}
 .retrievalList span {
   display: inline-block;
   width: 70px;
@@ -657,8 +755,9 @@ ul li {
   color: #333;
   text-align: center;
   border: 1px solid #d5d5d5;
-  border-bottom: none;
+  border-bottom: 0px;
   cursor: pointer;
+  box-sizing: border-box;
 }
 .retrievalList span:not(:last-child) {
   border-right: none;
@@ -671,6 +770,7 @@ ul li {
   background: #44abf7;
   color: #fff;
   border: 1px solid #44abf7;
+  border-bottom: 0px;
 }
 /*表格样式*/
 ul,
@@ -805,5 +905,20 @@ li {
 .page-content {
   padding-bottom: 20px;
   position: relative;
+}
+.button-group {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  flex-direction: row-reverse;
+}
+</style>
+<style>
+.button-group /deep/ .el-button {
+  border-radius: 0px;
+  line-height: 15px;
+  padding: 5px;
+  display: inline-block;
 }
 </style>

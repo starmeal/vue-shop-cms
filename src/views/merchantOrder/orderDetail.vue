@@ -67,20 +67,6 @@
       </div>
       <div class="buy-info">
         <div>
-          <section class="poiner">
-            收货人信息
-            <span
-              v-if="orderInfo.orderStatus == 2"
-              style="color:#44abf7;margin-right:11px;margin-left:20px"
-              @click="updateAddress"
-            >修改</span>
-            <span
-              style="color:#44abf7"
-              v-clipboard:copy="copy"
-              v-clipboard:success="onCopy"
-              v-clipboard:error="onError"
-            >复制</span>
-          </section>
           <section>
             <span class="yincang">我跟</span>
             收货人：{{orderInfo.custName}}
@@ -103,11 +89,6 @@
           <section>付款信息：</section>
           <section>实付金额：{{orderInfo.payAmount}}</section>
           <section>付款时间：{{orderInfo.payTime}}</section>
-        </div>
-        <div>
-          <section>买家信息：</section>
-          <section>买家：{{orderInfo.nickName}}</section>
-          <section>买家留言：{{orderInfo.remarks ? orderInfo.remarks : '--'}}</section>
         </div>
       </div>
       <div class="table-box">
