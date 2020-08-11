@@ -14,12 +14,28 @@
           </div>
         </div>
         <div class="flex-container">
-          <!-- style="width:90%" -->
+          <!-- {{orderInfo.orderFinishTime == true}} -->
           <el-steps :active="orderInfo.orderStatus" align-center style="width:90%;margin:0 auto">
-            <el-step title="买家下单"></el-step>
-            <el-step title="买家付款"></el-step>
-            <el-step title="商家发货"></el-step>
-            <el-step title="交易成功"></el-step>
+            <el-step title="买家下单">
+              <template slot="description" style="font-size:10px">
+                <div style="font-size:10px">{{orderInfo.createTime}}</div>
+              </template>
+            </el-step>
+            <el-step title="买家付款">
+              <template slot="description" style="font-size:10px">
+                <div style="font-size:10px">{{orderInfo.payTime}}</div>
+              </template>
+            </el-step>
+            <el-step title="商家发货">
+              <template slot="description" style="font-size:10px">
+                <div style="font-size:10px">{{orderInfo.deliveryTime}}</div>
+              </template>
+            </el-step>
+            <el-step :title="orderInfo.orderFinishTime ? '交易成功' : '交易关闭'">
+              <template slot="description" style="font-size:10px">
+                <div>{{orderInfo.orderFinishTime ? orderInfo.orderFinishTime : orderInfo.orderFinishTime}}</div>
+              </template>
+            </el-step>
           </el-steps>
         </div>
       </div>
@@ -69,7 +85,11 @@
         <div>
           <section>
             收货人信息
-            <span @click="updateAddress" style="color:#44abf7;margin-right:10px;margin-left:10px" v-if="orderInfo.orderStatus == 2">修改</span>
+            <span
+              @click="updateAddress"
+              style="color:#44abf7;margin-right:10px;margin-left:10px"
+              v-if="orderInfo.orderStatus == 2"
+            >修改</span>
             <span v-clipboard:success="onCopy" style="color:#44abf7" v-clipboard:copy="copy">复制</span>
           </section>
           <section>

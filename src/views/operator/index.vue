@@ -1,12 +1,13 @@
 <template>
   <div>
+    <!-- v-adaptive  -->
     <div class="operator">
-      <el-table :data="list" v-loading="loading" v-adaptive style="width: 100%" height="100px">
+      <el-table :data="list" v-loading="loading" style="width: 100%;height:100%">
         <el-table-column prop="id" label="ID"></el-table-column>
         <el-table-column prop="nickName" label="用户名"></el-table-column>
         <el-table-column prop="actualName" label="姓名"></el-table-column>
         <el-table-column prop="phone" label="手机号"></el-table-column>
-        <el-table-column prop="lastLoginDate" label="最后一次登录时间"></el-table-column>
+        <el-table-column prop="lastLoginDate" label="最后一次登录"></el-table-column>
         <el-table-column prop="roleName" label="角色名称"></el-table-column>
         <el-table-column label="操作" width="150px">
           <template slot-scope="props">
@@ -21,18 +22,20 @@
           </template>
         </el-table-column>
       </el-table>
-      <section class="page-box">
-        <el-pagination
-          v-if="list.length > 0"
-          @size-change="handleSizeChange"
-          @current-change="changepage"
-          layout="sizes,total, prev, pager, next, jumper"
-          :page-size="listpage.pageSize"
-          :current-page.sync="listpage.curPage"
-          :total="totalCount"
-          :page-sizes="[10, 20, 30, 50]"
-        ></el-pagination>
-      </section>
+      <div>
+        <section class="page-box">
+          <el-pagination
+            v-if="list.length > 0"
+            @size-change="handleSizeChange"
+            @current-change="changepage"
+            layout="sizes,total, prev, pager, next, jumper"
+            :page-size="listpage.pageSize"
+            :current-page.sync="listpage.curPage"
+            :total="totalCount"
+            :page-sizes="[10, 20, 30, 50]"
+          ></el-pagination>
+        </section>
+      </div>
     </div>
   </div>
 </template>
@@ -46,7 +49,7 @@ export default {
         curPage: 1,
         pageSize: 10,
       },
-      totalCount:0,
+      totalCount: 0,
       loading: true,
       list: [],
     };
@@ -69,7 +72,7 @@ export default {
       permissionuser(this.listpage).then((res) => {
         this.loading = false;
         this.list = res.body.records;
-        this.totalCount = res.body.total
+        this.totalCount = res.body.total;
         console.log(res);
       });
     },
@@ -83,6 +86,14 @@ export default {
   min-height: 100%;
   width: 100%;
   background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+.operator > div {
+  flex: 1;
+}
+.operator > div:last-of-type {
+  flex: 0 0 40px;
 }
 .icon-content {
   border: solid 1px #efefef;
