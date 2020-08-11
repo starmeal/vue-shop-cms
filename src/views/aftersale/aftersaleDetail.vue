@@ -56,7 +56,7 @@
           <section class="goods-content">
             <img :src="aftersaleinfo.thumbImg" style="width:80px;height:80px" />
             <div>
-              {{aftersaleinfo.productName}}
+              <div>{{aftersaleinfo.productName}}</div>
               <div>{{aftersaleinfo.goodsSku}}</div>
             </div>
           </section>
@@ -69,20 +69,23 @@
           </section>
           <section v-if="aftersaleinfo.aftersaleType == 4">换货件数：{{aftersaleinfo.aftersaleNum}}</section>
           <section v-else>退款金额：{{aftersaleinfo.refundAmount}}</section>
-          <section>联系方式：{{aftersaleinfo.userMobile}}</section>
+          <!-- <section>联系方式：{{aftersaleinfo.userMobile}}</section> -->
           <section>退款原因：{{aftersaleinfo.aftersaleReason}}</section>
           <!-- <section>退款说明:{{aftersaleinfo.aftersaleReason}}</section> -->
-          <section>售后历史：{{aftersaleinfo.historyAftersaleNum}}</section>
+          <!-- <section>售后历史：{{aftersaleinfo.historyAftersaleNum}}</section> -->
         </div>
         <div>
           <section>购买信息</section>
           <section>
             商品单价：
-            <span style="color:#ff0000">{{aftersaleinfo.payPrice}} * {{aftersaleinfo.number}}件</span>
+            <span style="color:#ff0000">{{aftersaleinfo.payPrice}} × {{aftersaleinfo.number}}件</span>
           </section>
           <section>
             实付金额：
-            <span style="color:#ff0000">{{aftersaleinfo.payPrice * aftersaleinfo.number}}</span>
+            <span
+              style="color:#ff0000"
+              v-if="aftersaleinfo.payPrice && aftersaleinfo.number"
+            >{{aftersaleinfo.payPrice * aftersaleinfo.number}}</span>
           </section>
           <section>
             发货件数：
@@ -92,6 +95,21 @@
           <section>
             订单编号：
             <span style="color:#44abf7">{{aftersaleinfo.orderCode}}</span>
+          </section>
+        </div>
+        <div v-if="aftersaleinfo.merAddress">
+          <section>退货地址</section>
+          <section>
+            联系电话：
+            {{aftersaleinfo.merMobile}}
+          </section>
+          <section>
+            联系人：
+            {{aftersaleinfo.merName}}
+          </section>
+          <section class="flex-nima">
+            <div>退货地址：</div>
+            <div>{{aftersaleinfo.merAddress}}</div>
           </section>
         </div>
       </div>
@@ -472,6 +490,7 @@ export default {
           center: true,
         });
         this.dialogTableVisible2 = false;
+        this.getDetail(this.aftersaleinfo.asaleCode);
       });
     },
     justsoso(index) {
@@ -491,12 +510,11 @@ export default {
       }
       // 已收到退货,立即退款
       if (dialogType[index] == 3) {
-        this.shouhuo(1)
+        this.shouhuo(1);
       }
-       if (dialogType[index] == 6) {
-        this.queren()
+      if (dialogType[index] == 6) {
+        this.queren();
       }
-      
     },
     // 发货查询物流公司
     onSubmit() {
@@ -727,6 +745,7 @@ export default {
       }
     },
     getDetail(asaleCode) {
+      this.timetime = "";
       let obj = {
         asaleCode,
       };
@@ -765,14 +784,16 @@ export default {
     cutdown(num) {
       setTimeout(() => {
         let start = new Date().getTime();
-        this.timetime = this.calculateDiffTime(
-          start,
-          this.aftersaleinfo.processOverTimeStamp * 1000
-        );
+        if (this.aftersaleinfo.processOverTimeStamp) {
+          this.timetime = this.calculateDiffTime(
+            start,
+            this.aftersaleinfo.processOverTimeStamp * 1000
+          );
 
-        this.aftersaleinfo.countDownText = `${this.opop[0]}<span class="time-box" style="font-size: 16px;color: rgb(240, 186, 8);font-weight: bold;">${this.timetime}</span>${this.opop[1]}`;
-        // console.log(this.aftersaleinfo.countDownText);
-        this.cutdown(1000);
+          this.aftersaleinfo.countDownText = `${this.opop[0]}<span class="time-box" style="font-size: 16px;color: rgb(240, 186, 8);font-weight: bold;">${this.timetime}</span>${this.opop[1]}`;
+          // console.log(this.aftersaleinfo.countDownText);
+          this.cutdown(1000);
+        }
       }, num);
     },
     calculateDiffTime(start_time, end_time) {
@@ -811,6 +832,12 @@ export default {
 <style scoped>
 * {
   font-size: 12px;
+}
+.flex-nima {
+  display: flex;
+}
+.flex-nima > div:first-of-type {
+  flex: 0 0 40%;
 }
 .flex-box {
   display: flex;
@@ -973,6 +1000,9 @@ export default {
   flex: 1;
   line-height: 20px;
 }
+.buy-info > div:first-of-type {
+  flex: 0 0 40%;
+}
 .buy-info > div > section:first-of-type {
   flex: 1;
   line-height: 20px;
@@ -989,7 +1019,7 @@ export default {
 }
 .goods-content > div {
   margin-left: 10px;
-  flex: 0 0 70%;
+  flex: 0 0 55%;
 }
 .timebox {
   width: 100%;

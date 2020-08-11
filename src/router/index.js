@@ -246,6 +246,7 @@ export const asyncRoutes = [
           parentPath: '/merchantOrder',
           basePath: '/merchantOrder',
         },
+        hidden: true,
         component: () => import('@/views/merchantOrder/orderDetail'),
       },
     ]
@@ -268,14 +269,35 @@ export const asyncRoutes = [
         },
         component: () => import('@/views/aftersale/index'),
       },
-      {
+      { 
         path: '/aftersaleDetail',
         meta: {
           title: '售后详情',
           parentPath: '/aftersale',
           basePath: '/aftersale',
         },
+        hidden: true,
         component: () => import('@/views/aftersale/aftersaleDetail'),
+      },
+    ]
+  },
+  {
+    path: '/operator',
+    component: () => import('@/views/layout/layout'),
+    meta: {
+      title: '人员',
+      fullTitle: '操作员管理',
+      icon: 'shouhou-01',
+    },
+    children: [
+      {
+        path: '',
+        meta: {
+          title: '操作员列表',
+          parentPath: '/operator',
+          basePath: '/operator',
+        },
+        component: () => import('@/views/operator/index'),
       },
     ]
   },

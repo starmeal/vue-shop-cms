@@ -3,7 +3,7 @@
     <section class="form-container">
       <el-form
         :model="form"
-        label-width="150px"
+        label-width="120px"
         :rules="form.status != 5 ? formrules : draftsrules"
         ref="goodForm"
       >
@@ -189,11 +189,13 @@
                 </transition-group>
               </draggable>
             </div>
-            <div class="detils-bg" v-if="form.detail.length">
-              <div class="phone-hezi">
-                <div v-for="(item,index) in form.detail" :key="index" class="deatils-items">
-                  <div>
-                    <img :src="item" style="height:auto;width:100%" />
+            <div>
+              <div class="detils-bg" v-if="form.detail.length">
+                <div class="phone-hezi">
+                  <div v-for="(item,index) in form.detail" :key="index" class="deatils-items">
+                    <div>
+                      <img :src="item" style="height:auto;width:100%" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1853,8 +1855,8 @@ export default {
   cursor: pointer;
 }
 .img-item {
-  margin-right: 20px;
-  margin-top: 27px;
+  margin-right: 15px;
+  margin-top: 15px;
   position: relative;
   padding-right: 10px;
 }
@@ -1864,19 +1866,28 @@ export default {
   top: -10px;
 }
 .img-items {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
 }
 .detils-img {
   width: 100%;
   display: flex;
   margin-top: 20px;
+  position: relative;
 }
 .detils-img > div:first-of-type {
-  width: 50%;
+  flex: 0 0 50%;
+}
+.detils-img > div:last-of-type {
+  flex: 0 0 50%;
+  position: relative;
 }
 .detils-bg {
+  top: -138px;
   width: 425px;
+  right: 50px;
+  position: relative;
+  transform: scale(0.65);
   box-sizing: border-box;
   padding: 24px 24px 24px 24px;
   height: 852px;

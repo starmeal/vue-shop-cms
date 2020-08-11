@@ -17,6 +17,7 @@
             placeholder="请输入商品名称"
             class="el-input-s"
             style="width:160px"
+            size="mini"
           ></el-input>
           <el-input
             clearable
@@ -24,6 +25,7 @@
             placeholder="请输入商品ID"
             class="el-input-s"
             style="width:160px"
+            size="mini"
           ></el-input>
           <el-input
             clearable
@@ -31,6 +33,7 @@
             placeholder="请输入商品条码"
             class="el-input-s"
             style="width:160px"
+            size="mini"
           ></el-input>
           <el-select
             v-model="listpage.category"
@@ -38,6 +41,7 @@
             placeholder="请选择类目"
             class="sel"
             style="width:160px"
+            size="mini"
           >
             <el-option
               v-for="item in valArr"
@@ -55,6 +59,7 @@
               placeholder="请输入起始价"
               class="deep-number"
               @input="nospace1"
+              size="mini"
             ></el-input>
             <span class="lin-hi">至</span>
             <el-input
@@ -63,18 +68,21 @@
               placeholder="请输入结束价"
               class="left-none"
               @input="nospace2"
+              size="mini"
             ></el-input>
           </section>
-          <section class="mini-flexs" style="margin-left:20px">
+          <section class="mini-flexs" style="margin-left:10px">
             <el-input
               v-model="listpage.shelfDayBeginStr"
               :controls="false"
               placeholder="请输入有效期"
               class="deep-number"
               @input="nospace3"
+              size="mini"
             ></el-input>
             <span class="lin-hi">至</span>
             <el-input
+              size="mini"
               v-model="listpage.shelfDayEndStr"
               :controls="false"
               placeholder="请输入有效期"
@@ -82,16 +90,16 @@
               @input="nospace4"
             ></el-input>
           </section>
-          <el-button type="primary" class="btn-search" @click="serach()">搜索</el-button>
-          <el-button type="success" class="btn-search" @click="qingkong">清空筛选条件</el-button>
+          <el-button type="primary" class="btn-search" @click="serach()" size="mini">搜索</el-button>
+          <el-button type="success" class="btn-search" @click="qingkong" size="mini">清空筛选</el-button>
         </div>
       </section>
       <section class="screening-box-one">
-        <el-button type="primary" class="btn-search" @click="goform()">发布商品</el-button>
-        <el-button class="btn-search" @click="exportlist">导出</el-button>
+        <el-button type="primary" class="btn-search" size="mini" @click="goform()">发布商品</el-button>
+        <el-button class="btn-search" size="mini" @click="exportlist">导出</el-button>
       </section>
       <section class="table-container">
-        <el-table :data="list" v-loading="loading" style="width: 100%">
+        <el-table @select-all="handleSelectionChange"  @selection-change="handleSelectionChange" :data="list" v-loading="loading" style="width: 100%">
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column prop="sort" label="排序" width="50px"></el-table-column>
           <el-table-column prop="createTime" label="创建时间"></el-table-column>
@@ -117,7 +125,7 @@
             <template slot-scope="props">
               <span>{{props.row.shelfDay || '--'}}</span>
             </template>
-          </el-table-column> -->
+          </el-table-column>-->
           <el-table-column label="是否推荐">
             <template slot-scope="props">
               <el-switch
@@ -127,6 +135,15 @@
                 size="mini"
                 @change="(val)=>{switchChange(val,props)}"
               ></el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column label="状态">
+            <template slot-scope="props">
+              <span v-if="props.row.status == 1">已上架</span>
+              <span v-if="props.row.status == 2">待上架</span>
+              <span v-if="props.row.status == 3">已下架</span>
+              <span v-if="props.row.status == 4">回收站</span>
+              <span v-if="props.row.status == 5">草稿箱</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="150px">
@@ -152,7 +169,7 @@
                   class="item light-item"
                   effect="light"
                   placement="top"
-                  v-if="listpage.listType == 2"
+                  v-if="props.row.status == 2 || props.row.status == 3"
                 >
                   <span slot="content" style="font-size:12px;color:#9d9d9d">上架</span>
                   <i class="el-icon-top icon-content" @click="updateStatus(props.row,'down')"></i>
@@ -161,7 +178,7 @@
                   class="item light-item"
                   effect="light"
                   placement="top"
-                  v-if="listpage.listType ==1 "
+                  v-if="props.row.status == 1"
                 >
                   <span slot="content" style="font-size:12px;color:#9d9d9d">下架</span>
                   <i class="el-icon-bottom icon-content" @click="updateStatus(props.row,'up')"></i>
@@ -282,6 +299,9 @@ export default {
     this.getcat();
   },
   methods: {
+    handleSelectionChange(val){
+      console.log(val)
+    },
     updateStatus(row, status) {
       let obj = {
         goodsCodeList: [row.goodsCode],
@@ -523,7 +543,7 @@ export default {
 
 .btn-search {
   border-radius: 0px;
-  margin-left: 20px;
+  margin-left: 10px;
 }
 .goods-container {
   min-height: 100%;

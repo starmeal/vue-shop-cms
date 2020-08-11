@@ -9,20 +9,23 @@
                 clearable
                 v-model="listpage.productName"
                 placeholder="商品名称"
-                style="width:200px"
+                style="width:150px"
+                size="mini"
               ></el-input>
               <span class="mock-label">订单编号</span>
               <el-input
                 clearable
                 v-model="listpage.orderCode"
                 placeholder="订单编号"
-                style="width:200px;margin-left:20px"
+                size="mini"
+                style="width:150px;margin-left:20px"
               ></el-input>
             </div>
           </el-form-item>
           <el-form-item label="申请时间">
             <p class="orderTime">
               <el-date-picker
+                size="mini"
                 v-model="createTime"
                 class="timeInput"
                 type="datetimerange"
@@ -32,10 +35,10 @@
                 @change="timeChange"
                 value-format="yyyy-MM-dd HH:mm:ss"
               ></el-date-picker>
-              <el-button type="primary" plain @click="today">今天</el-button>
-              <el-button type="primary" plain @click="yesterday">昨天</el-button>
-              <el-button type="primary" plain @click="lastSeven">最近7天</el-button>
-              <el-button type="primary" plain @click="lastThirty">最近30天</el-button>
+              <el-button type="primary" size="mini" plain @click="today">今天</el-button>
+              <el-button type="primary" size="mini" plain @click="yesterday">昨天</el-button>
+              <el-button type="primary" size="mini" plain @click="lastSeven">最近7天</el-button>
+              <el-button type="primary" size="mini" plain @click="lastThirty">最近30天</el-button>
             </p>
           </el-form-item>
           <el-form-item label="售后编号">
@@ -44,14 +47,16 @@
                 clearable
                 v-model="listpage.asaleCode"
                 placeholder="售后编号"
-                style="width:200px"
+                style="width:150px"
+                size="mini"
               ></el-input>
               <span class="mock-label">退款类型</span>
               <el-select
                 clearable
                 v-model="listpage.refundType"
                 placeholder="请选择"
-                style="margin-left:20px"
+                style="margin-left:20px;width:150px"
+                size="mini"
               >
                 <el-option :key="1" label="售中退款" value="1"></el-option>
                 <el-option :key="2" label="售后退款" value="2"></el-option>
@@ -61,7 +66,8 @@
                 clearable
                 v-model="listpage.aftersaleType"
                 placeholder="请选择售后方式"
-                style="margin-left:20px"
+                style="margin-left:20px;width:150px"
+                size="mini"
               >
                 <el-option :key="1" label="仅退款" value="1"></el-option>
                 <el-option :key="3" label="退货退款" value="3"></el-option>
@@ -71,16 +77,23 @@
           </el-form-item>
           <el-form-item label="发货状态">
             <div>
-              <el-select clearable v-model="listpage.deliveryStatus" placeholder="请选择">
-                <el-option :key="0" label="售中退款" value="0"></el-option>
-                <el-option :key="1" label="售后退款" value="1"></el-option>
+              <el-select
+                clearable
+                v-model="listpage.deliveryStatus"
+                placeholder="请选择"
+                style="width:150px"
+                size="mini"
+              >
+                <el-option :key="0" label="未发货" value="0"></el-option>
+                <el-option :key="1" label="已发货" value="1"></el-option>
               </el-select>
               <span class="mock-label">售后状态</span>
               <el-select
                 clearable
                 v-model="listpage.aftersaleStatus"
                 placeholder="请选择"
-                style="margin-left:20px"
+                style="margin-left:20px;width:150px"
+                size="mini"
               >
                 <el-option :key="1" label="售后处理中" value="1"></el-option>
                 <el-option :key="2" label="售后申请待商家处理" value="2"></el-option>
@@ -95,9 +108,10 @@
               <span class="mock-label">退货物流</span>
               <el-select
                 clearable
-                v-model="listpage.aftersaleType"
+                v-model="listpage.refundSigning"
                 placeholder="请选择"
-                style="margin-left:20px"
+                style="margin-left:20px;width:150px;"
+                size="mini"
               >
                 <el-option :key="1" label="商家未签收" value="0"></el-option>
                 <el-option :key="3" label="商家已签收" value="1"></el-option>
@@ -106,8 +120,12 @@
           </el-form-item>
           <el-form-item>
             <div style="margin-left:60px">
-              <el-button @click="search" type="primary">筛选</el-button>
-              <el-button @click="toExper">导出</el-button>
+              <el-button @click="search" type="primary" size="mini">
+                <span style="font-size:10px">筛选</span>
+              </el-button>
+              <el-button @click="toExper" size="mini">
+                <span style="font-size:10px">导出</span>
+              </el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -121,8 +139,20 @@
         </p>
         <div class="button-group">
           <el-button-group>
-            <el-button :type="listpage.sortType == 1  ? 'primary' : ''" @click="search(1)">按最近申请排序</el-button>
-            <el-button :type="listpage.sortType == 2  ? 'primary' : ''" @click="search(2)">按临近超时排序</el-button>
+            <el-button
+              size="mini"
+              :type="listpage.sortType == 1  ? 'primary' : ''"
+              @click="search(1)"
+            >
+              <span style="font-size:10px">按最近申请排序</span>
+            </el-button>
+            <el-button
+              size="mini"
+              :type="listpage.sortType == 2  ? 'primary' : ''"
+              @click="search(2)"
+            >
+              <span style="font-size:10px">按临近超时排序</span>
+            </el-button>
           </el-button-group>
         </div>
         <div class="page-content">
@@ -133,11 +163,12 @@
             >
               <table style="width:100%; border-collapse: collapse; border: none;table-layout:fixed">
                 <tr style="width:100%" class="header-tr">
-                  <td style="width:40%">
+                  <td style="width:30%">
                     <div class="header-flex">
                       <section>商品</section>
                     </div>
                   </td>
+                  <td style="width:10%">发货状态</td>
                   <td style="width:10%">订单金额</td>
                   <td style="width:10%">退款金额</td>
                   <td style="width:10%">申请时间</td>
@@ -166,21 +197,21 @@
             <div class="mock-table" v-for="(its, index) in list" :key="index">
               <div style="width:100%;position: relative;">
                 <span
-                  style="margin-right:30px;margin-left:18px;font-size:12px;"
+                  style="margin-right:30px;margin-left:18px;font-size:10px;"
                 >售后编号：{{ its.asaleCode }}</span>
                 <span
-                  style="margin-right:30px;margin-left:18px;font-size:12px;"
+                  style="margin-right:30px;margin-left:18px;font-size:10px;"
                 >订单编号：{{ its.orderCode }}</span>
                 <span
-                  style="margin-right:30px;margin-left:18px;font-size:12px;"
+                  style="margin-right:30px;margin-left:18px;font-size:10px;"
                   v-if="its.aftersaleType == 1"
-                >退款</span>
+                >仅退款</span>
                 <span
-                  style="margin-right:30px;margin-left:18px;font-size:12px;"
+                  style="margin-right:30px;margin-left:18px;font-size:10px;"
                   v-if="its.aftersaleType == 3"
                 >退货退款</span>
                 <span
-                  style="margin-right:30px;margin-left:18px;font-size:12px;"
+                  style="margin-right:30px;margin-left:18px;font-size:10px;"
                   v-if="its.aftersaleType == 4"
                 >换货</span>
                 <!-- <p class="detail" @click="goOrderdetail(its)">查看详情</p> -->
@@ -200,7 +231,7 @@
                         </div>
                       </div>
                       <div>
-                        <div v-show="its.goodsSkus">{{its.goodsSkus}}</div>
+                        <div v-show="its.goodsSkus" style="font-size:10px;">{{its.goodsSkus}}</div>
                       </div>
                     </section>
                   </td>
@@ -208,16 +239,16 @@
                     <p class="qusibap">{{ its.deliveryStatus == 1 ? '已发货' : '未发货' }}</p>
                   </td>
                   <td style="width:10%">
-                    <p class="qusibap">{{ its.payAmount }}</p>
+                    <p class="qusibap">¥{{ its.payAmount}}</p>
                   </td>
                   <td style="width:10%">
-                    <p class="qusibap">{{ its.refundAmounts }}</p>
+                    <p class="qusibap">¥{{ its.refundAmounts }}</p>
                   </td>
                   <td style="width:10%">
                     <p class="qusibap">{{ its.applyTime }}</p>
                   </td>
                   <td style="width:10%">
-                    <div class="qusibap">{{its.merOverTime}}</div>
+                    <div class="qusibap">{{its.merOverTime || '--'}}</div>
                   </td>
                   <td style="width:10%">
                     <p class="qusibap">{{ its.aftersaleStatusText }}</p>
@@ -228,6 +259,7 @@
                 </tr>
               </table>
             </div>
+            <section v-if="list.length == 0  && !loading" class="qunima">暂无数据</section>
           </section>
           <section class="page-box">
             <el-pagination
@@ -300,8 +332,8 @@ export default {
   created() {
     this.getList();
   },
-  mounted(){
-    this.initscroll()
+  mounted() {
+    this.initscroll();
   },
   methods: {
     initscroll() {
@@ -322,7 +354,8 @@ export default {
         this.domWidth = document.querySelector("#router-view").offsetWidth;
         const myObserver = new ResizeObserver((entries) => {
           entries.forEach((entry) => {
-            this.domWidth = document.querySelector("#router-view").offsetWidth - 19;
+            this.domWidth =
+              document.querySelector("#router-view").offsetWidth - 19;
             // console.log("大小位置", entry.contentRect);
             // console.log("监听的DOM", entry.target);
           });
@@ -342,6 +375,14 @@ export default {
       });
     },
     toExper() {
+      if (this.createTime == "" || this.createTime == null) {
+        this.$message({
+          message: "请选择起止时间",
+          type: "error",
+          center: true,
+        });
+        return false;
+      }
       merAfterSaleListExportExcel(this.listpage).then((res) => {});
     },
     goOrderdetail(item) {
@@ -466,6 +507,14 @@ export default {
 </script>
 
 <style scoped>
+.qunima {
+  display: flex;
+  width: 100%;
+  height: 30vh;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
 .mock-label {
   font-size: 12px;
   font-family: Microsoft YaHei, MicrosoftYaHei-Bold;
@@ -559,7 +608,7 @@ table {
 .mock-table > div {
   padding: 10px 0px;
   background: #ebebeb;
-  font-size: 12px;
+  font-size: 10px;
 }
 ul,
 p {
@@ -617,14 +666,14 @@ ul li {
 .qusibap {
   padding: 5px;
   text-align: center;
-  font-size: 13px;
+  font-size: 10px;
   font-family: PingFang SC;
   color: rgba(51, 51, 51, 1);
 }
 .qusibaps {
   padding: 5px;
   text-align: center;
-  font-size: 13px;
+  font-size: 10px;
   font-family: PingFang SC;
   color: rgba(51, 51, 51, 1);
   width: 100%;
@@ -717,7 +766,7 @@ ul li {
   width: 95%;
   margin-left: 0px;
   flex: 1;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 400;
   line-height: 1.2;
   -webkit-line-clamp: 2;
@@ -735,7 +784,7 @@ ul li {
   text-align: center;
   height: 30px;
   line-height: 30px;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 400;
   background: #edf6ff;
   color: rgba(51, 51, 51, 1);
@@ -763,6 +812,7 @@ ul li {
   color: #44abf7;
   cursor: pointer;
   text-align: center;
+  font-size: 10px;
 }
 </style>
 <style scoped>
@@ -794,6 +844,7 @@ ul li {
   padding: 5px 0;
   color: #333;
   text-align: center;
+  font-size: 10px;
   border: 1px solid #d5d5d5;
   border-bottom: 0px;
   cursor: pointer;
@@ -937,7 +988,6 @@ li {
 .top-fixed {
   width: 69%;
   height: 30px;
-  left: 18.8%;
   z-index: -100;
   position: fixed;
   top: 129px;

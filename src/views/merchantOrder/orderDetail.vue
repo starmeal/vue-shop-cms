@@ -9,8 +9,8 @@
         <div>
           <div class="status-title">{{orderInfo.orderStatusText}}</div>
           <div v-for="(item,index) in needMerHandleAftersaleInfo" :key="index">
-          <div style="padding:10px 0px">[{{item.productName}}]{{item.productName}}</div>
-             <el-button>{{item.buttonText}}</el-button>
+            <div style="padding:10px 0px">[{{item.productName}}]{{item.productName}}</div>
+            <el-button @click="tuikuanchuli(item.asaleCode)">{{item.buttonText}}</el-button>
           </div>
         </div>
         <div class="flex-container">
@@ -18,7 +18,6 @@
           <el-steps :active="orderInfo.orderStatus" align-center style="width:90%;margin:0 auto">
             <el-step title="买家下单"></el-step>
             <el-step title="买家付款"></el-step>
-            <el-step title="确认库存"></el-step>
             <el-step title="商家发货"></el-step>
             <el-step title="交易成功"></el-step>
           </el-steps>
@@ -43,8 +42,8 @@
             <div class="tips-boxs">
               <div>
                 <div>发货方式：{{item.pickupType}}</div>
-                <div>发货人：1233123123</div>
-                <div>发货时间：1233123123</div>
+                <!-- <div>发货人：{{item.deliveryTime}}</div> -->
+                <div>发货时间：{{item.deliveryTime}}</div>
                 <div>运单号：{{item.logisticsCode}}</div>
               </div>
               <div>
@@ -69,6 +68,11 @@
       <div class="buy-info">
         <div>
           <section>
+            收货人信息
+            <span @click="updateAddress" style="color:#44abf7;margin-right:10px;margin-left:10px" v-if="orderInfo.orderStatus == 2">修改</span>
+            <span v-clipboard:success="onCopy" style="color:#44abf7" v-clipboard:copy="copy">复制</span>
+          </section>
+          <section>
             <span class="yincang">我跟</span>
             收货人：{{orderInfo.custName}}
           </section>
@@ -77,7 +81,7 @@
             联系电话：{{orderInfo.custMobile}}
           </section>
           <section class="item-address">
-            <span style="flex: 0 0 27%;text-align: right;">收货地址：</span>
+            <span style="flex: 0 0 38%;text-align: right;">收货地址：</span>
             <span>{{orderInfo.custAddress}}</span>
           </section>
         </div>
@@ -94,7 +98,7 @@
       </div>
       <div class="table-box">
         <el-table :data="detail" style="width: 100%">
-          <el-table-column prop="date" label="商品" width="400px">
+          <el-table-column prop="date" label="商品" width="300px">
             <template slot-scope="props">
               <div class="list-item-t">
                 <div>
@@ -107,12 +111,14 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="payPrice" label="单价（元）"></el-table-column>
+          <el-table-column prop="payPrice" label="单价（元）">
+            <template slot-scope="props">{{props.row.number * props.row.payPrice}}</template>
+          </el-table-column>
           <el-table-column prop="number" label="数量"></el-table-column>
           <el-table-column prop="address" label="小计（元）">
-            <template slot-scope="props">{{props.row.number * props.row.number}}</template>
+            <template slot-scope="props">{{props.row.number * props.row.payPrice}}</template>
           </el-table-column>
-          <el-table-column prop="aftersaleStatusText" label="售后状态">
+          <el-table-column prop="aftersaleStatusText" label="售后状态" width="100px">
             <template
               slot-scope="props"
             >{{props.row.aftersaleStatusText ? props.row.aftersaleStatusText : ''}}</template>
@@ -218,7 +224,22 @@ export default {
     this.getDetail(orderCode);
   },
   methods: {
+    tuikuanchuli(asaleCode) {
+      this.$router.push({
+        path: "/aftersaleDetail",
+        query: {
+          asaleCode: asaleCode,
+        },
+      });
+    },
     onCopy(e) {
+      // // this.$message({
+      // //   message: "复制成功",
+      // //   type: "success",
+      // //   center: true,
+      // // });
+      //       document.execCommand("Copy");
+      // this.copy;
       this.$message({
         message: "复制成功",
         type: "success",
@@ -226,10 +247,6 @@ export default {
       });
     },
     onError(e) {},
-    copyTest() {
-      document.execCommand("Copy");
-      this.copy;
-    },
     getDetail(orderCode) {
       let objData = {
         orderCode: orderCode,
@@ -330,12 +347,12 @@ export default {
   margin-top: 10px;
 }
 .order-statusBox > div:first-of-type {
-  flex: 0 0 40%;
+  flex: 0 0 35%;
   border-right: 1px #e4e7ed solid;
   padding: 20px;
 }
 .order-statusBox > div:last-of-type {
-  flex: 0 0 60%;
+  flex: 1;
 }
 .status-title {
   padding: 10px 0px;
@@ -347,7 +364,6 @@ export default {
   color: #000;
 }
 .flex-container {
-
   display: flex;
   align-items: center;
 }

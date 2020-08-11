@@ -5,7 +5,7 @@
         <div ref="forms" class="forms">
           <el-form ref="form" :model="form" :size="size" label-width="70px">
             <el-form-item label="订单搜索">
-              <el-select v-model="form.search" clearable>
+              <el-select v-model="form.search" clearable @change="searchChange">
                 <el-option
                   v-for="(item, index) in orderArr"
                   :label="item.label"
@@ -141,13 +141,13 @@
             <div class="mock-table" v-for="(its, index) in list" :key="index">
               <div style="width:100%;position: relative;">
                 <span
-                  style="margin-right:30px;margin-left:18px;font-size:12px;"
+                  style="margin-right:30px;margin-left:18px;font-size:10px;"
                 >订单号：{{ its.orderCode }}</span>
                 <span
-                  style="margin-right:30px;margin-left:18px;font-size:12px;"
+                  style="margin-right:30px;margin-left:18px;font-size:10px;"
                 >下单时间：{{ its.createTime }}</span>
                 <span
-                  style="margin-right:30px;margin-left:18px;font-size:12px;"
+                  style="margin-right:30px;margin-left:18px;font-size:10px;"
                 >{{its.payType == 2 ? '余额' : '微信'}}</span>
                 <p class="detail" @click="goOrderdetail(its)">查看详情</p>
               </div>
@@ -171,7 +171,7 @@
                         </div>
                       </div>
                       <div>
-                        <div>{{ item.payPrice / 100 }}</div>
+                        <div>￥{{ item.payPrice}}</div>
                         <div>{{ item.number }}件</div>
                       </div>
                       <div>
@@ -185,10 +185,10 @@
                     <p class="qusibap">{{ its.mobile }}</p>
                   </td>
                   <td style="width:10%">
-                    <p class="qusibap">{{ its.pickupType }}</p>
+                    <p class="qusibap">{{ its.pickupType}}</p>
                   </td>
                   <td style="width:10%">
-                    <div class="qusibap">{{its.payAmount / 100}}</div>
+                    <div class="qusibap">{{its.payAmount}}</div>
                   </td>
                   <td style="width:10%">
                     <p class="qusibap">{{ its.orderStatusText }}</p>
@@ -197,21 +197,25 @@
                     <p
                       class="qusibap"
                       @click="updatewuliu(its)"
-                      style="color:#44abf7;SC;cursor: pointer;font-size:12px"
+                      style="color:#44abf7;SC;cursor: pointer;"
                       v-if="its.orderStatus == 3 && its.updateLogisticsTime == ''"
-                    >修改物流</p>
+                    >修改物流{{its.updateLogisticsTime}}</p>
                     <p
                       class="qusibap poiner"
                       @click="ggosd(its)"
                       style="font-weight:600;color:green"
-                      v-if="its.orderStatus == 2"
+                      v-else-if="its.orderStatus == 2"
                     >
-                      <el-button size="mini">发货</el-button>
+                      <el-button size="mini">
+                        <span style="font-size:10px">发货</span>
+                      </el-button>
                     </p>
+                    <p v-else class="qusibap poiner">--</p>
                   </td>
                 </tr>
               </table>
             </div>
+            <section v-if="list.length == 0  && !loading" class="qunima">暂无数据</section>
           </section>
           <section class="page-box">
             <el-pagination
@@ -242,7 +246,7 @@
               <el-radio label>无需物流</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="物流公司：">
+          <el-form-item label="运单编号：">
             <section class="form-flex">
               <div>
                 <el-input
@@ -254,7 +258,7 @@
                 ></el-input>
               </div>
               <div class="ems">
-                <div style="font-weight: bold;">运单编号：</div>
+                <div style="font-weight: bold;">物流公司：</div>
               </div>
               <div>
                 <el-select
@@ -346,7 +350,7 @@
             </div>
           </el-form-item>
           <el-form-item label="发货方式">
-            <span style="font-size:12px" class="ems">自己联系快递</span>
+            <span class="ems">自己联系快递</span>
             <div>
               <el-input
                 v-model="fahuoform.logisticsCode"
@@ -427,7 +431,7 @@ export default {
           label: "订单编号",
         },
         {
-          value: "userNickName",
+          value: "custName",
           label: "收货人姓名",
         },
         {
@@ -519,9 +523,14 @@ export default {
     this.initscroll();
   },
   methods: {
-    kongkong(val){
-      if(!val){
-        this.listpage[this.form.search] = ''
+    searchChange(val) {
+      this.listpage.orderCode = "";
+      this.listpage.custName = "";
+      this.listpage.userTel = "";
+    },
+    kongkong(val) {
+      if (!val) {
+        this.listpage[this.form.search] = "";
       }
     },
     shohouzhong() {
@@ -545,6 +554,8 @@ export default {
         let dom = document.querySelector("#router-view");
         this.dom = dom;
         this.domWidth = document.querySelector("#router-view").offsetWidth;
+        this.domleft = document.querySelector(".header-tr").offsetLeft;
+        console.log(this.domleft);
         const myObserver = new ResizeObserver((entries) => {
           entries.forEach((entry) => {
             this.domWidth =
@@ -633,6 +644,7 @@ export default {
           });
           this.dialogStatus = false;
           this.tableDdialog = false;
+          this.getList();
         });
       }
     },
@@ -680,9 +692,9 @@ export default {
         });
         return false;
       }
-      this.fahuoform.shipperName = this.kuaidiarr.find(
-        (el) => el.ShipperCode == this.fahuoform.shipperCode
-      ).ShipperName;
+      this.fahuoform.shipperName = this.kuaidiarr.find((el) => {
+        return el.ShipperCode == this.fahuoform.shipperCode;
+      }).ShipperName;
       if (!this.fahuoform.shipperName) {
         this.$message({
           message: "请选择物流公司",
@@ -774,6 +786,8 @@ export default {
         this.orderDetailIds = val.map((element) => {
           return element.orderDetailId;
         });
+      } else {
+        this.orderDetailIds = [];
       }
     },
     changeStatus(val) {
@@ -812,7 +826,7 @@ export default {
     serachList() {
       this.listpage.curPage = 1;
       this.listpage[this.form.search] = this.form.value;
-      console.log(this.listpage)
+      console.log(this.listpage);
       this.getList();
     },
     //今天按钮
@@ -892,19 +906,25 @@ export default {
       if (!val) {
         this.listpage.createTimeBegin = "";
         this.listpage.createTimeEnd = "";
+      } else {
+        this.listpage.createTimeBegin = val[0];
+        this.listpage.createTimeEnd = val[1];
       }
       this.getList();
     },
     tabRetrieval(index, item) {
+      this.listpage.afterSaleStatus = "";
       this.isTrue = index;
       this.listpage.orderStatus = item.value;
+
       this.serachList();
     },
     exportList() {
       if (this.createTime == "" || this.createTime == null) {
         this.$message({
           message: "请选择下单起止时间",
-          type: "success",
+          type: "error",
+          center: true,
         });
         return false;
       }
@@ -954,7 +974,7 @@ export default {
   margin-right: 10px;
 }
 .header-flex > section:nth-of-type(2) {
-  flex: 0 0 20%;
+  flex: 0 0 25%;
 }
 .header-flex > section:nth-of-type(3) {
   flex: 0 0 20%;
@@ -964,10 +984,11 @@ export default {
   margin-bottom: 20px;
 }
 table {
-  font-size: 12px;
+  font-size: 10px;
 }
 .product-name {
   flex: 1;
+  font-size: 10px;
 }
 .poiner {
   cursor: pointer;
@@ -999,7 +1020,7 @@ table {
 .mock-table > div {
   padding: 10px 0px;
   background: #ebebeb;
-  font-size: 12px;
+  font-size: 10px;
 }
 ul,
 p {
@@ -1046,7 +1067,7 @@ ul li {
   margin-right: 10px;
 }
 .flex-box > div:nth-of-type(2) {
-  flex: 0 0 20%;
+  flex: 0 0 25%;
 }
 .flex-box > div:nth-of-type(3) {
   flex: 0 0 20%;
@@ -1055,16 +1076,14 @@ ul li {
   border-bottom: none;
 }
 .qusibap {
-  padding: 5px;
   text-align: center;
-  font-size: 13px;
+  font-size: 10px;
   font-family: PingFang SC;
   color: rgba(51, 51, 51, 1);
 }
 .qusibaps {
-  padding: 5px;
   text-align: center;
-  font-size: 13px;
+  font-size: 10px;
   font-family: PingFang SC;
   color: rgba(51, 51, 51, 1);
   width: 100%;
@@ -1177,7 +1196,7 @@ ul li {
   text-align: center;
   height: 30px;
   line-height: 30px;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 400;
   background: #edf6ff;
   color: rgba(51, 51, 51, 1);
@@ -1222,7 +1241,7 @@ ul li {
 .retrievalList span {
   display: inline-block;
   width: 70px;
-  font-size: 12px;
+  font-size: 11px;
   padding: 5px 0;
   color: #333;
   text-align: center;
@@ -1241,6 +1260,7 @@ ul li {
   background: #44abf7;
   color: #fff;
   border: 1px solid #44abf7;
+  border-bottom: none;
 }
 /*表格样式*/
 ul,
@@ -1367,7 +1387,6 @@ li {
 .top-fixed {
   width: 69%;
   height: 30px;
-  left: 18.8%;
   z-index: -100;
   position: fixed;
   top: 129px;
@@ -1375,5 +1394,13 @@ li {
 .page-content {
   padding-bottom: 20px;
   position: relative;
+}
+.qunima {
+  display: flex;
+  width: 100%;
+  height: 30vh;
+  align-items: center;
+  justify-content: center;
+  color: #999;
 }
 </style>
