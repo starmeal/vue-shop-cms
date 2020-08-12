@@ -345,7 +345,7 @@
     </el-dialog>
     <!-- 还可以发货弹窗 -->
     <el-dialog title="发货" :visible.sync="dialogTableVisible2">
-      <el-table :data="huotable">
+      <el-table :data="gridData">
         <el-table-column property="date" label="商品" width="300px">
           <template slot-scope="props">
             <section class="flex-box" style="width:100%;padding: 0;">
@@ -362,7 +362,15 @@
             </section>
           </template>
         </el-table-column>
-        <el-table-column property="aftersaleNum" label="数量"></el-table-column>
+        <el-table-column property="number" label="数量"></el-table-column>
+        <el-table-column property="deliveryStatus" label="状态">
+          <template slot-scope="props">
+            <section style="width:100%;padding: 0;">
+              <div style="color:rgb(240, 186, 8);">{{props.row.deliveryStatus1}}</div>
+              <div>{{props.row.deliveryStatus}}</div>
+            </section>
+          </template>
+        </el-table-column>
         <el-table-column property="userLogisticsCode" label="运单号"></el-table-column>
       </el-table>
       <el-form label-width="70px">
@@ -412,6 +420,7 @@ import {
   merAfterSaleRefuseReceipt,
   merAfterSaleLogisticsInfo,
 } from "@/api/aftersale";
+import { getDeliveryDetails } from "@/api/merchantOrder";
 import { setLogisticsInfoNew } from "@/api/merchantOrder";
 import { distinguishHandle } from "@/api/merchantOrder";
 export default {
@@ -432,6 +441,7 @@ export default {
       },
       indexStaus: "",
       radio: "",
+      gridData: [],
       listPage: {
         curPage: 1,
         pageSize: 5,
@@ -458,6 +468,7 @@ export default {
       ? this.$route.query.asaleCode
       : "AS15967083515250133";
     this.getDetail(asaleCode);
+    this.ggosd();
     this.getaddress();
   },
   methods: {
@@ -743,6 +754,17 @@ export default {
           });
         }
       }
+    },
+    ggosd(item) {
+      let obj = {
+        asaleCode: this.$route.query.asaleCode,
+      };
+      getDeliveryDetails(obj).then((res) => {
+        this.gridData = res.body.productInfo;
+        this.fahuoinfo = res.body;
+        this.kuaidiarr = [];
+        // this.gridData = item.detail;
+      });
     },
     getDetail(asaleCode) {
       this.timetime = "";

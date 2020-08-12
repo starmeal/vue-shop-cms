@@ -332,10 +332,7 @@
           <el-table-column property="deliveryStatus" label="状态">
             <template slot-scope="props">
               <section class="flex-box" style="width:100%;padding: 0;">
-                <span v-if="props.row.deliveryStatus == 1">处理退款</span>
-                <span v-if="props.row.deliveryStatus == 2">处理换货</span>
-                <span v-if="props.row.deliveryStatus == 3">已发货</span>
-                <span v-if="props.row.deliveryStatus == 4">待发货</span>
+                <span>{{props.row.deliveryStatus}}</span>
               </section>
             </template>
           </el-table-column>

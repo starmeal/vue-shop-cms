@@ -285,7 +285,7 @@ export const asyncRoutes = [
     path: '/operator',
     component: () => import('@/views/layout/layout'),
     meta: {
-      title: '人员',
+      title: '设置',
       fullTitle: '操作员管理',
       icon: 'shouhou-01',
     },
@@ -298,6 +298,15 @@ export const asyncRoutes = [
           basePath: '/operator',
         },
         component: () => import('@/views/operator/index'),
+      },
+      {
+        path: '/rolelist',
+        meta: {
+          title: '角色员列表',
+          parentPath: '/operator',
+          basePath: '/operator',
+        },
+        component: () => import('@/views/operator/rolelist'),
       },
     ]
   },

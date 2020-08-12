@@ -200,6 +200,7 @@
                   style="margin-right:30px;margin-left:18px;font-size:10px;"
                 >售后编号：{{ its.asaleCode }}</span>
                 <span
+                  @click="gogogo(its.orderCode)"
                   style="margin-right:30px;margin-left:18px;font-size:10px;"
                 >订单编号：{{ its.orderCode }}</span>
                 <span
@@ -336,6 +337,14 @@ export default {
     this.initscroll();
   },
   methods: {
+    gogogo(id){
+      this.$router.push({
+        path:'/orderDetail',
+        query:{
+          orderId:id
+        }
+      })
+    },
     initscroll() {
       this.$nextTick(() => {
         function getElementTop(elem) {
