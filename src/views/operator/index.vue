@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- v-adaptive  -->
     <div class="operator">
       <div>
         <div class="btn-box">
@@ -50,8 +49,15 @@
         <el-form-item label="操作员姓名" prop="actualName">
           <el-input v-model="form.actualName" size="mini" style="width:300px"></el-input>
         </el-form-item>
-        <el-form-item label="操作员密码" prop="password">
-          <el-input v-model="form.password" size="mini" style="width:300px"></el-input>
+        <el-form-item label="操作员密码" prop="password" class="passs">
+          <el-input
+            v-model="form.password"
+            size="mini"
+            style="width:300px"
+            show-password
+            :disabled="disabled"
+          ></el-input>
+          <el-button type="primary" style="margin-left:10px" @click="updatePassword">修改密码</el-button>
         </el-form-item>
         <el-form-item label="操作员手机号" prop="phone">
           <el-input v-model="form.phone" size="mini" style="width:300px"></el-input>
@@ -80,6 +86,7 @@ import {
   getRoleListCommon,
   getUserInfo,
 } from "@/api/operator";
+import md5 from "blueimp-md5";
 export default {
   data() {
     var EmptyValidator = (rule, value, callback) => {
@@ -91,6 +98,7 @@ export default {
       }
     };
     return {
+      disabled: true,
       rules: {
         nickName: [
           { required: true, message: "请输入用户名", trigger: "blur" },
@@ -136,12 +144,22 @@ export default {
     this.getgetRoleListCommon();
   },
   methods: {
+    updatePassword() {
+      this.disabled = false;
+      this.form.password = "";
+      console.log(document.querySelector(".el-input__suffix"));
+    },
     updateuser(row) {
       this.dTitle = true;
-      this.form.id = row.id;
-      getUserInfo(this.form).then((res) => {
+      this.disabled = true;
+      // this.form.id = row.id;
+      let obj = {
+        id: row.id,
+      };
+      getUserInfo(obj).then((res) => {
+        res.body.roleId = parseInt(res.body.roleId);
         this.form = res.body;
-        console.log(res);
+        this.password = res.body.password;
       });
       this.saveOrUpdateUser();
     },
@@ -152,11 +170,19 @@ export default {
     },
     saveOrUpdateUser() {
       if (!this.dialogFormVisible) {
-        this.dialogFormVisible = true;
+        this.$nextTick(() => {
+          this.dialogFormVisible = true;
+        });
       } else {
         this.$refs.ruleForm.validate((valid) => {
           if (valid) {
-            saveOrUpdateUser(this.form).then((res) => {
+            let obj = Object.assign({}, this.form, {
+              password:
+                this.form.password === this.password
+                  ? this.password
+                  : md5(this.form.password),
+            });
+            saveOrUpdateUser(obj).then((res) => {
               this.$message({
                 type: "success",
                 center: true,
@@ -172,6 +198,9 @@ export default {
               phone: "",
               roleId: "",
             };
+            setTimeout(() => {
+              this.$refs.ruleForm.clearValidate();
+            }, 0);
             this.dTitle = false;
           } else {
             console.log("error submit!!");
@@ -227,6 +256,10 @@ export default {
 </script>
 
 <style>
+/* .passs .el-input__suffix {
+  z-index: -100;
+  opacity: 0;
+} */
 .btn-box {
   padding: 10px;
 }

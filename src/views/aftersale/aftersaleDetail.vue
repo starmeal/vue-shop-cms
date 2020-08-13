@@ -85,7 +85,7 @@
             <span
               style="color:#ff0000"
               v-if="aftersaleinfo.payPrice && aftersaleinfo.number"
-            >{{aftersaleinfo.payPrice * aftersaleinfo.number}}</span>
+            >{{multiply(aftersaleinfo.payPrice,aftersaleinfo.number)}}</span>
           </section>
           <section>
             发货件数：
@@ -420,6 +420,7 @@ import {
   merAfterSaleRefuseReceipt,
   merAfterSaleLogisticsInfo,
 } from "@/api/aftersale";
+import { multiply } from "@/utils/util";
 import { getDeliveryDetails } from "@/api/merchantOrder";
 import { setLogisticsInfoNew } from "@/api/merchantOrder";
 import { distinguishHandle } from "@/api/merchantOrder";
@@ -472,6 +473,9 @@ export default {
     this.getaddress();
   },
   methods: {
+    multiply(a,b){
+      return multiply(a,b)
+    },
     haikeyifahuo() {
       if (!this.fahuoform1.logisticsCode) {
         this.$message({

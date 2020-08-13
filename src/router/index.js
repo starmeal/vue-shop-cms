@@ -269,7 +269,7 @@ export const asyncRoutes = [
         },
         component: () => import('@/views/aftersale/index'),
       },
-      { 
+      {
         path: '/aftersaleDetail',
         meta: {
           title: '售后详情',
@@ -307,6 +307,26 @@ export const asyncRoutes = [
           basePath: '/operator',
         },
         component: () => import('@/views/operator/rolelist'),
+      },
+    ]
+  },
+  {
+    path: '/adddress',
+    component: () => import('@/views/layout/layout'),
+    meta: {
+      title: '地址',
+      fullTitle: '地址管理',
+      icon: 'shouhou-01',
+    },
+    children: [
+      {
+        path: '',
+        meta: {
+          title: '地址列表',
+          parentPath: '/adddress',
+          basePath: '/adddress',
+        },
+        component: () => import('@/views/adddress/index'),
       },
     ]
   },

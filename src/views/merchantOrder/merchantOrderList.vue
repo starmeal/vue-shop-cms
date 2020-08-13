@@ -393,7 +393,9 @@ import {
   updateShopOrderParcelInfo,
   getShopOrderDetailNew,
 } from "@/api/merchantOrder";
-import { formatDate } from "@/utils/util";
+
+import { addOrModifyMerchantAddress } from "@/api/address";
+import { formatDate, multiply } from "@/utils/util";
 export default {
   name: "merchantOrderList",
   data() {
@@ -718,6 +720,13 @@ export default {
           type: "success",
           center: true,
         });
+        this.fahuoform = {
+          orderDetailIds: "",
+          shipperCode: "",
+          shipperName: "",
+          logisticsCode: "",
+          orderCode: "",
+        };
         this.dialogTableVisible = false;
         this.getList();
       });
@@ -773,8 +782,8 @@ export default {
           });
           return false;
         }
-        this.fahuoform.shipperCode = res.body[0].ShipperCode;
         this.kuaidiarr = res.body;
+        this.fahuoform.shipperCode = res.body[0].ShipperCode;
       });
     },
     // 发货复选框选中
@@ -806,6 +815,13 @@ export default {
       });
     },
     ggosd(item) {
+      this.fahuoform = {
+        orderDetailIds: "",
+        shipperCode: "",
+        shipperName: "",
+        logisticsCode: "",
+        orderCode: "",
+      };
       let obj = {
         orderCode: item.orderCode,
       };

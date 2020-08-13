@@ -493,6 +493,7 @@
           <el-input-number
             :disabled="disabled"
             :max="9999999"
+            :min="0"
             :precision="0"
             v-model="form.stock"
             :controls="false"
@@ -1401,6 +1402,14 @@ export default {
     submitForm() {
       this.$refs.goodForm.validate((valid) => {
         if (valid) {
+          if (this.form.stock <= 0) {
+            this.$message({
+              message: "库存值填写不正确",
+              type: "error",
+              center: true,
+            });
+            return false;
+          }
           if (
             this.form.goodsPrice <
             this.form.accountMoney + this.form.anchorMoney
