@@ -27,7 +27,7 @@
         <el-dialog title="新增角色" :visible.sync="dialogFormVisible">
           <el-form :model="form" label-width="120px">
             <el-form-item label="角色名称">
-              <el-input v-model="form.name" style="width:200px"></el-input>
+              <el-input v-model="form.name" style="width:200px" maxlength="3" show-word-limit></el-input>
             </el-form-item>
             <el-form-item></el-form-item>
             <el-form-item label="配置权限">
@@ -133,14 +133,14 @@ export default {
     },
     updateuser(row) {
       this.form.name = row.name;
-      this.form.id = JSON.stringify(row.id)
+      this.form.id = JSON.stringify(row.id);
       let obj = {
         id: JSON.stringify(row.id),
       };
       getRoleAndPermissions(obj).then((res) => {
         this.assignedPermissions = [];
         this.deplist(res.body.permissions);
-        this.form.permissions = this.assignedPermissions
+        this.form.permissions = this.assignedPermissions;
         this.dialogFormVisible = true;
       });
     },
@@ -193,6 +193,14 @@ export default {
           });
           return false;
         }
+        if (this.form.permissions.length == 0) {
+          this.$message({
+            type: "error",
+            center: true,
+            message: "配权限",
+          });
+          return false;
+        }
         saveOrUpdateRole(this.form).then((res) => {
           this.$message({
             type: "success",
@@ -223,7 +231,7 @@ export default {
       });
     },
     deluser(row) {
-      this.$confirm("是否确认删除", "提示", {
+      this.$confirm("您确定删除角色和角色下边操作员帐号吗", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",

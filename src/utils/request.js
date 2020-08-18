@@ -62,9 +62,9 @@ service.interceptors.response.use(
         if (res.code == '300010') {
           return Promise.reject(res)
         }
-        if (res.code == '500550') {
-          return Promise.reject(res)
-        }
+        // if (res.code == '500550') {
+        //   return Promise.reject(res)
+        // }
         Message({
           message: res.msg || "Error",
           type: "error",

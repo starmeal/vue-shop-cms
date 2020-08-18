@@ -1559,6 +1559,7 @@ export default {
     delImg(index, type) {
       if (type) {
         this.form.detail.splice(index, 1);
+        return false;
       }
       this.form.goodsImgs.splice(index, 1);
     },
@@ -1617,7 +1618,10 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)",
       });
-      let consat = `hs_star/app_shop/goods/${this.randomNum(1, 100)}`;
+      let fenge = file.name.split(".");
+      var timestamp = Date.parse(new Date());
+      let FILENAME = `${timestamp}.${fenge[1]}`;
+      let consat = `hs_star/app_shop/goods/${FILENAME}`;
       let that = this;
       SSupload(consat, file)
         .then(({ res, url, name }) => {

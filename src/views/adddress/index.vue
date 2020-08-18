@@ -7,17 +7,38 @@
       <div class="table-box">
         <el-table :data="list" style="width: 100%" v-adaptive height="100px">
           <el-table-column prop="recipientsName" label="联系人" width="140"></el-table-column>
-          <el-table-column prop="recipientsTel" label="联系方式" width="140"></el-table-column>
-          <el-table-column prop="addressInfo" label="地址"></el-table-column>
-          <el-table-column prop="addressType" label="地址类型" width="140">
+          <el-table-column prop="recipientsTel" label="联系方式" width="140">
             <template slot-scope="props">
-              <div>{{props.row.addressType == 1 ? '买家地址' : '商家地址'}}</div>
+              <div>{{props.row.landlinePhone}}</div>
+              <div>{{props.row.recipientsTel}}</div>
             </template>
           </el-table-column>
+          <el-table-column prop="addressInfo" label="地址">
+            <template slot-scope="props">
+              <div>
+                {{props.row.addressInfo}}
+                <span
+                  style="color:#67C23A;margin-left:10px"
+                >{{props.row.isDefaultAddress == 1 ? '默认' : ''}}</span>
+              </div>
+            </template>
+          </el-table-column>
+          <!-- <el-table-column prop="addressType" label="地址类型" width="140">
+            <template slot-scope="props">
+              <div>
+                {{props.row.addressType == 1 ? '买家地址' : '商家地址'}}
+               
+              </div>
+            </template>
+          </el-table-column>-->
           <el-table-column prop="address" label="操作" width="170">
             <template slot-scope="props">
               <el-button type="text" @click="getDetail(props.row)">编辑</el-button>
-              <el-button type="text" @click="deladdress(props.row)">删除</el-button>
+              <el-button
+                type="text"
+                @click="deladdress(props.row)"
+                :disabled="props.row.isDefaultAddress == 1"
+              >删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -37,7 +58,11 @@
       <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
         <el-form :model="form" label-width="120px" :rules="rules" ref="ruleForm">
           <el-form-item label="联系人" prop="recipientsName">
-            <el-input v-model="form.recipientsName" style="width:320px"></el-input>
+            <el-input
+              v-model.trim="form.recipientsName"
+              style="width:320px"
+              :onkeyup="form.recipientsName = form.recipientsName.replace(/\s+/g,'')"
+            ></el-input>
           </el-form-item>
           <el-form-item label="联系方式" prop="recipientsTel">
             <el-input v-model="form.recipientsTel" style="width:320px"></el-input>
@@ -45,15 +70,24 @@
           <el-form-item label="座机">
             <el-input
               v-model="form.quNumber"
+              @input="(val)=>{
+                nospace1('quNumber',val)
+              } "
               style="width:100px;margin-right:10px"
               placeholder="区号"
             ></el-input>
             <el-input
+              @input="(val)=>{
+                nospace1('landlinePhone',val)
+              } "
               v-model="form.landlinePhone"
               style="width:100px;margin-right:10px"
               placeholder="座机号"
             ></el-input>
             <el-input
+              @input="(val)=>{
+                nospace1('landlinePhone1',val)
+              } "
               v-model="form.landlinePhone1"
               style="width:100px;margin-right:10px"
               placeholder="分机号"
@@ -64,14 +98,19 @@
             <cascader v-model="cityvalue" @change="citychange" size="small" width="320px"></cascader>
           </el-form-item>
           <el-form-item label="详细地址" prop="addressDetail">
-            <el-input v-model="form.addressDetail" style="width:320px"></el-input>
+            <el-input
+              v-model.trim="form.addressDetail"
+              style="width:320px"
+              maxlength="100"
+              show-word-limit
+            ></el-input>
           </el-form-item>
-          <el-form-item label="地址类型" prop="addressType">
+          <!-- <el-form-item label="地址类型" prop="addressType">
             <el-checkbox-group v-model="form.addressType">
               <el-checkbox label="1">买家地址</el-checkbox>
               <el-checkbox label="2">商家地址</el-checkbox>
             </el-checkbox-group>
-          </el-form-item>
+          </el-form-item>-->
           <el-form-item label="是否默认地址">
             <el-radio v-model="form.isDefaultAddress" label="0">否</el-radio>
             <el-radio v-model="form.isDefaultAddress" label="1">是</el-radio>
@@ -128,7 +167,7 @@ export default {
       },
       rules: {
         recipientsName: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { required: true, message: "请输入名字", trigger: "blur" },
         ],
         recipientsTel: [
           { required: true, message: "请输入联系方式", trigger: "blur" },
@@ -172,25 +211,13 @@ export default {
     this.getList();
   },
   methods: {
+    nospace1(type,val) {
+      console.log(this.form)
+      this.form[type] = val.replace(/[^\d.]/g, "");
+    },
     showform() {
       if (!this.dialogTableVisible) {
         this.dialogTableVisible = true;
-        this.cityArrName = []
-        this.cityvalue = []
-        this.form = {
-          quNumber: "",
-          recipientsName: "",
-          recipientsTel: "",
-          provinceCode: "",
-          cityCode: "",
-          areaCode: "",
-          addressValues: "",
-          addressDetail: "",
-          isDefaultAddress: "0",
-          landlinePhone: "",
-          landlinePhone1: "",
-          addressType: [],
-        };
         setTimeout(() => {
           this.$refs.ruleForm.clearValidate();
         }, 0);
@@ -198,15 +225,16 @@ export default {
         this.$refs.ruleForm.validate((valid) => {
           if (valid) {
             let form = Object.assign({}, this.form, {
-              addressValues: this.cityArrName.length ? this.cityArrName.join(",") : this.form.addressValues,
+              addressValues: this.cityArrName.length
+                ? this.cityArrName.join(",")
+                : this.form.addressValues,
               addressType: this.form.addressType.join(","),
             });
             if (!this.form.landlinePhone && !this.form.quNumber) {
               form.landlinePhone = "";
             } else {
-              form.landlinePhone = `${this.quNumber} - ${this.formlandlinePhone} -${this.formlandlinePhone1}`;
+              form.landlinePhone = `${this.form.quNumber} - ${this.form.landlinePhone} -${this.form.landlinePhone1}`;
             }
-
             addOrModifyMerchantAddress(form).then((res) => {
               this.$message({
                 message: "恭喜你，成功啦",
@@ -214,6 +242,8 @@ export default {
                 center: true,
               });
               this.dialogTableVisible = false;
+              this.cityArrName = [];
+              this.cityvalue = [];
               this.form = {
                 quNumber: "",
                 recipientsName: "",
@@ -231,7 +261,7 @@ export default {
               setTimeout(() => {
                 this.$refs.ruleForm.clearValidate();
               }, 0);
-              this.getList()
+              this.getList();
             });
           } else {
             console.log("error submit!!");
@@ -250,7 +280,14 @@ export default {
         this.form = body;
         this.form.addressType = this.form.addressType.split(",");
         this.dialogTableVisible = true;
-        console.log(this.form)
+        let ret = this.form.landlinePhone;
+        if (ret) {
+          ret = ret.split("-");
+          let [quNumber, landlinePhone, landlinePhone1] = ret;
+          this.$set(this.form, "quNumber", quNumber.trim());
+          this.$set(this.form, "landlinePhone", landlinePhone.trim());
+          this.$set(this.form, "landlinePhone1", landlinePhone1.trim());
+        }
       });
     },
     deladdress(row) {

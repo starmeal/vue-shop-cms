@@ -147,7 +147,7 @@
                 style="width:300px"
               ></el-date-picker>
             </div>
-            <div  style="margin-top:10px">
+            <div style="margin-top:10px">
               <el-radio v-model="form.idCardValidityType" label="1">长期有效</el-radio>
               <el-date-picker
                 v-model="idCardvalueOne"
@@ -447,14 +447,29 @@ export default {
             });
             return false;
           }
-          if (this.idCardvalue.includes("") && !this.idCardvalueOne) {
-            this.$message({
-              message: "请选择证件有效期",
-              type: "error",
-              center: true,
-            });
-            return false;
+          if (this.form.idCardValidityType == 0) {
+            if (
+              this.idCardvalue == null ||
+              (!this.idCardvalue && this.idCardvalue.includes(""))
+            ) {
+              this.$message({
+                message: "请选择证件有效期",
+                type: "error",
+                center: true,
+              });
+              return false;
+            }
+          } else {
+            if (!this.idCardvalueOne) {
+              this.$message({
+                message: "请选择证件有效期",
+                type: "error",
+                center: true,
+              });
+              return false;
+            }
           }
+
           let form = Object.assign({}, this.form, {});
           if (form.idCardValidityType == 0) {
             form.validityStartDate = this.idCardvalue[0];

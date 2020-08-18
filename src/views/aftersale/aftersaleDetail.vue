@@ -169,7 +169,7 @@
         <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
       </div>
       <div style="margin-lef：20px" class="jue-js">
-        <span>据决原因：</span>
+        <span>拒绝原因：</span>
         <el-input style="width:300px;" type="textarea" v-model="juejuetext"></el-input>
       </div>
       <span slot="footer" class="dialog-footer">

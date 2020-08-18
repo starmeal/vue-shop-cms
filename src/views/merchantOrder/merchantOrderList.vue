@@ -363,6 +363,7 @@
                 placeholder="请选择"
                 size="mini"
                 style="width:300px"
+                :disabled="ddsb"
               >
                 <el-option
                   v-for="(item, index) in kuaidiarr"
@@ -400,6 +401,7 @@ export default {
   name: "merchantOrderList",
   data() {
     return {
+      ddsb: true,
       queArr: [],
       tableDdialog: false,
       parcelInfo: [],
@@ -782,6 +784,7 @@ export default {
           });
           return false;
         }
+        this.ddsb = false;
         this.kuaidiarr = res.body;
         this.fahuoform.shipperCode = res.body[0].ShipperCode;
       });
@@ -815,6 +818,7 @@ export default {
       });
     },
     ggosd(item) {
+      this.ddsb = true;
       this.fahuoform = {
         orderDetailIds: "",
         shipperCode: "",
