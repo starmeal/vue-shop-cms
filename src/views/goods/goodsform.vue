@@ -1619,8 +1619,9 @@ export default {
         background: "rgba(0, 0, 0, 0.7)",
       });
       let fenge = file.name.split(".");
+      
       var timestamp = Date.parse(new Date());
-      let FILENAME = `${timestamp}.${fenge[1]}`;
+      let FILENAME = `${timestamp}${Math.random().toString(9).substr(2)}.${fenge[1]}`;
       let consat = `hs_star/app_shop/goods/${FILENAME}`;
       let that = this;
       SSupload(consat, file)

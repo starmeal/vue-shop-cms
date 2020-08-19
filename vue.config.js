@@ -4,10 +4,11 @@ module.exports = {
   outputDir: 'dist',
   assetsDir: 'static',
   devServer: {
+    disableHostCheck: true,
     port: 9090,
     open: true,
     host: '0.0.0.0',
-       overlay: {
+    overlay: {
       warnings: false,
       errors: true
     },

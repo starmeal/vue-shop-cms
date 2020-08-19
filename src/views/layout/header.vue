@@ -1,8 +1,8 @@
 <template>
   <div class="header-container">
     <div class="header-menu-placeholder"></div>
-    <div class="home-con">
-      <icon icon="home"></icon>
+    <div class="home-con" @click="gohome">
+      <icon icon="home" ></icon>
     </div>
     <el-popover trigger="click" placement="bottom-start" v-model="isShowPopver">
       <div class="visit-con">
@@ -141,6 +141,11 @@ export default {
     };
   },
   methods: {
+    gohome(){
+      this.$router.push({
+        path:'/'
+      })
+    },
     handleSelectChange(value) {
       let {
         path,
