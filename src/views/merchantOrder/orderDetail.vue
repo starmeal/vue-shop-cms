@@ -81,7 +81,7 @@
           </el-tab-pane>
         </el-tabs>
       </div>
-      <div class="buy-info">
+      <div class="buy-info" v-if="orderInfo">
         <div>
           <section>
             收货人信息
@@ -92,16 +92,16 @@
             >修改</span>
             <span v-clipboard:success="onCopy" style="color:#44abf7" v-clipboard:copy="copy">复制</span>
           </section>
-          <section>
-            <span class="yincang">我跟</span>
-            收货人：{{orderInfo.custName}}
-          </section>
-          <section>
-            <span class="yincang">我</span>
-            联系电话：{{orderInfo.custMobile}}
+          <section class="item-address">
+            <span>收货人：</span>
+            <span>{{orderInfo.custName}}</span>
           </section>
           <section class="item-address">
-            <span style="flex: 0 0 38%;text-align: right;">收货地址：</span>
+            <span>联系电话：</span>
+            <span>{{orderInfo.custMobile}}</span>
+          </section>
+          <section class="item-address">
+            <span>收货地址：</span>
             <span>{{orderInfo.custAddress}}</span>
           </section>
         </div>

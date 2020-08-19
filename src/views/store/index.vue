@@ -357,7 +357,7 @@ export default {
             });
             return false;
           }
-          if (this.phone == '') {
+          if (this.phone == "") {
             this.$message({
               message: "请输入客服电话",
               type: "error",
@@ -367,6 +367,16 @@ export default {
           if (!re.test(this.phone)) {
             this.$message({
               message: "电话只能输入数字",
+              type: "error",
+            });
+            return false;
+          }
+          if (
+            (this.phone.length > 8 || this.phone.length < 7) &&
+            this.areaCode
+          ) {
+            this.$message({
+              message: "电话号输入不正确",
               type: "error",
             });
             return false;

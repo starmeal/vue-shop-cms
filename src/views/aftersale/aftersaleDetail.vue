@@ -68,7 +68,16 @@
             <span style="color:#ff0000">{{aftersaleinfo.aftersaleTypeText}}</span>
           </section>
           <section v-if="aftersaleinfo.aftersaleType == 4">换货件数：{{aftersaleinfo.aftersaleNum}}</section>
-          <section v-else>退款金额：{{aftersaleinfo.refundAmount}}</section>
+          <section v-else>
+            退款金额：
+            <span>
+              <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
+              <span v-if="aftersaleinfo.orderFreight != 0">
+                （含
+                <span style="color:#ff0000">￥{{aftersaleinfo.orderFreight}}</span> 运费）
+              </span>
+            </span>
+          </section>
           <!-- <section>联系方式：{{aftersaleinfo.userMobile}}</section> -->
           <section>退款原因：{{aftersaleinfo.aftersaleReason}}</section>
           <!-- <section>退款说明:{{aftersaleinfo.aftersaleReason}}</section> -->
@@ -148,7 +157,13 @@
       <div style="margin-top:20px">售后方式：{{aftersaleinfo.aftersaleTypeText}}</div>
       <div style="margin-top:20px">
         退款金额：
-        <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
+        <span>
+          <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
+          <span v-if="aftersaleinfo.orderFreight != 0">
+            （含
+            <span style="color:#ff0000">￥{{aftersaleinfo.orderFreight}}</span> 运费）
+          </span>
+        </span>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -166,7 +181,13 @@
       <div style="margin-top:20px">售后方式：{{aftersaleinfo.aftersaleTypeText}}</div>
       <div style="margin-top:20px">
         退款金额：
-        <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
+        <span>
+          <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
+          <span v-if="aftersaleinfo.orderFreight != 0">
+            （含
+            <span style="color:#ff0000">￥{{aftersaleinfo.orderFreight}}</span> 运费）
+          </span>
+        </span>
       </div>
       <div style="margin-lef：20px" class="jue-js">
         <span>拒绝原因：</span>
@@ -210,7 +231,13 @@
       <template v-if="aftersaleinfo.aftersaleType != 4">
         <div style="margin-top:20px">
           退款金额：
-          <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
+          <span>
+            <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
+            <span v-if="aftersaleinfo.orderFreight != 0">
+              （含
+              <span style="color:#ff0000">￥{{aftersaleinfo.orderFreight}}</span> 运费）
+            </span>
+          </span>
         </div>
         <div style="margin-top:20px">
           退货件数：
@@ -251,7 +278,13 @@
       <template v-if="aftersaleinfo.aftersaleType != 4">
         <div style="margin-top:20px">
           退款金额：
-          <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
+          <span>
+            <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
+            <span v-if="aftersaleinfo.orderFreight != 0">
+              （
+              <span style="color:#ff0000">{{aftersaleinfo.orderFreight}}</span> ）
+            </span>
+          </span>
         </div>
         <div style="margin-top:20px">
           退货件数：
@@ -473,8 +506,8 @@ export default {
     this.getaddress();
   },
   methods: {
-    multiply(a,b){
-      return multiply(a,b)
+    multiply(a, b) {
+      return multiply(a, b);
     },
     haikeyifahuo() {
       if (!this.fahuoform1.logisticsCode) {
@@ -777,6 +810,7 @@ export default {
       };
       getAfterSaleDetailInfoNew(obj).then((res) => {
         this.aftersaleinfo = res.body;
+        this.aftersaleinfo.orderFreight;
         if (this.aftersaleinfo.canDoText != "") {
           this.aftersaleinfo.canDoText = this.aftersaleinfo.canDoText.split(
             ","
