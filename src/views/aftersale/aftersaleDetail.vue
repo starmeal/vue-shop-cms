@@ -265,7 +265,7 @@
         <el-button type="primary" @click="queren">确认</el-button>
       </span>
     </el-dialog>
-    <!-- 同意跟拒绝收货弹窗 -->
+    <!-- 同意跟拒绝收货弹窗12 -->
     <el-dialog :visible.sync="dialogVisible3" width="40%">
       <span style="font-size:16px" slot="title">售后维权处理</span>
       <el-alert
