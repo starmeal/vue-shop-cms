@@ -85,7 +85,7 @@
             </div>
             <div style="margin-bottom: 10px;">
               <span class="customerPhone">经营地址</span>
-              <cascader :size="size" :class="{styleAddress:isShowAddress}" v-model="cityvalue" />
+              <cascader :size="size" :class="{styleAddress:isShowAddress}" v-model="cityvalue" @change="changecity"/>
               <p
                 v-show="isShowAddress"
                 style="margin-left: 202px;font-size:12px;color: #F56C6C;"
@@ -314,6 +314,9 @@ export default {
         cityvalue[1] = cityCode;
         cityvalue[2] = countyCode;
         this.cityvalue = cityvalue;
+        this.form.cityCode = cityCode
+        this.form.countyCode = countyCode
+        this.form.provinceCode = provinceCode
         this.categoryName = categoryName.split(",").join("/"); //经营类目
         this.form.shopMerchantsName = shopMerchantsName;
         this.form.thumbImg = thumbImg;

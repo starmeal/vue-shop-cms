@@ -469,7 +469,7 @@
         </section>
         <el-form-item label="市场价">
           <el-input-number
-            :disabled="disabled"
+            :disabled="disabled || form.resource == 2"
             v-model="form.goodsOriginalPrice"
             :controls="false"
             label="描述文字"
@@ -480,7 +480,7 @@
         </el-form-item>
         <el-form-item label="销售价格" prop="goodsPrice">
           <el-input-number
-            :disabled="disabled"
+            :disabled="disabled || form.resource == 2"
             v-model="form.goodsPrice"
             :controls="false"
             label="描述文字"
@@ -491,7 +491,7 @@
         </el-form-item>
         <el-form-item label="总库存" prop="stock">
           <el-input-number
-            :disabled="disabled"
+            :disabled="disabled || form.resource == 2"
             :max="9999999"
             :min="0"
             :precision="0"
@@ -1619,9 +1619,11 @@ export default {
         background: "rgba(0, 0, 0, 0.7)",
       });
       let fenge = file.name.split(".");
-      
+
       var timestamp = Date.parse(new Date());
-      let FILENAME = `${timestamp}${Math.random().toString(9).substr(2)}.${fenge[1]}`;
+      let FILENAME = `${timestamp}${Math.random().toString(9).substr(2)}.${
+        fenge[1]
+      }`;
       let consat = `hs_star/app_shop/goods/${FILENAME}`;
       let that = this;
       SSupload(consat, file)
