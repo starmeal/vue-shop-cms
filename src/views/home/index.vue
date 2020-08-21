@@ -100,6 +100,10 @@
             <div>直播中商品</div>
           </div>
           <div>
+            <div></div>
+            <div></div>
+          </div>
+          <div>
             <div>{{homeInfo.waitPayOrderNum}}</div>
             <div>待付款</div>
           </div>
@@ -126,10 +130,6 @@
           <div>
             <div>{{homeInfo.afterSaleWaitMerProcessNum}}</div>
             <div>售后待处理</div>
-          </div>
-          <div>
-            <div></div>
-            <div></div>
           </div>
         </div>
         <section style="width:100%;background:#fff">
