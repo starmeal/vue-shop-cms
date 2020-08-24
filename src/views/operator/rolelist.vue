@@ -27,7 +27,7 @@
         <el-dialog title="新增角色" :visible.sync="dialogFormVisible">
           <el-form :model="form" label-width="120px">
             <el-form-item label="角色名称">
-              <el-input v-model="form.name" style="width:200px" maxlength="3" show-word-limit></el-input>
+              <el-input v-model="form.name" style="width:200px" maxlength="10" show-word-limit></el-input>
             </el-form-item>
             <el-form-item></el-form-item>
             <el-form-item label="配置权限">
