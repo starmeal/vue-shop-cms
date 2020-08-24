@@ -49,8 +49,8 @@ export const asyncRoutes = [
         path: '',
         meta: {
           roles: [
-            "/shop/merchants/info/editInfo",
-            "/shop/merchants/info/selectDetailInfo"
+            "1",
+            "2"
           ],
           title: '店铺设置',
           parentPath: '/store',
