@@ -103,6 +103,8 @@
             <div></div>
             <div></div>
           </div>
+        </div>
+        <div class="a-s-a-s">
           <div>
             <div>{{homeInfo.waitPayOrderNum}}</div>
             <div>待付款</div>
@@ -132,7 +134,7 @@
             <div>售后待处理</div>
           </div>
         </div>
-        <section style="width:100%;background:#fff">
+        <section style="width:100%;background:#fff;margin-top:10px">
           <div class="pspp">
             <span
               @click="initcharts(item.value,index)"
@@ -487,7 +489,6 @@ export default {
   flex-wrap: wrap;
   justify-content: space-between;
   background: #fff;
-  margin-bottom: 10px;
 }
 .a-s-a-s > div {
   font-size: 14px;

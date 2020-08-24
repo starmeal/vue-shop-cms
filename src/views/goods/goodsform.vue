@@ -1415,7 +1415,7 @@ export default {
     submitForm() {
       this.$refs.goodForm.validate((valid) => {
         if (valid) {
-          if (this.form.stock <= 0) {
+          if (this.form.status != 5 && this.form.stock <= 0 ) {
             this.$message({
               message: "库存值填写不正确",
               type: "error",
