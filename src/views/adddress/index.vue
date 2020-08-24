@@ -233,9 +233,46 @@ export default {
       } else {
         this.$refs.ruleForm.validate((valid) => {
           if (valid) {
+            if (
+              this.form.quNumber && this.form.quNumber.length < 3) {
+              this.$message({
+                message: "区号填了要填写正确",
+                type: "error",
+                center: true,
+              });
+              return false;
+            }
             if (this.form.quNumber && !this.form.landlinePhone) {
               this.$message({
                 message: "区号填写后必须填写座机号",
+                type: "error",
+                center: true,
+              });
+              return false;
+            }
+            if (this.form.landlinePhone && !this.form.quNumber) {
+              this.$message({
+                message: "座机填了需填区号",
+                type: "error",
+                center: true,
+              });
+              return false;
+            }
+            if (this.form.landlinePhone && this.form.landlinePhone < 7) {
+              this.$message({
+                message: "座机填得不对",
+                type: "error",
+                center: true,
+              });
+              return false;
+            }
+            if (
+              !this.form.quNumber &&
+              !this.form.landlinePhone &&
+              this.form.landlinePhone1
+            ) {
+              this.$message({
+                message: "分机填了得填总机跟区号",
                 type: "error",
                 center: true,
               });

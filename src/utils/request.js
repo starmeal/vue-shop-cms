@@ -71,16 +71,16 @@ service.interceptors.response.use(
           center: true,
           duration: 2 * 1000
         });
-        if (res.code == "400000") {
-          store.dispatch("user/resetToken").then(() => {
-            window.location.hash = "/login";
-          });
-        }
-        if (res.code == "-999999") {
-          store.dispatch("user/resetToken").then(() => {
-            window.location.hash = "/login";
-          });
-        }
+        // if (res.code == "400000") {
+        //   store.dispatch("user/resetToken").then(() => {
+        //     window.location.hash = "/login";
+        //   });
+        // }
+        // if (res.code == "-999999") {
+        //   store.dispatch("user/resetToken").then(() => {
+        //     window.location.hash = "/login";
+        //   });
+        // }
         // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
         if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
           // to re-login

@@ -27,13 +27,14 @@ router.beforeEach((to, from, next) => {
       NProgress.done()
     } else {
       // determine whether the user has obtained his permission roles through getInfo
-      if (hasRoles) {
+      if (hasRoles) { 
         next()
       } else {
         try {
           // get user info
           // generate accessible routes map based on roles
           let accessRoutes  = filterAsyncRoutes(asyncRoutes, roles)
+          console.log(accessRoutes, '112222')
           accessRoutes = staticRoutes.concat(accessRoutes)
           // dynamically add accessible routes
           hasRoles = true

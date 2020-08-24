@@ -32,6 +32,7 @@ export function filterAsyncRoutes(routes, roles) {
     if (hasPermission(roles, tmp)) {
       if (tmp.children) {
         tmp.children = filterAsyncRoutes(tmp.children, roles);
+        console.log(tmp.children, tmp, '112223333')
       }
       result.push(tmp);
     }

@@ -48,6 +48,10 @@ export const asyncRoutes = [
       {
         path: '',
         meta: {
+          roles: [
+            "/shop/merchants/info/editInfo",
+            "/shop/merchants/info/selectDetailInfo"
+          ],
           title: '店铺设置',
           parentPath: '/store',
           basePath: '/store',
@@ -60,6 +64,9 @@ export const asyncRoutes = [
           title: '资质认证',
           parentPath: '/store',
           basePath: '/store',
+          roles: [
+            "/shop/merchants/info/qualificationDetailEdit"
+          ]
         },
         component: () => import('@/views/store/authentication/index')
       },
@@ -296,6 +303,7 @@ export const asyncRoutes = [
           title: '操作员列表',
           parentPath: '/operator',
           basePath: '/operator',
+
         },
         component: () => import('@/views/operator/index'),
       },

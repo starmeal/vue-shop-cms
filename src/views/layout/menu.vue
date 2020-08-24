@@ -78,6 +78,7 @@ export default {
       path,
       meta: { basePath, parentPath },
     } = this.$route;
+    console.log(this.$route, 'this.$route')
     this.defaultExpandedKeys = [path];
     this.basePath = basePath;
     this.menuList.forEach((menuItem, menuIndex) => {
