@@ -75,12 +75,18 @@
               } "
               style="width:100px;margin-right:10px"
               placeholder="区号"
+              minlength="3"
+              maxlength="4"
+              show-word-limit
             ></el-input>
             <el-input
               @input="(val)=>{
                 nospace1('landlinePhone',val)
               } "
               v-model="form.landlinePhone"
+              minlength="7"
+              show-word-limit
+              maxlength="8"
               style="width:100px;margin-right:10px"
               placeholder="座机号"
             ></el-input>
@@ -90,6 +96,9 @@
               } "
               v-model="form.landlinePhone1"
               style="width:100px;margin-right:10px"
+              minlength="7"
+              maxlength="8"
+              show-word-limit
               placeholder="分机号"
             ></el-input>
             <div style="font-size:12px">优先显示座机号码</div>
@@ -211,8 +220,8 @@ export default {
     this.getList();
   },
   methods: {
-    nospace1(type,val) {
-      console.log(this.form)
+    nospace1(type, val) {
+      console.log(this.form);
       this.form[type] = val.replace(/[^\d.]/g, "");
     },
     showform() {
@@ -224,6 +233,14 @@ export default {
       } else {
         this.$refs.ruleForm.validate((valid) => {
           if (valid) {
+            if (this.form.quNumber && !this.form.landlinePhone) {
+              this.$message({
+                message: "区号填写后必须填写座机号",
+                type: "error",
+                center: true,
+              });
+              return false;
+            }
             let form = Object.assign({}, this.form, {
               addressValues: this.cityArrName.length
                 ? this.cityArrName.join(",")
@@ -233,7 +250,11 @@ export default {
             if (!this.form.landlinePhone && !this.form.quNumber) {
               form.landlinePhone = "";
             } else {
-              form.landlinePhone = `${this.form.quNumber} - ${this.form.landlinePhone} -${this.form.landlinePhone1}`;
+              form.landlinePhone = `${this.form.quNumber} - ${
+                this.form.landlinePhone
+              }${
+                this.form.landlinePhone1 ? "-" + this.form.landlinePhone1 : ""
+              }`;
             }
             addOrModifyMerchantAddress(form).then((res) => {
               this.$message({

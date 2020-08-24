@@ -220,6 +220,7 @@
             :disabled="disabled"
             v-model="form.manufactureTime"
             value-format="yyyy-MM-dd"
+            @change="shelfDayChange1"
             type="date"
             placeholder="选择日期"
           ></el-date-picker>
@@ -1338,6 +1339,18 @@ export default {
     shelfDayChange(val) {
       if (val) {
         let numDate = val * 24 * 60 * 60 * 1000;
+        let newDate = new Date(
+          parseInt(new Date(this.form.manufactureTime).getTime() + numDate)
+        ).getTime();
+        this.newDate = formatDate(newDate);
+        let nowDate = parseInt(new Date().getTime());
+        let number = (newDate - nowDate) / (60 * 60 * 24 * 1000);
+        this.numberDay = parseInt(number);
+      }
+    },
+    shelfDayChange1(val) {
+      if (val) {
+        let numDate = this.form.shelfDay * 24 * 60 * 60 * 1000;
         let newDate = new Date(
           parseInt(new Date(this.form.manufactureTime).getTime() + numDate)
         ).getTime();

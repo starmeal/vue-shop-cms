@@ -4,6 +4,7 @@
     <header-container></header-container>
     <div class="layout-main-con">
       <div class="layout-main-container">
+        <!--  -->
         <router-view id="router-view" style="height:calc(100% - 59px);overflow-y: scroll;"></router-view>
         <div class="botton-container">Powered by BOSS开播v2.5.7 © 2014-2015 升级微信1976633855</div>
       </div>

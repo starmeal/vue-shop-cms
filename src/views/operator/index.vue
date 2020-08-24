@@ -47,11 +47,11 @@
           <el-input v-model.trim="form.nickName" size="mini" style="width:300px"></el-input>
         </el-form-item>
         <el-form-item label="操作员姓名" prop="actualName">
-          <el-input v-modell.trim="form.actualName" size="mini" style="width:300px"></el-input>
+          <el-input v-model.trim="form.actualName" size="mini" style="width:300px"></el-input>
         </el-form-item>
         <el-form-item label="操作员密码" prop="password" class="passs">
           <el-input
-            v-modell.trim="form.password"
+            v-model.trim="form.password"
             size="mini"
             style="width:300px"
             show-password
@@ -66,7 +66,7 @@
           >修改密码</el-button>
         </el-form-item>
         <el-form-item label="操作员手机号" prop="phone">
-          <el-input v-modell.trim="form.phone" size="mini" style="width:300px"></el-input>
+          <el-input v-model.trim="form.phone" size="mini" style="width:300px"></el-input>
         </el-form-item>
         <el-form-item label="分配角色" prop="roleId">
           <el-select v-modell="form.roleId" placeholder="请选择">
