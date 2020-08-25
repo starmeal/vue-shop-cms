@@ -99,7 +99,13 @@
         <el-button class="btn-search" size="mini" @click="exportlist">导出</el-button>
       </section>
       <section class="table-container">
-        <el-table @select-all="handleSelectionChange"  @selection-change="handleSelectionChange" :data="list" v-loading="loading" style="width: 100%">
+        <el-table
+          @select-all="handleSelectionChange"
+          @selection-change="handleSelectionChange"
+          :data="list"
+          v-loading="loading"
+          style="width: 100%"
+        >
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column prop="sort" label="排序" width="50px"></el-table-column>
           <el-table-column prop="createTime" label="创建时间"></el-table-column>
@@ -121,6 +127,23 @@
           <el-table-column prop="accountMoney" label="分享佣金"></el-table-column>
           <el-table-column prop="stock" label="库存"></el-table-column>
           <el-table-column prop="selled" label="销量"></el-table-column>
+          <el-table-column prop="selled" label="排序">
+            <template slot-scope="props">
+              <div
+                v-show="props.row.disabled"
+                @dblclick="updateSort(props.row)"
+              >{{props.row.sort || '--'}}</div>
+              <el-input
+                v-model="props.row.sort"
+                :min="1"
+                v-show="!props.row.disabled"
+                autofocus
+                @blur="toSortEnd(props.row)"
+                type="number"
+                :size="size"
+              />
+            </template>
+          </el-table-column>
           <!-- <el-table-column prop="shelfDay" label="保质期" width="60px">
             <template slot-scope="props">
               <span>{{props.row.shelfDay || '--'}}</span>
@@ -299,8 +322,38 @@ export default {
     this.getcat();
   },
   methods: {
-    handleSelectionChange(val){
-      console.log(val)
+    updateSort: function (row) {
+      row.disabled = false;
+      this.beforeSort = row.sort;
+    },
+    toSortEnd: function (row) {
+      row.disabled = true;
+      if (row.sort == this.beforeSort) {
+        return false;
+      }
+      this.liveRoomUpdateSort(row.sort, row.id);
+    },
+    liveRoomUpdateSort(sort, id) {
+      let loadingInstance = Loading.service({
+        fullscreen: false,
+        background: "transparent",
+      });
+      liveRoomUpdateSort({
+        sort,
+        id,
+      })
+        .then((res) => {
+          if (res.data.code == "0000") {
+            this.getList();
+            loadingInstance.close();
+          }
+        })
+        .catch((res) => {
+          loadingInstance.close();
+        });
+    },
+    handleSelectionChange(val) {
+      console.log(val);
     },
     updateStatus(row, status) {
       let obj = {
@@ -521,6 +574,9 @@ export default {
       queryGoodsList(this.listpage).then((res) => {
         this.loading = false;
         let { records, total } = res.body;
+        records.forEach((item, index) => {
+          item.disabled = true;
+        });
         this.list = records;
         this.totalCount = total;
       });
