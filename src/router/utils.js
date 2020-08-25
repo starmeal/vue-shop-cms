@@ -31,8 +31,9 @@ export function filterAsyncRoutes(routes, roles) {
     const tmp = { ...route };
     if (hasPermission(roles, tmp)) {
       if (tmp.children) {
-        tmp.children = filterAsyncRoutes(tmp.children, roles);
-        console.log(tmp.children, tmp, '112223333')
+        let result = filterAsyncRoutes(tmp.children, roles);
+        result[0].path = '';
+        tmp.children = result
       }
       result.push(tmp);
     }
