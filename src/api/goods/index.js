@@ -107,3 +107,10 @@ export function modifyProductStatus(data) {
     data
   });
 }
+export function updateGoodsSort(data) {
+  return request({
+    url: `/cms/goods/updateGoodsSort`,
+    method: "POST",
+    data
+  });
+}

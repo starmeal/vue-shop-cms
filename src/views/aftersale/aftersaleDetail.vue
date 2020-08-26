@@ -224,7 +224,7 @@
       </el-table>
     </el-dialog>
     <!-- 退货退款换货同意弹窗 -->
-    <el-dialog :visible.sync="dialogVisible2" width="40%">
+    <el-dialog :visible.sync="dialogVisible2" width="60%">
       <span style="font-size:16px" slot="title">售后维权处理</span>
       <el-alert title="商家同意后，退款将自动原路退后买家付款账户" type="warning" :center="true" :closable="false"></el-alert>
       <div style="margin-top:20px">售后方式：{{aftersaleinfo.aftersaleTypeText}}</div>
@@ -253,10 +253,10 @@
       <div>
         <div v-for="(item,index) in AddressData" :key="index" class="address-tel">
           <el-radio v-model="radio" :label="item.asuaId">
-            <span>[{{item.recipientsName}}收]</span>
-            <span>{{item.addressInfo}}</span>
-            <span>{{item.recipientsTel}}</span>
-            <span v-if="item.isDefaultAddress == 1" style="color:rgb(240, 186, 8)">默认</span>
+            <span>
+              [{{item.recipientsName}}收]{{item.addressInfo}}{{item.recipientsTel}}
+              <span v-if="item.isDefaultAddress == 1" style="color:rgb(240, 186, 8)">默认</span>
+            </span>
           </el-radio>
         </div>
       </div>
@@ -888,7 +888,13 @@ export default {
   },
 };
 </script>
-
+<style>
+.address-tel .el-radio {
+ white-space: pre-wrap;
+ display: flex;
+ align-items: center;
+}
+</style>
 <style scoped>
 * {
   font-size: 12px;

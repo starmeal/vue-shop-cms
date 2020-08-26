@@ -588,7 +588,7 @@
             size="small"
             style="margin-bottom:0px"
             @click="bianji"
-            v-if="$route.query.goodsCode"
+            v-if="$route.query.goodsCode && this.disabled"
           >编辑</el-button>
           <el-button
             type="primary"
@@ -1705,8 +1705,6 @@ export default {
         loop: true,
         lang: "zh-cn",
         url: that.form.vedio,
-        poster:
-          "//s2.pstatp.com/cdn/expire-1-M/byted-player-videos/1.0.0/poster.jpg",
         width: 600,
         pip: true,
         height: 337.5,

@@ -113,7 +113,8 @@
           <el-table-column prop="goodsCode" label="ID" width="150px"></el-table-column>
           <el-table-column prop="address" label="主图">
             <template slot-scope="props">
-              <img :src="props.row.thumbImg" style="width:100%;height:100%;" />
+              <img :src="props.row.thumbImg" v-if="props.row.thumbImg" style="width:100%;height:100%;" />
+              <img  v-else src="./logo2.png" style="width:100%;height:100%;"/>
             </template>
           </el-table-column>
           <el-table-column prop="goodsName" label="商品名称" width="100px">
@@ -127,20 +128,21 @@
           <el-table-column prop="accountMoney" label="分享佣金"></el-table-column>
           <el-table-column prop="stock" label="库存"></el-table-column>
           <el-table-column prop="selled" label="销量"></el-table-column>
-          <el-table-column prop="selled" label="排序">
+          <el-table-column prop="selled" label="排序" width="100px">
             <template slot-scope="props">
               <div
+                style="width:100%"
                 v-show="props.row.disabled"
                 @dblclick="updateSort(props.row)"
               >{{props.row.sort || '--'}}</div>
               <el-input
+               style="width:100;"
                 v-model="props.row.sort"
                 :min="1"
                 v-show="!props.row.disabled"
                 autofocus
                 @blur="toSortEnd(props.row)"
                 type="number"
-                :size="size"
               />
             </template>
           </el-table-column>
@@ -180,7 +182,7 @@
                   <span slot="content" style="font-size:12px;color:#9d9d9d">复制</span>
                   <i class="el-icon-copy-document icon-content" @click="goform(props.row,'copy')"></i>
                 </el-tooltip>
-                <el-tooltip class="item light-item" effect="light" placement="top">
+                <el-tooltip class="item light-item" effect="light" placement="top" v-if="props.row.status !== 4">
                   <span slot="content" style="font-size:12px;color:#9d9d9d">删除</span>
                   <i class="el-icon-delete icon-content" @click="delgoods(props.row)"></i>
                 </el-tooltip>
@@ -262,8 +264,10 @@ import {
   selectShopGoodsCategory,
   exportGoodsList,
   modifyRecommendationStatus,
+  updateGoodsSort,
   modifyProductStatus,
 } from "@/api/goods";
+import { Loading } from 'element-ui';
 export default {
   data() {
     return {
@@ -331,16 +335,16 @@ export default {
       if (row.sort == this.beforeSort) {
         return false;
       }
-      this.liveRoomUpdateSort(row.sort, row.id);
+      this.liveRoomUpdateSort(row.sort, row.goodsCode);
     },
-    liveRoomUpdateSort(sort, id) {
+    liveRoomUpdateSort(sort, goodsCode) {
       let loadingInstance = Loading.service({
         fullscreen: false,
         background: "transparent",
       });
-      liveRoomUpdateSort({
+      updateGoodsSort({
         sort,
-        id,
+        goodsCode,
       })
         .then((res) => {
           if (res.data.code == "0000") {

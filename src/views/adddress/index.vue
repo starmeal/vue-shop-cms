@@ -244,7 +244,7 @@ export default {
             }
             if (this.form.quNumber && !this.form.landlinePhone) {
               this.$message({
-                message: "区号填写后必须填写座机号",
+                message: "请填写正确的座机号",
                 type: "error",
                 center: true,
               });
@@ -252,7 +252,7 @@ export default {
             }
             if (this.form.landlinePhone && !this.form.quNumber) {
               this.$message({
-                message: "座机填了需填区号",
+                message: "请填写正确的座机号",
                 type: "error",
                 center: true,
               });
@@ -260,7 +260,7 @@ export default {
             }
             if (this.form.landlinePhone && this.form.landlinePhone < 7) {
               this.$message({
-                message: "座机填得不对",
+                message: "请填写正确的座机号",
                 type: "error",
                 center: true,
               });

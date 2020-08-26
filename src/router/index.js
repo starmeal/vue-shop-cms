@@ -43,15 +43,18 @@ export const asyncRoutes = [
       title: '店铺',
       fullTitle: '店铺首页',
       icon: 'dianpu',
+      // roles: [
+      //   "/shop/merchants/info/qualificationDetailEdit",
+      //   "/shop/merchants/info/queryShopNamingCertification",
+      //   "/shop/merchants/addShopMerchantsNotice",
+      //   "/shop/merchants/selectShopMerchantsNotice"
+      // ]
     },
     children: [
       {
         path: '',
         meta: {
-          roles: [
-            "1",
-            "2"
-          ],
+          roles: [],
           title: '店铺设置',
           parentPath: '/store',
           basePath: '/store',
@@ -65,7 +68,7 @@ export const asyncRoutes = [
           parentPath: '/store',
           basePath: '/store',
           roles: [
-            "/shop/merchants/info/qualificationDetailEdit"
+            "/shop/merchants/info/queryQualificationDetail"
           ]
         },
         component: () => import('@/views/store/authentication/index')
@@ -82,50 +85,14 @@ export const asyncRoutes = [
       {
         path: '/shopNominate',
         meta: {
+          roles: [
+            "/shop/merchants/info/queryShopNamingCertification"
+          ],
           title: '店铺命名申请',
           parentPath: '/store',
           basePath: '/store',
         },
         component: () => import('@/views/store/shopNominate/index')
-      },
-      {
-        path: '/shippingMethods',
-        meta: {
-          title: '配送方式',
-          parentPath: '/store',
-          basePath: '/store',
-        },
-        component: () => import('@/views/routeview'),
-        children: [
-          {
-            path: '',
-            meta: {
-              title: '快递配送',
-              parentPath: '/shippingMethods',
-              basePath: '/store',
-            },
-            component: () => import('@/views/store/tongchengpeisong/list'),
-          },
-          {
-            path: '/expressDeliveryAdd',
-            hidden: true,
-            meta: {
-              title: '添加',
-              parentPath: '/shippingMethods',
-              basePath: '/store',
-            },
-            component: () => import('@/views/store/tongchengpeisong/add'),
-          },
-          {
-            path: '/intraCity',
-            meta: {
-              title: '同城配送',
-              parentPath: '/shippingMethods',
-              basePath: '/store',
-            },
-            component: () => import('@/views/store/shippingMethods/index'),
-          }
-        ]
       },
       {
         path: '/notice',
@@ -134,6 +101,10 @@ export const asyncRoutes = [
           title: '公告',
           parentPath: '/store',
           basePath: '/store',
+          roles: [
+            "/shop/merchants/addShopMerchantsNotice",
+            "/shop/merchants/selectShopMerchantsNotice"
+          ],
         },
         children: [
           {
@@ -142,6 +113,9 @@ export const asyncRoutes = [
               title: '编辑公告',
               parentPath: '/notice',
               basePath: '/store',
+              roles: [
+                "/shop/merchants/addShopMerchantsNotice",
+              ],
             },
             component: () => import('@/views/store/notice/index'),
           },
@@ -151,11 +125,53 @@ export const asyncRoutes = [
               title: '公告列表',
               parentPath: '/notice',
               basePath: '/store',
+              roles: [
+                "/shop/merchants/selectShopMerchantsNotice"
+              ],
             },
             component: () => import('@/views/store/notice/noticelist'),
           },
         ]
       },
+      // {
+      //   path: '/shippingMethods',
+      //   meta: {
+      //     title: '配送方式',
+      //     parentPath: '/store',
+      //     basePath: '/store',
+      //   },
+      //   component: () => import('@/views/routeview'),
+      //   children: [
+      //     {
+      //       path: '',
+      //       meta: {
+      //         title: '快递配送',
+      //         parentPath: '/shippingMethods',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/store/tongchengpeisong/list'),
+      //     },
+      //     {
+      //       path: '/expressDeliveryAdd',
+      //       hidden: true,
+      //       meta: {
+      //         title: '添加',
+      //         parentPath: '/shippingMethods',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/store/tongchengpeisong/add'),
+      //     },
+      //     {
+      //       path: '/intraCity',
+      //       meta: {
+      //         title: '同城配送',
+      //         parentPath: '/shippingMethods',
+      //         basePath: '/store',
+      //       },
+      //       component: () => import('@/views/store/shippingMethods/index'),
+      //     }
+      //   ]
+      // },
       // {
       //   path: '/home2',
       //   meta: {
@@ -205,6 +221,9 @@ export const asyncRoutes = [
       title: '商品',
       fullTitle: '商品管理',
       icon: 'shangpinguanliicon',
+      roles: [
+        "/shop/cms/goods/queryGoodsList"
+      ]
     },
     children: [
       {
@@ -235,6 +254,9 @@ export const asyncRoutes = [
       title: '订单',
       fullTitle: '订单管理',
       icon: 'dingdan',
+      roles: [
+        "/shop/order/getMerShopOrderList"
+      ]
     },
     children: [
       {
@@ -265,6 +287,9 @@ export const asyncRoutes = [
       title: '售后',
       fullTitle: '售后管理',
       icon: 'shouhou-01',
+      roles: [
+        "/shop/aftersale/merAfterSaleListNew"
+      ]
     },
     children: [
       {
@@ -295,6 +320,10 @@ export const asyncRoutes = [
       title: '设置',
       fullTitle: '操作员管理',
       icon: 'shouhou-01',
+      roles: [
+        "/shop/cms/permission/user/list",
+        "/shop/cms/permission/role/list"
+      ]
     },
     children: [
       {
@@ -303,7 +332,9 @@ export const asyncRoutes = [
           title: '操作员列表',
           parentPath: '/operator',
           basePath: '/operator',
-
+          roles: [
+            "/shop/cms/permission/user/list",
+          ]
         },
         component: () => import('@/views/operator/index'),
       },
@@ -313,8 +344,12 @@ export const asyncRoutes = [
           title: '角色员列表',
           parentPath: '/operator',
           basePath: '/operator',
+          roles: [
+              "/shop/cms/permission/role/list"
+          ]
         },
         component: () => import('@/views/operator/rolelist'),
+
       },
     ]
   },
@@ -325,6 +360,9 @@ export const asyncRoutes = [
       title: '地址',
       fullTitle: '地址管理',
       icon: 'shouhou-01',
+      roles: [
+        "/shop/address/inquireAddressList"
+      ]
     },
     children: [
       {
@@ -333,6 +371,9 @@ export const asyncRoutes = [
           title: '地址列表',
           parentPath: '/adddress',
           basePath: '/adddress',
+          roles: [
+            "/shop/address/inquireAddressList"
+          ]
         },
         component: () => import('@/views/adddress/index'),
       },

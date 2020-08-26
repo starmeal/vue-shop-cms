@@ -24,7 +24,7 @@
           </div>
           <div class="order-item-con">
             订单咨询
-            <div class="count">(2)</div>
+            <div class="count">(0)</div>
           </div>
         </el-collapse-item>
         <el-collapse-item name="3">
@@ -34,7 +34,7 @@
           <div class="order-item-con" v-if="evaCount">
             <template>
               待评价回复
-              <div class="count">({{evaCount}})</div>
+              <div class="count">(0)</div>
             </template>
           </div>
           <div class="order-item-con" v-else>

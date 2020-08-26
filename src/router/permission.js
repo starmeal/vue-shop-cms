@@ -5,7 +5,6 @@ import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
-let hasRoles = false
 const whiteList = ['/login'] // no redirect whitelist
 router.beforeEach((to, from, next) => {
   let {
@@ -27,17 +26,18 @@ router.beforeEach((to, from, next) => {
       NProgress.done()
     } else {
       // determine whether the user has obtained his permission roles through getInfo
-      if (hasRoles) { 
+      if (store.state.user.hasRoles && JSON.stringify(to.meta) !==  JSON.stringify(from.meta)) {
         next()
+
       } else {
         try {
           // get user info
           // generate accessible routes map based on roles
           let accessRoutes  = filterAsyncRoutes(asyncRoutes, roles)
           store.commit('user/SET_ROUTES',accessRoutes.slice(0, accessRoutes.length - 1))
+          store.commit('user/SET_HASROLES', true)
           accessRoutes = staticRoutes.concat(accessRoutes)
           // dynamically add accessible routes
-          hasRoles = true
           router.addRoutes(accessRoutes)
           // hack method to ensure that addRoutes is complete
           // set the replace: true, so the navigation will not leave a history record

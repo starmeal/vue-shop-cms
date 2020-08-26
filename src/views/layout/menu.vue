@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-container">
+  <div class="menu-container" :key="$route.path">
     <div :class="['menu-con', {'is-collapse': isCollapse}]">
       <div class="menu-top-item" :class="{'is-collapse': isCollapse}" @click="changeIsCollapse">
         <Icon :icon="isCollapse ? 'yousuojin':'zuosuojin'" />
@@ -19,7 +19,7 @@
       </template>
     </div>
 
-    <div :class="['menu-second-container', {'active': isCollapseSecond}]">
+    <div :class="['menu-second-container', {'active': isCollapseSecond}]" v-if="menuItemList.length">
       <div :class="['second-title', {'active': isCollapseSecond}]">
         <span>{{fullTitle}}</span>
       </div>
@@ -92,6 +92,9 @@ export default {
     this.currentNodeKey = this.$route.matched[
       this.$route.matched.length - 1
     ].path;
+    this.$nextTick(() => {
+      this.handleIsExpand()
+    })
   },
   methods: {
     handleNodeClick(data, node, self) {
@@ -138,8 +141,13 @@ export default {
     },
     handleIsExpand() {
       if (this.isCollapseSecond && this.isCollapse) {
-        document.querySelector(".layout-main-container").style.marginLeft =
+        if (this.menuItemList.length) {
+                  document.querySelector(".layout-main-container").style.marginLeft =
           258 + "px";
+        } else {
+          document.querySelector(".layout-main-container").style.marginLeft =
+          138 + "px";
+        }
         return false;
       }
       if (!this.isCollapseSecond && this.isCollapse) {

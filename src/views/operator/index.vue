@@ -69,7 +69,7 @@
           <el-input v-model.trim="form.phone" size="mini" style="width:300px"></el-input>
         </el-form-item>
         <el-form-item label="分配角色" prop="roleId">
-          <el-select v-modell="form.roleId" placeholder="请选择">
+          <el-select v-model="form.roleId"  placeholder="请选择">
             <el-option v-for="item in select" :key="item.value" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
@@ -109,7 +109,12 @@ export default {
       rules: {
         nickName: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
+          {
+            min: 3,
+            max: 10,
+            message: "长度在 3 到 10 个字符",
+            trigger: "blur",
+          },
         ],
         actualName: [
           { required: true, message: "请输入操作员姓名", trigger: "blur" },
@@ -132,7 +137,7 @@ export default {
         curPage: 1,
         pageSize: 10,
       },
-      select: "",
+      select: [],
       totalCount: 0,
       loading: true,
       list: [],
@@ -168,8 +173,8 @@ export default {
         res.body.roleId = parseInt(res.body.roleId);
         this.form = res.body;
         this.password = res.body.password;
+        this.saveOrUpdateUser(1);
       });
-      this.saveOrUpdateUser(1);
     },
     saveOrUpdateUser(i) {
       if (i == 1) {
@@ -210,6 +215,7 @@ export default {
               this.$refs.ruleForm.clearValidate();
             }, 0);
             this.dTitle = false;
+            this.getList()
           } else {
             console.log("error submit!!");
             return false;

@@ -1,5 +1,6 @@
 import { login, plogin,resetingPassword  } from '@/api/login';
 const state = {
+  hasRoles: false,
   token: '',
   name: '',
   userName: '',
@@ -17,6 +18,8 @@ const actions = {
       commit("SET_NAME", "");
       commit("SET_CODE", "");
       commit("SET_ROLES", []);
+      commit("SET_ROUTES", []);
+      commit("SET_HASROLES", false);
       resolve();
     });
   },
@@ -103,6 +106,10 @@ const mutations = {
   },
   SET_ROUTES: (state, routes) => {
     state.routes = routes
+  },
+  SET_HASROLES: (state, hasRoles) => {
+    console.log(hasRoles, 'hasRoles')
+    state.hasRoles = hasRoles
   }
 };
 export default {

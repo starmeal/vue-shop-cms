@@ -288,6 +288,7 @@ export default {
     };
   },
   created() {
+    localStorage.clear();
     if (this.$route.query.type == 1) {
       this.isShow = false;
       this.handleRefreshCode();
@@ -419,6 +420,7 @@ export default {
                 this.loading = false;
                 if (code === "000000") {
                   this.$router.push({ path: this.redirect || "/" });
+                  // window.location.reload();
                 }
               })
               .catch((err) => {
@@ -434,6 +436,8 @@ export default {
               .dispatch("user/phonelogin", this.mobelForm)
               .then((res) => {
                 this.$router.push({ path: this.redirect || "/" });
+                // window.location.reload();
+
                 this.loading = false;
               })
               .catch(() => {
