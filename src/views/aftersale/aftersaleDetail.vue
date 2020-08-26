@@ -122,6 +122,16 @@
           </section>
         </div>
       </div>
+      <div class="wutit" v-if="aftersaleinfo.aftersaleImgsArr.length">协商图片</div>
+      <div class="bng-container" v-if="aftersaleinfo.aftersaleImgsArr.length">
+        <el-image
+          style="width: 100px; height: 100px;margin-right:10px"
+          :src="item"
+          :key="index"
+          v-for="(item,index) in aftersaleinfo.aftersaleImgsArr"
+          :preview-src-list="aftersaleinfo.aftersaleImgsArr"
+        ></el-image>
+      </div>
       <div class="btn-box">
         <!-- 退款 -->
         <div v-if="aftersaleinfo.aftersaleType == 1 && aftersaleinfo.aftersaleStatus == '997'">
@@ -255,7 +265,10 @@
           <el-radio v-model="radio" :label="item.asuaId">
             <span>
               [{{item.recipientsName}}收]{{item.addressInfo}}{{item.recipientsTel}}
-              <span v-if="item.isDefaultAddress == 1" style="color:rgb(240, 186, 8)">默认</span>
+              <span
+                v-if="item.isDefaultAddress == 1"
+                style="color:rgb(240, 186, 8)"
+              >默认</span>
             </span>
           </el-radio>
         </div>
@@ -890,12 +903,32 @@ export default {
 </script>
 <style>
 .address-tel .el-radio {
- white-space: pre-wrap;
- display: flex;
- align-items: center;
+  white-space: pre-wrap;
+  display: flex;
+  align-items: center;
 }
 </style>
 <style scoped>
+.wutit {
+  padding-left: 20px;
+  background: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  margin-top: 20px;
+  color: #666;
+  padding-top: 10px;
+}
+.bng-container {
+  width: 100%;
+  background: #fff;
+  padding: 20px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bng-container img {
+  margin-left: 10px;
+}
 * {
   font-size: 12px;
 }

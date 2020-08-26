@@ -338,7 +338,7 @@
           </el-table-column>
           <el-table-column property="address" label="运单号"></el-table-column>
         </el-table>
-        <el-form label-width="70px">
+        <el-form label-width="100px">
           <el-form-item label="配送信息">
             <div class="ems">
               <div>配送方式：{{fahuoinfo.pickupType}}</div>

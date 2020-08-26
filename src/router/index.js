@@ -43,12 +43,12 @@ export const asyncRoutes = [
       title: '店铺',
       fullTitle: '店铺首页',
       icon: 'dianpu',
-      // roles: [
-      //   "/shop/merchants/info/qualificationDetailEdit",
-      //   "/shop/merchants/info/queryShopNamingCertification",
-      //   "/shop/merchants/addShopMerchantsNotice",
-      //   "/shop/merchants/selectShopMerchantsNotice"
-      // ]
+      roles: [
+        // "/shop/merchants/info/qualificationDetailEdit",
+        "/shop/merchants/info/queryShopNamingCertification",
+        "/shop/merchants/addShopMerchantsNotice",
+        "/shop/merchants/selectShopMerchantsNotice"
+      ]
     },
     children: [
       {
@@ -58,30 +58,33 @@ export const asyncRoutes = [
           title: '店铺设置',
           parentPath: '/store',
           basePath: '/store',
+          roles: [
+            "/shop/merchants/info/selectDetailInfo"
+          ],
         },
         component: () => import('@/views/store'),
       },
-      {
-        path: '/authentication',
-        meta: {
-          title: '资质认证',
-          parentPath: '/store',
-          basePath: '/store',
-          roles: [
-            "/shop/merchants/info/queryQualificationDetail"
-          ]
-        },
-        component: () => import('@/views/store/authentication/index')
-      },
-      {
-        path: '/category',
-        meta: {
-          title: '类目资质认证',
-          parentPath: '/store',
-          basePath: '/store',
-        },
-        component: () => import('@/views/store/authentication/authentication')
-      },
+      // {
+      //   path: '/authentication',
+      //   meta: {
+      //     title: '资质认证',
+      //     parentPath: '/store',
+      //     basePath: '/store',
+      //     roles: [
+      //       "/shop/merchants/info/queryQualificationDetail"
+      //     ]
+      //   },
+      //   component: () => import('@/views/store/authentication/index')
+      // },
+      // {
+      //   path: '/category',
+      //   meta: {
+      //     title: '类目资质认证',
+      //     parentPath: '/store',
+      //     basePath: '/store',
+      //   },
+      //   component: () => import('@/views/store/authentication/authentication')
+      // },
       {
         path: '/shopNominate',
         meta: {
@@ -345,7 +348,7 @@ export const asyncRoutes = [
           parentPath: '/operator',
           basePath: '/operator',
           roles: [
-              "/shop/cms/permission/role/list"
+            "/shop/cms/permission/role/list"
           ]
         },
         component: () => import('@/views/operator/rolelist'),
