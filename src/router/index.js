@@ -136,45 +136,48 @@ export const asyncRoutes = [
           },
         ]
       },
-      // {
-      //   path: '/shippingMethods',
-      //   meta: {
-      //     title: '配送方式',
-      //     parentPath: '/store',
-      //     basePath: '/store',
-      //   },
-      //   component: () => import('@/views/routeview'),
-      //   children: [
-      //     {
-      //       path: '',
-      //       meta: {
-      //         title: '快递配送',
-      //         parentPath: '/shippingMethods',
-      //         basePath: '/store',
-      //       },
-      //       component: () => import('@/views/store/tongchengpeisong/list'),
-      //     },
-      //     {
-      //       path: '/expressDeliveryAdd',
-      //       hidden: true,
-      //       meta: {
-      //         title: '添加',
-      //         parentPath: '/shippingMethods',
-      //         basePath: '/store',
-      //       },
-      //       component: () => import('@/views/store/tongchengpeisong/add'),
-      //     },
-      //     {
-      //       path: '/intraCity',
-      //       meta: {
-      //         title: '同城配送',
-      //         parentPath: '/shippingMethods',
-      //         basePath: '/store',
-      //       },
-      //       component: () => import('@/views/store/shippingMethods/index'),
-      //     }
-      //   ]
-      // },
+      {
+        path: '/shippingMethods',
+        meta: {
+          title: '配送方式',
+          parentPath: '/store',
+          basePath: '/store',
+          roles: [
+            "/shop/template/getMerTemplateList"
+          ],
+        },
+        component: () => import('@/views/routeview'),
+        children: [
+          {
+            path: '',
+            meta: {
+              title: '快递配送',
+              parentPath: '/shippingMethods',
+              basePath: '/store',
+            },
+            component: () => import('@/views/store/tongchengpeisong/list'),
+          },
+          {
+            path: '/expressDeliveryAdd',
+            hidden: true,
+            meta: {
+              title: '添加',
+              parentPath: '/shippingMethods',
+              basePath: '/store',
+            },
+            component: () => import('@/views/store/tongchengpeisong/add'),
+          },
+          // {
+          //   path: '/intraCity',
+          //   meta: {
+          //     title: '同城配送',
+          //     parentPath: '/shippingMethods',
+          //     basePath: '/store',
+          //   },
+          //   component: () => import('@/views/store/shippingMethods/index'),
+          // }
+        ]
+      },
       // {
       //   path: '/home2',
       //   meta: {
@@ -214,9 +217,61 @@ export const asyncRoutes = [
 
       //   ]
       // }
-
     ]
   },
+  // {
+  //   path: '/bank',
+  //   component: () => import('@/views/layout/layout'),
+  //   meta: {
+  //     title: '提现',
+  //     fullTitle: '银行卡管理',
+  //     icon: 'shouhou-01',
+  //   },
+  //   children: [
+  //     {
+  //       meta: {
+  //         title: '申请提现',
+  //         parentPath: '/bank',
+  //         basePath: '/bank',
+  //         roles: [
+  //           "/shop/merchants/info/selectDetailInfo"
+  //         ],
+  //       },
+  //       path: '',
+  //       component: () => import('@/views/bank/index'),
+  //     },
+  //     {
+  //       meta: {
+  //         title: '添加银行卡',
+  //         parentPath: '/bank',
+  //         basePath: '/bank',
+  //       },
+  //       hidden: true,
+  //       path: '/addbank',
+  //       component: () => import('@/views/bank/addbank'),
+  //     },
+  //     {
+  //       meta: {
+  //         title: '添加对公账户',
+  //         parentPath: '/bank',
+  //         basePath: '/bank',
+  //       },
+  //       hidden: true,
+  //       path: '/addbas',
+  //       component: () => import('@/views/bank/addbas'),
+  //     },
+  //     {
+  //       meta: {
+  //         title: '银行卡列表',
+  //         parentPath: '/bank',
+  //         basePath: '/bank',
+  //       },
+  //       path: '/banklist',
+  //       component: () => import('@/views/bank/banklist'),
+  //     },
+
+  //   ]
+  // },
   {
     path: '/goods',
     component: () => import('@/views/layout/layout'),

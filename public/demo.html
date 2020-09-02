@@ -9,17 +9,16 @@
 
 <body>
     <script>
-        var points = [40, 100, 1, 5, 25, 10, [40, 100, 1, 5, 25, 10]];
-        let flatDeep = (arr) => {
-            return arr.reduce((res, cur) => {
-                if (Array.isArray(cur)) {
-                    return [...res, ...flatDeep(cur)]
-                } else {
-                    return [...res, cur]
-                }
-            }, [])
-        }
-        console.log(flatDeep(points))
+        var arr = [
+            {
+                key: "保质期",
+                value: []
+            }
+        ]
+        let abc = arr.find((el) => {
+            return el.key == '保质期' && el.value.length == 0
+        })
+        console.log(abc)
     </script>
 </body>
 

@@ -28,7 +28,7 @@
               @click="justsoso(index)"
             >
               {{item}}
-              <span v-if="index != aftersaleinfo.canDoText.length-1">,</span>
+              <span v-if="aftersaleinfo.canDoText && index != aftersaleinfo.canDoText.length-1">,</span>
             </span>
             <span style="color:#666" v-if="aftersaleinfo.isYellow == 1">还可以：</span>
             <span
@@ -80,6 +80,7 @@
           </section>
           <!-- <section>联系方式：{{aftersaleinfo.userMobile}}</section> -->
           <section>退款原因：{{aftersaleinfo.aftersaleReason}}</section>
+          <section class="flex-ssss"><span> 退款说明：</span><span>{{aftersaleinfo.aftersaleDes}}</span> </section>
           <!-- <section>退款说明:{{aftersaleinfo.aftersaleReason}}</section> -->
           <!-- <section>售后历史：{{aftersaleinfo.historyAftersaleNum}}</section> -->
         </div>
@@ -122,8 +123,8 @@
           </section>
         </div>
       </div>
-      <div class="wutit" v-if="aftersaleinfo.aftersaleImgsArr.length">协商图片</div>
-      <div class="bng-container" v-if="aftersaleinfo.aftersaleImgsArr.length">
+      <div class="wutit" v-if="aftersaleinfo.aftersaleImgsArr && aftersaleinfo.aftersaleImgsArr.length">协商图片</div>
+      <div class="bng-container" v-if="aftersaleinfo.aftersaleImgsArr && aftersaleinfo.aftersaleImgsArr.length">
         <el-image
           style="width: 100px; height: 100px;margin-right:10px"
           :src="item"
@@ -1172,6 +1173,9 @@ export default {
   display: inline-block;
   margin-right: 10px;
   padding: 5px 0px;
+}
+.flex-ssss{
+  display: flex;
 }
 /* .time-content{
 

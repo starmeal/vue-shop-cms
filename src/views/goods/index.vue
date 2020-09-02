@@ -107,7 +107,7 @@
           style="width: 100%"
         >
           <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column prop="sort" label="排序" width="50px"></el-table-column>
+          <!-- <el-table-column prop="sort" label="排序" width="50px"></el-table-column> -->
           <el-table-column prop="createTime" label="创建时间"></el-table-column>
           <el-table-column prop="putawayTime" label="上架时间" width="140px"></el-table-column>
           <el-table-column prop="goodsCode" label="ID" width="150px"></el-table-column>

@@ -69,7 +69,7 @@
           <el-input v-model.trim="form.phone" size="mini" style="width:300px"></el-input>
         </el-form-item>
         <el-form-item label="分配角色" prop="roleId">
-          <el-select v-model="form.roleId"  placeholder="请选择">
+          <el-select v-model="form.roleId" placeholder="请选择">
             <el-option v-for="item in select" :key="item.value" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
@@ -215,7 +215,8 @@ export default {
               this.$refs.ruleForm.clearValidate();
             }, 0);
             this.dTitle = false;
-            this.getList()
+            this.getpermissionuser();
+            this.getgetRoleListCommon();
           } else {
             console.log("error submit!!");
             return false;

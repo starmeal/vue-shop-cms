@@ -1,4 +1,3 @@
-export const hasRoles = false
 const routeFile = require.context('@/views/', true, /router.js/);
 export const asyncRoutes = [];
 routeFile.keys().forEach((key) => {
@@ -23,8 +22,8 @@ function hasPermission(roles, route) {
  * @param roles
  */
 export function filterAsyncRoutes(routes, roles) {
-  if (roles === '*') {
-    return asyncRoutes
+  if (roles[0] === '*') {
+    return routes
   }
   const result = []
   routes.forEach((route) => {

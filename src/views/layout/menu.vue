@@ -152,7 +152,7 @@ export default {
       }
       if (!this.isCollapseSecond && this.isCollapse) {
         document.querySelector(".layout-main-container").style.marginLeft =
-          120 + "px";
+          140 + "px";
         return false;
       }
       if (this.isCollapseSecond && !this.isCollapse) {

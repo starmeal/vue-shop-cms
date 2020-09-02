@@ -324,14 +324,15 @@
                         :disabled="disabled"
                         placeholder="生产日期"
                       ></el-date-picker>
-                      <el-input
+                      <el-input-number
                         v-model="item.day"
                         size="mini"
-                        style="width:200px;"
+                        style="width:150px;"
+                        :controls="false"
                         :disabled="disabled"
                       >
-                        <el-button type="primary" slot="append" @click="addskuvalue(item,index)">添加</el-button>
-                      </el-input>
+                      </el-input-number>
+                      <el-button  size="mini" @click="addskuvalue(item,index)">添加</el-button>
                     </template>
                     <template v-else>
                       <el-input
@@ -900,6 +901,9 @@ export default {
   },
   mounted() {},
   methods: {
+    daychange(val){
+
+    },
     nospace(val) {
       this.form.goodsName = val.replace(/\s+/g, "");
     },
@@ -1415,7 +1419,7 @@ export default {
     submitForm() {
       this.$refs.goodForm.validate((valid) => {
         if (valid) {
-          if (this.form.status != 5 && this.form.stock <= 0 ) {
+          if (this.form.status != 5 && this.form.stock <= 0) {
             this.$message({
               message: "库存值填写不正确",
               type: "error",
@@ -1480,6 +1484,23 @@ export default {
             });
             return false;
           }
+          let abc = this.form.specification.find((el) => {
+            return el.key == "保质期" && el.value.length == 0;
+          });
+          let def = this.form.specificationList.find((el) => {
+            if (el["保质期"]) {
+              return el;
+            }
+          });
+          console.log(def);
+          if (this.form.isOnTime == 1 && this.form.resource == 2 && abc && !def) {
+            this.$message({
+              message: "在多规格开启是否临期保质期sku必须有值",
+              type: "error",
+              center: true,
+            });
+            return false;
+          }
           let form = Object.assign({}, this.form, {
             discount:
               this.form.goodsOriginalPrice > 0
@@ -1497,7 +1518,7 @@ export default {
             form.status = 1;
           }
           form.specification.forEach((el) => {
-            if (el.skuvalue) {
+            if (el.skuvalue || el.skuvalue == "") {
               delete el.skuvalue;
             }
             if (el.time) {
@@ -1509,6 +1530,7 @@ export default {
             if (el.date) {
               delete el.date;
             }
+            console.log(el);
           });
           form.specificationList.forEach((el) => {
             if (el["保质期"] && el["保质期"] !== "") {
@@ -1516,7 +1538,6 @@ export default {
               el.qualityTime = el["保质期"].split("至")[1];
             }
           });
-          console.log(form);
           if (this.$route.query.goodsCode && !this.$route.query.status) {
             update(form).then((res) => {
               this.$message({
@@ -1631,13 +1652,24 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)",
       });
+      let houzhui = "";
+      let fileName = "";
+      houzhui = file.name.split(".");
       let fenge = file.name.split(".");
-
+      let now = new Date();
+      let year = now.getFullYear(); // 得到年份
+      let month = now.getMonth(); // 得到月份
+      let date = now.getDate(); // 得到日期
       var timestamp = Date.parse(new Date());
-      let FILENAME = `${timestamp}${Math.random().toString(9).substr(2)}.${
-        fenge[1]
+      month = month + 1;
+      var timestamp = Date.parse(new Date());
+      fileName = `${parseInt(
+        (Math.random() + 1) * Math.pow(10, 18 - 1)
+      )}${timestamp}.${houzhui[houzhui.length - 1]}`;
+
+      let consat = `hs_star/app_shop/goods/${year}${month}${date}/${
+        fileName || timestamp
       }`;
-      let consat = `hs_star/app_shop/goods/${FILENAME}`;
       let that = this;
       SSupload(consat, file)
         .then(({ res, url, name }) => {
