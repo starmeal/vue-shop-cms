@@ -9,16 +9,52 @@
 
 <body>
     <script>
-        var arr = [
-            {
-                key: "保质期",
-                value: []
+        // 插入排序
+        function insert(ary) {
+            // 1准备新数组用来存储开始先放一个进去
+            let handle = []
+            handle.push(ary[0])
+            // 从第二项开始以此比较
+            for (let i = 1; i < ary.length; i++) {
+                let A = ary[i]
+                //跟第一个比较从后向前比较
+                for (let j = handle.length - 1; j >= 0; j--) {
+                    // 每一次要比较存放的
+                    let B = handle[j]
+                    // 如果当前的新牌A必要比较的牌大,把A放到B的后面
+                    if (A > B) {
+                        handle.splice(j + 1, 0, A)
+                        break
+                    }
+                    if (j === 0) {
+                        handle.unshift(A)
+                    }
+                }
             }
-        ]
-        let abc = arr.find((el) => {
-            return el.key == '保质期' && el.value.length == 0
-        })
-        console.log(abc)
+            return handle
+        }
+        let ary = [12, 8, 24, 16, 1];
+        insert(ary);
+        // 查找字符串
+        (function () {
+            // 循环原始字符串每一项，让每一项从当前位置后截取 t.length个字符串跟t进行比较如果不一样继续循环，如果一样返回当前索引循环结束
+            function myIndexOf(t) {
+                let lenT = t.length, lenS = this.length, res = -1
+                // 循环查找减去需要查找的位数才能找到
+                for (let i = 0; i <= lenS - lenT; i++) {
+                    let char = this[i]
+                    if(this.substr(i, lenT) === t){
+                        res = i
+                        break
+                    }
+                }
+                return res
+            }
+            String.prototype.myIndexOf = myIndexOf
+        })();
+        let S = 'helloWord',
+            t = "d"
+        console.log(S.myIndexOf(t))
     </script>
 </body>
 
