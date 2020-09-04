@@ -12,6 +12,9 @@ import '@/router/permission.js'
 import '@/utils/vhight'
 import VueClipboard from 'vue-clipboard2'
 VueClipboard.config.autoSetContainer = true
+// import starMiniUi from 'star-mini-ui'
+// import 'star-mini-ui/dist/star-mini-ui.css'
+// Vue.use(starMiniUi)
 Vue.use(VueClipboard)
 Vue.config.productionTip = false
 Vue.use(ElementUI, {

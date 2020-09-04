@@ -34,27 +34,64 @@
             return handle
         }
         let ary = [12, 8, 24, 16, 1];
-        insert(ary);
-        // 查找字符串
-        (function () {
-            // 循环原始字符串每一项，让每一项从当前位置后截取 t.length个字符串跟t进行比较如果不一样继续循环，如果一样返回当前索引循环结束
-            function myIndexOf(t) {
-                let lenT = t.length, lenS = this.length, res = -1
-                // 循环查找减去需要查找的位数才能找到
-                for (let i = 0; i <= lenS - lenT; i++) {
-                    let char = this[i]
-                    if(this.substr(i, lenT) === t){
-                        res = i
-                        break
+        // console.log(insert(ary));
+        Function.prototype.myCall = function (context, ...arg) {
+            const fn = Symbol('临时属性')
+            context[fn] = this
+            context[fn](...arg)
+            delete context[fn]
+        }
+        function a(a, b, c) {
+            console.log(this.name);
+            console.log(a, b, c)
+        }
+        const b = {
+            name: "segmentFault"
+        }
+        // a.myCall(b, 1, 2, 3)
+            // 查找字符串
+            ; (function () {
+                // 循环原始字符串每一项，让每一项从当前位置后截取 t.length个字符串跟t进行比较如果不一样继续循环，如果一样返回当前索引循环结束
+                function myIndexOf(t) {
+                    let lenT = t.length, lenS = this.length, res = -1
+                    // 循环查找减去需要查找的位数才能找到
+                    for (let i = 0; i <= lenS - lenT; i++) {
+                        let char = this[i]
+                        if (this.substr(i, lenT) === t) {
+                            res = i
+                            break
+                        }
                     }
+                    return res
                 }
-                return res
-            }
-            String.prototype.myIndexOf = myIndexOf
-        })();
+                String.prototype.myIndexOf = myIndexOf
+            })();
         let S = 'helloWord',
             t = "d"
-        console.log(S.myIndexOf(t))
+        // console.log(S.myIndexOf(t))
+        Function.prototype.newCall = function (obj) {
+            var obj = obj || window
+            obj.p = this
+            var newArguments = []
+            for (var i = 1; i < arguments.length; i++) {
+                newArguments.push('arguments[' + i + ']')
+            }
+            var result = eval('obj.p(' + newArguments + ')')
+            delete obj.p
+            return result
+        }
+        a.newCall(b, 1, 2, 3, 4)
+        // function ccc (a, b, c) {
+        //   return a + b + c
+        // }
+        // function curry (fn, ...currags) {
+        //    return currags.length < fn.length ? (...innerarg) => curry(fn, ...currags, ...innerarg) : fn(...currags)
+        // }
+        // let add = curry(ccc);
+        // console.log(add(1)(2)(3))
+        // console.log(add(1)(2,3))
+        // console.log(add(1,2)(3))
+        // console.log(add(1,2,3))
     </script>
 </body>
 
