@@ -265,7 +265,7 @@ export default {
         });
         return false;
       }
-      let consat = `hs_star/app_shop/goods/${this.randomNum(1, 100)}`;
+      let consat = `hs_star/app_shop/authentication/${this.randomNum(1, 100)}`;
       let that = this;
       SSupload(consat, file)
         .then(({ res, url, name }) => {

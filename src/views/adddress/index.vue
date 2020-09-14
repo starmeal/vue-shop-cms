@@ -137,6 +137,7 @@
 <script>
 import axios from "axios";
 import cascader from "@/components/city/cascader.vue";
+import city from "@/components/city/district.json";
 import { inquireAddressList } from "@/api/aftersale";
 import {
   addOrModifyMerchantAddress,
@@ -208,15 +209,16 @@ export default {
     cascader,
   },
   created() {
-    axios
-      .get(
-        "https://restapi.amap.com/v3/config/district?keywords=中国&subdistrict=3&key=53db67bb6768fb1da369ea6603e05e1b"
-      )
-      .then((res) => {
-        if (res.statusText == "OK") {
-          districts = res.data.districts[0].districts;
-        }
-      });
+    // axios
+    //   .get(
+    //     "https://restapi.amap.com/v3/config/district?keywords=中国&subdistrict=3&key=53db67bb6768fb1da369ea6603e05e1b"
+    //   )
+    //   .then((res) => {
+    //     if (res.statusText == "OK") {
+    //       districts = res.data.districts[0].districts;
+    //     }
+    //   });
+    districts = city.districts[0].districts
     this.getList();
   },
   methods: {

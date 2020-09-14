@@ -1666,7 +1666,6 @@ export default {
       fileName = `${parseInt(
         (Math.random() + 1) * Math.pow(10, 18 - 1)
       )}${timestamp}.${houzhui[houzhui.length - 1]}`;
-
       let consat = `hs_star/app_shop/goods/${year}${month}${date}/${
         fileName || timestamp
       }`;

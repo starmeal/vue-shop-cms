@@ -277,13 +277,26 @@ export const asyncRoutes = [
       },
       {
         meta: {
-          title: '财务概况',
+          title: '提现明细',
           parentPath: '/bank',
           basePath: '/bank',
+          // roles: [
+          //   "/shop/sendWithdrawal/bankCardList"
+          // ]
         },
-        path: '/moeny',
-        component: () => import('@/views/bank/moeny'),
+        path: '/moenylist',
+        component: () => import('@/views/bank/moenylist'),
       },
+      
+      // {
+      //   meta: {
+      //     title: '财务概况',
+      //     parentPath: '/bank',
+      //     basePath: '/bank',
+      //   },
+      //   path: '/moeny',
+      //   component: () => import('@/views/bank/moeny'),
+      // },
     ]
   },
   {

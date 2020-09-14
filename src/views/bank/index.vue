@@ -5,14 +5,18 @@
       <div class="size-tw">可提现金额：￥{{allMoney.nowAmount}}</div>
       <el-form ref="form" :rules="rules" :size="size" :model="form" label-width="150px">
         <el-form-item label="填写提现金额" prop="nowMoney">
-          <el-input-number
+          <el-input
             :max="5000"
+            @keyup.native="changeMoeny"
             :controls="false"
             style="width:200px;margin-right:20px"
-            v-model="form.nowMoney"
-          ></el-input-number>
+            v-model.trim="form.nowMoney"
+          ></el-input>
           <el-button :size="size" type="primary" @click="allin">全部提现</el-button>
-          <div class="tips">温馨提示：最多提现每次不超5000元，到帐金额小于提现金额，差额为扣除的技术服务费，详情仔细阅读《 XXXX合同》</div>
+          <div class="tips">
+            温馨提示：最多提现每次不超5000元，到帐金额小于提现金额，差额为扣除的技术服务费，详情仔细阅读
+            <span style="color:rgb(0, 155, 255)" class="curpoiner" @click="openxieyi">《提现协议》</span>
+          </div>
         </el-form-item>
         <el-form-item label="到账银行卡" prop="account">
           <el-select v-model="form.account" placeholder="请选择" style="width:200px;margin-right:20px">
@@ -61,7 +65,7 @@
           <el-button :size="size" type="danger" @click="submitgoods()">提交申请</el-button>
           <div class="bok">
             我已阅读并同意
-            <span style="color:rgb(0, 155, 255)">《提现协议》</span>
+            <span style="color:rgb(0, 155, 255)" class="curpoiner" @click="openxieyi">《提现协议》</span>
           </div>
         </el-form-item>
       </el-form>
@@ -71,7 +75,7 @@
 
 <script>
 var myreg = /^[1][3,4,5,6,7,8,9,][0-9]{9}$/;
-import { allBalances, mybankCardList,submitWithdrawal  } from "@/api/bank";
+import { allBalances, mybankCardList, submitWithdrawal } from "@/api/bank";
 import { cmssendSMCode } from "@/api/login";
 
 export default {
@@ -128,6 +132,14 @@ export default {
     this.getMOeny();
   },
   methods: {
+    openxieyi() {
+      window.open("http://shanghutixianxieyi.html");
+      // window.open('http://shanghutixianxieyi.html')
+    },
+    changeMoeny(val) {
+      this.form.nowMoney = this.form.nowMoney.replace(/[^\.\d]/g, "");
+      this.form.nowMoney = this.form.nowMoney.replace(".", "");
+    },
     getmybannk() {
       mybankCardList().then((res) => {
         this.options = res.body;
@@ -135,7 +147,9 @@ export default {
     },
     allin() {
       this.form.nowMoney =
-        this.allMoney.nowAmount > 5000 ? 5000 : this.allMoney.nowAmount;
+        this.allMoney.nowAmount > 5000
+          ? 5000
+          : parseInt(this.allMoney.nowAmount);
     },
     getMOeny() {
       allBalances().then((res) => {
@@ -195,7 +209,15 @@ export default {
     submitgoods() {
       this.$refs.form.validate((valid) => {
         if (valid) {
-          this.form.nowMoney = this.form.nowMoney.toString()
+          if (this.form.nowMoney > 5000) {
+            this.$message({
+              message: "单笔提现金额请小于5000元",
+              type: "error",
+              center: true,
+            });
+            return false;
+          }
+          this.form.nowMoney = this.form.nowMoney.toString();
           submitWithdrawal(this.form).then((res) => {
             this.$message({
               message: "申请成功",
@@ -247,5 +269,8 @@ export default {
 .bok {
   color: #606266;
   font-size: 12px;
+}
+.curpoiner {
+  cursor: pointer;
 }
 </style>

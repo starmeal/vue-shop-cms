@@ -419,8 +419,8 @@ export default {
               .then(({ code }) => {
                 this.loading = false;
                 if (code === "000000") {
-                  this.$router.push({ path: this.redirect || "/" });
                   // window.location.reload();
+                  this.$router.push({ path: this.redirect || "/" });
                 }
               })
               .catch((err) => {
@@ -435,8 +435,8 @@ export default {
             this.$store
               .dispatch("user/phonelogin", this.mobelForm)
               .then((res) => {
-                this.$router.push({ path: this.redirect || "/" });
                 // window.location.reload();
+                this.$router.push({ path: this.redirect || "/" });
 
                 this.loading = false;
               })

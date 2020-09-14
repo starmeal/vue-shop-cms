@@ -14,9 +14,9 @@ router.beforeEach((to, from, next) => {
   // start progress bar
   NProgress.start()
   // set page title
-/*
-  document.title = getPageTitle(to.meta.title)
-*/
+  /*
+    document.title = getPageTitle(to.meta.title)
+  */
 
   // determine whether the user has logged in
   if (token) {
@@ -26,16 +26,15 @@ router.beforeEach((to, from, next) => {
       NProgress.done()
     } else {
       // determine whether the user has obtained his permission roles through getInfo
-      if (store.state.user.hasRoles && JSON.stringify(to.meta) !==  JSON.stringify(from.meta)) {
+      if (store.state.user.hasRoles && JSON.stringify(to.meta) !== JSON.stringify(from.meta)) {
         next()
-
       } else {
         try {
           // get user info
           // generate accessible routes map based on roles
-          let accessRoutes  = filterAsyncRoutes(asyncRoutes, roles)
-          store.commit('user/SET_ROUTES',accessRoutes.slice(0, accessRoutes.length - 1))
+          let accessRoutes = filterAsyncRoutes(asyncRoutes, roles)
           store.commit('user/SET_HASROLES', true)
+          store.commit('user/SET_ROUTES', accessRoutes.slice(0, accessRoutes.length - 1))
           accessRoutes = staticRoutes.concat(accessRoutes)
           // dynamically add accessible routes
           router.addRoutes(accessRoutes)

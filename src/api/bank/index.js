@@ -56,3 +56,10 @@ export function updateBankCard(data) {
     data: data
   });
 }
+export function withdrawalList(data) {
+  return request({
+    url: "/withdrawal/withdrawalList",
+    method: "post",
+    data: data
+  });
+}
