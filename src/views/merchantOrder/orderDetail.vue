@@ -15,25 +15,27 @@
         </div>
         <div class="flex-container">
           <!-- {{orderInfo.orderFinishTime == true}} -->
+          <!-- orderInfo.orderStatus -->
+          <!--  -->
           <el-steps :active="orderInfo.orderStatus" align-center style="width:90%;margin:0 auto">
             <el-step title="买家下单">
               <template slot="description" style="font-size:10px">
                 <div style="font-size:10px">{{orderInfo.createTime}}</div>
               </template>
             </el-step>
-            <el-step title="买家付款">
+            <el-step title="买家付款" v-if="orderInfo.orderStatus != 6">
               <template slot="description" style="font-size:10px">
                 <div style="font-size:10px">{{orderInfo.payTime}}</div>
               </template>
             </el-step>
-            <el-step title="商家发货">
+            <el-step title="商家发货"  v-if="orderInfo.orderStatus != 6">
               <template slot="description" style="font-size:10px">
                 <div style="font-size:10px">{{orderInfo.deliveryTime}}</div>
               </template>
             </el-step>
             <el-step :title="orderInfo.orderFinishTime ? '交易成功' : '交易关闭'">
               <template slot="description" style="font-size:10px">
-                <div>{{orderInfo.orderFinishTime ? orderInfo.orderFinishTime : orderInfo.orderFinishTime}}</div>
+                <div>{{orderInfo.orderFinishTime ? orderInfo.orderFinishTime : orderInfo.orderClosedTime}}</div>
               </template>
             </el-step>
           </el-steps>
