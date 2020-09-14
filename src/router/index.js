@@ -219,86 +219,86 @@ export const asyncRoutes = [
       // }
     ]
   },
-  {
-    path: '/bank',
-    component: () => import('@/views/layout/layout'),
-    meta: {
-      title: '财务',
-      fullTitle: '银行卡管理',
-      icon: 'shouhou-01',
-      roles: [
-        "/shop/sendWithdrawal/bankCardList"
-      ]
-    },
-    children: [
-      {
-        meta: {
-          title: '申请提现',
-          parentPath: '/bank',
-          basePath: '/bank',
-          roles: [
-            "/shop/sendWithdrawal/submitWithdrawal"
-          ],
-        },
-        path: '',
-        component: () => import('@/views/bank/index'),
-      },
-      {
-        meta: {
-          title: '添加银行卡',
-          parentPath: '/bank',
-          basePath: '/bank',
-        },
-        hidden: true,
-        path: '/addbank',
-        component: () => import('@/views/bank/addbank'),
-      },
-      {
-        meta: {
-          title: '添加对公账户',
-          parentPath: '/bank',
-          basePath: '/bank',
-        },
-        hidden: true,
-        path: '/addbas',
-        component: () => import('@/views/bank/addbas'),
-      },
-      {
-        meta: {
-          title: '银行卡列表',
-          parentPath: '/bank',
-          basePath: '/bank',
-          roles: [
-            "/shop/sendWithdrawal/bankCardList"
-          ]
-        },
-        path: '/banklist',
-        component: () => import('@/views/bank/banklist'),
-      },
-      {
-        meta: {
-          title: '提现明细',
-          parentPath: '/bank',
-          basePath: '/bank',
-          // roles: [
-          //   "/shop/sendWithdrawal/bankCardList"
-          // ]
-        },
-        path: '/moenylist',
-        component: () => import('@/views/bank/moenylist'),
-      },
+  // {
+  //   path: '/bank',
+  //   component: () => import('@/views/layout/layout'),
+  //   meta: {
+  //     title: '财务',
+  //     fullTitle: '银行卡管理',
+  //     icon: 'shouhou-01',
+  //     roles: [
+  //       "/shop/sendWithdrawal/bankCardList"
+  //     ]
+  //   },
+  //   children: [
+  //     {
+  //       meta: {
+  //         title: '申请提现',
+  //         parentPath: '/bank',
+  //         basePath: '/bank',
+  //         roles: [
+  //           "/shop/sendWithdrawal/submitWithdrawal"
+  //         ],
+  //       },
+  //       path: '',
+  //       component: () => import('@/views/bank/index'),
+  //     },
+  //     {
+  //       meta: {
+  //         title: '添加银行卡',
+  //         parentPath: '/bank',
+  //         basePath: '/bank',
+  //       },
+  //       hidden: true,
+  //       path: '/addbank',
+  //       component: () => import('@/views/bank/addbank'),
+  //     },
+  //     {
+  //       meta: {
+  //         title: '添加对公账户',
+  //         parentPath: '/bank',
+  //         basePath: '/bank',
+  //       },
+  //       hidden: true,
+  //       path: '/addbas',
+  //       component: () => import('@/views/bank/addbas'),
+  //     },
+  //     {
+  //       meta: {
+  //         title: '银行卡列表',
+  //         parentPath: '/bank',
+  //         basePath: '/bank',
+  //         roles: [
+  //           "/shop/sendWithdrawal/bankCardList"
+  //         ]
+  //       },
+  //       path: '/banklist',
+  //       component: () => import('@/views/bank/banklist'),
+  //     },
+  //     {
+  //       meta: {
+  //         title: '提现明细',
+  //         parentPath: '/bank',
+  //         basePath: '/bank',
+  //         // roles: [
+  //         //   "/shop/sendWithdrawal/bankCardList"
+  //         // ]
+  //       },
+  //       path: '/moenylist',
+  //       component: () => import('@/views/bank/moenylist'),
+  //     },
       
-      // {
-      //   meta: {
-      //     title: '财务概况',
-      //     parentPath: '/bank',
-      //     basePath: '/bank',
-      //   },
-      //   path: '/moeny',
-      //   component: () => import('@/views/bank/moeny'),
-      // },
-    ]
-  },
+  //     // {
+  //     //   meta: {
+  //     //     title: '财务概况',
+  //     //     parentPath: '/bank',
+  //     //     basePath: '/bank',
+  //     //   },
+  //     //   path: '/moeny',
+  //     //   component: () => import('@/views/bank/moeny'),
+  //     // },
+  //   ]
+  // },
   {
     path: '/goods',
     component: () => import('@/views/layout/layout'),
