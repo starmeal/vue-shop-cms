@@ -110,7 +110,7 @@
             placeholder="请输入商品名称/商品货号"
             v-model="form.noticeName"
             class="input-with-select"
-            style="width:240px"
+            style="width:250px"
           >
             <el-button slot="append">搜索</el-button>
           </el-input>
@@ -118,7 +118,7 @@
             placeholder="请选择商品"
             v-model="form.noticeName"
             class="input-with-select"
-            style="width:280px;margin-left:30px"
+            style="width:250px;margin-left:30px"
           >
             <el-button slot="append">添加</el-button>
           </el-input>
@@ -126,6 +126,8 @@
         <el-form-item>
           <el-button type="primary">完成</el-button>
           <el-button>取消</el-button>
+        </el-form-item>
+        <el-form-item>
         </el-form-item>
       </el-form>
     </section>
@@ -207,6 +209,11 @@ export default {
 }
 </style>
 <style scoped lang="scss">
+.form-container {
+  width: 100%;
+  background: #f7f6f9;
+  height: auto;
+}
 .font-f {
   font-size: 12px;
   color: #606266;
