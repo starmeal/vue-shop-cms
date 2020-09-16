@@ -14,8 +14,12 @@
           ></el-input>
           <el-button :size="size" type="primary" @click="allin">全部提现</el-button>
           <div class="tips">
-            温馨提示：最多提现每次不超5000元，到帐金额小于提现金额，差额为扣除的技术服务费，详情仔细阅读
-            <span style="color:rgb(0, 155, 255)" class="curpoiner" @click="openxieyi">《提现协议》</span>
+            温馨提示：最多提现每次不超5000元，到帐金额小于提现金额，最新提现5元,差额为扣除的技术服务费，详情仔细阅读
+            <span
+              style="color:rgb(0, 155, 255)"
+              class="curpoiner"
+              @click="openxieyi"
+            >《提现协议》</span>
           </div>
         </el-form-item>
         <el-form-item label="到账银行卡" prop="account">
@@ -27,8 +31,8 @@
               :value="item.account"
             ></el-option>
           </el-select>
-          <el-button :size="size" @click="goadd(1)">添加银行卡</el-button>
-          <el-button :size="size" @click="goadd(2)">添加对公账户</el-button>
+          <el-button :size="size" @click="goadd(1)" type="primary">添加银行卡</el-button>
+          <el-button :size="size" @click="goadd(2)" type="primary">添加对公账户</el-button>
         </el-form-item>
         <el-form-item label="短信验证码" prop="verifiCode">
           <el-input
@@ -133,7 +137,9 @@ export default {
   },
   methods: {
     openxieyi() {
-      window.open("http://shanghutixianxieyi.html");
+      window.open(
+        "https://hs.star.cms.xingfaner.cn/xieyi/shanghutixianxieyi.html"
+      );
       // window.open('http://shanghutixianxieyi.html')
     },
     changeMoeny(val) {
@@ -209,6 +215,14 @@ export default {
     submitgoods() {
       this.$refs.form.validate((valid) => {
         if (valid) {
+          if (this.form.nowMoney < 5) {
+            this.$message({
+              message: "单笔最小提现金额5元",
+              type: "error",
+              center: true,
+            });
+            return false;
+          }
           if (this.form.nowMoney > 5000) {
             this.$message({
               message: "单笔提现金额请小于5000元",
@@ -222,6 +236,9 @@ export default {
             this.$message({
               message: "申请成功",
               type: "success",
+            });
+            this.$router.push({
+              path: "/moenylist",
             });
           });
         } else {

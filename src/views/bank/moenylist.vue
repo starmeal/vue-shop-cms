@@ -3,7 +3,7 @@
     <section ref="merchantslabel">
       <div class="operation-container">
         <el-form ref="form" :size="size" label-width="70px">
-          <el-form-item label="下单时间">
+          <el-form-item label="申请时间">
             <p class="orderTime">
               <el-date-picker
                 :size="size"
@@ -155,8 +155,8 @@ export default {
           1
       );
       this.createTime = [start, end];
-      this.listpage.createTimeBegin = formatDate(start);
-      this.listpage.createTimeEnd = formatDate(end);
+      this.listpage.beginTimeStr = formatDate(start);
+      this.listpage.endTimeStr = formatDate(end);
     },
     //时间选择器
     timeChange(val) {
@@ -181,8 +181,8 @@ export default {
           1
       );
       this.createTime = [start, end];
-      this.listpage.createTimeBegin = formatDate(start);
-      this.listpage.createTimeEnd = formatDate(end);
+      this.listpage.beginTimeStr = formatDate(start);
+      this.listpage.endTimeStr = formatDate(end);
     },
     //最近7天按钮
     lastSeven() {
@@ -196,8 +196,8 @@ export default {
           1
       );
       this.createTime = [start, end];
-      this.listpage.createTimeBegin = formatDate(start);
-      this.listpage.createTimeEnd = formatDate(end);
+      this.listpage.beginTimeStr = formatDate(start);
+      this.listpage.endTimeStr = formatDate(end);
     },
     //最近30天按钮
     lastThirty() {
@@ -211,8 +211,8 @@ export default {
           1
       );
       this.createTime = [start, end];
-      this.listpage.createTimeBegin = formatDate(start);
-      this.listpage.createTimeEnd = formatDate(end);
+      this.listpage.beginTimeStr = formatDate(start);
+      this.listpage.endTimeStr = formatDate(end);
     },
     // 请求列表
     async getList() {

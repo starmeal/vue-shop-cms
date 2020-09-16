@@ -3,7 +3,7 @@
     <section class="form-container">
       <div style="height:20px"></div>
       <el-form ref="form" :rules="rules" :size="size" :model="form" label-width="150px">
-        <el-form-item label="优惠券名称1" prop="noticeName">
+        <el-form-item label="优惠券名称" prop="noticeName">
           <el-input
             style="width:300px"
             class="input-update"
@@ -125,7 +125,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary">完成</el-button>
-          <el-button>取消1</el-button>
+          <el-button>取消</el-button>
         </el-form-item>
         <el-form-item>
         </el-form-item>
