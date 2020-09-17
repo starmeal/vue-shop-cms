@@ -23,12 +23,12 @@
             </el-form-item>
             <el-form-item v-if="status==null || status == 2" label="店铺名称" prop="shopMerchantsName">
               <el-input v-model="form.shopMerchantsName" show-word-limit maxlength="30" @change="shopNameChange" :class="{styleShop: isShowShop}"></el-input>
-              <div style="font-size: 12px;color:#999;">请详细阅读 <a style="color:#3976e6" href="https://hs.star.cms.xingfaner.cn/xieyi/mingmingguizhe.html" target="_blank">《店铺名称命名规范》</a></div>
+              <div style="font-size: 12px;color:#999;">请详细阅读 <a style="color:#3976e6"  href="https://hs.star.cms.xingfaner.cn/xieyi/mingmingguizhe.html" target="_blank">《店铺名称命名规范》</a></div>
               <div v-show="isShowShop" style="font-size:12px;color: #F56C6C;">店铺名称中含有违禁词：{{hotCard}}</div>
             </el-form-item>
             <el-form-item v-if="status == 1 || status == 3" label="店铺名称" prop="shopMerchantsName">
               <el-input v-model="form.shopMerchantsName" show-word-limit maxlength="30" @change="shopNameChange" readonly="readonly" :class="{styleShop: isShowShop}"></el-input>
-              <div style="font-size: 12px;color:#999;">请详细阅读 <a style="color:#3976e6" href="https://hs.star.cms.xingfaner.cn/xieyi/mingmingguizhe.html">《店铺名称命名规范》</a></div>
+              <div style="font-size: 12px;color:#999;">请详细阅读 <a style="color:#3976e6" href="https://hs.star.cms.xingfaner.cn/xieyi/mingmingguizhe.html" target="_blank">《店铺名称命名规范》</a></div>
             </el-form-item>
             <el-form-item v-if="status==null || status == 2" label="商标证书" prop="trademarkCertificateImg">
               <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" accept=".jpg, .png, .jpeg, .gif" :show-file-list="false" :http-request="uploadHttp" :data="{

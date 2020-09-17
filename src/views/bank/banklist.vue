@@ -19,7 +19,7 @@
           <template slot-scope="props">{{props.$index + 1}}</template>
         </el-table-column>
         <el-table-column label="类别">
-          <template slot-scope="props">{{props.row.bankName}}</template>
+          <template slot-scope="props">{{props.row.bankName || '对公'}}</template>
         </el-table-column>
         <el-table-column label="卡号" width="170px">
           <template slot-scope="props">{{props.row.account}}</template>

@@ -333,6 +333,35 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/coupon',
+    component: () => import('@/views/layout/layout'),
+    meta: {
+      title: '优惠',
+      fullTitle: '优惠券管理',
+      icon: 'shangpinguanliicon'
+    },
+    children: [
+      {
+        path: '',
+        meta: {
+          title: '优惠券列表',
+          parentPath: '/coupon',
+          basePath: '/coupon',
+        },
+        component: () => import('@/views/coupon/index'),
+      },
+      {
+        path: '/couponForm',
+        meta: {
+          title: '优惠券创建',
+          parentPath: '/coupon',
+          basePath: '/coupon',
+        },
+        component: () => import('@/views/coupon/form'),
+      },
+    ]
+  },
+  {
     path: '/merchantOrder',
     component: () => import('@/views/layout/layout'),
     meta: {

@@ -6,7 +6,11 @@
           <el-button type="primary" @click="saveOrUpdateUser">增加</el-button>
         </div>
         <el-table :data="list" v-loading="loading" style="width: 100%;height:100%">
-          <el-table-column prop="id" label="ID"></el-table-column>
+          <el-table-column prop="id" label="ID">
+             <template slot-scope="props">
+               {{props.$index + 1}}
+             </template>
+          </el-table-column>
           <el-table-column prop="nickName" label="用户名"></el-table-column>
           <el-table-column prop="actualName" label="姓名"></el-table-column>
           <el-table-column prop="phone" label="手机号"></el-table-column>
@@ -41,7 +45,7 @@
         </section>
       </div>
     </div>
-    <el-dialog :title="dTitle ? '编辑' :'添加角色'" :visible.sync="dialogFormVisible">
+    <el-dialog :title="dTitle ? '编辑' :'添加操作员'" :visible.sync="dialogFormVisible">
       <el-form :model="form" label-width="100px" :rules="rules" ref="ruleForm">
         <el-form-item label="用户名" prop="nickName">
           <el-input v-model.trim="form.nickName" size="mini" style="width:300px"></el-input>
@@ -50,20 +54,15 @@
           <el-input v-model.trim="form.actualName" size="mini" style="width:300px"></el-input>
         </el-form-item>
         <el-form-item label="操作员密码" prop="password" class="passs">
-          <el-input
-            v-model.trim="form.password"
-            size="mini"
-            style="width:300px"
-            show-password
-            :disabled="disabled && hidenbtn"
-          ></el-input>
-          <el-button
+          <!-- :disabled="disabled && hidenbtn" -->
+          <el-input v-model.trim="form.password" size="mini" style="width:300px" show-password></el-input>
+          <!-- <el-button
             type="primary"
             style="margin-left:10px"
             @click="updatePassword"
             v-if="hidenbtn"
             show-word-limit
-          >修改密码</el-button>
+          >修改密码</el-button>-->
         </el-form-item>
         <el-form-item label="操作员手机号" prop="phone">
           <el-input v-model.trim="form.phone" size="mini" style="width:300px"></el-input>
@@ -172,6 +171,7 @@ export default {
       getUserInfo(obj).then((res) => {
         res.body.roleId = parseInt(res.body.roleId);
         this.form = res.body;
+        this.form.password = "";
         this.password = res.body.password;
         this.saveOrUpdateUser(1);
       });

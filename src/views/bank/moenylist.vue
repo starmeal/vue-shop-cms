@@ -3,7 +3,7 @@
     <section ref="merchantslabel">
       <div class="operation-container">
         <el-form ref="form" :size="size" label-width="70px">
-          <el-form-item label="下单时间">
+          <el-form-item label="申请时间">
             <p class="orderTime">
               <el-date-picker
                 :size="size"
@@ -56,12 +56,19 @@
           <el-table-column label="提现金额">
             <template slot-scope="props">{{props.row.balancesCash}}（元）</template>
           </el-table-column>
-          <el-table-column label="实收金额">
+          <el-table-column label="实收金额" width="140px">
             <template slot-scope="props">{{props.row.toCost}}（元）</template>
           </el-table-column>
-          <el-table-column prop="wechatDeduction" label="微信扣点0.6%" width="100px"></el-table-column>
-          <el-table-column prop="bankCardHandlingFee" label="提现到银行卡手续费1%" width="150px"></el-table-column>
-          <el-table-column prop="withdrawInformation" label="提现至" width="190px">
+          <el-table-column prop="serviceCharge" label="技术服务费(元)" width="140px">
+            <template slot-scope="props">{{ props.row.serviceCharge }}(元)</template>
+          </el-table-column>
+          <el-table-column prop="wechatDeduction" label="微信扣点0.6%" width="140px">
+            <template slot-scope="props">{{ props.row.wechatDeduction }}(元)</template>
+          </el-table-column>
+          <el-table-column prop="bankCardHandlingFee" label="提现到银行卡手续费1%" width="150px">
+             <template slot-scope="props">{{ props.row.bankCardHandlingFee }}(元)</template>
+          </el-table-column>
+          <el-table-column prop="withdrawInformation" label="提现至" width="150px">
             <template slot-scope="props">{{props.row.withdrawInformation || '--'}}</template>
           </el-table-column>
           <el-table-column prop="auditTime" label="审核时间">
@@ -155,8 +162,8 @@ export default {
           1
       );
       this.createTime = [start, end];
-      this.listpage.createTimeBegin = formatDate(start);
-      this.listpage.createTimeEnd = formatDate(end);
+      this.listpage.beginTimeStr = formatDate(start);
+      this.listpage.endTimeStr = formatDate(end);
     },
     //时间选择器
     timeChange(val) {
@@ -181,8 +188,8 @@ export default {
           1
       );
       this.createTime = [start, end];
-      this.listpage.createTimeBegin = formatDate(start);
-      this.listpage.createTimeEnd = formatDate(end);
+      this.listpage.beginTimeStr = formatDate(start);
+      this.listpage.endTimeStr = formatDate(end);
     },
     //最近7天按钮
     lastSeven() {
@@ -196,8 +203,8 @@ export default {
           1
       );
       this.createTime = [start, end];
-      this.listpage.createTimeBegin = formatDate(start);
-      this.listpage.createTimeEnd = formatDate(end);
+      this.listpage.beginTimeStr = formatDate(start);
+      this.listpage.endTimeStr = formatDate(end);
     },
     //最近30天按钮
     lastThirty() {
@@ -211,8 +218,8 @@ export default {
           1
       );
       this.createTime = [start, end];
-      this.listpage.createTimeBegin = formatDate(start);
-      this.listpage.createTimeEnd = formatDate(end);
+      this.listpage.beginTimeStr = formatDate(start);
+      this.listpage.endTimeStr = formatDate(end);
     },
     // 请求列表
     async getList() {
