@@ -6,7 +6,11 @@
           <el-button type="primary" @click="saveOrUpdateUser">增加</el-button>
         </div>
         <el-table :data="list" v-loading="loading" style="width: 100%;height:100%">
-          <el-table-column prop="id" label="ID"></el-table-column>
+          <el-table-column prop="id" label="ID">
+             <template slot-scope="props">
+               {{props.$index + 1}}
+             </template>
+          </el-table-column>
           <el-table-column prop="nickName" label="用户名"></el-table-column>
           <el-table-column prop="actualName" label="姓名"></el-table-column>
           <el-table-column prop="phone" label="手机号"></el-table-column>
