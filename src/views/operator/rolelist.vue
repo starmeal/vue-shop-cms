@@ -113,7 +113,7 @@ export default {
     };
   },
   created() {
-    this.getpermissionuser();
+    this.getlist();
     this.getRoleAndPermissions();
   },
   methods: {
@@ -207,7 +207,7 @@ export default {
             center: true,
             message: "操作成功!",
           });
-          this.getpermissionuser();
+          this.getlist();
           this.dialogFormVisible = false;
           console.log(res.body);
         });
@@ -223,7 +223,7 @@ export default {
       this.listpage.pageSize = val;
       this.getList();
     },
-    getpermissionuser() {
+    getlist() {
       rolelist(this.listpage).then((res) => {
         this.loading = false;
         this.list = res.body.records;
@@ -251,7 +251,7 @@ export default {
           center: true,
           message: "删除成功!",
         });
-        this.getpermissionuser();
+        this.getlist();
       });
     },
   },
