@@ -45,15 +45,11 @@
           <el-button type="primary" @click="toExper" size="mini">导出</el-button>
         </div>
         <div class="table-container">
-          <!-- v-loading="tableloading" -->
-          <!-- height="100px"
-          v-adaptive-->
           <el-table
             :data="list"
             v-loading="loading"
             style="width: 100%;height:100%"
-            height="100px"
-            v-adaptive
+            height="69.4vh"
           >
             <el-table-column prop="validStartTime" label="开始时间" width="150px"></el-table-column>
             <el-table-column prop="validEndTime" label="到期时间" width="150px"></el-table-column>
@@ -79,7 +75,11 @@
                 <span v-if="props.row.status == 3">已结束</span>
               </template>
             </el-table-column>
-            <el-table-column prop="remark" label="备注"></el-table-column>
+            <el-table-column prop="remark" label="备注">
+              <template slot-scope="props">
+                <span class="hide-text">{{props.row.remark}}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="操作" width="150px">
               <template slot-scope="props">
                 <el-tooltip class="item light-item" effect="light" placement="top">
@@ -300,5 +300,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.hide-text {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

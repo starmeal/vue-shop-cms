@@ -368,7 +368,7 @@ export default {
       this.pageData.couponCode = this.$route.query.couponCode;
       couponsGoodsList(this.pageData).then((res) => {
         console.log(res);
-        this.tableData = res.body.records;
+        this.pagetable = res.body.records;
         this.totalCount = res.body.total;
       });
     },

@@ -352,6 +352,7 @@ export const asyncRoutes = [
       },
       {
         path: '/couponForm',
+        hidden: true,
         meta: {
           title: '优惠券创建',
           parentPath: '/coupon',
@@ -361,6 +362,7 @@ export const asyncRoutes = [
       },
       {
         path: '/couponLook',
+        hidden: true,
         meta: {
           title: '优惠券查看',
           parentPath: '/coupon',

@@ -1,82 +1,100 @@
 <template>
-  <div>
-    <div class="operator">
+  <div class="min-s">
+    <div style="background:#fff">
       <el-row>
-        <el-col :span="4">
+        <el-col :span="8">
           <div class="grid-content">
             <div>名称</div>
-            <div></div>
+            <div>{{form.couponName}}</div>
           </div>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="2">
           <div class="grid-content">
             <div>优惠券类型</div>
-            <div></div>
+            <div>{{form.used == 1 ? '普通券': '新人券'}}</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="grid-content">
             <div>可使用商品</div>
-            <div></div>
+            <div>
+              <span v-if="form.couponRange == 1">全场通用</span>
+              <span v-if="form.couponRange == 2">指定商品</span>
+              <span v-if="form.couponRange == 3">指定分类</span>
+            </div>
           </div>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="2">
           <div class="grid-content">
             <div>限领</div>
-            <div></div>
+            <div>{{form.limitedCollar}}</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="grid-content">
             <div>优惠形式</div>
-            <div></div>
+            <div>满{{form.withAmount}}减{{form.usedAmount}}</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="grid-content">
-            <div>状态</div>
-            <div></div>
+            <div style="border-right:none;">状态</div>
+            <div style="border-right:none;">
+              <span v-if="form.status == 1">生效</span>
+              <span v-if="form.status == 2">失效</span>
+              <span v-if="form.status == 3">已结束</span>
+            </div>
           </div>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="4">
+        <el-col :span="8">
           <div class="grid-content">
             <div>有效期(开始至结束时间)</div>
-            <div></div>
+            <div>{{form.validStartTime}}至{{form.validEndTime}}</div>
           </div>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="2">
           <div class="grid-content">
             <div>总发行量</div>
-            <div></div>
+            <div>{{form.quota}}</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="grid-content">
             <div>已领取</div>
-            <div></div>
+            <div>{{form.takeCount}}</div>
           </div>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="2">
           <div class="grid-content">
             <div>待领取</div>
-            <div></div>
+            <div>{{form.notTakeCount}}</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="grid-content">
             <div>已使用</div>
-            <div></div>
+            <div>{{form.usedCount}}</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="grid-content">
-            <div>未使用</div>
-            <div></div>
+            <div style="border-right:none;">未使用</div>
+            <div style="border-right:none;">{{form.noUsedCount}}</div>
           </div>
         </el-col>
       </el-row>
+      <el-row>
+        <el-col :span="8">
+          <div class="grid-content">
+            <div>备注</div>
+            <div>{{form.remark}}</div>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <div class="operator">
       <div>
         <div class="btn-box">
           <el-input
@@ -107,13 +125,7 @@
           <el-button type="primary" @click="getlist" style="margin-left:10px" size="mini">搜索</el-button>
         </div>
         <div class="table-container">
-          <el-table
-            :data="list"
-            v-loading="loading"
-            style="width: 100%;height:100%"
-            height="100px"
-            v-adaptive
-          >
+          <el-table :data="list" v-loading="loading">
             <el-table-column prop="nickName" label="领取会员"></el-table-column>
             <el-table-column prop="createTime" label="领取时间"></el-table-column>
             <el-table-column prop="isUsed" label="当前状态">
@@ -227,7 +239,7 @@ export default {
   flex-wrap: wrap;
 }
 .operator {
-  min-height: 100%;
+  min-height: 63vh;
   width: 100%;
   background: #fff;
   display: flex;
@@ -256,10 +268,23 @@ export default {
   align-items: center;
   justify-content: center;
 }
-.grid-content > div:first-of-type{
-    font-size: 12px;
-    font-weight: bold;
-    height: 50px;
-    line-height: 50px;
+.grid-content > div {
+  font-size: 12px;
+  text-align: center;
+  border-right: solid 1px rgb(223, 223, 223);
+  border-bottom: solid 1px rgb(223, 223, 223);
+}
+.grid-content > div:last-of-type {
+  height: auto;
+  width: auto;
+  min-height: 30px;
+  line-height: 30px;
+}
+.grid-content > div:first-of-type {
+  width: auto;
+  font-weight: bold;
+  line-height: 30px;
+  min-height: 30px;
+  background: #f9f9f9;
 }
 </style>
