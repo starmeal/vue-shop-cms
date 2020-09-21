@@ -359,6 +359,15 @@ export const asyncRoutes = [
         },
         component: () => import('@/views/coupon/form'),
       },
+      {
+        path: '/couponLook',
+        meta: {
+          title: '优惠券查看',
+          parentPath: '/coupon',
+          basePath: '/coupon',
+        },
+        component: () => import('@/views/coupon/look'),
+      },
     ]
   },
   {

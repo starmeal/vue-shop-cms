@@ -18,6 +18,7 @@ export function merAfterSaleListExportExcel(data) {
   return request({
     url: "/aftersale/merAfterSaleListExportExcel",
     method: "post",
+    responseType: 'blob',
     data: data
   });
 }

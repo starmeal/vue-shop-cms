@@ -41,7 +41,8 @@
             @change="timeChange"
             value-format="yyyy-MM-dd HH:mm:ss"
           ></el-date-picker>
-          <el-button type="primary" @click="getlist" style="margin-left:10px">搜索</el-button>
+          <el-button type="primary" @click="getlist" style="margin-left:10px" size="mini">搜索</el-button>
+          <el-button type="primary" @click="toExper" size="mini">导出</el-button>
         </div>
         <div class="table-container">
           <!-- v-loading="tableloading" -->
@@ -104,7 +105,7 @@
                 </el-tooltip>
                 <el-tooltip class="item light-item" effect="light" placement="top">
                   <span slot="content" style="font-size:12px;color:#9d9d9d">查看</span>
-                  <i class="el-icon-picture-outline icon-content" @click="deluser(props.row)"></i>
+                  <i class="el-icon-picture-outline icon-content" @click="golook(props.row)"></i>
                 </el-tooltip>
               </template>
             </el-table-column>
@@ -135,6 +136,7 @@ import {
   queryCouponList,
   fakeDeleteCupons,
   updateCouponsStatus,
+  exportCouponsList,
 } from "@/api/coupon";
 export default {
   data() {
@@ -173,6 +175,17 @@ export default {
     this.getlist();
   },
   methods: {
+    golook(row) {
+      this.$router.push({
+        path: "/couponLook",
+        query: {
+          couponCode: row.couponCode ? row.couponCode : "",
+        },
+      });
+    },
+    toExper() {
+      exportCouponsList(this.listpage).then((res) => {});
+    },
     getupdateCouponsStatus(props) {
       let obj = {
         couponCode: props.row.couponCode,

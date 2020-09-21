@@ -64,3 +64,19 @@ export function updateCouponsStatus(data) {
         data: data
     });
 }
+export function exportCouponsList(data) {
+    return request({
+        url: "/cms/coupon/exportCouponsList",
+        method: "post",
+        responseType: 'blob',
+        data: data
+    });
+}
+
+export function getcouponsUserList(data) {
+    return request({
+        url: "/cms/coupon/couponsUserList",
+        method: "post",
+        data: data
+    });
+}
