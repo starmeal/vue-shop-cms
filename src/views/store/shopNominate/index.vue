@@ -265,7 +265,21 @@ export default {
         });
         return false;
       }
-      let consat = `hs_star/app_shop/authentication/${this.randomNum(1, 100)}`;
+      let houzhui = "";
+      houzhui = file.name.split(".");
+      let fileName = "";
+      var timestamp = Date.parse(new Date());
+      month = month + 1;
+      fileName = `${parseInt(
+        (Math.random() + 1) * Math.pow(10, 18 - 1)
+      )}${timestamp}.${houzhui[houzhui.length - 1]}`;
+      let now = new Date();
+      let year = now.getFullYear(); // 得到年份
+      let month = now.getMonth(); // 得到月份
+      let date = now.getDate(); // 得到日期
+      let consat = `hs_star/app_shop/authentication/${year}${month}${date}/${
+        fileName || timestamp
+      }`;
       let that = this;
       SSupload(consat, file)
         .then(({ res, url, name }) => {
