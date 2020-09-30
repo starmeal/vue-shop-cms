@@ -3,9 +3,9 @@
     <div class="operator">
       <div>
         <div class="btn-box">
-          <el-button type="primary" @click="addcoupon">增加</el-button>
+          <el-button type="primary" @click="addcoupon">创建优惠券</el-button>
           <el-input
-            style="width:200px;margin-left:20px"
+            style="width: 200px; margin-left: 20px"
             class="input-update"
             :size="size"
             maxlength="30"
@@ -20,47 +20,77 @@
             placeholder="优惠券状态"
             :size="size"
             clearable
-            style="width:150px;margin-left:20px"
+            style="width: 150px; margin-left: 20px"
           >
             <el-option
               :label="item.label"
               :value="item.value"
-              v-for="(item,index) in optionsone"
+              v-for="(item, index) in optionsone"
               :key="index"
             ></el-option>
           </el-select>
           <el-date-picker
-            style="margin-left:20px"
+            style="margin-left: 20px"
             :size="size"
             v-model="createTime"
             class="timeInput"
             type="datetimerange"
             range-separator="至"
-            start-placeholder="起始时间"
+            start-placeholder="开始时间"
             end-placeholder="结束时间"
             @change="timeChange"
             value-format="yyyy-MM-dd HH:mm:ss"
           ></el-date-picker>
-          <el-button type="primary" @click="getlist" style="margin-left:10px" size="mini">搜索</el-button>
-          <el-button type="primary" @click="toExper" size="mini">导出</el-button>
+          <el-button
+            type="primary"
+            @click="getlist"
+            style="margin-left: 10px"
+            size="mini"
+            >搜索</el-button
+          >
+          <el-button type="primary" @click="toExper" size="mini"
+            >导出</el-button
+          >
         </div>
         <div class="table-container">
           <el-table
             :data="list"
             v-loading="loading"
-            style="width: 100%;height:100%"
+            style="width: 100%; height: 100%"
             height="69.4vh"
           >
-            <el-table-column prop="validStartTime" label="开始时间" width="150px"></el-table-column>
-            <el-table-column prop="validEndTime" label="到期时间" width="150px"></el-table-column>
-            <el-table-column prop="couponName" label="优惠券名称"></el-table-column>
+            <el-table-column
+              prop="validStartTime"
+              label="开始时间"
+              width="150px"
+            ></el-table-column>
+            <el-table-column
+              prop="validEndTime"
+              label="结束时间"
+              width="150px"
+            ></el-table-column>
+            <el-table-column
+              prop="couponName"
+              label="优惠券名称"
+            ></el-table-column>
             <el-table-column prop="userCount" label="类型">
-              <template slot-scope="props">{{props.row.used == 1 ? '普通券' : '新人券'}}</template>
+              <template slot-scope="props">{{
+                props.row.used == 1 ? "普通券" : "新人券"
+              }}</template>
             </el-table-column>
-            <el-table-column prop="couponForm" label="优惠形式"></el-table-column>
+            <el-table-column
+              prop="couponForm"
+              label="优惠形式"
+            ></el-table-column>
             <el-table-column prop="quota" label="总发行量"></el-table-column>
-            <el-table-column prop="notTakeCount" label="带领取量"></el-table-column>
-            <el-table-column prop="limitedCollar" label="限领"></el-table-column>
+            <el-table-column
+              prop="notTakeCount"
+              label="待领取量"
+            ></el-table-column>
+            <el-table-column
+              prop="limitedCollar"
+              label="限领"
+            ></el-table-column>
             <el-table-column prop="couponRange" label="商品范围">
               <template slot-scope="props">
                 <span v-if="props.row.couponRange == 1">全场通用</span>
@@ -77,18 +107,38 @@
             </el-table-column>
             <el-table-column prop="remark" label="备注">
               <template slot-scope="props">
-                <span class="hide-text">{{props.row.remark}}</span>
+                <span class="hide-text">{{ props.row.remark }}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作" width="150px">
               <template slot-scope="props">
-                <el-tooltip class="item light-item" effect="light" placement="top">
-                  <span slot="content" style="font-size:12px;color:#9d9d9d">编辑</span>
-                  <i class="el-icon-edit icon-content" @click="addcoupon(props.row)"></i>
+                <el-tooltip
+                  class="item light-item"
+                  effect="light"
+                  placement="top"
+                  v-if="props.row.status == 2"
+                >
+                  <span slot="content" style="font-size: 12px; color: #9d9d9d"
+                    >编辑</span
+                  >
+                  <i
+                    class="el-icon-edit icon-content"
+                    @click="addcoupon(props.row)"
+                  ></i>
                 </el-tooltip>
-                <el-tooltip class="item light-item" effect="light" placement="top">
-                  <span slot="content" style="font-size:12px;color:#9d9d9d">删除</span>
-                  <i class="el-icon-delete icon-content" @click="delcop(props.row)"></i>
+                <el-tooltip
+                  class="item light-item"
+                  effect="light"
+                  placement="top"
+                  v-if="props.row.status != 1"
+                >
+                  <span slot="content" style="font-size: 12px; color: #9d9d9d"
+                    >删除</span
+                  >
+                  <i
+                    class="el-icon-delete icon-content"
+                    @click="delcop(props.row)"
+                  ></i>
                 </el-tooltip>
                 <el-tooltip
                   class="item light-item"
@@ -98,14 +148,27 @@
                 >
                   <span
                     slot="content"
-                    style="font-size:12px;color:#9d9d9d"
+                    style="font-size: 12px; color: #9d9d9d"
                     v-if="props.row.status != 3"
-                  >{{props.row.status == 1 ?'失效' : '生效'}}</span>
-                  <i class="el-icon-refresh icon-content" @click="getupdateCouponsStatus(props)"></i>
+                    >{{ props.row.status == 1 ? "失效" : "生效" }}</span
+                  >
+                  <i
+                    class="el-icon-refresh icon-content"
+                    @click="getupdateCouponsStatus(props)"
+                  ></i>
                 </el-tooltip>
-                <el-tooltip class="item light-item" effect="light" placement="top">
-                  <span slot="content" style="font-size:12px;color:#9d9d9d">查看</span>
-                  <i class="el-icon-picture-outline icon-content" @click="golook(props.row)"></i>
+                <el-tooltip
+                  class="item light-item"
+                  effect="light"
+                  placement="top"
+                >
+                  <span slot="content" style="font-size: 12px; color: #9d9d9d"
+                    >查看</span
+                  >
+                  <i
+                    class="el-icon-picture-outline icon-content"
+                    @click="golook(props.row)"
+                  ></i>
                 </el-tooltip>
               </template>
             </el-table-column>
@@ -174,6 +237,11 @@ export default {
   created() {
     this.getlist();
   },
+  watch: {
+    "listpage.curPage": function (newVal, oldVal) {
+      console.log(newVal, oldVal, "oldValoldValoldVal");
+    },
+  },
   methods: {
     golook(row) {
       this.$router.push({
@@ -187,17 +255,25 @@ export default {
       exportCouponsList(this.listpage).then((res) => {});
     },
     getupdateCouponsStatus(props) {
-      let obj = {
-        couponCode: props.row.couponCode,
-        status: props.row.status == 1 ? 2 : 1,
-      };
-      updateCouponsStatus(obj).then((res) => {
-        this.list[props.$index].status = obj.status;
-        this.$message({
-          type: "success",
-          message: "修改成功!",
-        });
-      });
+      this.$confirm("是否确定当前操作?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          let obj = {
+            couponCode: props.row.couponCode,
+            status: props.row.status == 1 ? 2 : 1,
+          };
+          updateCouponsStatus(obj).then((res) => {
+            this.list[props.$index].status = obj.status;
+            this.$message({
+              type: "success",
+              message: "修改成功!",
+            });
+          });
+        })
+        .catch(() => {});
     },
     delcop(row) {
       let obj = {
@@ -214,7 +290,10 @@ export default {
               type: "success",
               message: "删除成功!",
             });
-            this.getlist();
+            this.totalCount--;
+            this.$nextTick(() => {
+              this.getlist();
+            });
           });
         })
         .catch(() => {

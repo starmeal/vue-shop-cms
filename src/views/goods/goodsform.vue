@@ -79,7 +79,7 @@
               action
               multiple
               class="bili"
-              accept=".png, .jpg, .gif"
+              accept=".png, .jpg, .gif,.webp"
               :http-request="uploadHttp"
               :show-file-list="false"
               :data="{

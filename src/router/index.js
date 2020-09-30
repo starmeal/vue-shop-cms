@@ -338,7 +338,10 @@ export const asyncRoutes = [
     meta: {
       title: '优惠',
       fullTitle: '优惠券管理',
-      icon: 'shangpinguanliicon'
+      icon: 'shangpinguanliicon',
+      roles: [
+        "/shop/cms/coupon/queryCouponList"
+      ]
     },
     children: [
       {

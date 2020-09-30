@@ -1,17 +1,17 @@
 <template>
   <div class="min-s">
-    <div style="background:#fff">
+    <div style="background: #fff">
       <el-row>
         <el-col :span="8">
           <div class="grid-content">
             <div>名称</div>
-            <div>{{form.couponName}}</div>
+            <div>{{ form.couponName }}</div>
           </div>
         </el-col>
         <el-col :span="2">
           <div class="grid-content">
             <div>优惠券类型</div>
-            <div>{{form.used == 1 ? '普通券': '新人券'}}</div>
+            <div>{{ form.used == 1 ? "普通券" : "新人券" }}</div>
           </div>
         </el-col>
         <el-col :span="4">
@@ -27,19 +27,19 @@
         <el-col :span="2">
           <div class="grid-content">
             <div>限领</div>
-            <div>{{form.limitedCollar}}</div>
+            <div>{{ form.limitedCollar }}</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="grid-content">
             <div>优惠形式</div>
-            <div>满{{form.withAmount}}减{{form.usedAmount}}</div>
+            <div>满{{ form.withAmount }}减{{ form.usedAmount }}</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="grid-content">
-            <div style="border-right:none;">状态</div>
-            <div style="border-right:none;">
+            <div style="border-right: none">状态</div>
+            <div style="border-right: none">
               <span v-if="form.status == 1">生效</span>
               <span v-if="form.status == 2">失效</span>
               <span v-if="form.status == 3">已结束</span>
@@ -51,37 +51,37 @@
         <el-col :span="8">
           <div class="grid-content">
             <div>有效期(开始至结束时间)</div>
-            <div>{{form.validStartTime}}至{{form.validEndTime}}</div>
+            <div>{{ form.validStartTime }}至{{ form.validEndTime }}</div>
           </div>
         </el-col>
         <el-col :span="2">
           <div class="grid-content">
             <div>总发行量</div>
-            <div>{{form.quota}}</div>
+            <div>{{ form.quota }}</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="grid-content">
             <div>已领取</div>
-            <div>{{form.takeCount}}</div>
+            <div>{{ form.takeCount }}</div>
           </div>
         </el-col>
         <el-col :span="2">
           <div class="grid-content">
             <div>待领取</div>
-            <div>{{form.notTakeCount}}</div>
+            <div>{{ form.notTakeCount }}</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="grid-content">
             <div>已使用</div>
-            <div>{{form.usedCount}}</div>
+            <div>{{ form.usedCount }}</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="grid-content">
-            <div style="border-right:none;">未使用</div>
-            <div style="border-right:none;">{{form.noUsedCount}}</div>
+            <div style="border-right: none">未使用</div>
+            <div style="border-right: none">{{ form.noUsedCount }}</div>
           </div>
         </el-col>
       </el-row>
@@ -89,45 +89,62 @@
         <el-col :span="8">
           <div class="grid-content">
             <div>备注</div>
-            <div>{{form.remark}}</div>
+            <div>{{ form.remark }}</div>
           </div>
         </el-col>
       </el-row>
     </div>
     <div class="operator">
       <div>
-        <div class="btn-box">
-          <el-input
-            style="width:200px;"
-            class="input-update"
-            :size="size"
-            maxlength="30"
-            show-word-limit
-            v-model="listpage.orderCode"
-            placeholder="请输入订单编号"
-            clearable
-          ></el-input>
-          <el-select
-            @change="getlist"
-            v-model="listpage.status"
-            placeholder="优惠券状态"
-            :size="size"
-            clearable
-            style="width:150px;margin-left:20px"
-          >
-            <el-option
-              :label="item.label"
-              :value="item.value"
-              v-for="(item,index) in optionsone"
-              :key="index"
-            ></el-option>
-          </el-select>
-          <el-button type="primary" @click="getlist" style="margin-left:10px" size="mini">搜索</el-button>
+        <div class="show-se">
+          <div class="bibi">
+            <div>筛选查询</div>
+            <div>
+              <span class="cuprio" @click="showtat = !showtat">{{showtat ? '收起筛选' : '展开筛选'}}</span>
+              <el-button
+                type="primary"
+                @click="getlist"
+                style="margin-left: 10px; margin-top: 10px"
+                size="mini"
+                >查询结果</el-button
+              >
+            </div>
+          </div>
+          <div class="btn-box" v-show="showtat">
+            <el-input
+              style="width: 200px"
+              class="input-update"
+              :size="size"
+              maxlength="30"
+              show-word-limit
+              v-model="listpage.orderCode"
+              placeholder="请输入订单编号"
+              clearable
+            ></el-input>
+            <el-select
+              @change="getlist"
+              v-model="listpage.status"
+              placeholder="优惠券状态"
+              :size="size"
+              clearable
+              style="width: 150px; margin-left: 20px"
+            >
+              <el-option
+                :label="item.label"
+                :value="item.value"
+                v-for="(item, index) in optionsone"
+                :key="index"
+              ></el-option>
+            </el-select>
+          </div>
         </div>
         <div class="table-container">
           <el-table :data="list" v-loading="loading">
             <el-table-column prop="nickName" label="领取会员"></el-table-column>
-            <el-table-column prop="createTime" label="领取时间"></el-table-column>
+            <el-table-column
+              prop="createTime"
+              label="领取时间"
+            ></el-table-column>
             <el-table-column prop="isUsed" label="当前状态">
               <template slot-scope="props">
                 <span v-if="props.row.isUsed == 1">未使用</span>
@@ -136,7 +153,10 @@
               </template>
             </el-table-column>
             <el-table-column prop="usedTime" label="使用时间"></el-table-column>
-            <el-table-column prop="orderCode" label="订单编码"></el-table-column>
+            <el-table-column
+              prop="orderCode"
+              label="订单编码"
+            ></el-table-column>
           </el-table>
         </div>
       </div>
@@ -164,19 +184,20 @@ import { getcouponsUserList, coupondetail } from "@/api/coupon";
 export default {
   data() {
     return {
+      showtat: false,
       form: "",
       optionsone: [
         {
           value: "1",
-          label: "生效",
+          label: "未使用",
         },
         {
           value: "2",
-          label: "失效",
+          label: "已使用",
         },
         {
           value: "3",
-          label: "已结束",
+          label: "已过期",
         },
       ],
       size: "mini",
@@ -232,6 +253,34 @@ export default {
 </script>
 
 <style>
+.show-se{
+  box-sizing: border-box;
+  border:solid 1px #f0f0f0;
+  margin-bottom: 10px;
+}
+.cuprio{
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 30px;
+}
+.bibi{
+  display: flex;
+  font-size: 12px;
+  align-items: center;
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px 0px;
+  background: #f0f0f0;
+}
+.bibi>div:first-of-type{
+  flex: 1;
+  box-sizing: border-box;
+  padding-left: 10px;
+}
+.bibi>div:last-of-type{
+ padding-right:20px;
+ box-sizing: border-box;
+}
 .btn-box {
   padding: 10px;
   display: flex;

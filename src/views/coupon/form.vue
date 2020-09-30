@@ -1,11 +1,17 @@
 <template>
   <div class="big-container">
     <section class="form-container">
-      <div style="height:20px"></div>
-      <el-form ref="form" :rules="rules" :size="size" :model="form" label-width="150px">
+      <div style="height: 20px"></div>
+      <el-form
+        ref="form"
+        :rules="rules"
+        :size="size"
+        :model="form"
+        label-width="150px"
+      >
         <el-form-item label="优惠券名称" prop="couponName">
           <el-input
-            style="width:300px"
+            style="width: 300px"
             class="input-update"
             :size="size"
             type="textarea"
@@ -18,45 +24,62 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="优惠券类型" prop="used">
-          <el-select v-model="form.used" placeholder="请选择类型" style="width:300px">
+          <el-select
+            v-model="form.used"
+            placeholder="请选择类型"
+            style="width: 300px"
+            :disabled="$route.query.couponCode ? true : false"
+          >
             <el-option
               :label="item.label"
               :value="item.value"
-              v-for="(item,index) in options"
+              v-for="(item, index) in options"
               :key="index"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="满减金额" prop="withAmount">
-          <span style="margin-right:20px;font-size: 12px;color: #333;">满</span>
+          <span style="margin-right: 20px; font-size: 12px; color: #333"
+            >满</span
+          >
           <el-input
-            @keyup.native="(val)=>{
-              changeMoeny(val,'withAmount')
-            }"
+            @keyup.native="
+              (val) => {
+                changeMoeny(val, 'withAmount');
+              }
+            "
             :controls="false"
-            style="width:90px;"
+            style="width: 90px"
             v-model.trim="form.withAmount"
           ></el-input>
-          <span style="margin:0 20px;font-size: 12px;color: #333;">减</span>
+          <span style="margin: 0 20px; font-size: 12px; color: #333">减</span>
           <el-input
-            @keyup.native="(val)=>{
-              changeMoeny(val,'usedAmount')
-            }"
+            @keyup.native="
+              (val) => {
+                changeMoeny(val, 'usedAmount');
+              }
+            "
             :controls="false"
-            style="width:90px;"
+            style="width: 90px"
             v-model.trim="form.usedAmount"
           ></el-input>
         </el-form-item>
         <el-form-item label="发行数量" prop="quota">
-          <el-input-number
+          <el-input
+            @keyup.native="
+              (val) => {
+                changeMoeny(val, 'quota');
+              }
+            "
             v-model="form.quota"
             :controls="false"
-            style="width:300px"
+            style="width: 300px"
+            :precision="0"
             class="num-in"
-          ></el-input-number>
+          ></el-input>
         </el-form-item>
         <el-form-item label="限领">
-          <span style="font-size:12px">每人限领一张</span>
+          <span style="font-size: 12px">每人限领一张</span>
         </el-form-item>
         <el-form-item label="开始时间" prop="validStartTime">
           <el-date-picker
@@ -79,18 +102,22 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="优惠券状态" prop="status">
-          <el-select v-model="form.status" placeholder="优惠券状态 " style="width:300px">
+          <el-select
+            v-model="form.status"
+            placeholder="优惠券状态 "
+            style="width: 300px"
+          >
             <el-option
               :label="item.label"
               :value="item.value"
-              v-for="(item,index) in optionsone"
+              v-for="(item, index) in optionsone"
               :key="index"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input
-            style="width:300px"
+            style="width: 300px"
             class="input-update"
             :size="size"
             type="textarea"
@@ -119,19 +146,20 @@
             v-model="auxiliary.keyWord"
             :disabled="$route.query.couponCode ? true : false"
             class="input-with-select"
-            style="width:250px"
+            style="width: 250px"
           >
             <el-button
               slot="append"
               @click="getgetAllValidGoods(1)"
               :loading="searchLoading"
               :disabled="$route.query.couponCode ? true : false"
-            >搜索</el-button>
+              >搜索</el-button
+            >
           </el-input>
           <el-select
             v-model="selectvalue"
             placeholder="请选择"
-            style="margin-left:10px"
+            style="margin-left: 10px"
             :disabled="$route.query.couponCode ? true : false"
           >
             <el-option
@@ -143,13 +171,23 @@
           </el-select>
           <el-button
             type="primary"
-            style="margin-left:10px"
+            style="margin-left: 10px"
             @click="inittable"
             :disabled="$route.query.couponCode ? true : false"
-          >添加</el-button>
-          <div v-show="tableData.length" style="margin-top:20px;">
-            <el-table :data="tableData" style="width:70%">
-              <el-table-column prop="goodsName" label="商品名称"></el-table-column>
+            >添加</el-button
+          >
+          <div v-show="tableData.length" style="margin-top: 20px">
+            <div style="color: #999; font-size: 12px">
+              购买以下商品可使用优惠券抵扣金额，已选中<span
+                style="color: #ff0000"
+                >{{ totalCount }}</span
+              >件商品
+            </div>
+            <el-table :data="tableData" style="width: 70%">
+              <el-table-column
+                prop="goodsName"
+                label="商品名称"
+              ></el-table-column>
               <el-table-column prop="goodsCode" label="货号"></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
@@ -158,7 +196,8 @@
                     size="small"
                     @click="delItem(scope)"
                     :disabled="$route.query.couponCode ? true : false"
-                  >删除</el-button>
+                    >删除</el-button
+                  >
                 </template>
               </el-table-column>
             </el-table>
@@ -177,24 +216,31 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="选择分类" v-if="form.couponRange == 3" prop="couponUsedCategoryName">
+        <el-form-item
+          label="选择分类"
+          v-if="form.couponRange == 3"
+          prop="couponUsedCategoryName"
+        >
           <el-select
             v-model="form.couponUsedCategoryId"
             placeholder="选择分类"
-            style="width:300px"
+            style="width: 300px"
             @change="selectChange"
+            :disabled="$route.query.couponCode ? true : false"
           >
             <el-option
               :label="item.categoryName"
               :value="item.category"
-              v-for="(item,index) in ShopGoodsCategory"
+              v-for="(item, index) in ShopGoodsCategory"
               :key="index"
             ></el-option>
           </el-select>
           <div class="tips">购买以上分类商品可使用优惠券抵扣金额</div>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm">{{$route.query.couponCode ? '修改' : '完成'}}</el-button>
+          <el-button type="primary" @click="submitForm">{{
+            $route.query.couponCode ? "修改" : "完成"
+          }}</el-button>
           <el-button @click="golist">取消</el-button>
         </el-form-item>
         <el-form-item></el-form-item>
@@ -398,7 +444,7 @@ export default {
         obj = this.select.find((el) => {
           return el.goodsCode == this.selectvalue;
         });
-        let ostate = this.tableData.some((item, index) => {
+        let ostate = this.pagetable.some((item, index) => {
           return item.goodsCode == obj.goodsCode;
         });
         if (ostate) {
@@ -420,7 +466,7 @@ export default {
         this.form.couponUsedCategoryName = "";
         this.form.couponUsedCategoryId = null;
         this.form.couponGoodsList = "";
-        this.tableData = [];
+        this.pagetable = [];
       }
     },
     // 分类切换
@@ -468,14 +514,53 @@ export default {
       if (this.pagetable.length > 0) {
         this.form.couponGoodsList = [];
         this.pagetable.forEach((item, index) => {
-          this.form.couponGoodsList.push(item.goodsCode)
+          this.form.couponGoodsList.push(item.goodsCode);
         });
       }
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (this.form.withAmount < this.form.usedAmount) {
+          if (
+            parseInt(this.form.withAmount) == 0 ||
+            parseInt(this.form.usedAmount) == 0
+          ) {
+            this.$message({
+              message: "满减不能为0",
+              type: "error",
+            });
+            return false;
+          }
+          if (
+            parseInt(this.form.withAmount) < parseInt(this.form.usedAmount) ||
+            parseInt(this.form.withAmount) == parseInt(this.form.usedAmount)
+          ) {
             this.$message({
               message: "满减填写有误请核对后重新填写",
+              type: "error",
+            });
+            return false;
+          }
+          if (this.form.quota == 0) {
+            this.$message({
+              message: "发行数量不可为0",
+              type: "error",
+            });
+            return false;
+          }
+          if (parseInt(this.form.quota) <= 0) {
+            this.$message({
+              message: "发行数量请填写正整数",
+              type: "error",
+            });
+            return false;
+          }
+          if (
+            new Date(this.form.validStartTime).getTime() >
+              new Date(this.form.validEndTime).getTime() ||
+            new Date(this.form.validStartTime).getTime() ==
+              new Date(this.form.validEndTime).getTime()
+          ) {
+            this.$message({
+              message: "时间填写有误",
               type: "error",
             });
             return false;
