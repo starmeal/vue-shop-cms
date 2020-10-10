@@ -7,12 +7,14 @@
             <div
               class="big-title"
               :class="aftersaleinfo.isYellow == 1 ? 'isYellow' : ''"
-            >{{aftersaleinfo.aftersaleStatusText}}</div>
-            <div class="code-box">售后编号：{{aftersaleinfo.asaleCode}}</div>
+            >
+              {{ aftersaleinfo.aftersaleStatusText }}
+            </div>
+            <div class="code-box">售后编号：{{ aftersaleinfo.asaleCode }}</div>
             <div class="name-box">
               申请人：
-              <span>{{aftersaleinfo.nickName}}</span>
-              <span>申请时间：{{aftersaleinfo.applyTime}}</span>
+              <span>{{ aftersaleinfo.nickName }}</span>
+              <span>申请时间：{{ aftersaleinfo.applyTime }}</span>
             </div>
           </section>
           <div
@@ -21,29 +23,55 @@
             v-if="this.timetime && aftersaleinfo.isYellow == 0"
           ></div>
           <div class="top-last">
-            <span v-if="aftersaleinfo.canDoText && aftersaleinfo.canDoText.length">还可以：</span>
             <span
-              v-for="(item,index) in aftersaleinfo.canDoText"
+              v-if="aftersaleinfo.canDoText && aftersaleinfo.canDoText.length"
+              >还可以：</span
+            >
+            <span
+              v-for="(item, index) in aftersaleinfo.canDoText"
               :key="index"
               @click="justsoso(index)"
             >
-              {{item}}
-              <span v-if="aftersaleinfo.canDoText && index != aftersaleinfo.canDoText.length-1">,</span>
+              {{ item }}
+              <span
+                v-if="
+                  aftersaleinfo.canDoText &&
+                  index != aftersaleinfo.canDoText.length - 1
+                "
+                >,</span
+              >
             </span>
-            <span style="color:#666" v-if="aftersaleinfo.isYellow == 1">还可以：</span>
+            <span style="color: #666" v-if="aftersaleinfo.isYellow == 1"
+              >还可以：</span
+            >
             <span
               @click="lookmoeny"
-              v-if="aftersaleinfo.isYellow == 1 && (aftersaleinfo.aftersaleType == 1 || aftersaleinfo.aftersaleType == 3)"
+              v-if="
+                aftersaleinfo.isYellow == 1 &&
+                (aftersaleinfo.aftersaleType == 1 ||
+                  aftersaleinfo.aftersaleType == 3)
+              "
               class="lookmoeny"
-            >查看钱款去向</span>
-            <span v-if="aftersaleinfo.isYellow == 1  && aftersaleinfo.aftersaleType == 4">买家已收获换货完成</span>
+              >查看钱款去向</span
+            >
+            <span
+              v-if="
+                aftersaleinfo.isYellow == 1 && aftersaleinfo.aftersaleType == 4
+              "
+              >买家已收获换货完成</span
+            >
             <!-- <span>立即发货</span> -->
           </div>
         </div>
-        <div class="tips-box" v-if="aftersaleinfo.remindText && aftersaleinfo.remindText.length">
+        <div
+          class="tips-box"
+          v-if="aftersaleinfo.remindText && aftersaleinfo.remindText.length"
+        >
           <div>和商有品提醒：</div>
           <div class="tips-text">
-            <div v-for="(item,index) in aftersaleinfo.remindText" :key="index">{{item}}</div>
+            <div v-for="(item, index) in aftersaleinfo.remindText" :key="index">
+              {{ item }}
+            </div>
             <!-- <div>如果未发货，请点击同意退款给买家</div>
             <div>如果实际已发货，请主要与买家联系</div>
             <div>如果你逾期未处理，视作同意买家申请，系统将自动退款给买家。</div>-->
@@ -53,11 +81,15 @@
       <div class="buy-info">
         <div>
           <section>售后商品</section>
-          <section class="goods-content">
-            <img :src="aftersaleinfo.thumbImg" style="width:80px;height:80px" />
+          <section
+            class="goods-content"
+            v-for="(item, idx) in aftersaleinfo.productList"
+            :key="idx"
+          >
+            <img :src="item.thumbImg" style="width: 80px; height: 80px" />
             <div>
-              <div>{{aftersaleinfo.productName}}</div>
-              <div>{{aftersaleinfo.goodsSku}}</div>
+              <div>{{ item.productName }}</div>
+              <div>{{ item.goodsSku }}</div>
             </div>
           </section>
         </div>
@@ -65,114 +97,205 @@
           <section>售后信息</section>
           <section>
             售后方式：
-            <span style="color:#ff0000">{{aftersaleinfo.aftersaleTypeText}}</span>
+            <span style="color: #ff0000">{{
+              aftersaleinfo.aftersaleTypeText
+            }}</span>
           </section>
-          <section v-if="aftersaleinfo.aftersaleType == 4">换货件数：{{aftersaleinfo.aftersaleNum}}</section>
+          <section v-if="aftersaleinfo.aftersaleType == 4">
+            换货件数：{{ aftersaleinfo.aftersaleNum }}
+          </section>
           <section v-else>
             退款金额：
             <span>
-              <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
+              <span style="color: #ff0000"
+                >￥{{ aftersaleinfo.refundAmount }}</span
+              >
               <span v-if="aftersaleinfo.orderFreight != 0">
                 （含
-                <span style="color:#ff0000">￥{{aftersaleinfo.orderFreight}}</span> 运费）
+                <span style="color: #ff0000"
+                  >￥{{ aftersaleinfo.orderFreight }}</span
+                >
+                运费）
               </span>
             </span>
           </section>
           <!-- <section>联系方式：{{aftersaleinfo.userMobile}}</section> -->
-          <section>退款原因：{{aftersaleinfo.aftersaleReason}}</section>
-          <section class="flex-ssss"><span> 退款说明：</span><span>{{aftersaleinfo.aftersaleDes}}</span> </section>
+          <section>退款原因：{{ aftersaleinfo.aftersaleReason }}</section>
+          <section class="flex-ssss">
+            <span> 退款说明：</span
+            ><span>{{ aftersaleinfo.aftersaleDes }}</span>
+          </section>
           <!-- <section>退款说明:{{aftersaleinfo.aftersaleReason}}</section> -->
           <!-- <section>售后历史：{{aftersaleinfo.historyAftersaleNum}}</section> -->
         </div>
         <div>
           <section>购买信息</section>
-          <section>
-            商品单价：
-            <span style="color:#ff0000">{{aftersaleinfo.payPrice}} × {{aftersaleinfo.number}}件</span>
+          <section class="flex-ssss">
+            <div>商品单价：</div>
+            <div>
+              <span
+                style="color: #ff0000; display: block"
+                v-for="(item, idx) in aftersaleinfo.productList"
+                :key="idx"
+                >{{ item.payPrice }} × {{ item.number }}件</span
+              >
+            </div>
           </section>
           <section>
             实付金额：
             <span
-              style="color:#ff0000"
+              style="color: #ff0000"
               v-if="aftersaleinfo.payPrice && aftersaleinfo.number"
-            >{{multiply(aftersaleinfo.payPrice,aftersaleinfo.number)}}</span>
+              >￥{{ totalMoeny }}
+            </span>
           </section>
           <section>
             发货件数：
-            {{aftersaleinfo.number}}
+            {{ aftersaleinfo.number }}
           </section>
-          <section>发货状态：{{aftersaleinfo.orderDeliveryStatus == 0 ? '未发货' : '已发货'}}</section>
+          <section v-if="aftersaleinfo.productList">
+            发货状态：{{
+              aftersaleinfo.productList[0].orderDeliveryStatus == 0
+                ? "未发货"
+                : "已发货"
+            }}
+          </section>
           <section>
             订单编号：
-            <span style="color:#44abf7">{{aftersaleinfo.orderCode}}</span>
+            <span style="color: #44abf7">{{ aftersaleinfo.orderCode }}</span>
           </section>
         </div>
         <div v-if="aftersaleinfo.merAddress">
           <section>退货地址</section>
           <section>
             联系电话：
-            {{aftersaleinfo.merMobile}}
+            {{ aftersaleinfo.merMobile }}
           </section>
           <section>
             联系人：
-            {{aftersaleinfo.merName}}
+            {{ aftersaleinfo.merName }}
           </section>
           <section class="flex-nima">
             <div>退货地址：</div>
-            <div>{{aftersaleinfo.merAddress}}</div>
+            <div>{{ aftersaleinfo.merAddress }}</div>
           </section>
         </div>
       </div>
-      <div class="wutit" v-if="aftersaleinfo.aftersaleImgsArr && aftersaleinfo.aftersaleImgsArr.length">协商图片</div>
-      <div class="bng-container" v-if="aftersaleinfo.aftersaleImgsArr && aftersaleinfo.aftersaleImgsArr.length">
+      <div
+        class="wutit"
+        v-if="
+          aftersaleinfo.aftersaleImgsArr &&
+          aftersaleinfo.aftersaleImgsArr.length
+        "
+      >
+        协商图片
+      </div>
+      <div
+        class="bng-container"
+        v-if="
+          aftersaleinfo.aftersaleImgsArr &&
+          aftersaleinfo.aftersaleImgsArr.length
+        "
+      >
         <el-image
-          style="width: 100px; height: 100px;margin-right:10px"
+          style="width: 100px; height: 100px; margin-right: 10px"
           :src="item"
           :key="index"
-          v-for="(item,index) in aftersaleinfo.aftersaleImgsArr"
+          v-for="(item, index) in aftersaleinfo.aftersaleImgsArr"
           :preview-src-list="aftersaleinfo.aftersaleImgsArr"
         ></el-image>
       </div>
       <div class="btn-box">
         <!-- 退款 -->
-        <div v-if="aftersaleinfo.aftersaleType == 1 && aftersaleinfo.aftersaleStatus == '997'">
-          <el-button type="primary" @click="queren">同意{{aftersaleinfo.aftersaleTypeText}}</el-button>
-          <el-button @click="jujue">拒绝{{aftersaleinfo.aftersaleTypeText}}</el-button>
+        <div
+          v-if="
+            aftersaleinfo.aftersaleType == 1 &&
+            aftersaleinfo.aftersaleStatus == '997'
+          "
+        >
+          <el-button type="primary" @click="queren"
+            >同意{{ aftersaleinfo.aftersaleTypeText }}</el-button
+          >
+          <el-button @click="jujue"
+            >拒绝{{ aftersaleinfo.aftersaleTypeText }}</el-button
+          >
         </div>
         <!-- 退货退款 -->
-        <div v-if="aftersaleinfo.aftersaleType == 3 && aftersaleinfo.aftersaleStatus == '997'">
-          <el-button type="primary" @click="queren">同意{{aftersaleinfo.aftersaleTypeText}}</el-button>
-          <el-button @click="jujue">拒绝{{aftersaleinfo.aftersaleTypeText}}</el-button>
+        <div
+          v-if="
+            aftersaleinfo.aftersaleType == 3 &&
+            aftersaleinfo.aftersaleStatus == '997'
+          "
+        >
+          <el-button type="primary" @click="queren"
+            >同意{{ aftersaleinfo.aftersaleTypeText }}</el-button
+          >
+          <el-button @click="jujue"
+            >拒绝{{ aftersaleinfo.aftersaleTypeText }}</el-button
+          >
         </div>
         <!-- 退货确认收货 -->
-        <div v-if="aftersaleinfo.aftersaleType == 3 && aftersaleinfo.aftersaleStatus == '993'">
-          <el-button type="primary" @click="shouhuo(1)">确认收货并退款</el-button>
+        <div
+          v-if="
+            aftersaleinfo.aftersaleType == 3 &&
+            aftersaleinfo.aftersaleStatus == '993'
+          "
+        >
+          <el-button type="primary" @click="shouhuo(1)"
+            >确认收货并退款</el-button
+          >
           <el-button @click="shouhuo(2)">拒绝收货</el-button>
         </div>
         <!-- 换货 -->
-        <div v-if="aftersaleinfo.aftersaleType == 4 && aftersaleinfo.aftersaleStatus == '997'">
-          <el-button type="primary" @click="queren">同意{{aftersaleinfo.aftersaleTypeText}}</el-button>
-          <el-button @click="jujue">拒绝{{aftersaleinfo.aftersaleTypeText}}</el-button>
+        <div
+          v-if="
+            aftersaleinfo.aftersaleType == 4 &&
+            aftersaleinfo.aftersaleStatus == '997'
+          "
+        >
+          <el-button type="primary" @click="queren"
+            >同意{{ aftersaleinfo.aftersaleTypeText }}</el-button
+          >
+          <el-button @click="jujue"
+            >拒绝{{ aftersaleinfo.aftersaleTypeText }}</el-button
+          >
         </div>
         <!-- 换货确认收货并发货 -->
-        <div v-if="aftersaleinfo.aftersaleType == 4 && aftersaleinfo.aftersaleStatus == '993'">
-          <el-button type="primary" @click="shouhuobingfahuo">确认收货并发货</el-button>
+        <div
+          v-if="
+            aftersaleinfo.aftersaleType == 4 &&
+            aftersaleinfo.aftersaleStatus == '993'
+          "
+        >
+          <el-button type="primary" @click="shouhuobingfahuo"
+            >确认收货并发货</el-button
+          >
           <el-button @click="shouhuo(2)">拒绝收货</el-button>
         </div>
       </div>
     </div>
     <!-- 退款同意 -->
     <el-dialog :visible.sync="dialogVisible" width="40%">
-      <span style="font-size:16px" slot="title">售后维权处理</span>
-      <el-alert title="商家同意后，退款将自动原路退后买家付款账户" type="warning" :center="true" :closable="false"></el-alert>
-      <div style="margin-top:20px">售后方式：{{aftersaleinfo.aftersaleTypeText}}</div>
-      <div style="margin-top:20px">
+      <span style="font-size: 16px" slot="title">售后维权处理</span>
+      <el-alert
+        title="商家同意后，退款将自动原路退后买家付款账户"
+        type="warning"
+        :center="true"
+        :closable="false"
+      ></el-alert>
+      <div style="margin-top: 20px">
+        售后方式：{{ aftersaleinfo.aftersaleTypeText }}
+      </div>
+      <div style="margin-top: 20px">
         退款金额：
         <span>
-          <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
+          <span style="color: #ff0000">￥{{ aftersaleinfo.refundAmount }}</span>
           <span v-if="aftersaleinfo.orderFreight != 0">
             （含
-            <span style="color:#ff0000">￥{{aftersaleinfo.orderFreight}}</span> 运费）
+            <span style="color: #ff0000"
+              >￥{{ aftersaleinfo.orderFreight }}</span
+            >
+            运费）
           </span>
         </span>
       </div>
@@ -183,26 +306,35 @@
     </el-dialog>
     <!-- 退款决绝弹窗 -->
     <el-dialog :visible.sync="dialogVisible1" width="40%">
-      <span style="font-size:16px" slot="title">售后维权处理</span>
+      <span style="font-size: 16px" slot="title">售后维权处理</span>
       <el-alert
         title="建议你与买家协商后,在确定是否拒绝退款，如果拒绝退款后，买家可以修改退款申请协议重新发起退款。"
         type="warning"
         :closable="false"
       ></el-alert>
-      <div style="margin-top:20px">售后方式：{{aftersaleinfo.aftersaleTypeText}}</div>
-      <div style="margin-top:20px">
+      <div style="margin-top: 20px">
+        售后方式：{{ aftersaleinfo.aftersaleTypeText }}
+      </div>
+      <div style="margin-top: 20px">
         退款金额：
         <span>
-          <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
+          <span style="color: #ff0000">￥{{ aftersaleinfo.refundAmount }}</span>
           <span v-if="aftersaleinfo.orderFreight != 0">
             （含
-            <span style="color:#ff0000">￥{{aftersaleinfo.orderFreight}}</span> 运费）
+            <span style="color: #ff0000"
+              >￥{{ aftersaleinfo.orderFreight }}</span
+            >
+            运费）
           </span>
         </span>
       </div>
       <div style="margin-lef：20px" class="jue-js">
         <span>拒绝原因：</span>
-        <el-input style="width:300px;" type="textarea" v-model="juejuetext"></el-input>
+        <el-input
+          style="width: 300px"
+          type="textarea"
+          v-model="juejuetext"
+        ></el-input>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible1 = false">取 消</el-button>
@@ -211,65 +343,97 @@
     </el-dialog>
     <!-- 查看欠款去向 -->
     <el-dialog title="收货地址" :visible.sync="dialogTableVisible" width="80%">
-      <span style="font-size:16px" slot="title">查看欠款去向</span>
+      <span style="font-size: 16px" slot="title">查看欠款去向</span>
       <div class="flex-s">
         <div>
           退款/返现总额:
-          <span>{{aftersaleinfo.refundAmount}}</span>
+          <span>{{ aftersaleinfo.refundAmount }}</span>
         </div>
         <div>
           订单：
-          <span style="color:#44abf7">{{aftersaleinfo.orderCode}}</span>
+          <span style="color: #44abf7">{{ aftersaleinfo.orderCode }}</span>
         </div>
       </div>
       <el-table :data="gridData">
         <el-table-column property="refundId" label="退款流水号">
-          <template slot-scope="prop">{{prop.row.refundId ? prop.row.refundId : '--'}}</template>
+          <template slot-scope="prop">{{
+            prop.row.refundId ? prop.row.refundId : "--"
+          }}</template>
         </el-table-column>
-        <el-table-column property="applyTime" label="申请时间"></el-table-column>
-        <el-table-column property="refundMode" label="退款方式"></el-table-column>
-        <el-table-column property="refundAmount" label="金额（元）"></el-table-column>
+        <el-table-column
+          property="applyTime"
+          label="申请时间"
+        ></el-table-column>
+        <el-table-column
+          property="refundMode"
+          label="退款方式"
+        ></el-table-column>
+        <el-table-column
+          property="refundAmount"
+          label="金额（元）"
+        ></el-table-column>
         <el-table-column property="refundStutas" label="状态"></el-table-column>
         <el-table-column property="operator" label="操作者"></el-table-column>
-        <el-table-column property="aftersaleReason" label="退款原因"></el-table-column>
+        <el-table-column
+          property="aftersaleReason"
+          label="退款原因"
+        ></el-table-column>
       </el-table>
     </el-dialog>
     <!-- 退货退款换货同意弹窗 -->
     <el-dialog :visible.sync="dialogVisible2" width="60%">
-      <span style="font-size:16px" slot="title">售后维权处理</span>
-      <el-alert title="商家同意后，退款将自动原路退后买家付款账户" type="warning" :center="true" :closable="false"></el-alert>
-      <div style="margin-top:20px">售后方式：{{aftersaleinfo.aftersaleTypeText}}</div>
+      <span style="font-size: 16px" slot="title">售后维权处理</span>
+      <el-alert
+        title="商家同意后，退款将自动原路退后买家付款账户"
+        type="warning"
+        :center="true"
+        :closable="false"
+      ></el-alert>
+      <div style="margin-top: 20px">
+        售后方式：{{ aftersaleinfo.aftersaleTypeText }}
+      </div>
       <template v-if="aftersaleinfo.aftersaleType != 4">
-        <div style="margin-top:20px">
+        <div style="margin-top: 20px">
           退款金额：
           <span>
-            <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
+            <span style="color: #ff0000"
+              >￥{{ aftersaleinfo.refundAmount }}</span
+            >
             <span v-if="aftersaleinfo.orderFreight != 0">
               （含
-              <span style="color:#ff0000">￥{{aftersaleinfo.orderFreight}}</span> 运费）
+              <span style="color: #ff0000"
+                >￥{{ aftersaleinfo.orderFreight }}</span
+              >
+              运费）
             </span>
           </span>
         </div>
-        <div style="margin-top:20px">
+        <div style="margin-top: 20px">
           退货件数：
-          <span style="color:#ff0000">{{aftersaleinfo.aftersaleNum}}</span>
+          <span style="color: #ff0000">{{ aftersaleinfo.aftersaleNum }}</span>
         </div>
       </template>
       <template v-else>
-        <div style="margin-top:20px">
+        <div style="margin-top: 20px">
           换货件数：
-          <span style="color:#ff0000">{{aftersaleinfo.aftersaleNum}}</span>
+          <span style="color: #ff0000">{{ aftersaleinfo.aftersaleNum }}</span>
         </div>
       </template>
       <div>
-        <div v-for="(item,index) in AddressData" :key="index" class="address-tel">
+        <div
+          v-for="(item, index) in AddressData"
+          :key="index"
+          class="address-tel"
+        >
           <el-radio v-model="radio" :label="item.asuaId">
             <span>
-              [{{item.recipientsName}}收]{{item.addressInfo}}{{item.recipientsTel}}
+              [{{ item.recipientsName }}收]{{ item.addressInfo
+              }}{{ item.recipientsTel }}
               <span
                 v-if="item.isDefaultAddress == 1"
-                style="color:rgb(240, 186, 8)"
-              >默认</span>
+                style="color: rgb(240, 186, 8)"
+                >默认</span
+              >
             </span>
           </el-radio>
         </div>
@@ -281,51 +445,64 @@
     </el-dialog>
     <!-- 同意跟拒绝收货弹窗12 -->
     <el-dialog :visible.sync="dialogVisible3" width="40%">
-      <span style="font-size:16px" slot="title">售后维权处理</span>
+      <span style="font-size: 16px" slot="title">售后维权处理</span>
       <el-alert
         title="需要你同意退款申请，买家才能退货给你，买家退货后你需要再次确认收货后，退款将自动原路退回至买家账户"
         type="warning"
         :center="true"
         :closable="false"
       ></el-alert>
-      <div style="margin-top:20px">售后方式：{{aftersaleinfo.aftersaleTypeText}}</div>
+      <div style="margin-top: 20px">
+        售后方式：{{ aftersaleinfo.aftersaleTypeText }}
+      </div>
       <template v-if="aftersaleinfo.aftersaleType != 4">
-        <div style="margin-top:20px">
+        <div style="margin-top: 20px">
           退款金额：
           <span>
-            <span style="color:#ff0000">￥{{aftersaleinfo.refundAmount}}</span>
+            <span style="color: #ff0000"
+              >￥{{ aftersaleinfo.refundAmount }}</span
+            >
             <span v-if="aftersaleinfo.orderFreight != 0">
               （
-              <span style="color:#ff0000">{{aftersaleinfo.orderFreight}}</span> ）
+              <span style="color: #ff0000">{{
+                aftersaleinfo.orderFreight
+              }}</span>
+              ）
             </span>
           </span>
         </div>
-        <div style="margin-top:20px">
+        <div style="margin-top: 20px">
           退货件数：
-          <span style="color:#ff0000">{{aftersaleinfo.aftersaleNum}}</span>
+          <span style="color: #ff0000">{{ aftersaleinfo.aftersaleNum }}</span>
         </div>
       </template>
       <template v-else>
-        <div style="margin-top:20px">
+        <div style="margin-top: 20px">
           换货件数：
-          <span style="color:#ff0000">{{aftersaleinfo.aftersaleNum}}</span>
+          <span style="color: #ff0000">{{ aftersaleinfo.aftersaleNum }}</span>
         </div>
       </template>
-      <div style="margin-top:20px">
+      <div style="margin-top: 20px">
         收货地址：
         <span>
-          <span>[{{aftersaleinfo.merName}}收]</span>
-          <span>{{aftersaleinfo.merAddress}}</span>
-          <span>{{aftersaleinfo.merMobile}}</span>
+          <span>[{{ aftersaleinfo.merName }}收]</span>
+          <span>{{ aftersaleinfo.merAddress }}</span>
+          <span>{{ aftersaleinfo.merMobile }}</span>
         </span>
       </div>
       <div style="margin-lef：20px" class="jue-js" v-if="indexStaus == 2">
         <span>据决原因：</span>
-        <el-input style="width:300px;" type="textarea" v-model="aftersaleRefuse"></el-input>
+        <el-input
+          style="width: 300px"
+          type="textarea"
+          v-model="aftersaleRefuse"
+        ></el-input>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible3 = false">取 消</el-button>
-        <el-button type="primary" @click="shouhuo" v-if="indexStaus == 1">确认收到退货</el-button>
+        <el-button type="primary" @click="shouhuo" v-if="indexStaus == 1"
+          >确认收到退货</el-button
+        >
         <el-button type="primary" @click="shouhuo" v-if="indexStaus == 2">
           <span v-if="aftersaleinfo.aftersaleType == 3">未收到货拒绝退款</span>
           <span v-if="aftersaleinfo.aftersaleType == 4">未收到货拒绝换货</span>
@@ -335,37 +512,47 @@
     <!-- 确认收货并发货弹窗 -->
     <el-dialog title="确认收货并发货" :visible.sync="dialogTableVisible1">
       <div class="dilogTitle">
-        <el-alert title="换货商品重新发货不会引起库存变化" type="warning" :center="true" :closable="false"></el-alert>
+        <el-alert
+          title="换货商品重新发货不会引起库存变化"
+          type="warning"
+          :center="true"
+          :closable="false"
+        ></el-alert>
       </div>
       <el-table :data="huotable">
         <el-table-column property="date" label="商品" width="300px">
           <template slot-scope="props">
-            <section class="flex-box" style="width:100%;padding: 0;">
+            <section class="flex-box" style="width: 100%; padding: 0">
               <div>
                 <img class="thumbImg" :src="props.row.thumbImg" />
                 <div class="product-name">
                   <p class="thumbImg-right">{{ props.row.productName }}</p>
                   <div
-                    style="margin-left:10px;margin-top:10px"
+                    style="margin-left: 10px; margin-top: 10px"
                     v-show="props.row.goodsSku"
-                  >{{props.row.goodsSku}}</div>
+                  >
+                    {{ props.row.goodsSku }}
+                  </div>
                 </div>
               </div>
             </section>
           </template>
         </el-table-column>
         <el-table-column property="aftersaleNum" label="数量"></el-table-column>
-        <el-table-column property="userLogisticsCode" label="运单号"></el-table-column>
+        <el-table-column
+          property="userLogisticsCode"
+          label="运单号"
+        ></el-table-column>
       </el-table>
       <el-form label-width="70px">
         <el-form-item label="发货方式">
-          <span style="font-size:12px" class="ems">自己联系快递</span>
+          <span style="font-size: 12px" class="ems">自己联系快递</span>
           <div>
             <el-input
               v-model="fahuoform.merLogisticsCode"
               size="mini"
               @blur="onSubmit"
-              style="width:300px;margin-right:20px"
+              style="width: 300px; margin-right: 20px"
               onkeyup="value=value.replace(/[\W]/g,'')"
             ></el-input>
           </div>
@@ -374,7 +561,7 @@
               v-model="fahuoform.merShipperCode"
               placeholder="请选择"
               size="mini"
-              style="width:300px"
+              style="width: 300px"
             >
               <el-option
                 v-for="(item, index) in kuaidiarr"
@@ -386,7 +573,9 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="disp" @click="shouhuobingfahuo">发货</el-button>
+          <el-button type="primary" class="disp" @click="shouhuobingfahuo"
+            >发货</el-button
+          >
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -395,15 +584,17 @@
       <el-table :data="gridData">
         <el-table-column property="date" label="商品" width="300px">
           <template slot-scope="props">
-            <section class="flex-box" style="width:100%;padding: 0;">
+            <section class="flex-box" style="width: 100%; padding: 0">
               <div>
                 <img class="thumbImg" :src="props.row.thumbImg" />
                 <div class="product-name">
                   <p class="thumbImg-right">{{ props.row.productName }}</p>
                   <div
-                    style="margin-left:10px;margin-top:10px"
+                    style="margin-left: 10px; margin-top: 10px"
                     v-show="props.row.goodsSku"
-                  >{{props.row.goodsSku}}</div>
+                  >
+                    {{ props.row.goodsSku }}
+                  </div>
                 </div>
               </div>
             </section>
@@ -412,23 +603,28 @@
         <el-table-column property="number" label="数量"></el-table-column>
         <el-table-column property="deliveryStatus" label="状态">
           <template slot-scope="props">
-            <section style="width:100%;padding: 0;">
-              <div style="color:rgb(240, 186, 8);">{{props.row.deliveryStatus1}}</div>
-              <div>{{props.row.deliveryStatus}}</div>
+            <section style="width: 100%; padding: 0">
+              <div style="color: rgb(240, 186, 8)">
+                {{ props.row.deliveryStatus1 }}
+              </div>
+              <div>{{ props.row.deliveryStatus }}</div>
             </section>
           </template>
         </el-table-column>
-        <el-table-column property="userLogisticsCode" label="运单号"></el-table-column>
+        <el-table-column
+          property="userLogisticsCode"
+          label="运单号"
+        ></el-table-column>
       </el-table>
       <el-form label-width="70px">
         <el-form-item label="发货方式">
-          <span style="font-size:12px" class="ems">自己联系快递</span>
+          <span style="font-size: 12px" class="ems">自己联系快递</span>
           <div>
             <el-input
               v-model="fahuoform1.logisticsCode"
               size="mini"
               @blur="onSubmit1"
-              style="width:300px;margin-right:20px"
+              style="width: 300px; margin-right: 20px"
               onkeyup="value=value.replace(/[\W]/g,'')"
             ></el-input>
           </div>
@@ -437,7 +633,7 @@
               v-model="fahuoform1.shipperCode"
               placeholder="请选择"
               size="mini"
-              style="width:300px"
+              style="width: 300px"
             >
               <el-option
                 v-for="(item, index) in kuaidiarr"
@@ -449,7 +645,9 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="disp" @click="haikeyifahuo">发货</el-button>
+          <el-button type="primary" class="disp" @click="haikeyifahuo"
+            >发货</el-button
+          >
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -494,6 +692,7 @@ export default {
         curPage: 1,
         pageSize: 5,
       },
+      totalMoeny: "",
       AddressData: [],
       gridData: [],
       huotable: [],
@@ -824,6 +1023,12 @@ export default {
       };
       getAfterSaleDetailInfoNew(obj).then((res) => {
         this.aftersaleinfo = res.body;
+        this.totalMoeny = this.aftersaleinfo.productList.reduce(function (
+          total,
+          val
+        ) {
+          return parseFloat(total.payAmount) + parseFloat(val.payAmount);
+        });
         this.aftersaleinfo.orderFreight;
         if (this.aftersaleinfo.canDoText != "") {
           this.aftersaleinfo.canDoText = this.aftersaleinfo.canDoText.split(
@@ -1113,6 +1318,7 @@ export default {
 .goods-content {
   display: flex;
   align-items: center;
+  margin-top: 10px;
 }
 .goods-content > img {
   border-radius: 5px;
@@ -1174,7 +1380,7 @@ export default {
   margin-right: 10px;
   padding: 5px 0px;
 }
-.flex-ssss{
+.flex-ssss {
   display: flex;
 }
 /* .time-content{

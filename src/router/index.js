@@ -225,7 +225,7 @@ export const asyncRoutes = [
     meta: {
       title: '财务',
       fullTitle: '银行卡管理',
-      icon: 'shouhou-01',
+      icon: 'caiwuguanli',
       roles: [
         "/shop/sendWithdrawal/bankCardList"
       ]
@@ -447,7 +447,7 @@ export const asyncRoutes = [
     meta: {
       title: '设置',
       fullTitle: '操作员管理',
-      icon: 'shouhou-01',
+      icon: 'shezhi',
       roles: [
         "/shop/cms/permission/user/list",
         "/shop/cms/permission/role/list"

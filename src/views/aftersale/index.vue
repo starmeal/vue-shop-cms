@@ -225,14 +225,14 @@
               >
                 <tr class="tspi" style="width:100%">
                   <td style="width:30%">
-                    <section class="flex-box">
+                    <section class="flex-box" v-for="(good,inx) in its.productList" :key="inx">
                       <div>
                         <div class="product-name">
-                          <p class="thumbImg-right">{{ its.productNames }}</p>
+                          <p class="thumbImg-right">{{ good.productNames }}</p>
                         </div>
                       </div>
                       <div>
-                        <div v-show="its.goodsSkus" style="font-size:10px;">{{its.goodsSkus}}</div>
+                        <div v-show="good.goodsSkus" style="font-size:10px;">{{good.goodsSkus}}</div>
                       </div>
                     </section>
                   </td>
