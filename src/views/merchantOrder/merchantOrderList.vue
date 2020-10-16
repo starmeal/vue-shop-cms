@@ -135,7 +135,7 @@
                 "
               >
                 <tr style="width: 100%" class="header-tr">
-                  <td style="width: 40%">
+                  <td style="width: 50%">
                     <div class="header-flex">
                       <section>商品</section>
                       <section>单价（元）/数量</section>
@@ -145,7 +145,6 @@
                   <!-- <td style="width:10%">售后</td> -->
                   <td style="width: 10%">买家/收货人</td>
                   <td style="width: 10%">配送方式</td>
-                  <td style="width: 10%">运费</td>
                   <td style="width: 10%">实收金额（元）</td>
                   <td style="width: 10%">订单状态</td>
                   <td style="width: 10%">操作</td>
@@ -161,7 +160,7 @@
               "
             >
               <tr style="width: 100%" class="header-tr">
-                <td style="width: 40%">
+                <td style="width: 50%">
                   <div class="header-flex">
                     <section>商品</section>
                     <section>单价（元）/数量</section>
@@ -171,7 +170,6 @@
                 <!-- <td style="width:10%">售后</td> -->
                 <td style="width: 10%">买家/收货人</td>
                 <td style="width: 10%">配送方式</td>
-                <td style="width: 10%">运费</td>
                 <td style="width: 10%">实收金额（元）</td>
                 <td style="width: 10%">订单状态</td>
                 <td style="width: 10%">操作</td>
@@ -189,7 +187,7 @@
                 >
                 <span
                   style="margin-right: 30px; margin-left: 18px; font-size: 10px"
-                  >{{ its.payType == 2 ? "余额" : "微信" }}</span
+                  >支付方式：{{ its.payType == 2 ? "余额" : "微信" }}</span
                 >
                 <p class="detail" @click="goOrderdetail(its)">查看详情</p>
               </div>
@@ -205,7 +203,7 @@
                 "
               >
                 <tr class="tspi" style="width: 100%">
-                  <td style="width: 40%">
+                  <td style="width: 50%">
                     <section
                       class="flex-box"
                       v-for="(item, idx) in its.detail"
@@ -240,14 +238,11 @@
                     <p class="qusibaps">{{ its.nickName }}</p>
                     <p class="qusibap">{{ its.mobile }}</p>
                   </td>
-                    <td style="width: 10%">
+                  <td style="width: 10%">
                     <p class="qusibap">{{ its.pickupType }}</p>
                   </td>
                   <td style="width: 10%">
-                    <p class="qusibap">￥{{ its.orderFreight }}</p>
-                  </td>
-                  <td style="width: 10%">
-                    <div class="qusibap">￥{{ its.payAmount }}</div>
+                    <div class="qusibap">{{ its.payAmount }}</div>
                   </td>
                   <td style="width: 10%">
                     <p class="qusibap">{{ its.orderStatusText }}</p>
@@ -390,8 +385,10 @@
         </div>
         <el-table
           :data="gridData"
+          ref="frod"
           @selection-change="handleSelectionChange"
-          @select-all="handleSelectionChange"
+          @select-all="selectSingle"
+          @select="selectSingle"
         >
           <el-table-column
             type="selection"
@@ -621,6 +618,28 @@ export default {
     this.initscroll();
   },
   methods: {
+    SelectionChange() {
+      this.$nextTick(() => {
+        this.gridData.forEach((row, index) => {
+          if (row.isSelect == 1) {
+            this.$refs.frod.toggleRowSelection(row, true);
+          } else {
+            this.$refs.frod.toggleRowSelection(row, false);
+          }
+        });
+      });
+    },
+    // 发货过滤不能发的商品
+    selectable(row, index) {
+      if (row.isSelect == 1) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    selectSingle() {
+      this.SelectionChange();
+    },
     searchChange(val) {
       this.listpage.orderCode = "";
       this.listpage.custName = "";
@@ -770,15 +789,6 @@ export default {
           });
         });
       });
-    },
-    // 发货过滤不能发的商品
-    selectable(row, index) {
-      console.log(row, index);
-      if (row.isSelect == 1) {
-        return true;
-      } else {
-        return false;
-      }
     },
     // 确认发货
     fahuola() {
@@ -931,6 +941,10 @@ export default {
         this.fahuoinfo = res.body;
         this.kuaidiarr = [];
         this.dialogTableVisible = true;
+        this.selectSingle();
+        // setTimeout(()=>{
+        //   this.$refs.frod.toggleAllSelection()
+        // })
         this.fahuoform.orderCode = item.orderCode;
         console.log(res);
         // this.gridData = item.detail;

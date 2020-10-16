@@ -70,11 +70,10 @@
           <div>和商有品提醒：</div>
           <div class="tips-text">
             <div v-for="(item, index) in aftersaleinfo.remindText" :key="index">
-              {{ item }}
+              <template v-show="item != ''">
+                （{{ index + 1 }}）{{ item }}
+              </template>
             </div>
-            <!-- <div>如果未发货，请点击同意退款给买家</div>
-            <div>如果实际已发货，请主要与买家联系</div>
-            <div>如果你逾期未处理，视作同意买家申请，系统将自动退款给买家。</div>-->
           </div>
         </div>
       </div>
@@ -86,14 +85,19 @@
             v-for="(item, idx) in aftersaleinfo.productList"
             :key="idx"
           >
-            <img :src="item.thumbImg" style="width: 80px; height: 80px" />
-            <div>
-              <div>{{ item.productName }}</div>
+            <img :src="item.thumbImg" style="width: 100px; height: 100px" />
+            <div class="jsx-goods">
+              <div class="jsx-productName">{{ item.productName }}</div>
               <div>{{ item.goodsSku }}</div>
+              <div>
+                <span style="color: #ff0000; display: block"
+                  >￥{{ item.payPrice }} × {{ item.number }}件</span
+                >
+              </div>
             </div>
           </section>
         </div>
-        <div>
+        <div class="lint-he">
           <section>售后信息</section>
           <section>
             售后方式：
@@ -120,34 +124,36 @@
             </span>
           </section>
           <!-- <section>联系方式：{{aftersaleinfo.userMobile}}</section> -->
-          <section>退款原因：{{ aftersaleinfo.aftersaleReason }}</section>
+          <section>退款原因：<span>{{ aftersaleinfo.aftersaleReason }}</span>  </section>
           <section class="flex-ssss">
             <span> 退款说明：</span
-            ><span>{{ aftersaleinfo.aftersaleDes }}</span>
+            ><span> {{ aftersaleinfo.aftersaleDes }}</span>
           </section>
           <!-- <section>退款说明:{{aftersaleinfo.aftersaleReason}}</section> -->
           <!-- <section>售后历史：{{aftersaleinfo.historyAftersaleNum}}</section> -->
         </div>
-        <div>
+        <div class="lint-he">
           <section>购买信息</section>
-          <section class="flex-ssss">
+          <!-- <section class="flex-ssss">
             <div>商品单价：</div>
             <div>
               <span
                 style="color: #ff0000; display: block"
                 v-for="(item, idx) in aftersaleinfo.productList"
                 :key="idx"
-                >{{ item.payPrice }} × {{ item.number }}件</span
+                >￥{{ item.payPrice }} × {{ item.number }}件</span
               >
             </div>
-          </section>
-          <section>
-            实付金额：
-            <span
-              style="color: #ff0000"
-              v-if="aftersaleinfo.payPrice && aftersaleinfo.number"
-              >￥{{ totalMoeny }}
-            </span>
+          </section> -->
+          <section class="flex-ssss">
+            <div>实付金额：</div>
+            <div>
+              <span
+                style="color: #ff0000"
+                v-if="aftersaleinfo.payPrice && aftersaleinfo.number"
+                >￥{{ totalMoeny }}
+              </span>
+            </div>
           </section>
           <section>
             发货件数：
@@ -205,9 +211,10 @@
           :preview-src-list="aftersaleinfo.aftersaleImgsArr"
         ></el-image>
       </div>
-      <div class="btn-box">
+      <div>
         <!-- 退款 -->
         <div
+          class="btn-box"
           v-if="
             aftersaleinfo.aftersaleType == 1 &&
             aftersaleinfo.aftersaleStatus == '997'
@@ -222,6 +229,7 @@
         </div>
         <!-- 退货退款 -->
         <div
+          class="btn-box"
           v-if="
             aftersaleinfo.aftersaleType == 3 &&
             aftersaleinfo.aftersaleStatus == '997'
@@ -236,6 +244,7 @@
         </div>
         <!-- 退货确认收货 -->
         <div
+          class="btn-box"
           v-if="
             aftersaleinfo.aftersaleType == 3 &&
             aftersaleinfo.aftersaleStatus == '993'
@@ -248,6 +257,7 @@
         </div>
         <!-- 换货 -->
         <div
+          class="btn-box"
           v-if="
             aftersaleinfo.aftersaleType == 4 &&
             aftersaleinfo.aftersaleStatus == '997'
@@ -262,6 +272,7 @@
         </div>
         <!-- 换货确认收货并发货 -->
         <div
+          class="btn-box"
           v-if="
             aftersaleinfo.aftersaleType == 4 &&
             aftersaleinfo.aftersaleStatus == '993'
@@ -611,10 +622,11 @@
             </section>
           </template>
         </el-table-column>
-        <el-table-column
-          property="userLogisticsCode"
-          label="运单号"
-        ></el-table-column>
+        <el-table-column property="userLogisticsCode" label="运单号">
+          <template slot-scope="props">
+            {{ props.row.userLogisticsCode ? props.row.userLogisticsCode : "" }}
+          </template>
+        </el-table-column>
       </el-table>
       <el-form label-width="70px">
         <el-form-item label="发货方式">
@@ -657,6 +669,7 @@
 <script>
 import {
   merAfterSaleConfirmReceipt,
+  getShipCommodityInfoList,
   getAfterSaleDetailInfoNew,
   afterSaleAgreeApply,
   afterSaleRefuseApply,
@@ -719,6 +732,14 @@ export default {
     this.getaddress();
   },
   methods: {
+    getgoods() {
+      let obj = {
+        asaleCode: this.$route.query.asaleCode,
+      };
+      getShipCommodityInfoList(obj).then((res) => {
+        this.huotable = res.body;
+      });
+    },
     multiply(a, b) {
       return multiply(a, b);
     },
@@ -779,7 +800,6 @@ export default {
     },
     // 发货查询物流公司
     onSubmit() {
-      console.log(this.fahuoform);
       if (this.fahuoform.merLogisticsCode.length <= 0) {
         this.$message({
           message: "请输入物流单号后查询",
@@ -792,7 +812,6 @@ export default {
         logisticCode: this.fahuoform.merLogisticsCode,
       };
       distinguishHandle(obj).then((res) => {
-        console.log(res);
         if (!res.body) {
           this.$message({
             message: "没查到",
@@ -818,7 +837,6 @@ export default {
         logisticCode: this.fahuoform1.logisticsCode,
       };
       distinguishHandle(obj).then((res) => {
-        console.log(res);
         if (!res.body) {
           this.$message({
             message: "没查到",
@@ -911,7 +929,6 @@ export default {
     getaddress() {
       inquireAddressList(this.listPage).then((res) => {
         this.AddressData = res.body.records;
-        console.log(this.AddressData);
       });
     },
     lookmoeny() {
@@ -922,7 +939,6 @@ export default {
         this.dialogTableVisible = true;
         this.gridData = [];
         this.gridData.push(res.body);
-        console.log(res);
       });
     },
     jujue() {
@@ -1023,11 +1039,9 @@ export default {
       };
       getAfterSaleDetailInfoNew(obj).then((res) => {
         this.aftersaleinfo = res.body;
-        this.totalMoeny = this.aftersaleinfo.productList.reduce(function (
-          total,
-          val
-        ) {
-          return parseFloat(total.payAmount) + parseFloat(val.payAmount);
+        this.totalMoeny = 0;
+        this.aftersaleinfo.productList.forEach((element) => {
+          this.totalMoeny = this.totalMoeny + parseFloat(element.payAmount);
         });
         this.aftersaleinfo.orderFreight;
         if (this.aftersaleinfo.canDoText != "") {
@@ -1042,18 +1056,10 @@ export default {
           this.aftersaleinfo.remindText = this.aftersaleinfo.remindText.split(
             "。"
           );
+          let len = this.aftersaleinfo.remindText.length;
+          this.aftersaleinfo.remindText.splice(len - 1, 1);
         }
-        this.huotable = [
-          {
-            productName: this.aftersaleinfo.productName,
-            goodsSku: this.aftersaleinfo.goodsSku,
-            thumbImg: this.aftersaleinfo.thumbImg,
-            aftersaleNum: this.aftersaleinfo.aftersaleNum,
-            userLogisticsCode: this.aftersaleinfo.userLogisticsCode,
-            orderDeliveryStatus:
-              this.aftersaleinfo.orderDeliveryStatus == 0 ? "未发货" : "已发货",
-          },
-        ];
+        this.getgoods();
         if (this.aftersaleinfo.countDownText) {
           this.opop = this.aftersaleinfo.countDownText.split("countdown");
           this.cutdown(0);
@@ -1070,7 +1076,6 @@ export default {
           );
 
           this.aftersaleinfo.countDownText = `${this.opop[0]}<span class="time-box" style="font-size: 16px;color: rgb(240, 186, 8);font-weight: bold;">${this.timetime}</span>${this.opop[1]}`;
-          // console.log(this.aftersaleinfo.countDownText);
           this.cutdown(1000);
         }
       }, num);
@@ -1115,6 +1120,17 @@ export default {
 }
 </style>
 <style scoped>
+.lint-he > section{
+  line-height: 25px;
+}
+.jsx-goods{
+  display: flex;
+  height: 100px;
+  flex-direction: column;
+}
+.tips-text {
+  line-height: 25px;
+}
 .wutit {
   padding-left: 20px;
   background: #fff;
@@ -1142,7 +1158,7 @@ export default {
   display: flex;
 }
 .flex-nima > div:first-of-type {
-  flex: 0 0 40%;
+  flex: 0 0 30%;
 }
 .flex-box {
   display: flex;
@@ -1203,7 +1219,7 @@ export default {
 }
 .top-box {
   padding: 10px 10px;
-  border-bottom: solid 1px #d5d5d5;
+  border-bottom: solid 1px #f0f0f0;
   background: #fff;
 }
 .top-flex {
@@ -1270,7 +1286,6 @@ export default {
   width: 100%;
   padding-top: 10px;
   box-sizing: border-box;
-  margin-bottom: 20px;
   line-height: 20px;
   background: #fff;
   padding-left: 10px;
@@ -1286,7 +1301,6 @@ export default {
   box-sizing: border-box;
   background: #fdfdfd;
   width: 100%;
-  border: solid 1px #e4e7ed;
   margin-top: 10px;
   padding: 20px;
   color: #666;

@@ -83,11 +83,15 @@
               :http-request="uploadHttp"
               :show-file-list="false"
               :data="{
-            data:'goodsImgs'
-          }"
+                data: 'goodsImgs',
+              }"
             >
               <section class="input-con">
-                <input placeholder="批量上传图片" size="small" class="input-cla" />
+                <input
+                  placeholder="批量上传图片"
+                  size="small"
+                  class="input-cla"
+                />
                 <div class="btnsss">选择图片</div>
               </section>
             </el-upload>
@@ -97,23 +101,34 @@
               class="img-content"
               element="div"
               v-model="form.goodsImgs"
-              @start="isDragging=true"
-              @end="isDragging=false"
+              @start="isDragging = true"
+              @end="isDragging = false"
             >
-              <transition-group type="transition" :name="'flip-list'" key="img-content">
+              <transition-group
+                type="transition"
+                :name="'flip-list'"
+                key="img-content"
+              >
                 <div
                   class="img-item list-group-item"
-                  v-for="(item,index) in form.goodsImgs"
+                  v-for="(item, index) in form.goodsImgs"
                   :key="item + '' + index"
                 >
-                  <i class="el-icon-close close-i" v-if="!disabled" @click="delImg(index)"></i>
+                  <i
+                    class="el-icon-close close-i"
+                    v-if="!disabled"
+                    @click="delImg(index)"
+                  ></i>
                   <img :src="item" class="img-items" />
                 </div>
               </transition-group>
             </draggable>
           </div>
           <div class="hidden-box">
-            <el-input v-model="form.goodsImgs[0]" class="hidden-input"></el-input>
+            <el-input
+              v-model="form.goodsImgs[0]"
+              class="hidden-input"
+            ></el-input>
           </div>
         </el-form-item>
         <el-form-item label="首图视频">
@@ -126,23 +141,27 @@
             :http-request="uploadHttp"
             :show-file-list="false"
             :data="{
-            data:'vedio'
-          }"
+              data: 'vedio',
+            }"
           >
             <section class="input-con">
               <input placeholder="上传视频" size="small" class="input-cla" />
               <div class="btnsss">选择文件</div>
             </section>
           </el-upload>
-          <div v-show="form.vedio && !disabled" @click="delvideo" style="margin-top:20px">
+          <div
+            v-show="form.vedio && !disabled"
+            @click="delvideo"
+            style="margin-top: 20px"
+          >
             <el-button type="primary">删除视频</el-button>
           </div>
-          <div id="mse" style="margin-top:20px" v-show="form.vedio"></div>
+          <div id="mse" style="margin-top: 20px" v-show="form.vedio"></div>
           <div class="hidden-box">
             <el-input v-model="form.vedio" class="hidden-input"></el-input>
           </div>
         </el-form-item>
-        <div style="border-top: 13px solid rgb(255, 255, 255);"></div>
+        <div style="border-top: 13px solid rgb(255, 255, 255)"></div>
         <div class="title title-margin">
           <Icon icon="jibenxinxi" class="authentication-title" />商品详情
         </div>
@@ -159,11 +178,15 @@
             :show-file-list="false"
             accept=".png, .jpg, .gif"
             :data="{
-            data:'detail'
-          }"
+              data: 'detail',
+            }"
           >
             <section class="input-con">
-              <input placeholder="批量上传图片" size="small" class="input-cla" />
+              <input
+                placeholder="批量上传图片"
+                size="small"
+                class="input-cla"
+              />
               <div class="btnsss">选择图片</div>
             </section>
           </el-upload>
@@ -174,16 +197,20 @@
                 class="img-content"
                 element="div"
                 v-model="form.detail"
-                @start="isDragging=true"
-                @end="isDragging=false"
+                @start="isDragging = true"
+                @end="isDragging = false"
               >
                 <transition-group type="transition" :name="'flip-list'">
                   <div
                     class="img-item list-group-item"
-                    v-for="(item,ix) in form.detail"
+                    v-for="(item, ix) in form.detail"
                     :key="item + '' + ix"
                   >
-                    <i class="el-icon-close close-i" v-if="!disabled" @click="delImg(ix,1)"></i>
+                    <i
+                      class="el-icon-close close-i"
+                      v-if="!disabled"
+                      @click="delImg(ix, 1)"
+                    ></i>
                     <img :src="item" class="img-items" />
                   </div>
                 </transition-group>
@@ -192,9 +219,13 @@
             <div>
               <div class="detils-bg" v-if="form.detail.length">
                 <div class="phone-hezi">
-                  <div v-for="(item,index) in form.detail" :key="index" class="deatils-items">
+                  <div
+                    v-for="(item, index) in form.detail"
+                    :key="index"
+                    class="deatils-items"
+                  >
                     <div>
-                      <img :src="item" style="height:auto;width:100%" />
+                      <img :src="item" style="height: auto; width: 100%" />
                     </div>
                   </div>
                 </div>
@@ -202,7 +233,7 @@
             </div>
           </div>
         </el-form-item>
-        <div style="border-top: 13px solid rgb(255, 255, 255);"></div>
+        <div style="border-top: 13px solid rgb(255, 255, 255)"></div>
         <div class="title title-margin">
           <Icon icon="jibenxinxi" class="authentication-title" />价格库存
         </div>
@@ -236,11 +267,15 @@
           ></el-input-number>
           <span class="xiaoxue" v-show="form.manufactureTime && form.shelfDay">
             剩余保质期：
-            <span>共:{{numberDay}}天</span>
+            <span>共:{{ numberDay }}天</span>
           </span>
         </el-form-item>
         <el-form-item label="商品规格" prop="resource">
-          <el-radio-group v-model="form.resource" @change="resourceChange" :disabled="disabled">
+          <el-radio-group
+            v-model="form.resource"
+            @change="resourceChange"
+            :disabled="disabled"
+          >
             <el-radio :label="1">统一规格</el-radio>
             <el-radio :label="2">多规格</el-radio>
           </el-radio-group>
@@ -279,10 +314,19 @@
         </section>
         <section v-if="form.resource == 2">
           <el-form-item>
-            <el-button type="primary" @click="addspecificationKey" :disabled="disabled">新增规格</el-button>
+            <el-button
+              type="primary"
+              @click="addspecificationKey"
+              :disabled="disabled"
+              >新增规格</el-button
+            >
           </el-form-item>
           <section>
-            <div class="guige" v-for="(item, index) in form.specification" :key="index">
+            <div
+              class="guige"
+              v-for="(item, index) in form.specification"
+              :key="index"
+            >
               <section class="sku-box">
                 <section class="flex-sku">
                   <div>
@@ -293,22 +337,26 @@
                       v-model="item.key"
                       @input="changeskuName(index)"
                       size="mini"
-                      style="width:200px;"
+                      style="width: 200px"
                     ></el-input>
-                    <i class="el-icon-delete" @click="delsku(index)" style="margin-left:20px"></i>
+                    <i
+                      class="el-icon-delete"
+                      @click="delsku(index)"
+                      style="margin-left: 20px"
+                    ></i>
                   </div>
                   <div>
                     排序
                     <i
                       class="el-icon-top"
-                      style="margin-riht:20px"
+                      style="margin-riht: 20px"
                       v-if="index !== 0"
-                      @click="skusort('top',index)"
+                      @click="skusort('top', index)"
                     ></i>
                     <i
                       class="el-icon-bottom"
-                      style="margin-riht:20px"
-                      @click="skusort('bottom',index)"
+                      style="margin-riht: 20px"
+                      @click="skusort('bottom', index)"
                       v-if="index !== form.specification.length - 1"
                     ></i>
                   </div>
@@ -319,7 +367,7 @@
                         v-model="item.date"
                         value-format="yyyy-MM-dd"
                         type="date"
-                        style="width:140px;"
+                        style="width: 140px"
                         class="gelu"
                         :disabled="disabled"
                         placeholder="生产日期"
@@ -327,29 +375,40 @@
                       <el-input-number
                         v-model="item.day"
                         size="mini"
-                        style="width:150px;"
+                        style="width: 150px"
                         :controls="false"
                         :disabled="disabled"
                       >
                       </el-input-number>
-                      <el-button  size="mini" @click="addskuvalue(item,index)">添加</el-button>
+                      <el-button size="mini" @click="addskuvalue(item, index)"
+                        >添加</el-button
+                      >
                     </template>
                     <template v-else>
                       <el-input
                         v-model="item.skuvalue"
                         size="mini"
-                        style="width:200px;"
+                        style="width: 200px"
                         :disabled="disabled"
                       >
-                        <el-button type="primary" slot="append" @click="addskuvalue(item,index)">添加</el-button>
+                        <el-button
+                          type="primary"
+                          slot="append"
+                          @click="addskuvalue(item, index)"
+                          >添加</el-button
+                        >
                       </el-input>
                     </template>
                   </div>
                 </section>
                 <div class="skuvalue-class">
-                  <div v-for="(el, idx) in item.value" :key="idx" class="skuvalue-item">
-                    <el-button @click="delskuvalue(item,index,idx)">
-                      {{el}}
+                  <div
+                    v-for="(el, idx) in item.value"
+                    :key="idx"
+                    class="skuvalue-item"
+                  >
+                    <el-button @click="delskuvalue(item, index, idx)">
+                      {{ el }}
                       <i class="el-icon--right el-icon-delete"></i>
                     </el-button>
                   </div>
@@ -431,19 +490,23 @@
                     <img
                       v-if="props.row.goodsSkuImg"
                       :src="props.row.goodsSkuImg"
-                      style="width:50px;height:50px"
+                      style="width: 50px; height: 50px"
                     />
-                    <i class="el-icon-close" v-if="!disabled" @click="delskuIMg(props.$index)"></i>
+                    <i
+                      class="el-icon-close"
+                      v-if="!disabled"
+                      @click="delskuIMg(props.$index)"
+                    ></i>
                   </div>
                   <el-upload
                     v-if="!props.row.goodsSkuImg"
-                    style="overflow:hidden"
+                    style="overflow: hidden"
                     action
                     :multiple="true"
                     :data="{
-                        data: 'specificationList',
-                        open: `${props.$index}`
-                      }"
+                      data: 'specificationList',
+                      open: `${props.$index}`,
+                    }"
                     :http-request="uploadHttp"
                     :show-file-list="false"
                   >
@@ -453,7 +516,10 @@
               </el-table-column>
               <el-table-column label="商品条码" width="90px">
                 <template slot-scope="props">
-                  <el-input v-model="props.row.goodsBarCode" :disabled="disabled"></el-input>
+                  <el-input
+                    v-model="props.row.goodsBarCode"
+                    :disabled="disabled"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="90px">
@@ -463,7 +529,8 @@
                     @click="delgoodsType(props)"
                     size="mini"
                     :disabled="disabled"
-                  >删除</el-button>
+                    >删除</el-button
+                  >
                 </template>
               </el-table-column>
             </el-table>
@@ -509,7 +576,7 @@
             <el-radio label="2">付款减库存</el-radio>
           </el-radio-group>
         </el-form-item>
-        <div style="border-top: 13px solid rgb(255, 255, 255);"></div>
+        <div style="border-top: 13px solid rgb(255, 255, 255)"></div>
         <div class="title title-margin">
           <Icon icon="jibenxinxi" class="authentication-title" />物流与服务
         </div>
@@ -541,7 +608,11 @@
             @change="serviceAssuranceChange"
             :disabled="disabled"
           >
-            <el-checkbox v-for="(el) in sblist" :key="el.id" :label="el.code"></el-checkbox>
+            <el-checkbox
+              v-for="el in sblist"
+              :key="el.id"
+              :label="el.code"
+            ></el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="发票设置">
@@ -551,7 +622,11 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="是否上架">
-          <el-radio-group v-model="form.status" @change="statusChange" :disabled="disabled">
+          <el-radio-group
+            v-model="form.status"
+            @change="statusChange"
+            :disabled="disabled"
+          >
             <el-radio :label="1">立刻上架</el-radio>
             <el-radio :label="2">放入仓库</el-radio>
             <el-radio :label="9">定时上下架</el-radio>
@@ -566,7 +641,7 @@
               value-format="yyyy-MM-dd HH:mm:ss"
               type="datetime"
             ></el-date-picker>
-            <span style="width: 40px;display: inline-block;"></span>
+            <span style="width: 40px; display: inline-block"></span>
             <el-date-picker
               :size="size"
               :disabled="disabled"
@@ -583,41 +658,52 @@
             icon="el-icon-message"
             :disabled="disabled"
             @click="dialogTableVisible = true"
-          >{{DraftBoxList.total}}</el-button>
+            >{{ DraftBoxList.total }}</el-button
+          >
           <el-button
             type="primary"
             size="small"
-            style="margin-bottom:0px"
+            style="margin-bottom: 0px"
             @click="bianji"
             v-if="$route.query.goodsCode && this.disabled"
-          >编辑</el-button>
+            >编辑</el-button
+          >
           <el-button
             type="primary"
             size="small"
             @click="submitForm"
-            style="margin-bottom:0px"
+            style="margin-bottom: 0px"
             :disabled="disabled"
-          >提交商品</el-button>
-          <el-button type="primary" size="small" @click="golist" style="margin-bottom:0px">返回列表</el-button>
+            >提交商品</el-button
+          >
+          <el-button
+            type="primary"
+            size="small"
+            @click="golist"
+            style="margin-bottom: 0px"
+            >返回列表</el-button
+          >
         </el-form-item>
       </el-form>
     </section>
     <el-dialog :visible.sync="dialogTableVisible">
       <div class="flex-dialog">
-        <div>您在当前草稿箱（{{DraftBoxList.total}}）</div>
-        <el-button type="primary" class="btn-search" @click="delallmdrafts">清空全部</el-button>
+        <div>您在当前草稿箱（{{ DraftBoxList.total }}）</div>
+        <el-button type="primary" class="btn-search" @click="delallmdrafts"
+          >清空全部</el-button
+        >
       </div>
       <el-table :data="DraftBoxList.records">
         <el-table-column>
           <template slot-scope="props">
             <div class="flex-dialog-one">
               <div>
-                <div>{{props.row.goodsName}}</div>
-                <div>{{props.row.createTime}}</div>
+                <div>{{ props.row.goodsName }}</div>
+                <div>{{ props.row.createTime }}</div>
               </div>
               <div>
                 <i
-                  style="margin-right:30px"
+                  style="margin-right: 30px"
                   class="el-icon-edit icon-content"
                   @click="gomdrafts(props.row)"
                 ></i>
@@ -631,7 +717,10 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination layout="prev, pager, next" :total="DraftBoxContent"></el-pagination>
+      <el-pagination
+        layout="prev, pager, next"
+        :total="DraftBoxContent"
+      ></el-pagination>
     </el-dialog>
   </div>
 </template>
@@ -901,9 +990,7 @@ export default {
   },
   mounted() {},
   methods: {
-    daychange(val){
-
-    },
+    daychange(val) {},
     nospace(val) {
       this.form.goodsName = val.replace(/\s+/g, "");
     },
@@ -1493,7 +1580,12 @@ export default {
             }
           });
           console.log(def);
-          if (this.form.isOnTime == 1 && this.form.resource == 2 && abc && !def) {
+          if (
+            this.form.isOnTime == 1 &&
+            this.form.resource == 2 &&
+            abc &&
+            !def
+          ) {
             this.$message({
               message: "在多规格开启是否临期保质期sku必须有值",
               type: "error",
@@ -1501,78 +1593,86 @@ export default {
             });
             return false;
           }
-          let form = Object.assign({}, this.form, {
-            discount:
-              this.form.goodsOriginalPrice > 0
-                ? (this.form.goodsPrice / this.form.goodsOriginalPrice) * 10
-                : 0,
-            specificationList: this.skuArr,
-            category: this.form.category ? this.form.category.join(",") : "",
-            categoryName: this.form.categoryName
-              ? this.form.categoryName.join(",")
-              : "",
-            qualityTime: this.newDate ? this.newDate : "",
-          });
-          // 9 是定时后台没有变成1
-          if (form.status == 9) {
-            form.status = 1;
+          if (this.timeout) {
+            clearTimeout(this.timeout);
           }
-          form.specification.forEach((el) => {
-            if (el.skuvalue || el.skuvalue == "") {
-              delete el.skuvalue;
-            }
-            if (el.time) {
-              delete el.time;
-            }
-            if (el.day) {
-              delete el.day;
-            }
-            if (el.date) {
-              delete el.date;
-            }
-            console.log(el);
-          });
-          form.specificationList.forEach((el) => {
-            if (el["保质期"] && el["保质期"] !== "") {
-              el.manufactureTime = el["保质期"].split("至")[0];
-              el.qualityTime = el["保质期"].split("至")[1];
-            }
-          });
-          if (this.$route.query.goodsCode && !this.$route.query.status) {
-            update(form).then((res) => {
-              this.$message({
-                message: "修改商品成功",
-                type: "success",
-                center: true,
-              });
-              this.$router.push({
-                path: "/goods",
-              });
+          this.timeout = setTimeout(() => {
+            let form = Object.assign({}, this.form, {
+              discount:
+                this.form.goodsOriginalPrice > 0
+                  ? (this.form.goodsPrice / this.form.goodsOriginalPrice) * 10
+                  : 0,
+              specificationList: this.skuArr,
+              category: this.form.category ? this.form.category.join(",") : "",
+              categoryName: this.form.categoryName
+                ? this.form.categoryName.join(",")
+                : "",
+              qualityTime: this.newDate ? this.newDate : "",
             });
-            return false;
-          } else if (this.$route.query.goodsCode && this.$route.query.status) {
-            goodsadd(form).then((res) => {
-              this.$message({
-                message: "复制商品成功",
-                type: "success",
-                center: true,
-              });
-              this.$router.push({
-                path: "/goods",
-              });
+            // 9 是定时后台没有变成1
+            if (form.status == 9) {
+              form.status = 1;
+            }
+            form.specification.forEach((el) => {
+              if (el.skuvalue || el.skuvalue == "") {
+                delete el.skuvalue;
+              }
+              if (el.time) {
+                delete el.time;
+              }
+              if (el.day) {
+                delete el.day;
+              }
+              if (el.date) {
+                delete el.date;
+              }
+              console.log(el);
             });
-          } else {
-            goodsadd(form).then((res) => {
-              this.$message({
-                message: "创建商品成功",
-                type: "success",
-                center: true,
-              });
-              this.$router.push({
-                path: "/goods",
-              });
+            form.specificationList.forEach((el) => {
+              if (el["保质期"] && el["保质期"] !== "") {
+                el.manufactureTime = el["保质期"].split("至")[0];
+                el.qualityTime = el["保质期"].split("至")[1];
+              }
             });
-          }
+            if (this.$route.query.goodsCode && !this.$route.query.status) {
+              update(form).then((res) => {
+                this.$message({
+                  message: "修改商品成功",
+                  type: "success",
+                  center: true,
+                });
+                this.$router.push({
+                  path: "/goods",
+                });
+              });
+              return false;
+            } else if (
+              this.$route.query.goodsCode &&
+              this.$route.query.status
+            ) {
+              goodsadd(form).then((res) => {
+                this.$message({
+                  message: "复制商品成功",
+                  type: "success",
+                  center: true,
+                });
+                this.$router.push({
+                  path: "/goods",
+                });
+              });
+            } else {
+              goodsadd(form).then((res) => {
+                this.$message({
+                  message: "创建商品成功",
+                  type: "success",
+                  center: true,
+                });
+                this.$router.push({
+                  path: "/goods",
+                });
+              });
+            }
+          }, 300);
         } else {
           this.$nextTick(() => {
             let obj = {

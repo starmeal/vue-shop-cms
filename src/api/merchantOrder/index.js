@@ -57,3 +57,10 @@ export function updateCustAddressInfo(data) {
       data
     });
 }
+export function getShipCommodityInfoList(data) {
+    return request({
+      url: "/order/getShipCommodityInfoList",
+      method: "POST",
+      data
+    });
+}

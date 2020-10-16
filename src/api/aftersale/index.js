@@ -72,3 +72,10 @@ export function merAfterSaleLogisticsInfo(data) {
     data: data
   });
 }
+export function getShipCommodityInfoList(data) {
+  return request({
+    url: "/order/getShipCommodityInfoList",
+    method: "post",
+    data: data
+  });
+}
