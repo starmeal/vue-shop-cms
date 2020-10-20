@@ -151,7 +151,7 @@
               <span
                 style="color: #ff0000"
                 v-if="aftersaleinfo.payPrice && aftersaleinfo.number"
-                >￥{{ totalMoeny }}
+                >￥{{ aftersaleinfo.payAmount }}
               </span>
             </div>
           </section>
