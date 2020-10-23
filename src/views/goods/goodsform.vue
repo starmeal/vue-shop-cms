@@ -53,7 +53,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="商品所在地">
+        <el-form-item label="商品所在地" prop="provinceCode">
           <cascader
             v-model="cityvalue"
             @change="citychange"
@@ -834,6 +834,9 @@ export default {
         ],
       },
       formrules: {
+        provinceCode: [
+          { required: true, message: "请选择所在地", trigger: "change" },
+        ],
         category: [
           { required: true, message: "请选择分类", trigger: "change" },
         ],
