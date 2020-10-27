@@ -10,29 +10,34 @@
         class="demo-form"
       >
         <div class="innerContainer">
-          <div style="width: 85%;">
+          <div style="width: 85%">
             <el-form-item label="经营类目" prop="categoryName">
-              <p style="font-size: 12px;color:#333;">{{categoryName}}</p>
+              <p style="font-size: 12px; color: #333">{{ categoryName }}</p>
             </el-form-item>
             <el-form-item label="店铺名称" prop="shopMerchantsName">
               <el-input
                 v-model="form.shopMerchantsName"
                 show-word-limit
-                :class="{styleShop: isShowShop}"
+                :class="{ styleShop: isShowShop }"
                 maxlength="30"
                 @change="shopNameChange"
                 @input="handleInput"
               ></el-input>
-              <div style="font-size: 12px;color:#999;">
+              <div style="font-size: 12px; color: #999">
                 详细阅读
                 <a
-                  style="color:#3976e6"
+                  style="color: #3976e6"
                   href="https://hs.star.cms.xingfaner.cn/xieyi/mingmingguizhe.html"
                   target="_blank"
-                >《店铺名称命名规范》</a>，如需申请“旗舰店”、“专营店”、“专卖店”，请进入
-                <span @click="toGo" style="color:#3976e6">《店铺名称认证》</span>
+                  >《店铺名称命名规范》</a
+                >，如需申请“旗舰店”、“专营店”、“专卖店”，请进入
+                <span @click="toGo" style="color: #3976e6"
+                  >《店铺名称认证》</span
+                >
               </div>
-              <div v-show="isShowShop" style="font-size:12px;color: #F56C6C;">店铺名称中含有违禁词：{{hotCard}}</div>
+              <div v-show="isShowShop" style="font-size: 12px; color: #f56c6c">
+                店铺名称中含有违禁词：{{ hotCard }}
+              </div>
             </el-form-item>
             <el-form-item label="店铺标志" prop="thumbImg">
               <el-upload
@@ -43,13 +48,15 @@
                 accept=".jpg, .png, .gif, .jpeg"
                 :multiple="true"
                 :data="{
-                      data:'thumbImg'
-                     }"
+                  data: 'thumbImg',
+                }"
               >
                 <img v-if="form.thumbImg" :src="form.thumbImg" class="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
-              <div style="font-size:12px;color: #999;">文件格式GIF、JPG、JPEG、PNG文件大小100k以内，建议尺寸80PX*80PX</div>
+              <div style="font-size: 12px; color: #999">
+                文件格式GIF、JPG、JPEG、PNG文件大小100k以内，建议尺寸80PX*80PX
+              </div>
             </el-form-item>
             <el-form-item label="店铺介绍" prop="shopMerchantsIntroduction">
               <el-input
@@ -59,37 +66,51 @@
                 show-word-limit
                 maxlength="200"
                 rows="6"
-                onkeyup="this.value=this.value.replace(/\s+/g,'')"
+                @input="valueCHange"
               ></el-input>
             </el-form-item>
-            <div style="margin-bottom: 10px; display: flex;flex-direction: row;">
-              <span class="customerPhone" style="min-width: 58px;">客服电话</span>
+            <!-- this.value=this.value.replace(/\s+/g,'') -->
+            <div
+              style="margin-bottom: 10px; display: flex; flex-direction: row"
+            >
+              <span class="customerPhone" style="min-width: 58px"
+                >客服电话</span
+              >
               <el-input
                 class="inputStyle1"
                 :size="size"
-                :class="{stylePhone:isShowPhone}"
+                :class="{ stylePhone: isShowPhone }"
                 v-model="areaCode"
                 placeholder="区号"
               ></el-input>
               <el-input
                 class="inputStyle2"
                 :size="size"
-                :class="{stylePhone:isShowPhone}"
+                :class="{ stylePhone: isShowPhone }"
                 v-model="phone"
                 placeholder="如果输入手机号不填区号"
               ></el-input>
               <p
                 v-show="isShowPhone"
-                style="margin-left: 202px;font-size:12px;color: #F56C6C;"
-              >请填写客服电话</p>
+                style="margin-left: 202px; font-size: 12px; color: #f56c6c"
+              >
+                请填写客服电话
+              </p>
             </div>
-            <div style="margin-bottom: 10px;">
+            <div style="margin-bottom: 10px">
               <span class="customerPhone">经营地址</span>
-              <cascader :size="size" :class="{styleAddress:isShowAddress}" v-model="cityvalue" @change="changecity"/>
+              <cascader
+                :size="size"
+                :class="{ styleAddress: isShowAddress }"
+                v-model="cityvalue"
+                @change="changecity"
+              />
               <p
                 v-show="isShowAddress"
-                style="margin-left: 202px;font-size:12px;color: #F56C6C;"
-              >请选择地址</p>
+                style="margin-left: 202px; font-size: 12px; color: #f56c6c"
+              >
+                请选择地址
+              </p>
             </div>
             <el-form-item label prop="addressDetail">
               <el-input
@@ -109,13 +130,19 @@
                 accept=".jpg, .png, .gif, .jpeg"
                 :http-request="uploadHttp"
                 :data="{
-                      data:'shopPicturesImg'
-                     }"
+                  data: 'shopPicturesImg',
+                }"
               >
-                <img v-if="form.shopPicturesImg" :src="form.shopPicturesImg" class="avatar" />
+                <img
+                  v-if="form.shopPicturesImg"
+                  :src="form.shopPicturesImg"
+                  class="avatar"
+                />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
-              <div style="font-size:12px;color: #999;">文件格式GIF、JPG、JPEG、PNG文件大小500k以内，建议尺寸750*280</div>
+              <div style="font-size: 12px; color: #999">
+                文件格式GIF、JPG、JPEG、PNG文件大小500k以内，建议尺寸750*280
+              </div>
             </el-form-item>
             <p class="articleBox">
               <el-checkbox v-model="checked"></el-checkbox>
@@ -132,26 +159,26 @@
             type="primary"
             :disabled="!checked"
             @click="submitForm('form')"
-          >保存</el-button>
+            >保存</el-button
+          >
         </el-form-item>
       </el-form>
       <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
         <section class="sbsb">
           <div>
             您的店铺名称中包含有违禁词
-            <span
-              v-for="(item,index) in quni"
-              :key="index"
-              class="red-color"
-            >“{{item}}”</span>。
+            <span v-for="(item, index) in quni" :key="index" class="red-color"
+              >“{{ item }}”</span
+            >。
           </div>
           <div>
             请仔细阅读
             <a
-              style="color:#3976e6"
+              style="color: #3976e6"
               href="https://hs.star.cms.xingfaner.cn/xieyi/mingmingguizhe.html"
               target="_blank"
-            >《店铺名称命名规范》</a>后进行修改
+              >《店铺名称命名规范》</a
+            >后进行修改
           </div>
         </section>
       </el-dialog>
@@ -247,6 +274,11 @@ export default {
         this.sendData.legal_person_phone = e.target.value.replace(/[\w]/g, "");
       }
     },
+    valueCHange(e) {
+      if (e) {
+        this.form.shopMerchantsIntroduction = e.replace(/\s+/g,'');
+      }
+    },
     toGo() {
       this.$confirm("请确认是否保存?", "提示", {
         confirmButtonText: "确定",
@@ -314,9 +346,9 @@ export default {
         cityvalue[1] = cityCode;
         cityvalue[2] = countyCode;
         this.cityvalue = cityvalue;
-        this.form.cityCode = cityCode
-        this.form.countyCode = countyCode
-        this.form.provinceCode = provinceCode
+        this.form.cityCode = cityCode;
+        this.form.countyCode = countyCode;
+        this.form.provinceCode = provinceCode;
         this.categoryName = categoryName.split(",").join("/"); //经营类目
         this.form.shopMerchantsName = shopMerchantsName;
         this.form.thumbImg = thumbImg;
