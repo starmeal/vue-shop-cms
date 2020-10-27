@@ -435,14 +435,11 @@ export default {
         if (valid) {
           if (sb) {
             this.$message({
-              message: "件数或者克数或者填写不等于0运费也不能等于0",
+              message: "填写续件和续件运费时，两项中任意一项不可为0（如两项均为0，则默认无续件运费）",
               type: "error",
             });
             return false;
           }
-          alert(1);
-          return false;
-          // templateSub
           this.templateEditMerTemplate();
         }
       });
