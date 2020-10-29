@@ -361,8 +361,8 @@
           <span>{{ aftersaleinfo.refundAmount }}</span>
         </div>
         <div>
-          订单：
-          <span style="color: #44abf7">{{ aftersaleinfo.orderCode }}</span>
+          售后单号：
+          <span style="color: #44abf7">{{ aftersaleinfo.asaleCode }}</span>
         </div>
       </div>
       <el-table :data="gridData">
@@ -938,6 +938,7 @@ export default {
       viewAftersaleMoneyWhere(obj).then((res) => {
         this.dialogTableVisible = true;
         this.gridData = [];
+        console.log(res.body)
         this.gridData.push(res.body);
       });
     },
@@ -1377,7 +1378,9 @@ export default {
 }
 .flex-s {
   display: flex;
-  justify-content: space-between;
+}
+.flex-s > div:first-of-type {
+  margin-right: 20px;
 }
 .flex-s > div:first-of-type > span {
   color: #ff0000;

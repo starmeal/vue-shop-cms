@@ -424,6 +424,13 @@
               </section>
             </template>
           </el-table-column>
+          <el-table-column property="deliveryStatus" label="售后状态">
+            <template slot-scope="props">
+              <section class="flex-box" style="width: 100%; padding: 0">
+                <span>{{ props.row.aftersaleStatusText ? props.row.aftersaleStatusText : '--' }}</span>
+              </section>
+            </template>
+          </el-table-column>
           <el-table-column property="address" label="运单号"></el-table-column>
         </el-table>
         <el-form label-width="100px">
