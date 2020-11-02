@@ -536,7 +536,7 @@
             </el-table>
           </template>
         </section>
-        <el-form-item label="市场价">
+        <el-form-item label="市场价" prop="goodsOriginalPrice">
           <el-input-number
             :disabled="disabled || form.resource == 2"
             v-model="form.goodsOriginalPrice"
@@ -834,6 +834,10 @@ export default {
         ],
       },
       formrules: {
+        goodsOriginalPrice: [
+          { required: true, message: "请填写市场价格", trigger: "blur" },
+          { validator: nums1, trigger: "blur" },
+        ],
         provinceCode: [
           { required: true, message: "请选择所在地", trigger: "change" },
         ],
@@ -1058,6 +1062,20 @@ export default {
 
         this.serviceAssuranceChange(body.serviceAssurance);
         this.form = body;
+        if (
+          this.form.putawayTime &&
+          this.form.soldOutTime &&
+          this.form.status == 1
+        ) {
+          this.form.status = 9;
+        }
+        if (
+          !this.form.putawayTime &&
+          !this.form.soldOutTime &&
+          this.form.status == 1
+        ) {
+          this.form.status = 1;
+        }
         this.form.category = category;
         this.form.resource = body.specification.length > 0 ? 2 : 1;
         this.shelfDayChange(parseInt(body.shelfDay));
@@ -1601,6 +1619,7 @@ export default {
           }
           this.timeout = setTimeout(() => {
             let form = Object.assign({}, this.form, {
+              goodsOriginalPrice:this.form.goodsOriginalPrice.toFixed(2),
               discount:
                 this.form.goodsOriginalPrice > 0
                   ? (this.form.goodsPrice / this.form.goodsOriginalPrice) * 10

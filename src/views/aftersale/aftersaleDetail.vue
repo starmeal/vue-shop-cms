@@ -124,7 +124,9 @@
             </span>
           </section>
           <!-- <section>联系方式：{{aftersaleinfo.userMobile}}</section> -->
-          <section>退款原因：<span>{{ aftersaleinfo.aftersaleReason }}</span>  </section>
+          <section>
+            退款原因：<span>{{ aftersaleinfo.aftersaleReason }}</span>
+          </section>
           <section class="flex-ssss">
             <span> 退款说明：</span
             ><span> {{ aftersaleinfo.aftersaleDes }}</span>
@@ -288,12 +290,12 @@
     <!-- 退款同意 -->
     <el-dialog :visible.sync="dialogVisible" width="40%">
       <span style="font-size: 16px" slot="title">售后维权处理</span>
-      <el-alert
+      <!-- <el-alert
         title="商家同意后，退款将自动原路退后买家付款账户"
         type="warning"
         :center="true"
         :closable="false"
-      ></el-alert>
+      ></el-alert> -->
       <div style="margin-top: 20px">
         售后方式：{{ aftersaleinfo.aftersaleTypeText }}
       </div>
@@ -394,12 +396,12 @@
     <!-- 退货退款换货同意弹窗 -->
     <el-dialog :visible.sync="dialogVisible2" width="60%">
       <span style="font-size: 16px" slot="title">售后维权处理</span>
-      <el-alert
+      <!-- <el-alert
         title="商家同意后，退款将自动原路退后买家付款账户"
         type="warning"
         :center="true"
         :closable="false"
-      ></el-alert>
+      ></el-alert> -->
       <div style="margin-top: 20px">
         售后方式：{{ aftersaleinfo.aftersaleTypeText }}
       </div>
@@ -457,12 +459,12 @@
     <!-- 同意跟拒绝收货弹窗12 -->
     <el-dialog :visible.sync="dialogVisible3" width="40%">
       <span style="font-size: 16px" slot="title">售后维权处理</span>
-      <el-alert
+      <!-- <el-alert
         title="需要你同意退款申请，买家才能退货给你，买家退货后你需要再次确认收货后，退款将自动原路退回至买家账户"
         type="warning"
         :center="true"
         :closable="false"
-      ></el-alert>
+      ></el-alert> -->
       <div style="margin-top: 20px">
         售后方式：{{ aftersaleinfo.aftersaleTypeText }}
       </div>
@@ -523,12 +525,12 @@
     <!-- 确认收货并发货弹窗 -->
     <el-dialog title="确认收货并发货" :visible.sync="dialogTableVisible1">
       <div class="dilogTitle">
-        <el-alert
+        <!-- <el-alert
           title="换货商品重新发货不会引起库存变化"
           type="warning"
           :center="true"
           :closable="false"
-        ></el-alert>
+        ></el-alert> -->
       </div>
       <el-table :data="huotable">
         <el-table-column property="date" label="商品" width="300px">
@@ -592,7 +594,8 @@
     </el-dialog>
     <!-- 还可以发货弹窗 -->
     <el-dialog title="发货" :visible.sync="dialogTableVisible2">
-      <el-table :data="gridData">
+      <!-- gridData -->
+      <el-table :data="huotable">
         <el-table-column property="date" label="商品" width="300px">
           <template slot-scope="props">
             <section class="flex-box" style="width: 100%; padding: 0">
@@ -728,14 +731,17 @@ export default {
       ? this.$route.query.asaleCode
       : "AS15967083515250133";
     this.getDetail(asaleCode);
-    this.ggosd();
+    // this.ggosd();
     this.getaddress();
   },
   methods: {
-    getgoods() {
-      let obj = {
-        asaleCode: this.$route.query.asaleCode,
-      };
+    getgoods(code, type) {
+      let obj = {};
+      if (type == 1) {
+        obj.orderCode = code;
+      } else {
+        obj.asaleCode = code;
+      }
       getShipCommodityInfoList(obj).then((res) => {
         this.huotable = res.body;
       });
@@ -764,7 +770,10 @@ export default {
         return false;
       }
       this.fahuoform1.asaleCode = this.aftersaleinfo.asaleCode;
-      this.fahuoform1.orderDetailIds = [this.aftersaleinfo.orderDetailId];
+      let orderDetailIds = this.huotable.map((item) => {
+        return item.orderDetailId;
+      });
+      this.fahuoform1.orderDetailIds = orderDetailIds;
       setLogisticsInfoNew(this.fahuoform1).then((res) => {
         this.$message({
           message: "恭喜你，发货成功啦",
@@ -825,24 +834,24 @@ export default {
       });
     },
     onSubmit1() {
-      if (this.fahuoform1.logisticsCode.length <= 0) {
-        this.$message({
-          message: "请输入物流单号后查询",
-          type: "error",
-          center: true,
-        });
-        return false;
-      }
+      // if (this.fahuoform1.logisticsCode.length <= 0) {
+      //   this.$message({
+      //     message: "请输入物流单号后查询",
+      //     type: "error",
+      //     center: true,
+      //   });
+      //   return false;
+      // }
       let obj = {
         logisticCode: this.fahuoform1.logisticsCode,
       };
       distinguishHandle(obj).then((res) => {
         if (!res.body) {
-          this.$message({
-            message: "没查到",
-            type: "error",
-            center: true,
-          });
+          // this.$message({
+          //   message: "没查到",
+          //   type: "error",
+          //   center: true,
+          // });
           return false;
         }
         this.fahuoform1.shipperCode = res.body[0].ShipperCode;
@@ -931,6 +940,7 @@ export default {
         this.AddressData = res.body.records;
       });
     },
+    // 查看欠款去向
     lookmoeny() {
       let obj = {
         asaleCode: this.aftersaleinfo.asaleCode,
@@ -938,7 +948,7 @@ export default {
       viewAftersaleMoneyWhere(obj).then((res) => {
         this.dialogTableVisible = true;
         this.gridData = [];
-        console.log(res.body)
+        console.log(res.body);
         this.gridData.push(res.body);
       });
     },
@@ -1060,7 +1070,17 @@ export default {
           let len = this.aftersaleinfo.remindText.length;
           this.aftersaleinfo.remindText.splice(len - 1, 1);
         }
-        this.getgoods();
+
+        let codesd;
+        let type;
+        if (this.aftersaleinfo.aftersaleType == 4) {
+          codesd = this.$route.query.asaleCode;
+          type = 2;
+        } else {
+          type = 1;
+          codesd = this.aftersaleinfo.orderCode;
+        }
+        this.getgoods(codesd, type);
         if (this.aftersaleinfo.countDownText) {
           this.opop = this.aftersaleinfo.countDownText.split("countdown");
           this.cutdown(0);
@@ -1121,10 +1141,10 @@ export default {
 }
 </style>
 <style scoped>
-.lint-he > section{
+.lint-he > section {
   line-height: 25px;
 }
-.jsx-goods{
+.jsx-goods {
   display: flex;
   height: 100px;
   flex-direction: column;

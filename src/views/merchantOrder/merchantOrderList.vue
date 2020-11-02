@@ -427,7 +427,11 @@
           <el-table-column property="deliveryStatus" label="售后状态">
             <template slot-scope="props">
               <section class="flex-box" style="width: 100%; padding: 0">
-                <span>{{ props.row.aftersaleStatusText ? props.row.aftersaleStatusText : '--' }}</span>
+                <span>{{
+                  props.row.aftersaleStatusText
+                    ? props.row.aftersaleStatusText
+                    : "--"
+                }}</span>
               </section>
             </template>
           </el-table-column>
@@ -494,6 +498,7 @@ import {
   distinguishHandle,
   updateShopOrderParcelInfo,
   getShopOrderDetailNew,
+  getShipCommodityInfoList
 } from "@/api/merchantOrder";
 
 import { addOrModifyMerchantAddress } from "@/api/address";
@@ -739,7 +744,7 @@ export default {
           object.orderDetailIds = el.parcelProductVo.map((item) => {
             return item.orderDetailId;
           });
-          object.orderDetailIds = object.orderDetailIds.join(",");
+          // object.orderDetailIds = object.orderDetailIds.join(",");
           return object;
         });
         this.queArr = [];
@@ -820,8 +825,8 @@ export default {
       }
       this.fahuoform.orderDetailIds =
         this.orderDetailIds && this.orderDetailIds.length > 0
-          ? this.orderDetailIds.join(",")
-          : "";
+          ? this.orderDetailIds
+          : [];
       if (!this.orderDetailIds || !this.orderDetailIds.length) {
         this.$message({
           message: "请选择发货商品",
@@ -877,25 +882,25 @@ export default {
     },
     // 发货查询物流公司
     onSubmit() {
-      if (this.fahuoform.logisticsCode.length <= 0) {
-        this.$message({
-          message: "请输入物流单号后查询",
-          type: "error",
-          center: true,
-        });
-        return false;
-      }
+      // if (this.fahuoform.logisticsCode.length <= 0) {
+      //   this.$message({
+      //     message: "请输入物流单号后查询",
+      //     type: "error",
+      //     center: true,
+      //   });
+      //   return false;
+      // }
       let obj = {
         logisticCode: this.fahuoform.logisticsCode,
       };
       distinguishHandle(obj).then((res) => {
         console.log(res);
         if (!res.body) {
-          this.$message({
-            message: "没查到",
-            type: "error",
-            center: true,
-          });
+          // this.$message({
+          //   message: "没查到",
+          //   type: "error",
+          //   center: true,
+          // });
           return false;
         }
         this.ddsb = false;

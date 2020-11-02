@@ -171,7 +171,7 @@
           </el-table-column>
           <el-table-column prop="payPrice" label="单价（元）">
             <template slot-scope="props">{{
-              props.row.number * props.row.payPrice
+             props.row.payPrice
             }}</template>
           </el-table-column>
           <el-table-column prop="number" label="数量"></el-table-column>
