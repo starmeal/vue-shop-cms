@@ -71,12 +71,7 @@ service.interceptors.response.use(
           center: true,
           duration: 2 * 1000
         });
-        // if (res.code == "400000") {
-        //   store.dispatch("user/resetToken").then(() => {
-        //     window.location.hash = "/login";
-        //   });
-        // }
-        if (res.code == "-999999") {
+        if (res.code == "-999999" || res.code == "400000") {
           store.dispatch("user/resetToken").then(() => {
             window.location.hash = "/login";
           });

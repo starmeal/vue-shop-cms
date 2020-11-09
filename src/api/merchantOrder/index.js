@@ -11,7 +11,8 @@ export function merShopOrderListExportExcel(data) {
     return request({
         url: `/order/merShopOrderListExportExcel`,
         method: "POST",
-        data
+        data,
+        responseType: 'blob',
     });
 }
 
@@ -53,6 +54,13 @@ export function getShopOrderDetailNew(data) {
 export function updateCustAddressInfo(data) {
     return request({
       url: "/order/updateCustAddressInfo",
+      method: "POST",
+      data
+    });
+}
+export function getShipCommodityInfoList(data) {
+    return request({
+      url: "/order/getShipCommodityInfoList",
       method: "POST",
       data
     });

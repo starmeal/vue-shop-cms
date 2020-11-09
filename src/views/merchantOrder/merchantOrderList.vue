@@ -14,7 +14,7 @@
                 ></el-option>
               </el-select>
               <el-input
-                style="margin-left: 20px;"
+                style="margin-left: 20px"
                 clearable
                 @change="kongkong"
                 class="inputStyle"
@@ -35,9 +35,15 @@
                   value-format="yyyy-MM-dd HH:mm:ss"
                 ></el-date-picker>
                 <el-button type="primary" plain @click="today">今天</el-button>
-                <el-button type="primary" plain @click="yesterday">昨天</el-button>
-                <el-button type="primary" plain @click="lastSeven">最近7天</el-button>
-                <el-button type="primary" plain @click="lastThirty">最近30天</el-button>
+                <el-button type="primary" plain @click="yesterday"
+                  >昨天</el-button
+                >
+                <el-button type="primary" plain @click="lastSeven"
+                  >最近7天</el-button
+                >
+                <el-button type="primary" plain @click="lastThirty"
+                  >最近30天</el-button
+                >
               </p>
             </el-form-item>
             <p class="orderTime">
@@ -65,7 +71,11 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="售后状态">
-                <el-select v-model="listpage.afterSaleStatus" clearable placeholder="全部">
+                <el-select
+                  v-model="listpage.afterSaleStatus"
+                  clearable
+                  placeholder="全部"
+                >
                   <el-option
                     v-for="(item, index) in serviceStatusArr"
                     :label="item.label"
@@ -77,35 +87,55 @@
             </p>
             <p>
               <el-button
-                style="margin-left:10px;"
+                style="margin-left: 10px"
                 icon="el-icon-search"
                 :loading="searchLoading"
                 :size="size"
                 @click="serachList"
                 type="primary"
-              >筛选</el-button>
-              <el-button style="margin-left:20px;" :size="size" @click="exportList">导出</el-button>
+                >筛选</el-button
+              >
+              <el-button
+                style="margin-left: 20px"
+                :size="size"
+                @click="exportList"
+                >导出</el-button
+              >
             </p>
           </el-form>
         </div>
         <p class="retrievalList">
           <span
-            :class="{active: index===isTrue}"
-            @click="tabRetrieval(index,item)"
-            v-for="(item,index) in orderStatusArr"
+            :class="{ active: index === isTrue }"
+            @click="tabRetrieval(index, item)"
+            v-for="(item, index) in orderStatusArr"
             :key="index"
-          >{{item.label}}</span>
-          <span @click="shohouzhong" :class="{active: isTrue  == 99 }">售后中</span>
+            >{{ item.label }}</span
+          >
+          <span @click="shohouzhong" :class="{ active: isTrue == 99 }"
+            >售后中</span
+          >
         </p>
         <div class="page-content">
           <section class="table-container" ref="table" v-loading="loading">
             <div
               class="top-fixed"
-              :style="{zIndex:fiexTop ? 1000 : -1000,width:domWidth+'px',top:domTop+'px'}"
+              :style="{
+                zIndex: fiexTop ? 1000 : -1000,
+                width: domWidth + 'px',
+                top: domTop + 'px',
+              }"
             >
-              <table style="width:100%; border-collapse: collapse; border: none;table-layout:fixed">
-                <tr style="width:100%" class="header-tr">
-                  <td style="width:50%">
+              <table
+                style="
+                  width: 100%;
+                  border-collapse: collapse;
+                  border: none;
+                  table-layout: fixed;
+                "
+              >
+                <tr style="width: 100%" class="header-tr">
+                  <td style="width: 50%">
                     <div class="header-flex">
                       <section>商品</section>
                       <section>单价（元）/数量</section>
@@ -113,17 +143,24 @@
                     </div>
                   </td>
                   <!-- <td style="width:10%">售后</td> -->
-                  <td style="width:10%">买家/收货人</td>
-                  <td style="width:10%">配送方式</td>
-                  <td style="width:10%">实收金额（元）</td>
-                  <td style="width:10%">订单状态</td>
-                  <td style="width:10%">操作</td>
+                  <td style="width: 10%">买家/收货人</td>
+                  <td style="width: 10%">配送方式</td>
+                  <td style="width: 10%">实收金额（元）</td>
+                  <td style="width: 10%">订单状态</td>
+                  <td style="width: 10%">操作</td>
                 </tr>
               </table>
             </div>
-            <table style="width:100%; border-collapse: collapse; border: none;table-layout:fixed">
-              <tr style="width:100%" class="header-tr">
-                <td style="width:50%">
+            <table
+              style="
+                width: 100%;
+                border-collapse: collapse;
+                border: none;
+                table-layout: fixed;
+              "
+            >
+              <tr style="width: 100%" class="header-tr">
+                <td style="width: 50%">
                   <div class="header-flex">
                     <section>商品</section>
                     <section>单价（元）/数量</section>
@@ -131,83 +168,104 @@
                   </div>
                 </td>
                 <!-- <td style="width:10%">售后</td> -->
-                <td style="width:10%">买家/收货人</td>
-                <td style="width:10%">配送方式</td>
-                <td style="width:10%">实收金额（元）</td>
-                <td style="width:10%">订单状态</td>
-                <td style="width:10%">操作</td>
+                <td style="width: 10%">买家/收货人</td>
+                <td style="width: 10%">配送方式</td>
+                <td style="width: 10%">实收金额（元）</td>
+                <td style="width: 10%">订单状态</td>
+                <td style="width: 10%">操作</td>
               </tr>
             </table>
             <div class="mock-table" v-for="(its, index) in list" :key="index">
-              <div style="width:100%;position: relative;">
+              <div style="width: 100%; position: relative">
                 <span
-                  style="margin-right:30px;margin-left:18px;font-size:10px;"
-                >订单号：{{ its.orderCode }}</span>
+                  style="margin-right: 30px; margin-left: 18px; font-size: 10px"
+                  >订单号：{{ its.orderCode }}</span
+                >
                 <span
-                  style="margin-right:30px;margin-left:18px;font-size:10px;"
-                >下单时间：{{ its.createTime }}</span>
+                  style="margin-right: 30px; margin-left: 18px; font-size: 10px"
+                  >下单时间：{{ its.createTime }}</span
+                >
                 <span
-                  style="margin-right:30px;margin-left:18px;font-size:10px;"
-                >{{its.payType == 2 ? '余额' : '微信'}}</span>
+                  style="margin-right: 30px; margin-left: 18px; font-size: 10px"
+                  >支付方式：{{ its.payType == 2 ? "余额" : "微信" }}</span
+                >
                 <p class="detail" @click="goOrderdetail(its)">查看详情</p>
               </div>
               <table
                 border="1"
                 cellspacing="0"
                 cellpadding="0"
-                style="width:100%; border-collapse: collapse; border: none;table-layout:fixed"
+                style="
+                  width: 100%;
+                  border-collapse: collapse;
+                  border: none;
+                  table-layout: fixed;
+                "
               >
-                <tr class="tspi" style="width:100%">
-                  <td style="width:50%">
-                    <section class="flex-box" v-for="(item, idx) in its.detail" :key="idx">
+                <tr class="tspi" style="width: 100%">
+                  <td style="width: 50%">
+                    <section
+                      class="flex-box"
+                      v-for="(item, idx) in its.detail"
+                      :key="idx"
+                    >
                       <div>
-                        <img class="thumbImg" :src="item.thumbImg.split(',')[0]" />
+                        <img
+                          class="thumbImg"
+                          :src="item.thumbImg.split(',')[0]"
+                        />
                         <div class="product-name">
                           <p class="thumbImg-right">{{ item.productName }}</p>
                           <div
-                            style="margin-left:10px;margin-top:10px"
+                            style="margin-left: 10px; margin-top: 10px"
                             v-show="item.goodsSku"
-                          >{{item.goodsSku}}</div>
+                          >
+                            {{ item.goodsSku }}
+                          </div>
                         </div>
                       </div>
                       <div>
-                        <div>￥{{ item.payPrice}}</div>
+                        <div>￥{{ item.payPrice }}</div>
                         <div>{{ item.number }}件</div>
                       </div>
                       <div>
-                        <div>{{ item.aftersaleStatusText}}</div>
+                        <div>{{ item.aftersaleStatusText }}</div>
                       </div>
                     </section>
                   </td>
                   <!-- <td style="width:10%"></td> -->
-                  <td style="width:10%">
+                  <td style="width: 10%">
                     <p class="qusibaps">{{ its.nickName }}</p>
                     <p class="qusibap">{{ its.mobile }}</p>
                   </td>
-                  <td style="width:10%">
-                    <p class="qusibap">{{ its.pickupType}}</p>
+                  <td style="width: 10%">
+                    <p class="qusibap">{{ its.pickupType }}</p>
                   </td>
-                  <td style="width:10%">
-                    <div class="qusibap">{{its.payAmount}}</div>
+                  <td style="width: 10%">
+                    <div class="qusibap">{{ its.payAmount }}</div>
                   </td>
-                  <td style="width:10%">
+                  <td style="width: 10%">
                     <p class="qusibap">{{ its.orderStatusText }}</p>
                   </td>
-                  <td style="width:10%">
+                  <td style="width: 10%">
                     <p
                       class="qusibap"
                       @click="updatewuliu(its)"
                       style="color:#44abf7;SC;cursor: pointer;"
-                      v-if="its.orderStatus == 3 && its.updateLogisticsTime == ''"
-                    >修改物流{{its.updateLogisticsTime}}</p>
+                      v-if="
+                        its.orderStatus == 3 && its.updateLogisticsTime == ''
+                      "
+                    >
+                      修改物流{{ its.updateLogisticsTime }}
+                    </p>
                     <p
                       class="qusibap poiner"
                       @click="ggosd(its)"
-                      style="font-weight:600;color:green"
+                      style="font-weight: 600; color: green"
                       v-else-if="its.orderStatus == 2"
                     >
                       <el-button size="mini">
-                        <span style="font-size:10px">发货</span>
+                        <span style="font-size: 10px">发货</span>
                       </el-button>
                     </p>
                     <p v-else class="qusibap poiner">--</p>
@@ -215,7 +273,9 @@
                 </tr>
               </table>
             </div>
-            <section v-if="list.length == 0  && !loading" class="qunima">暂无数据</section>
+            <section v-if="list.length == 0 && !loading" class="qunima">
+              暂无数据
+            </section>
           </section>
           <section class="page-box">
             <el-pagination
@@ -233,11 +293,19 @@
       </div>
       <!-- 修改物流弹窗 -->
       <el-dialog title="修改物流" :visible.sync="dialogStatus">
-        <el-alert title="物流信息仅支持1次更正，请仔细填写并核对" type="warning" :closable="false"></el-alert>
-        <el-form label-width="80px" v-for="(item,index) in parcelInfo" :key="index + 's'">
-          <el-form-item :label="`包裹${index+1}：`">
+        <el-alert
+          title="物流信息仅支持1次更正，请仔细填写并核对"
+          type="warning"
+          :closable="false"
+        ></el-alert>
+        <el-form
+          label-width="80px"
+          v-for="(item, index) in parcelInfo"
+          :key="index + 's'"
+        >
+          <el-form-item :label="`包裹${index + 1}：`">
             <div class="ems">
-              <div>共{{item.productNum}}件商品</div>
+              <div>共{{ item.productNum }}件商品</div>
             </div>
           </el-form-item>
           <el-form-item label="发货方式：">
@@ -252,20 +320,20 @@
                 <el-input
                   v-model="item.logisticsCode"
                   size="mini"
-                  @blur="onlistBlur(item,index)"
-                  style="width:200px;margin-right:20px"
+                  @blur="onlistBlur(item, index)"
+                  style="width: 200px; margin-right: 20px"
                   onkeyup="value=value.replace(/[\W]/g,'')"
                 ></el-input>
               </div>
               <div class="ems">
-                <div style="font-weight: bold;">物流公司：</div>
+                <div style="font-weight: bold">物流公司：</div>
               </div>
               <div>
                 <el-select
                   v-model="item.shipperCode"
                   placeholder="请选择"
                   size="mini"
-                  style="width:200px"
+                  style="width: 200px"
                 >
                   <el-option
                     v-for="(its, idx) in item.kuaidiarr"
@@ -287,12 +355,21 @@
       <el-dialog title="确认修改信息" :visible.sync="tableDdialog">
         <el-table :data="queArr">
           <el-table-column label="包裹名">
-            <template slot-scope="props">包裹{{props.row.idx + 1}}</template>
+            <template slot-scope="props">包裹{{ props.row.idx + 1 }}</template>
           </el-table-column>
           <el-table-column property="number" label="商品数量"></el-table-column>
-          <el-table-column property="pickupType" label="发货方式"></el-table-column>
-          <el-table-column property="shipperName" label="物流公司"></el-table-column>
-          <el-table-column property="logisticsCode" label="快递单号"></el-table-column>
+          <el-table-column
+            property="pickupType"
+            label="发货方式"
+          ></el-table-column>
+          <el-table-column
+            property="shipperName"
+            label="物流公司"
+          ></el-table-column>
+          <el-table-column
+            property="logisticsCode"
+            label="快递单号"
+          ></el-table-column>
         </el-table>
         <div slot="footer" class="dialog-footer">
           <el-button @click="fanhui">返回修改</el-button>
@@ -303,26 +380,37 @@
       <el-dialog title="订单发货" :visible.sync="dialogTableVisible">
         <div class="dilogTitle">
           <span>选择商品</span>
-          <span>待发货{{fahuoinfo.unDeliveryNum}}</span>
-          <span>已发货{{fahuoinfo.deliveryedNum}}</span>
+          <span>待发货{{ fahuoinfo.unDeliveryNum }}</span>
+          <span>已发货{{ fahuoinfo.deliveryedNum }}</span>
         </div>
         <el-table
           :data="gridData"
+          ref="frod"
           @selection-change="handleSelectionChange"
-          @select-all="handleSelectionChange"
+          @select-all="selectSingle"
+          @select="selectSingle"
         >
-          <el-table-column type="selection" width="55" :selectable="selectable"></el-table-column>
+          <el-table-column
+            type="selection"
+            width="55"
+            :selectable="selectable"
+          ></el-table-column>
           <el-table-column property="date" label="商品" width="300px">
             <template slot-scope="props">
-              <section class="flex-box" style="width:100%;padding: 0;">
+              <section class="flex-box" style="width: 100%; padding: 0">
                 <div>
-                  <img class="thumbImg" :src="props.row.thumbImg.split(',')[0]" />
+                  <img
+                    class="thumbImg"
+                    :src="props.row.thumbImg.split(',')[0]"
+                  />
                   <div class="product-name">
                     <p class="thumbImg-right">{{ props.row.productName }}</p>
                     <div
-                      style="margin-left:10px;margin-top:10px"
+                      style="margin-left: 10px; margin-top: 10px"
                       v-show="props.row.goodsSku"
-                    >{{props.row.goodsSku}}</div>
+                    >
+                      {{ props.row.goodsSku }}
+                    </div>
                   </div>
                 </div>
               </section>
@@ -331,8 +419,19 @@
           <el-table-column property="number" label="数量"></el-table-column>
           <el-table-column property="deliveryStatus" label="状态">
             <template slot-scope="props">
-              <section class="flex-box" style="width:100%;padding: 0;">
-                <span>{{props.row.deliveryStatus}}</span>
+              <section class="flex-box" style="width: 100%; padding: 0">
+                <span>{{ props.row.deliveryStatus }}</span>
+              </section>
+            </template>
+          </el-table-column>
+          <el-table-column property="deliveryStatus" label="售后状态">
+            <template slot-scope="props">
+              <section class="flex-box" style="width: 100%; padding: 0">
+                <span>{{
+                  props.row.aftersaleStatusText
+                    ? props.row.aftersaleStatusText
+                    : "--"
+                }}</span>
               </section>
             </template>
           </el-table-column>
@@ -341,9 +440,11 @@
         <el-form label-width="100px">
           <el-form-item label="配送信息">
             <div class="ems">
-              <div>配送方式：{{fahuoinfo.pickupType}}</div>
-              <div>收货人：{{fahuoinfo.custName}}{{fahuoinfo.custMobile}}</div>
-              <div>收获地址：{{fahuoinfo.custAddress}}</div>
+              <div>配送方式：{{ fahuoinfo.pickupType }}</div>
+              <div>
+                收货人：{{ fahuoinfo.custName }}{{ fahuoinfo.custMobile }}
+              </div>
+              <div>收获地址：{{ fahuoinfo.custAddress }}</div>
             </div>
           </el-form-item>
           <el-form-item label="发货方式">
@@ -353,7 +454,7 @@
                 v-model="fahuoform.logisticsCode"
                 size="mini"
                 @blur="onSubmit"
-                style="width:300px;margin-right:20px"
+                style="width: 300px; margin-right: 20px"
                 onkeyup="value=value.replace(/[\W]/g,'')"
               ></el-input>
             </div>
@@ -362,7 +463,7 @@
                 v-model="fahuoform.shipperCode"
                 placeholder="请选择"
                 size="mini"
-                style="width:300px"
+                style="width: 300px"
                 :disabled="ddsb"
               >
                 <el-option
@@ -373,10 +474,14 @@
                 ></el-option>
               </el-select>
             </div>
-            <div style="font-size:12px;color:#999">*请仔细填写物流公司及物流单号，发货后72小时内仅支持做一次更正，逾期不可修改</div>
+            <div style="font-size: 12px; color: #999">
+              *请仔细填写物流公司及物流单号，发货后72小时内仅支持做一次更正，逾期不可修改
+            </div>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="disp" @click="fahuola">发货</el-button>
+            <el-button type="primary" class="disp" @click="fahuola"
+              >发货</el-button
+            >
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -393,6 +498,7 @@ import {
   distinguishHandle,
   updateShopOrderParcelInfo,
   getShopOrderDetailNew,
+  getShipCommodityInfoList,
 } from "@/api/merchantOrder";
 
 import { addOrModifyMerchantAddress } from "@/api/address";
@@ -524,6 +630,28 @@ export default {
     this.initscroll();
   },
   methods: {
+    SelectionChange() {
+      this.$nextTick(() => {
+        this.gridData.forEach((row, index) => {
+          if (row.isSelect == 1) {
+            this.$refs.frod.toggleRowSelection(row, true);
+          } else {
+            this.$refs.frod.toggleRowSelection(row, false);
+          }
+        });
+      });
+    },
+    // 发货过滤不能发的商品
+    selectable(row, index) {
+      if (row.isSelect == 1) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    selectSingle() {
+      this.SelectionChange();
+    },
     searchChange(val) {
       this.listpage.orderCode = "";
       this.listpage.custName = "";
@@ -616,7 +744,7 @@ export default {
           object.orderDetailIds = el.parcelProductVo.map((item) => {
             return item.orderDetailId;
           });
-          object.orderDetailIds = object.orderDetailIds.join(",");
+          // object.orderDetailIds = object.orderDetailIds.join(",");
           return object;
         });
         this.queArr = [];
@@ -674,15 +802,6 @@ export default {
         });
       });
     },
-    // 发货过滤不能发的商品
-    selectable(row, index) {
-      console.log(row, index);
-      if (row.isSelect == 1) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     // 确认发货
     fahuola() {
       if (!this.fahuoform.logisticsCode) {
@@ -706,8 +825,8 @@ export default {
       }
       this.fahuoform.orderDetailIds =
         this.orderDetailIds && this.orderDetailIds.length > 0
-          ? this.orderDetailIds.join(",")
-          : "";
+          ? this.orderDetailIds
+          : [];
       if (!this.orderDetailIds || !this.orderDetailIds.length) {
         this.$message({
           message: "请选择发货商品",
@@ -716,6 +835,31 @@ export default {
         });
         return false;
       }
+      var isshohou = this.gridData.some((row, index) => {
+        if (row.isAftersale == 1) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      if (isshohou) {
+        let that = this;
+        this.$confirm("订单存在售后信息，是否确定发货", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+          .then(() => {
+            that.fashahuo();
+          })
+          .catch(() => {
+            
+          });
+      } else {
+        this.fashahuo();
+      }
+    },
+    fashahuo() {
       setLogisticsInfoNew(this.fahuoform).then((res) => {
         this.$message({
           message: "恭喜你，发货成功啦",
@@ -763,25 +907,25 @@ export default {
     },
     // 发货查询物流公司
     onSubmit() {
-      if (this.fahuoform.logisticsCode.length <= 0) {
-        this.$message({
-          message: "请输入物流单号后查询",
-          type: "error",
-          center: true,
-        });
-        return false;
-      }
+      // if (this.fahuoform.logisticsCode.length <= 0) {
+      //   this.$message({
+      //     message: "请输入物流单号后查询",
+      //     type: "error",
+      //     center: true,
+      //   });
+      //   return false;
+      // }
       let obj = {
         logisticCode: this.fahuoform.logisticsCode,
       };
       distinguishHandle(obj).then((res) => {
         console.log(res);
         if (!res.body) {
-          this.$message({
-            message: "没查到",
-            type: "error",
-            center: true,
-          });
+          // this.$message({
+          //   message: "没查到",
+          //   type: "error",
+          //   center: true,
+          // });
           return false;
         }
         this.ddsb = false;
@@ -834,6 +978,10 @@ export default {
         this.fahuoinfo = res.body;
         this.kuaidiarr = [];
         this.dialogTableVisible = true;
+        this.selectSingle();
+        // setTimeout(()=>{
+        //   this.$refs.frod.toggleAllSelection()
+        // })
         this.fahuoform.orderCode = item.orderCode;
         console.log(res);
         // this.gridData = item.detail;

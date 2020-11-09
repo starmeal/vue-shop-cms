@@ -66,9 +66,10 @@
                 show-word-limit
                 maxlength="200"
                 rows="6"
-                onkeyup="this.value=this.value.replace(/\s+/g,'')"
+                @input="valueCHange"
               ></el-input>
             </el-form-item>
+            <!-- this.value=this.value.replace(/\s+/g,'') -->
             <div
               style="margin-bottom: 10px; display: flex; flex-direction: row"
             >
@@ -271,6 +272,11 @@ export default {
     handleInput(e) {
       if (e) {
         this.sendData.legal_person_phone = e.target.value.replace(/[\w]/g, "");
+      }
+    },
+    valueCHange(e) {
+      if (e) {
+        this.form.shopMerchantsIntroduction = e.replace(/\s+/g,'');
       }
     },
     toGo() {

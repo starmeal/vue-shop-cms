@@ -288,10 +288,11 @@ export default {
     };
   },
   created() {
-    localStorage.clear();
     if (this.$route.query.type == 1) {
       this.isShow = false;
       this.handleRefreshCode();
+    } else {
+      localStorage.clear();
     }
   },
   watch: {

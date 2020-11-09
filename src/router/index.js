@@ -225,7 +225,7 @@ export const asyncRoutes = [
     meta: {
       title: '财务',
       fullTitle: '银行卡管理',
-      icon: 'shouhou-01',
+      icon: 'caiwuguanli',
       roles: [
         "/shop/sendWithdrawal/bankCardList"
       ]
@@ -331,35 +331,49 @@ export const asyncRoutes = [
       },
     ]
   },
-  // {
-  //   path: '/coupon',
-  //   component: () => import('@/views/layout/layout'),
-  //   meta: {
-  //     title: '优惠',
-  //     fullTitle: '优惠券管理',
-  //     icon: 'shangpinguanliicon'
-  //   },
-  //   children: [
-  //     {
-  //       path: '',
-  //       meta: {
-  //         title: '优惠券列表',
-  //         parentPath: '/coupon',
-  //         basePath: '/coupon',
-  //       },
-  //       component: () => import('@/views/coupon/index'),
-  //     },
-  //     {
-  //       path: '/couponForm',
-  //       meta: {
-  //         title: '优惠券创建',
-  //         parentPath: '/coupon',
-  //         basePath: '/coupon',
-  //       },
-  //       component: () => import('@/views/coupon/form'),
-  //     },
-  //   ]
-  // },
+  {
+    path: '/coupon',
+    component: () => import('@/views/layout/layout'),
+    meta: {
+      title: '优惠',
+      fullTitle: '优惠券管理',
+      icon: 'shangpinguanliicon',
+      roles: [
+        "/shop/cms/coupon/queryCouponList"
+      ]
+    },
+    children: [
+      {
+        path: '',
+        meta: {
+          title: '优惠券列表',
+          parentPath: '/coupon',
+          basePath: '/coupon',
+        },
+        component: () => import('@/views/coupon/index'),
+      },
+      {
+        path: '/couponForm',
+        hidden: true,
+        meta: {
+          title: '优惠券创建',
+          parentPath: '/coupon',
+          basePath: '/coupon',
+        },
+        component: () => import('@/views/coupon/form'),
+      },
+      {
+        path: '/couponLook',
+        hidden: true,
+        meta: {
+          title: '优惠券查看',
+          parentPath: '/coupon',
+          basePath: '/coupon',
+        },
+        component: () => import('@/views/coupon/look'),
+      },
+    ]
+  },
   {
     path: '/merchantOrder',
     component: () => import('@/views/layout/layout'),
@@ -432,7 +446,7 @@ export const asyncRoutes = [
     meta: {
       title: '设置',
       fullTitle: '操作员管理',
-      icon: 'shouhou-01',
+      icon: 'shezhi',
       roles: [
         "/shop/cms/permission/user/list",
         "/shop/cms/permission/role/list"

@@ -185,6 +185,11 @@ export default {
       this.options = ret;
     },
     signout(event, type) {
+      if(type){
+        let path = type ? `/login?type=${type}` : '/login';
+        this.$router.push({path})
+        return false
+      }
       this.$store.dispatch('user/resetToken').then(() => {
         let path = type ? `/login?type=${type}` : '/login';
         this.$router.replace({path})

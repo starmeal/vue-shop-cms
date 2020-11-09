@@ -18,6 +18,7 @@ export function merAfterSaleListExportExcel(data) {
   return request({
     url: "/aftersale/merAfterSaleListExportExcel",
     method: "post",
+    responseType: 'blob',
     data: data
   });
 }
@@ -67,6 +68,13 @@ export function merAfterSaleRefuseReceipt(data) {
 export function merAfterSaleLogisticsInfo(data) {
   return request({
     url: "/aftersale/merAfterSaleLogisticsInfo",
+    method: "post",
+    data: data
+  });
+}
+export function getShipCommodityInfoList(data) {
+  return request({
+    url: "/order/getShipCommodityInfoList",
     method: "post",
     data: data
   });

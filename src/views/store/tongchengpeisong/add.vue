@@ -1,14 +1,19 @@
 <template>
   <div class="authentication addYunFei">
     <div class="innerContainer">
-      <el-form ref="templateForm" :model="form" :rules="rules" label-width="150px">
+      <el-form
+        ref="templateForm"
+        :model="form"
+        :rules="rules"
+        label-width="150px"
+      >
         <el-form-item label="模板名称" prop="templateName" class="defaulStra">
           <el-input
             :disabled="lock"
             maxlength="20"
             v-model="form.templateName"
             :size="size"
-            style="width:80%;"
+            style="width: 80%"
             placeholder="单行输入"
             show-word-limit
           ></el-input>
@@ -30,12 +35,20 @@
           </el-cascader>
         </el-form-item>-->
         <el-form-item label="是否默认" prop="isChecked" class="defaulStraw">
-          <el-radio :disabled="lock" v-model="form.isChecked" label="1">是</el-radio>
-          <el-radio :disabled="lock" v-model="form.isChecked" label="0">否</el-radio>
+          <el-radio :disabled="lock" v-model="form.isChecked" label="1"
+            >是</el-radio
+          >
+          <el-radio :disabled="lock" v-model="form.isChecked" label="0"
+            >否</el-radio
+          >
         </el-form-item>
         <el-form-item label="计费方式" prop="chargeMode" class="defaulStra">
-          <el-radio :disabled="lock" v-model="form.chargeMode" label="1">按件计费</el-radio>
-          <el-radio :disabled="lock" v-model="form.chargeMode" label="2">按重量计费</el-radio>
+          <el-radio :disabled="lock" v-model="form.chargeMode" label="1"
+            >按件计费</el-radio
+          >
+          <el-radio :disabled="lock" v-model="form.chargeMode" label="2"
+            >按重量计费</el-radio
+          >
         </el-form-item>
         <el-form-item label="配送区域" prop="region" class="defaulStra">
           <el-table
@@ -46,77 +59,87 @@
             :border="false"
           >
             <el-table-column label="配送到" width="300px">
-              <template slot-scope="{row,$index}">
+              <template slot-scope="{ row, $index }">
                 <div class="Nodelivery_span">
-                  <span class v-for="(item,index) in row.cityNames" :key="index">{{item}}</span>
+                  <span
+                    class
+                    v-for="(item, index) in row.cityNames"
+                    :key="index"
+                    >{{ item }}</span
+                  >
                   <span v-show="!lock">
-                    <span v-if="$index!==0" @click="editDeliveryclick($index)" class="edit">编辑</span>
+                    <span
+                      v-if="$index !== 0"
+                      @click="editDeliveryclick($index)"
+                      class="edit"
+                      >编辑</span
+                    >
                   </span>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column :label="'首'+danwei">
-              <template slot-scope="{row,$index}">
+            <el-table-column :label="'首' + danwei">
+              <template slot-scope="{ row, $index }">
                 <el-input
                   :disabled="lock"
                   @blur="
-                      e => {
-                        burTableChange(
-                          e.target.value,
-                          'designatedFirst',
-                        $index
-                        );
-                      }
-                    "
+                    (e) => {
+                      burTableChange(e.target.value, 'designatedFirst', $index);
+                    }
+                  "
                   v-model="row.designatedFirst"
-                  style="width:60%;"
+                  style="width: 60%"
                 ></el-input>
               </template>
             </el-table-column>
             <el-table-column label="运费(元)">
-              <template slot-scope="{row,$index}">
+              <template slot-scope="{ row, $index }">
                 <el-input
                   :disabled="lock"
                   @blur="
-                      e => {
-                        burTableChange(
-                          e.target.value,
-                          'designatedFirstFreight',
+                    (e) => {
+                      burTableChange(
+                        e.target.value,
+                        'designatedFirstFreight',
                         $index
-                        );
-                      }
-                    "
+                      );
+                    }
+                  "
                   v-model="row.designatedFirstFreight"
-                  style="width:60%;"
+                  style="width: 60%"
                 ></el-input>
               </template>
             </el-table-column>
-            <el-table-column :label="'续'+danwei+'('+danwei+')'">
-              <template slot-scope="{row, $index}">
+            <el-table-column :label="'续' + danwei + '(' + danwei + ')'">
+              <template slot-scope="{ row, $index }">
                 <el-input
                   :disabled="lock"
                   @blur="
-                      e => {
-                        burTableChange(
-                          e.target.value,
-                          'designatedAdd',
-                        $index
-                        );
-                      }
-                    "
+                    (e) => {
+                      burTableChange(e.target.value, 'designatedAdd', $index);
+                    }
+                  "
                   v-model="row.designatedAdd"
-                  style="width:60%;"
+                  style="width: 60%"
                 ></el-input>
               </template>
             </el-table-column>
             <el-table-column label="运费(元)">
-              <template slot-scope="{row}">
-                <el-input :disabled="lock" v-model="row.designatedAddFreight" style="width:60%;"></el-input>
+              <template slot-scope="{ row }">
+                <el-input
+                  :disabled="lock"
+                  v-model="row.designatedAddFreight"
+                  style="width: 60%"
+                ></el-input>
               </template>
             </el-table-column>
             <el-table-column label>
-              <template slot-scope="{row,$index}">
-                <span v-show="!lock" @click="rowClick(row,$index)" :hidden="$index==0">
+              <template slot-scope="{ row, $index }">
+                <span
+                  v-show="!lock"
+                  @click="rowClick(row, $index)"
+                  :hidden="$index == 0"
+                >
                   <i class="el-icon-close"></i>
                 </span>
               </template>
@@ -129,28 +152,39 @@
           @click="seledtAreaClick"
           class="designatedArea"
           icon="el-icon-circle-plus-outline"
-        >指定区域运费</el-button>
-        <div
-          class="Tips"
-          v-if="form.chargeMode == 1"
-        >根据件数来计算运费，当物品不足“首件数量”时，按照“首件费用”计算，超过部分按照“续件重量和“续件费用”乘积来计算</div>
-        <div
-          class="Tips"
-          v-if="form.chargeMode == 2"
-        >根据重量来计算运费，当物品不足“首重重量”时，按照“首重费用“计算，超过部分按照“续重重量”和“续重费用”乘积来计算。</div>
+          >指定区域运费</el-button
+        >
+        <div class="Tips" v-if="form.chargeMode == 1">
+          根据件数来计算运费，当物品不足“首件数量”时，按照“首件费用”计算，超过部分按照“续件重量和“续件费用”乘积来计算
+        </div>
+        <div class="Tips" v-if="form.chargeMode == 2">
+          根据重量来计算运费，当物品不足“首重重量”时，按照“首重费用“计算，超过部分按照“续重重量”和“续重费用”乘积来计算。
+        </div>
         <el-button
           :disabled="lock"
           type="primary"
           @click="editdesignatedAreaClick"
           class="designatedArea"
-        >不可配送地区</el-button>
+          >不可配送地区</el-button
+        >
         <div class="Nodelivery" v-if="form.unreachableCityNames.length">
-          <span class v-for="(item,index) in form.unreachableCityNames" :key="index">{{item}}</span>
-          <span class="edit" v-show="!lock" @click="editdesignatedAreaClick">编辑</span>
+          <span
+            class
+            v-for="(item, index) in form.unreachableCityNames"
+            :key="index"
+            >{{ item }}</span
+          >
+          <span class="edit" v-show="!lock" @click="editdesignatedAreaClick"
+            >编辑</span
+          >
         </div>
         <el-form-item label="状态" prop="isEnabled" class="isEnabled">
-          <el-radio :disabled="lock" v-model="form.isEnabled" label="1">启用</el-radio>
-          <el-radio :disabled="lock" v-model="form.isEnabled" label="0">禁用</el-radio>
+          <el-radio :disabled="lock" v-model="form.isEnabled" label="1"
+            >启用</el-radio
+          >
+          <el-radio :disabled="lock" v-model="form.isEnabled" label="0"
+            >禁用</el-radio
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -160,48 +194,62 @@
       @click="submit"
       class="submit"
       :disabled="lock"
-    >提交</el-button>
+      >提交</el-button
+    >
     <el-button @click="back" type class="back">返回列表</el-button>
 
     <el-dialog
-      :title="selectType==1?'选择不可配送区域':'选择配送区域' "
+      :title="selectType == 1 ? '选择不可配送区域' : '选择配送区域'"
       :visible.sync="dialogVisible"
       :before-close="handleClose"
       width="60%"
     >
       <!-- 区域的循环 -->
       <div class="city_content">
-        <div class="areaClass" v-for="(area,areaindex ) in cityList" :key="area.adcode">
+        <div
+          class="areaClass"
+          v-for="(area, areaindex) in cityList"
+          :key="area.adcode"
+        >
           <!-- , areaindex -->
           <div class="areaClass_left">
-            <div style="display: inline-block;" @click="areaClick(area,'area',areaindex )">
+            <div
+              style="display: inline-block"
+              @click="areaClick(area, 'area', areaindex)"
+            >
               <Statusimg :status="area.checked" />
-              <span class="middle">{{area.name}}</span>
+              <span class="middle">{{ area.name }}</span>
             </div>
           </div>
           <div class="flexprovince">
-            <div class="provinceClass" v-for="(province ) in area.districts" :key="province.adcode">
+            <div
+              class="provinceClass"
+              v-for="province in area.districts"
+              :key="province.adcode"
+            >
               <!-- , provinceindex -->
               <!-- 省的名字 -->
               <div @click="provinceBtn(province)">
-                <span @click.stop="areaClick(province,'province',areaindex)">
+                <span @click.stop="areaClick(province, 'province', areaindex)">
                   <Statusimg :status="province.checked" />
                 </span>
-                <span class="middle">{{province.name}}</span>
-                <span class="middle provincelength">({{province.total}})</span>
+                <span class="middle">{{ province.name }}</span>
+                <span class="middle provincelength"
+                  >({{ province.total }})</span
+                >
                 <i class="el-icon-arrow-down middle"></i>
               </div>
-              <div class="none" :class="{'showCity': province.showCity} ">
+              <div class="none" :class="{ showCity: province.showCity }">
                 <!-- 点击城市的名字 -->
                 <div
                   class="cityLIst_flex_item"
-                  v-for="(city,cityIndex) in province.districts"
+                  v-for="(city, cityIndex) in province.districts"
                   :key="city.adcode"
-                  @click="areaClick(province,'city', cityIndex,areaindex )"
+                  @click="areaClick(province, 'city', cityIndex, areaindex)"
                 >
                   <!-- ,cityIndex -->
                   <Statusimg :status="city.checked" />
-                  <span class="middle">{{city.name}}</span>
+                  <span class="middle">{{ city.name }}</span>
                 </div>
               </div>
             </div>
@@ -213,8 +261,10 @@
             <span class="middle">全选</span>
           </div>
           <div class="footerfont">
-            <span>已选择{{cityTotal}}个区域</span>
-            <el-button @click="makeSureCity" type="primary" class="el-button-w">提交</el-button>
+            <span>已选择{{ cityTotal }}个区域</span>
+            <el-button @click="makeSureCity" type="primary" class="el-button-w"
+              >提交</el-button
+            >
           </div>
           <!-- @click="makeSureCity" -->
         </span>
@@ -369,8 +419,27 @@ export default {
     // 确定提交
 
     submit() {
+      var sb = this.form.templateSub.some((element) => {
+        console.log(element.designatedAddFreight,1)
+        let flag = parseInt(element.designatedAddFreight);
+        console.log(flag,2);
+        if (flag != 0 && element.designatedAdd == 0) {
+          return true;
+        }
+        if (flag == 0 && element.designatedAdd != 0) {
+          return true;
+        }
+      });
+
       this.$refs["templateForm"].validate((valid) => {
         if (valid) {
+          if (sb) {
+            this.$message({
+              message: "填写续件和续件运费时，两项中任意一项不可为0（如两项均为0，则默认无续件运费）",
+              type: "error",
+            });
+            return false;
+          }
           this.templateEditMerTemplate();
         }
       });

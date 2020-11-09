@@ -2,40 +2,56 @@
   <div>
     <div class="order-Detail">
       <div class="flex-top">
-        <div>订单编号：{{orderInfo.orderCode}}</div>
-        <div>下单时间：{{orderInfo.createTime}}</div>
+        <div>订单编号：{{ orderInfo.orderCode }}</div>
+        <div>下单时间：{{ orderInfo.createTime }}</div>
       </div>
       <div class="order-statusBox">
         <div>
-          <div class="status-title">{{orderInfo.orderStatusText}}</div>
-          <div v-for="(item,index) in needMerHandleAftersaleInfo" :key="index">
-            <div style="padding:10px 0px">[{{item.productName}}]{{item.productName}}</div>
-            <el-button @click="tuikuanchuli(item.asaleCode)">{{item.buttonText}}</el-button>
+          <div class="status-title">{{ orderInfo.orderStatusText }}</div>
+          <div v-for="(item, index) in needMerHandleAftersaleInfo" :key="index">
+            <div style="padding: 10px 0px">
+              [{{ item.productName }}]{{ item.productName }}
+            </div>
+            <el-button @click="tuikuanchuli(item.asaleCode)">{{
+              item.buttonText
+            }}</el-button>
           </div>
         </div>
         <div class="flex-container">
           <!-- {{orderInfo.orderFinishTime == true}} -->
           <!-- orderInfo.orderStatus -->
           <!--  -->
-          <el-steps :active="orderInfo.orderStatus" align-center style="width:90%;margin:0 auto">
+          <el-steps
+            :active="orderInfo.orderStatus"
+            align-center
+            style="width: 90%; margin: 0 auto"
+          >
             <el-step title="买家下单">
-              <template slot="description" style="font-size:10px">
-                <div style="font-size:10px">{{orderInfo.createTime}}</div>
+              <template slot="description" style="font-size: 10px">
+                <div style="font-size: 10px">{{ orderInfo.createTime }}</div>
               </template>
             </el-step>
             <el-step title="买家付款" v-if="orderInfo.orderStatus != 6">
-              <template slot="description" style="font-size:10px">
-                <div style="font-size:10px">{{orderInfo.payTime}}</div>
+              <template slot="description" style="font-size: 10px">
+                <div style="font-size: 10px">{{ orderInfo.payTime }}</div>
               </template>
             </el-step>
-            <el-step title="商家发货"  v-if="orderInfo.orderStatus != 6">
-              <template slot="description" style="font-size:10px">
-                <div style="font-size:10px">{{orderInfo.deliveryTime}}</div>
+            <el-step title="商家发货" v-if="orderInfo.orderStatus != 6">
+              <template slot="description" style="font-size: 10px">
+                <div style="font-size: 10px">{{ orderInfo.deliveryTime }}</div>
               </template>
             </el-step>
-            <el-step :title="orderInfo.orderFinishTime ? '交易成功' : '交易关闭'">
-              <template slot="description" style="font-size:10px">
-                <div>{{orderInfo.orderFinishTime ? orderInfo.orderFinishTime : orderInfo.orderClosedTime}}</div>
+            <el-step
+              :title="orderInfo.orderFinishTime ? '交易成功' : '交易关闭'"
+            >
+              <template slot="description" style="font-size: 10px">
+                <div>
+                  {{
+                    orderInfo.orderFinishTime
+                      ? orderInfo.orderFinishTime
+                      : orderInfo.orderClosedTime
+                  }}
+                </div>
               </template>
             </el-step>
           </el-steps>
@@ -44,9 +60,13 @@
       <div class="tips-box">
         <div>和商有品提醒：</div>
         <div class="tips-text">
-          <div>交易成功，和商有品将把货款结算至你的店铺账户余额，你可以申请提现</div>
+          <div>
+            交易成功，和商有品将把贷款结算至你的店铺账户余额，你可以申请提现
+          </div>
           <div>请及时关注你发出的包裹状态，确保能配送至卖家手中；</div>
-          <div>如果卖家表示未收到货或者货物有问题，请及时联系买家积极处理，友好协商</div>
+          <div>
+            如果卖家表示未收到货或者货物有问题，请及时联系买家积极处理，友好协商
+          </div>
         </div>
       </div>
       <div class="tab-deep">
@@ -54,27 +74,31 @@
           <el-tab-pane
             :label="`包裹${index + 1}`"
             :name="`${index}`"
-            v-for="(item,index) in parcelInfo"
+            v-for="(item, index) in parcelInfo"
             :key="index"
           >
             <div class="tips-boxs">
               <div>
-                <div>发货方式：{{item.pickupType}}</div>
+                <div>发货方式：{{ item.pickupType }}</div>
                 <!-- <div>发货人：{{item.deliveryTime}}</div> -->
-                <div>发货时间：{{item.deliveryTime}}</div>
-                <div>运单号：{{item.logisticsCode}}</div>
+                <div>发货时间：{{ item.deliveryTime }}</div>
+                <div>运单号：{{ item.logisticsCode }}</div>
               </div>
               <div>
-                <div style="margin-bottom:20px">物流状态：</div>
+                <div style="margin-bottom: 20px">物流状态：</div>
                 <el-timeline>
                   <el-timeline-item
                     placement="top"
-                    v-for="(el,idx) in item.traces"
+                    v-for="(el, idx) in item.traces"
                     :timestamp="el.AcceptTime"
                     :key="idx"
                   >
-                    <p style="font-size:12px;color:#f0ba08">{{el.AcceptStation}}</p>
-                    <p style="font-size:12px;color:#f0ba08">{{el.Remark}}</p>
+                    <p style="font-size: 12px; color: #f0ba08">
+                      {{ el.AcceptStation }}
+                    </p>
+                    <p style="font-size: 12px; color: #f0ba08">
+                      {{ el.Remark }}
+                    </p>
                   </el-timeline-item>
                 </el-timeline>
                 <span></span>
@@ -88,34 +112,48 @@
           <section>
             收货人信息
             <span
+              class="cupin"
               @click="updateAddress"
-              style="color:#44abf7;margin-right:10px;margin-left:10px"
+              style="color: #44abf7; margin-right: 10px; margin-left: 10px"
               v-if="orderInfo.orderStatus == 2"
-            >修改</span>
-            <span v-clipboard:success="onCopy" style="color:#44abf7" v-clipboard:copy="copy">复制</span>
+              >修改</span
+            >
+            <span
+              class="cupin"
+              v-clipboard:success="onCopy"
+              style="color: #44abf7"
+              v-clipboard:copy="copy"
+              >复制</span
+            >
           </section>
           <section class="item-address">
             <span>收货人：</span>
-            <span>{{orderInfo.custName}}</span>
+            <span>{{ orderInfo.custName }}</span>
           </section>
           <section class="item-address">
             <span>联系电话：</span>
-            <span>{{orderInfo.custMobile}}</span>
+            <span>{{ orderInfo.custMobile }}</span>
           </section>
           <section class="item-address">
             <span>收货地址：</span>
-            <span>{{orderInfo.custAddress}}</span>
+            <span>{{ orderInfo.custAddress }}</span>
           </section>
         </div>
         <div>
           <section>配送信息</section>
-          <section>配送方式：{{orderInfo.pickupType}}</section>
-          <section>发货时间：{{orderInfo.deliveryTime}}</section>
+          <section>配送方式：{{ orderInfo.pickupType }}</section>
+          <section>发货时间：{{ orderInfo.deliveryTime }}</section>
         </div>
         <div>
           <section>付款信息：</section>
-          <section>实付金额：{{orderInfo.payAmount}}</section>
-          <section>付款时间：{{orderInfo.payTime}}</section>
+          <section>优惠券抵扣：-¥{{ orderInfo.couponPrice }}</section>
+          <section>实付金额：{{ orderInfo.payAmount }}</section>
+          <section>付款时间：{{ orderInfo.payTime }}</section>
+        </div>
+        <div>
+          <section>买家信息：</section>
+          <section>买家昵称：{{ orderInfo.nickName }}</section>
+          <section>买家留言：{{ orderInfo.remarks }}</section>
         </div>
       </div>
       <div class="table-box">
@@ -124,52 +162,78 @@
             <template slot-scope="props">
               <div class="list-item-t">
                 <div>
-                  <img :src="props.row.thumbImg" style="width:80px;height:80px" />
+                  <img
+                    :src="props.row.thumbImg"
+                    style="width: 80px; height: 80px"
+                  />
                 </div>
                 <div>
-                  <div style="color:rgb(68, 171, 247)" class="hiden-text">{{props.row.productName}}</div>
-                  <div class="hiden-text">{{props.row.goodsSku}}</div>
+                  <div style="color: rgb(68, 171, 247)" class="hiden-text">
+                    {{ props.row.productName }}
+                  </div>
+                  <div class="hiden-text">{{ props.row.goodsSku }}</div>
                 </div>
               </div>
             </template>
           </el-table-column>
           <el-table-column prop="payPrice" label="单价（元）">
-            <template slot-scope="props">{{props.row.payPrice}}</template>
+            <template slot-scope="props">{{ props.row.payPrice }}</template>
           </el-table-column>
           <el-table-column prop="number" label="数量"></el-table-column>
           <el-table-column prop="address" label="小计（元）">
-            <template slot-scope="props">{{props.row.number * props.row.payPrice}}</template>
+            <template slot-scope="props">{{
+              props.row.number * props.row.payPrice
+            }}</template>
           </el-table-column>
-          <el-table-column prop="aftersaleStatusText" label="售后状态" width="100px">
-            <template
-              slot-scope="props"
-            >{{props.row.aftersaleStatusText ? props.row.aftersaleStatusText : ''}}</template>
+          <el-table-column
+            prop="aftersaleStatusText"
+            label="售后状态"
+            width="100px"
+          >
+            <template slot-scope="props">{{
+              props.row.aftersaleStatusText ? props.row.aftersaleStatusText : ""
+            }}</template>
           </el-table-column>
           <el-table-column prop="address" label="发货状态">
-            <template
-              slot-scope="props"
-            >{{props.row.isShipmentsText ? props.row.isShipmentsText : '未发货'}}</template>
+            <template slot-scope="props">{{
+              props.row.isShipmentsText ? props.row.isShipmentsText : "未发货"
+            }}</template>
           </el-table-column>
         </el-table>
       </div>
     </div>
     <!-- 修改地址弹窗 -->
     <el-dialog title="修改收货地址" :visible.sync="dialogFormVisible">
-      <el-alert title="仅支持修改一次,请务必在买家知情且同意下修改收货信息" type="warning" :closable="false"></el-alert>
+      <el-alert
+        title="仅支持修改一次,请务必在买家知情且同意下修改收货信息"
+        type="warning"
+        :closable="false"
+      ></el-alert>
       <el-form
         :model="addressform"
         :rules="addressformrules"
         label-width="90px"
-        style="margin-top:20px"
+        style="margin-top: 20px"
       >
         <el-form-item label="收货人" prop="custName">
-          <el-input v-model="addressform.custName" style="width:300px"></el-input>
+          <el-input
+            v-model="addressform.custName"
+            style="width: 300px"
+          ></el-input>
         </el-form-item>
         <el-form-item label="联系电话" prop="custMobile">
-          <el-input v-model="addressform.custMobile" style="width:300px"></el-input>
+          <el-input
+            v-model="addressform.custMobile"
+            style="width: 300px"
+          ></el-input>
         </el-form-item>
         <el-form-item label="联系地址">
-          <cascader v-model="cityvalue" @change="citychange" size="small" width="300px"></cascader>
+          <cascader
+            v-model="cityvalue"
+            @change="citychange"
+            size="small"
+            width="300px"
+          ></cascader>
         </el-form-item>
         <el-form-item label="详细地址" prop="custAddress">
           <el-input
@@ -177,7 +241,7 @@
             :rows="3"
             placeholder="请输入详细地址"
             v-model="addressform.custAddress"
-            style="width:300px"
+            style="width: 300px"
           ></el-input>
         </el-form-item>
       </el-form>
@@ -495,5 +559,8 @@ export default {
 }
 .tab-deep /deep/ .el-tabs__header {
   margin-bottom: 0px;
+}
+.cupin {
+  cursor: pointer;
 }
 </style>
