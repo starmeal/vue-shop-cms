@@ -112,12 +112,14 @@
           <section>
             收货人信息
             <span
+              class="cupin"
               @click="updateAddress"
               style="color: #44abf7; margin-right: 10px; margin-left: 10px"
               v-if="orderInfo.orderStatus == 2"
               >修改</span
             >
             <span
+              class="cupin"
               v-clipboard:success="onCopy"
               style="color: #44abf7"
               v-clipboard:copy="copy"
@@ -148,6 +150,11 @@
           <section>实付金额：{{ orderInfo.payAmount }}</section>
           <section>付款时间：{{ orderInfo.payTime }}</section>
         </div>
+        <div>
+          <section>买家信息：</section>
+          <section>买家昵称：{{ orderInfo.nickName }}</section>
+          <section>买家留言：{{ orderInfo.remarks }}</section>
+        </div>
       </div>
       <div class="table-box">
         <el-table :data="detail" style="width: 100%">
@@ -170,9 +177,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="payPrice" label="单价（元）">
-            <template slot-scope="props">{{
-             props.row.payPrice
-            }}</template>
+            <template slot-scope="props">{{ props.row.payPrice }}</template>
           </el-table-column>
           <el-table-column prop="number" label="数量"></el-table-column>
           <el-table-column prop="address" label="小计（元）">
@@ -554,5 +559,8 @@ export default {
 }
 .tab-deep /deep/ .el-tabs__header {
   margin-bottom: 0px;
+}
+.cupin {
+  cursor: pointer;
 }
 </style>

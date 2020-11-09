@@ -504,7 +504,7 @@
         </span>
       </div>
       <div style="margin-lef：20px" class="jue-js" v-if="indexStaus == 2">
-        <span>据决原因：</span>
+        <span>拒绝原因：</span>
         <el-input
           style="width: 300px"
           type="textarea"
@@ -774,6 +774,18 @@ export default {
         return item.orderDetailId;
       });
       this.fahuoform1.orderDetailIds = orderDetailIds;
+      let that = this;
+      this.$confirm("是否确认发货", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          that.fafahuo();
+        })
+        .catch(() => {});
+    },
+    fafahuo() {
       setLogisticsInfoNew(this.fahuoform1).then((res) => {
         this.$message({
           message: "恭喜你，发货成功啦",

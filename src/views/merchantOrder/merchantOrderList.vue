@@ -498,7 +498,7 @@ import {
   distinguishHandle,
   updateShopOrderParcelInfo,
   getShopOrderDetailNew,
-  getShipCommodityInfoList
+  getShipCommodityInfoList,
 } from "@/api/merchantOrder";
 
 import { addOrModifyMerchantAddress } from "@/api/address";
@@ -835,6 +835,31 @@ export default {
         });
         return false;
       }
+      var isshohou = this.gridData.some((row, index) => {
+        if (row.isAftersale == 1) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      if (isshohou) {
+        let that = this;
+        this.$confirm("订单存在售后信息，是否确定发货", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+          .then(() => {
+            that.fashahuo();
+          })
+          .catch(() => {
+            
+          });
+      } else {
+        this.fashahuo();
+      }
+    },
+    fashahuo() {
       setLogisticsInfoNew(this.fahuoform).then((res) => {
         this.$message({
           message: "恭喜你，发货成功啦",

@@ -5,26 +5,51 @@
         <div class="btn-box">
           <el-button type="primary" @click="saveOrUpdateUser">增加</el-button>
         </div>
-        <el-table :data="list" v-loading="loading" style="width: 100%;height:100%">
+        <el-table
+          :data="list"
+          v-loading="loading"
+          style="width: 100%; height: 100%"
+        >
           <el-table-column prop="id" label="ID">
-             <template slot-scope="props">
-               {{props.$index + 1}}
-             </template>
+            <template slot-scope="props">
+              {{ props.$index + 1 }}
+            </template>
           </el-table-column>
           <el-table-column prop="nickName" label="用户名"></el-table-column>
           <el-table-column prop="actualName" label="姓名"></el-table-column>
           <el-table-column prop="phone" label="手机号"></el-table-column>
-          <el-table-column prop="lastLoginDate" label="最后一次登录"></el-table-column>
+          <el-table-column
+            prop="lastLoginDate"
+            label="最后一次登录"
+          ></el-table-column>
           <el-table-column prop="roleName" label="角色名称"></el-table-column>
           <el-table-column label="操作" width="150px">
             <template slot-scope="props">
-              <el-tooltip class="item light-item" effect="light" placement="top">
-                <span slot="content" style="font-size:12px;color:#9d9d9d">编辑</span>
-                <i class="el-icon-tickets icon-content" @click="updateuser(props.row)"></i>
+              <el-tooltip
+                class="item light-item"
+                effect="light"
+                placement="top"
+              >
+                <span slot="content" style="font-size: 12px; color: #9d9d9d"
+                  >编辑</span
+                >
+                <i
+                  class="el-icon-tickets icon-content"
+                  @click="updateuser(props.row)"
+                ></i>
               </el-tooltip>
-              <el-tooltip class="item light-item" effect="light" placement="top">
-                <span slot="content" style="font-size:12px;color:#9d9d9d">删除</span>
-                <i class="el-icon-delete icon-content" @click="deluser(props.row)"></i>
+              <el-tooltip
+                class="item light-item"
+                effect="light"
+                placement="top"
+              >
+                <span slot="content" style="font-size: 12px; color: #9d9d9d"
+                  >删除</span
+                >
+                <i
+                  class="el-icon-delete icon-content"
+                  @click="deluser(props.row)"
+                ></i>
               </el-tooltip>
             </template>
           </el-table-column>
@@ -45,17 +70,33 @@
         </section>
       </div>
     </div>
-    <el-dialog :title="dTitle ? '编辑' :'添加操作员'" :visible.sync="dialogFormVisible">
+    <el-dialog
+      :title="dTitle ? '编辑' : '添加操作员'"
+      :visible.sync="dialogFormVisible"
+    >
       <el-form :model="form" label-width="100px" :rules="rules" ref="ruleForm">
         <el-form-item label="用户名" prop="nickName">
-          <el-input v-model.trim="form.nickName" size="mini" style="width:300px"></el-input>
+          <el-input
+            v-model.trim="form.nickName"
+            size="mini"
+            style="width: 300px"
+          ></el-input>
         </el-form-item>
         <el-form-item label="操作员姓名" prop="actualName">
-          <el-input v-model.trim="form.actualName" size="mini" style="width:300px"></el-input>
+          <el-input
+            v-model.trim="form.actualName"
+            size="mini"
+            style="width: 300px"
+          ></el-input>
         </el-form-item>
         <el-form-item label="操作员密码" prop="password" class="passs">
           <!-- :disabled="disabled && hidenbtn" -->
-          <el-input v-model.trim="form.password" size="mini" style="width:300px" show-password></el-input>
+          <el-input
+            v-model.trim="form.password"
+            size="mini"
+            style="width: 300px"
+            show-password
+          ></el-input>
           <!-- <el-button
             type="primary"
             style="margin-left:10px"
@@ -65,11 +106,20 @@
           >修改密码</el-button>-->
         </el-form-item>
         <el-form-item label="操作员手机号" prop="phone">
-          <el-input v-model.trim="form.phone" size="mini" style="width:300px"></el-input>
+          <el-input
+            v-model.trim="form.phone"
+            size="mini"
+            style="width: 300px"
+          ></el-input>
         </el-form-item>
         <el-form-item label="分配角色" prop="roleId">
           <el-select v-model="form.roleId" placeholder="请选择">
-            <el-option v-for="item in select" :key="item.value" :label="item.name" :value="item.id"></el-option>
+            <el-option
+              v-for="item in select"
+              :key="item.value"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -201,22 +251,22 @@ export default {
                 center: true,
                 message: "操作成功!",
               });
+              this.getpermissionuser();
+              this.dialogFormVisible = false;
+              this.form = {
+                nickName: "",
+                actualName: "",
+                password: "",
+                phone: "",
+                roleId: "",
+              };
+              setTimeout(() => {
+                this.$refs.ruleForm.clearValidate();
+              }, 0);
+              this.dTitle = false;
+              this.getpermissionuser();
+              this.getgetRoleListCommon();
             });
-            this.getpermissionuser();
-            this.dialogFormVisible = false;
-            this.form = {
-              nickName: "",
-              actualName: "",
-              password: "",
-              phone: "",
-              roleId: "",
-            };
-            setTimeout(() => {
-              this.$refs.ruleForm.clearValidate();
-            }, 0);
-            this.dTitle = false;
-            this.getpermissionuser();
-            this.getgetRoleListCommon();
           } else {
             console.log("error submit!!");
             return false;

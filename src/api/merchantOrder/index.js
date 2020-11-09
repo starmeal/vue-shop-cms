@@ -11,7 +11,8 @@ export function merShopOrderListExportExcel(data) {
     return request({
         url: `/order/merShopOrderListExportExcel`,
         method: "POST",
-        data
+        data,
+        responseType: 'blob',
     });
 }
 

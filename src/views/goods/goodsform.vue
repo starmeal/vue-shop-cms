@@ -726,6 +726,7 @@
 </template>
 
 <script>
+import districts from "@/components/city/district.json";
 import {
   multiply,
   formatDate,
@@ -749,7 +750,6 @@ import Icon from "@/components/base/icon.vue";
 import cascader from "@/components/city/cascader.vue";
 import draggable from "vuedraggable";
 import axios from "axios";
-var districts; // 地址城市
 export default {
   components: {
     Icon,
@@ -944,16 +944,16 @@ export default {
     };
   },
   created() {
-    //  为了获取中文地址名
-    axios
-      .get(
-        "https://restapi.amap.com/v3/config/district?keywords=中国&subdistrict=3&key=53db67bb6768fb1da369ea6603e05e1b"
-      )
-      .then((res) => {
-        if (res.statusText == "OK") {
-          districts = res.data.districts[0].districts;
-        }
-      });
+    // //  为了获取中文地址名
+    // axios
+    //   .get(
+    //     "https://restapi.amap.com/v3/config/district?keywords=中国&subdistrict=3&key=53db67bb6768fb1da369ea6603e05e1b"
+    //   )
+    //   .then((res) => {
+    //     if (res.statusText == "OK") {
+    //       districts = res.data.districts[0].districts;
+    //     }
+    //   });
     if (this.$route.query.goodsCode) {
       this.getDetail(this.$route.query.goodsCode);
     }
@@ -1483,7 +1483,7 @@ export default {
       if (value.length > 0) {
         this.form.provinceCode = value[0];
         this.form.cityCode = value[1];
-        this.HandleCityName(districts);
+        this.HandleCityName(districts.districts[0].districts);
       }
     },
     // 得到省市区中文
